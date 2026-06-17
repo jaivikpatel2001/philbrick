@@ -20,10 +20,10 @@
   z-index: -1;
   background: linear-gradient(
       130deg,
-      rgba(8, 12, 22, 0.82),
-      rgba(8, 12, 22, 0.55)
+      rgba(6, 7, 10, 0.84),
+      rgba(6, 7, 10, 0.55)
     ),
-    radial-gradient(60% 80% at 85% 20%, rgba(0, 212, 255, 0.28), transparent 60%);
+    radial-gradient(60% 80% at 85% 20%, rgba(201, 168, 106, 0.26), transparent 60%);
 }
 
 .gradient {

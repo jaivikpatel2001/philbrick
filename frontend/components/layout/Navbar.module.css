@@ -15,6 +15,20 @@
   border-bottom-color: var(--border);
 }
 
+/* At the very top the navbar floats over a dark hero on every page, so force
+   light controls — legible in BOTH light and dark themes. Skipped once scrolled
+   or when the mega panel is open (those bring their own glass background). */
+.header[data-scrolled="false"]:not(.megaOpen) .inner {
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-muted: rgba(255, 255, 255, 0.62);
+  --text-faint: rgba(255, 255, 255, 0.5);
+  --border: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.32);
+  --surface-2: rgba(255, 255, 255, 0.12);
+  --surface-hover: rgba(255, 255, 255, 0.18);
+}
+
 .inner {
   display: flex;
   align-items: center;

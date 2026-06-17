@@ -1,19 +1,19 @@
 /* Always-dark cinematic band — overrides theme tokens locally */
 .section {
-  --bg-primary: #0a0e16;
-  --surface: #141c2e;
-  --surface-2: #18223a;
+  --bg-primary: #0b0d11;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.06);
   --border: rgba(255, 255, 255, 0.09);
-  --border-accent: rgba(0, 212, 255, 0.45);
+  --border-accent: rgba(47, 107, 255, 0.45);
   --hairline: rgba(255, 255, 255, 0.05);
   --text-primary: #ffffff;
-  --text-secondary: #b8c2d3;
-  --text-muted: #828fa8;
-  --accent: #00d4ff;
-  --accent-soft: rgba(0, 212, 255, 0.12);
+  --text-secondary: rgba(255, 255, 255, 0.66);
+  --text-muted: rgba(255, 255, 255, 0.46);
+  --accent: #2f6bff;
+  --accent-soft: rgba(47, 107, 255, 0.12);
 
   position: relative;
-  background: #0a0e16;
+  background: #0b0d11;
   color: var(--text-primary);
   overflow: hidden;
   isolation: isolate;
@@ -37,7 +37,7 @@
   height: 50vw;
   max-width: 900px;
   z-index: -1;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.16), transparent 60%);
+  background: radial-gradient(circle, rgba(47, 107, 255, 0.16), transparent 60%);
   filter: blur(30px);
 }
 
