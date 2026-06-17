@@ -1,0 +1,19 @@
+.wall {
+  columns: 3;
+  column-gap: 1.5rem;
+}
+.wall > * {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 1000px) {
+  .wall {
+    columns: 2;
+  }
+}
+@media (max-width: 640px) {
+  .wall {
+    columns: 1;
+  }
+}

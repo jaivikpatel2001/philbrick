@@ -1,0 +1,4 @@
+.surface {
+  background: var(--bg-secondary);
+  border-block: 1px solid var(--border);
+}

@@ -1,0 +1,86 @@
+.story {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+}
+.storyText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.lede {
+  font-size: var(--fs-h3);
+  font-family: var(--font-display);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+  color: var(--text-primary);
+}
+.para {
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+}
+.storyMedia {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.storyImg {
+  object-fit: cover;
+}
+
+/* Mission & Vision */
+.mvSection {
+  background: var(--bg-secondary);
+  border-block: 1px solid var(--border);
+}
+.mv {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.mvCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.mvCard p {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-snug);
+  color: var(--text-primary);
+  font-weight: var(--fw-medium);
+}
+
+.team {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .story {
+    grid-template-columns: 1fr;
+  }
+  .storyMedia {
+    aspect-ratio: 16 / 11;
+  }
+  .mv {
+    grid-template-columns: 1fr;
+  }
+  .team {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .team {
+    grid-template-columns: 1fr;
+  }
+}

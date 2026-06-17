@@ -1,0 +1,107 @@
+.btn {
+  --btn-px: 1.5rem;
+  --btn-py: 0.85rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  padding: var(--btn-py) var(--btn-px);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+
+.label {
+  display: inline-block;
+}
+.arrow {
+  width: 1.05em;
+  height: 1.05em;
+  transition: transform var(--dur) var(--ease-out);
+}
+.btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* ----- Sizes ----- */
+.sm {
+  --btn-px: 1.1rem;
+  --btn-py: 0.6rem;
+  font-size: var(--fs-xs);
+}
+.md {
+  --btn-px: 1.6rem;
+  --btn-py: 0.9rem;
+}
+.lg {
+  --btn-px: 2.1rem;
+  --btn-py: 1.15rem;
+  font-size: var(--fs-body);
+}
+.full {
+  width: 100%;
+}
+
+/* ----- Primary ----- */
+.primary {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset;
+}
+.primary:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--glow-accent);
+  transform: translateY(-2px);
+}
+.primary:active {
+  transform: scale(0.97);
+}
+
+/* ----- Secondary (outline) ----- */
+.secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+.secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+}
+
+/* ----- Subtle (filled surface) ----- */
+.subtle {
+  background: var(--surface-2);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+.subtle:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+/* ----- Ghost (text link) ----- */
+.ghost {
+  background: transparent;
+  color: var(--text-primary);
+  padding-inline: 0.25rem;
+}
+.ghost:hover {
+  color: var(--accent);
+}

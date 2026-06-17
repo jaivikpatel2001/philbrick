@@ -1,0 +1,12 @@
+.wrap {
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--border);
+}
+.label {
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  max-width: 40ch;
+  margin-inline: auto;
+}

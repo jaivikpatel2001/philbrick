@@ -1,0 +1,42 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  padding: 0;
+}
+
+.track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 58px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  transition: background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.track:hover {
+  border-color: var(--border-strong);
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-circle);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.78rem;
+  transform: translateY(-50%);
+  transition: left var(--dur) var(--ease-spring),
+    background var(--dur) var(--ease-out);
+}
+.track[data-state="light"] .thumb {
+  left: calc(100% - 27px);
+}

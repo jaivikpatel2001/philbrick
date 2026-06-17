@@ -1,0 +1,117 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: var(--z-nav);
+  transition: background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    backdrop-filter var(--dur) var(--ease-out);
+  border-bottom: 1px solid transparent;
+}
+.header[data-scrolled="true"],
+.header.megaOpen {
+  background: var(--surface-glass-strong);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom-color: var(--border);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: var(--nav-h);
+  transition: height var(--dur) var(--ease-out);
+}
+.header[data-scrolled="true"] .inner {
+  height: 64px;
+}
+
+/* ----- Desktop nav ----- */
+.nav {
+  display: none;
+}
+.navList {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.navItem {
+  position: relative;
+}
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.95rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  transition: color var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out);
+}
+.navLink:hover {
+  color: var(--text-primary);
+  background: var(--surface-2);
+}
+.navLinkActive {
+  color: var(--text-primary);
+}
+.caret {
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-1px);
+  opacity: 0.6;
+  transition: transform var(--dur) var(--ease-out);
+}
+.navItem:hover .caret {
+  transform: rotate(225deg) translateY(-1px);
+}
+
+/* ----- Right actions ----- */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.themeToggle {
+  display: none;
+}
+.cta {
+  display: none;
+}
+.hamburger {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  transition: background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.hamburger:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+
+@media (min-width: 993px) {
+  .nav {
+    display: block;
+  }
+  .themeToggle {
+    display: inline-flex;
+  }
+  .cta {
+    display: inline-flex;
+  }
+  .hamburger {
+    display: none;
+  }
+}

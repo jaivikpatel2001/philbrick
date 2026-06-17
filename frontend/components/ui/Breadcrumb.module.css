@@ -1,0 +1,40 @@
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--fs-sm);
+}
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.link {
+  color: var(--text-muted);
+  transition: color var(--dur) var(--ease-out);
+}
+.link:hover {
+  color: var(--accent);
+}
+.current {
+  color: var(--text-secondary);
+  font-weight: var(--fw-medium);
+}
+.sep {
+  color: var(--text-faint);
+  font-size: 0.85em;
+}
+
+.light .link {
+  color: rgba(255, 255, 255, 0.62);
+}
+.light .link:hover {
+  color: #fff;
+}
+.light .current {
+  color: #fff;
+}
+.light .sep {
+  color: rgba(255, 255, 255, 0.4);
+}

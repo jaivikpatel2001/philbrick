@@ -1,0 +1,30 @@
+.wrap {
+  position: relative;
+}
+.swiper {
+  padding-bottom: 3.5rem !important;
+  overflow: visible;
+}
+.slide {
+  height: auto;
+}
+.slide > * {
+  height: 100%;
+}
+
+.wrap :global(.swiper-pagination) {
+  bottom: 0 !important;
+}
+.wrap :global(.swiper-pagination-bullet) {
+  width: 8px;
+  height: 8px;
+  background: var(--text-faint);
+  opacity: 0.5;
+  transition: all var(--dur) var(--ease-out);
+}
+.wrap :global(.swiper-pagination-bullet-active) {
+  width: 26px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  opacity: 1;
+}

@@ -1,0 +1,29 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.05rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  transition: all var(--dur) var(--ease-out);
+}
+button.pill {
+  cursor: pointer;
+}
+button.pill:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+.active:hover {
+  color: var(--accent-contrast);
+}

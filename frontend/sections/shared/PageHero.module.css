@@ -1,0 +1,98 @@
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 68vh;
+  padding-top: calc(var(--nav-h) + clamp(3rem, 8vw, 7rem));
+  padding-bottom: clamp(3rem, 6vw, 6rem);
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+}
+.hero[data-size="tall"] {
+  min-height: 86vh;
+}
+
+.bg {
+  object-fit: cover;
+  z-index: -2;
+  animation: scaleIn 1.4s var(--ease-out) both;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+      180deg,
+      rgba(11, 15, 23, 0.55) 0%,
+      rgba(11, 15, 23, 0.35) 35%,
+      rgba(11, 15, 23, 0.88) 100%
+    ),
+    radial-gradient(70% 60% at 80% 10%, rgba(0, 212, 255, 0.18), transparent 60%);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 60rem;
+  animation: fadeUp 1s var(--ease-out) 0.15s both;
+}
+.center {
+  align-items: center;
+  text-align: center;
+}
+.center .inner {
+  margin-inline: auto;
+}
+
+.crumbs {
+  margin-bottom: 0.5rem;
+}
+.eyebrow {
+  color: var(--brand-cyan);
+}
+.title {
+  font-size: var(--fs-display-2);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  text-wrap: balance;
+}
+.desc {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-snug);
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 44ch;
+}
+.center .desc {
+  margin-inline: auto;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+.center .actions {
+  justify-content: center;
+}
+
+/* ----- Bottom stats card ----- */
+.statsWrap {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+.statsCard {
+  /* Override theme tokens locally so Stats renders light over the dark scrim */
+  --text-primary: #fff;
+  --text-secondary: rgba(255, 255, 255, 0.82);
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --accent: var(--brand-cyan);
+  --border: rgba(255, 255, 255, 0.14);
+  background: var(--surface-glass);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}

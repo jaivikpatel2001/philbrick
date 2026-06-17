@@ -1,0 +1,126 @@
+.highlightBand {
+  background: var(--bg-secondary);
+  border-block: 1px solid var(--border);
+}
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+.highlights li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+}
+.highlights svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ----- Subcategories ----- */
+.subGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.subCard {
+  padding: clamp(1.5rem, 2.5vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.subCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-accent);
+}
+.subNum {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--accent);
+  font-weight: var(--fw-semibold);
+}
+.subCard h3 {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  margin: 0.75rem 0 0.5rem;
+}
+.subCard p {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  line-height: var(--lh-relaxed);
+}
+
+/* ----- Specs ----- */
+.specSection {
+  background: var(--bg-secondary);
+  border-block: 1px solid var(--border);
+}
+.specLayout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+.specLayout > :global(.header) {
+  margin-bottom: 0;
+}
+.specs {
+  display: flex;
+  flex-direction: column;
+}
+.specRow {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 1.5rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.specRow:first-child {
+  border-top: 1px solid var(--border);
+}
+.specRow dt {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+.specRow dd {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+}
+
+/* ----- Related ----- */
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1000px) {
+  .highlights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .subGrid,
+  .relatedGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .specLayout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+@media (max-width: 620px) {
+  .highlights,
+  .subGrid,
+  .relatedGrid {
+    grid-template-columns: 1fr;
+  }
+  .specRow {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}

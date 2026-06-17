@@ -1,0 +1,109 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: 100%;
+  transition: transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-accent);
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.img {
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+.card:hover .img {
+  transform: scale(1.06);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  flex: 1;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+.cat {
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+}
+.dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+.title {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  line-height: var(--lh-snug);
+}
+.featured .title {
+  font-size: var(--fs-h3);
+}
+.excerpt {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  line-height: var(--lh-relaxed);
+}
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--grad-accent);
+  color: var(--accent-contrast);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-xs);
+}
+.role {
+  color: var(--text-muted);
+}
+
+@media (min-width: 901px) {
+  .featured {
+    flex-direction: row;
+  }
+  .featured .media {
+    flex: 0 0 55%;
+    aspect-ratio: auto;
+  }
+  .featured .body {
+    justify-content: center;
+    padding: clamp(2rem, 4vw, 3.5rem);
+  }
+}
