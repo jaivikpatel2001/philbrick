@@ -48,15 +48,18 @@ const TILES = [
   { img: PROJECT_IMG.four, name: "St. Catherine Medical" },
 ];
 
-const SCENES = ["Future", "Architecture", "Anatomy", "Intelligence", "Proof", "Reveal"];
+const SCENES = ["Arrival", "Future", "Architecture", "Anatomy", "Intelligence", "Proof", "Reveal"];
 
+/* The interior story starts at t=14 of a 114-unit timeline (see below), so the
+   old thresholds map to (14 + t) / 114 of total scroll. */
 function sceneFromProgress(p: number) {
-  if (p < 0.15) return 0;
-  if (p < 0.35) return 1;
-  if (p < 0.6) return 2;
-  if (p < 0.8) return 3;
-  if (p < 0.9) return 4;
-  return 5;
+  if (p < 0.12) return 0;
+  if (p < 0.25) return 1;
+  if (p < 0.43) return 2;
+  if (p < 0.65) return 3;
+  if (p < 0.82) return 4;
+  if (p < 0.91) return 5;
+  return 6;
 }
 
 export function ScrollStory() {
@@ -85,6 +88,8 @@ export function ScrollStory() {
       const doorR = q(s(styles.doorR))[0];
       const cabinGlow = q(s(styles.cabinGlow))[0];
       const building = q(s(styles.building))[0];
+      const exterior = q(s(styles.exterior))[0];
+      const extTower = q(s(styles.extTower))[0];
       const blueprint = q(s(styles.blueprint))[0];
       const labels = q(s(styles.labels))[0];
       const techLayer = q(s(styles.techLayer))[0];
@@ -108,8 +113,10 @@ export function ScrollStory() {
       ];
       const explodingEls = exploding.map((p) => p.el);
 
-      /* ---- Baseline (timeline time 0 = resting hero state, fully visible) ---- */
-      gsap.set(rig, { autoAlpha: 1, y: 0, scale: 1, rotateY: 0 });
+      /* ---- Baseline (timeline time 0 = exterior arrival: the tower is
+         visible, the rig waits hidden behind the facade) ---- */
+      gsap.set(exterior, { autoAlpha: 1 });
+      gsap.set(rig, { autoAlpha: 0, y: 0, scale: 0.95, rotateY: 0 });
       gsap.set(building, { autoAlpha: 0, y: 50 });
       gsap.set([blueprint, labels, techLayer, finale, flare], { autoAlpha: 0 });
       gsap.set(blueprint, { scale: 1.04 });
@@ -118,9 +125,9 @@ export function ScrollStory() {
       gsap.set(scenes[0], { autoAlpha: 1, y: 0 });
       gsap.set(tiles, { autoAlpha: 0, y: 24 });
       gsap.set(techTags, { autoAlpha: 0, scale: 0.8 });
-      // Note: the resting hero state (rig + scene 1) is fully visible via the
-      // set() calls above — no time-based entrance is required, so the hero is
-      // never blank on load. A subtle CSS "settle" handles the on-load flourish.
+      // Note: the resting hero state (exterior + scene 1 copy) is fully visible
+      // via the set() calls above — no time-based entrance is required, so the
+      // hero is never blank on load. A CSS "settle" handles the on-load flourish.
 
       const dummy = { v: 0 };
       const tl = gsap.timeline({
@@ -140,68 +147,83 @@ export function ScrollStory() {
         },
       });
 
+      /* ---- Scene 1 — arrival (0–14): push in toward the tower at night,
+         then cross-fade through the facade into the elevator rig, so even the
+         fallback reads "outside → inside" ---- */
+      tl.to(cue, { autoAlpha: 0, duration: 4 }, 4);
+      tl.to(extTower, { scale: 1.5, y: 110, ease: "power1.in", duration: 15 }, 0);
+      tl.to(scenes[0], { autoAlpha: 0, y: -24, duration: 4 }, 9);
+      tl.to(exterior, { autoAlpha: 0, duration: 5 }, 10);
+      tl.to(rig, { autoAlpha: 1, scale: 1, duration: 6 }, 10);
+      tl.to(scenes[1], { autoAlpha: 1, y: 0, duration: 5 }, 11.5);
+
+      /* ---- The original interior story, nested so its local t0–100 maps to
+         global 14–114 (≈ scroll 0.12–1.0) ---- */
+      const inner = gsap.timeline({ defaults: { ease: "none" } });
+
       // Continuous ambient parallax across the whole journey.
-      tl.to(q(s(styles.grid))[0], { yPercent: -6, duration: 100 }, 0);
-      tl.to(q(s(styles.glowBlue))[0], { yPercent: 26, duration: 100 }, 0);
+      inner.to(q(s(styles.grid))[0], { yPercent: -6, duration: 100 }, 0);
+      inner.to(q(s(styles.glowBlue))[0], { yPercent: 26, duration: 100 }, 0);
 
-      /* ---- Scene 1 — the rise (0–15) ---- */
-      tl.to(cue, { autoAlpha: 0, duration: 4 }, 5);
-      tl.to(rig, { y: -14, duration: 14 }, 0.01);
-      tl.to(scenes[0], { autoAlpha: 0, y: -24, duration: 5 }, 14);
+      /* ---- Scene 2 — the rise (0–15) ---- */
+      inner.to(rig, { y: -14, duration: 14 }, 0.01);
+      inner.to(scenes[1], { autoAlpha: 0, y: -24, duration: 5 }, 14);
 
-      /* ---- Scene 2 — architecture / blueprint (15–35) ---- */
-      tl.to(building, { autoAlpha: 0.55, y: 0, duration: 9 }, 14);
-      tl.to(rig, { scale: 1.14, y: 18, duration: 20 }, 15);
-      tl.to(blueprint, { autoAlpha: 1, scale: 1, duration: 10 }, 16);
-      tl.to(scenes[1], { autoAlpha: 1, y: 0, duration: 6 }, 18);
-      tl.to(scenes[1], { autoAlpha: 0, y: -24, duration: 5 }, 33);
-      tl.to(blueprint, { autoAlpha: 0, duration: 5 }, 33);
+      /* ---- Scene 3 — architecture / blueprint (15–35) ---- */
+      inner.to(building, { autoAlpha: 0.55, y: 0, duration: 9 }, 14);
+      inner.to(rig, { scale: 1.14, y: 18, duration: 20 }, 15);
+      inner.to(blueprint, { autoAlpha: 1, scale: 1, duration: 10 }, 16);
+      inner.to(scenes[2], { autoAlpha: 1, y: 0, duration: 6 }, 18);
+      inner.to(scenes[2], { autoAlpha: 0, y: -24, duration: 5 }, 33);
+      inner.to(blueprint, { autoAlpha: 0, duration: 5 }, 33);
 
-      /* ---- Scene 3 — exploded view (35–60) ---- */
-      tl.to(rig, { scale: 1, y: 0, rotateY: -18, ease: "power2.inOut", duration: 8 }, 34);
+      /* ---- Scene 4 — exploded view (35–60) ---- */
+      inner.to(rig, { scale: 1, y: 0, rotateY: -18, ease: "power2.inOut", duration: 8 }, 34);
       exploding.forEach((p) =>
-        tl.to(p.el, { x: p.x, y: p.y, ease: "power2.out", duration: 12 }, 36)
+        inner.to(p.el, { x: p.x, y: p.y, ease: "power2.out", duration: 12 }, 36)
       );
-      tl.to(cabin, { scale: 1.05, duration: 12 }, 36);
-      tl.to(ropes, { autoAlpha: 0.2, y: -28, duration: 10 }, 36);
-      tl.to(scenes[2], { autoAlpha: 1, y: 0, duration: 6 }, 37);
-      tl.to(labels, { autoAlpha: 1, duration: 6 }, 44);
-      tl.to(labels, { autoAlpha: 0, duration: 5 }, 58);
-      tl.to(scenes[2], { autoAlpha: 0, y: -24, duration: 5 }, 58);
+      inner.to(cabin, { scale: 1.05, duration: 12 }, 36);
+      inner.to(ropes, { autoAlpha: 0.2, y: -28, duration: 10 }, 36);
+      inner.to(scenes[3], { autoAlpha: 1, y: 0, duration: 6 }, 37);
+      inner.to(labels, { autoAlpha: 1, duration: 6 }, 44);
+      inner.to(labels, { autoAlpha: 0, duration: 5 }, 58);
+      inner.to(scenes[3], { autoAlpha: 0, y: -24, duration: 5 }, 58);
 
-      /* ---- Scene 4 — intelligent technology (60–80) ---- */
-      tl.to(rig, { rotateY: 0, scale: 0.96, duration: 9 }, 59);
-      tl.to(explodingEls, { autoAlpha: 0.4, duration: 8 }, 59);
-      tl.to(techLayer, { autoAlpha: 1, duration: 8 }, 60);
-      tl.to(techTags, { autoAlpha: 1, scale: 1, stagger: 1.1, duration: 5 }, 61);
-      tl.to(scenes[3], { autoAlpha: 1, y: 0, duration: 6 }, 61);
-      tl.to(techTags, { autoAlpha: 0, duration: 4 }, 78);
-      tl.to(techLayer, { autoAlpha: 0, duration: 5 }, 78);
-      tl.to(scenes[3], { autoAlpha: 0, y: -24, duration: 5 }, 78);
+      /* ---- Scene 5 — intelligent technology (60–80) ---- */
+      inner.to(rig, { rotateY: 0, scale: 0.96, duration: 9 }, 59);
+      inner.to(explodingEls, { autoAlpha: 0.4, duration: 8 }, 59);
+      inner.to(techLayer, { autoAlpha: 1, duration: 8 }, 60);
+      inner.to(techTags, { autoAlpha: 1, scale: 1, stagger: 1.1, duration: 5 }, 61);
+      inner.to(scenes[4], { autoAlpha: 1, y: 0, duration: 6 }, 61);
+      inner.to(techTags, { autoAlpha: 0, duration: 4 }, 78);
+      inner.to(techLayer, { autoAlpha: 0, duration: 5 }, 78);
+      inner.to(scenes[4], { autoAlpha: 0, y: -24, duration: 5 }, 78);
 
-      /* ---- Scene 5 — reassemble + project showcase (80–90) ---- */
-      tl.to(
+      /* ---- Scene 6 — reassemble + project showcase (80–90) ---- */
+      inner.to(
         explodingEls,
         { x: 0, y: 0, autoAlpha: 1, ease: "power2.inOut", duration: 9 },
         79
       );
-      tl.to(cabin, { scale: 1, duration: 9 }, 79);
-      tl.to(ropes, { autoAlpha: 1, y: 0, duration: 9 }, 79);
-      tl.to(rig, { scale: 0.72, duration: 10 }, 80);
-      tl.to(scenes[4], { autoAlpha: 1, y: 0, duration: 5 }, 81);
-      tl.to(tiles, { autoAlpha: 1, y: 0, stagger: 0.8, duration: 4 }, 82);
-      tl.to(scenes[4], { autoAlpha: 0, y: -24, duration: 4 }, 89);
+      inner.to(cabin, { scale: 1, duration: 9 }, 79);
+      inner.to(ropes, { autoAlpha: 1, y: 0, duration: 9 }, 79);
+      inner.to(rig, { scale: 0.72, duration: 10 }, 80);
+      inner.to(scenes[5], { autoAlpha: 1, y: 0, duration: 5 }, 81);
+      inner.to(tiles, { autoAlpha: 1, y: 0, stagger: 0.8, duration: 4 }, 82);
+      inner.to(scenes[5], { autoAlpha: 0, y: -24, duration: 4 }, 89);
 
-      /* ---- Scene 6 — final reveal (90–100) ---- */
-      tl.to(rig, { scale: 0.98, duration: 5 }, 88);
-      tl.to(doorL, { xPercent: -100, ease: "power2.inOut", duration: 8 }, 89);
-      tl.to(doorR, { xPercent: 100, ease: "power2.inOut", duration: 8 }, 89);
-      tl.to(cabinGlow, { autoAlpha: 1, duration: 8 }, 89);
-      tl.to(rig, { scale: 2.6, ease: "power2.in", duration: 9 }, 92);
-      tl.to(flare, { autoAlpha: 1, duration: 7 }, 93);
-      tl.to(finale, { autoAlpha: 1, duration: 5 }, 95);
-      tl.set(finale, { pointerEvents: "auto" }, 96);
-      tl.to(dummy, { v: 1, duration: 0.01 }, 100);
+      /* ---- Scene 7 — final reveal (90–100) ---- */
+      inner.to(rig, { scale: 0.98, duration: 5 }, 88);
+      inner.to(doorL, { xPercent: -100, ease: "power2.inOut", duration: 8 }, 89);
+      inner.to(doorR, { xPercent: 100, ease: "power2.inOut", duration: 8 }, 89);
+      inner.to(cabinGlow, { autoAlpha: 1, duration: 8 }, 89);
+      inner.to(rig, { scale: 2.6, ease: "power2.in", duration: 9 }, 92);
+      inner.to(flare, { autoAlpha: 1, duration: 7 }, 93);
+      inner.to(finale, { autoAlpha: 1, duration: 5 }, 95);
+      inner.set(finale, { pointerEvents: "auto" }, 96);
+      inner.to(dummy, { v: 1, duration: 0.01 }, 100);
+
+      tl.add(inner, 14);
     },
     { scope: root, dependencies: [reduced] }
   );
@@ -220,6 +242,14 @@ export function ScrollStory() {
         <div className={styles.glowGold} aria-hidden />
         <div className={styles.glowBlue} aria-hidden />
         <div className={styles.building} aria-hidden />
+        {/* Exterior establishing shot (scene 1) — crossfades into the rig */}
+        <div className={styles.exterior} aria-hidden>
+          <div className={styles.extSideL} />
+          <div className={styles.extSideR} />
+          <div className={styles.extTower}>
+            <span className={styles.extEntrance} />
+          </div>
+        </div>
         <div className={styles.vignette} aria-hidden />
         <div className={styles.topScrim} aria-hidden />
 
@@ -229,7 +259,20 @@ export function ScrollStory() {
             <div className={styles.scenes}>
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>01 — Vertical Mobility</span>
+                  <span className={styles.eyebrow}>01 — Arrival</span>
+                  <h2 className={styles.sceneTitle}>
+                    Engineered for <em>movement.</em>
+                  </h2>
+                  <p className={styles.sceneSub}>
+                    Night falls on the VERTIQ tower. Step through the glass —
+                    your elevator is already waiting.
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.scene} data-scene>
+                <div className={styles.sceneInner}>
+                  <span className={styles.eyebrow}>02 — Vertical Mobility</span>
                   <h2 className={styles.sceneTitle}>
                     Engineering <em>Movement.</em>
                   </h2>
@@ -246,7 +289,7 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>02 — Architecture × Engineering</span>
+                  <span className={styles.eyebrow}>03 — Architecture × Engineering</span>
                   <h2 className={styles.sceneTitle}>
                     Every great building begins with <em>movement.</em>
                   </h2>
@@ -259,7 +302,7 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>03 — Anatomy</span>
+                  <span className={styles.eyebrow}>04 — Anatomy</span>
                   <h2 className={styles.sceneTitle}>
                     Precision in <em>every component.</em>
                   </h2>
@@ -273,7 +316,7 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>04 — Intelligence</span>
+                  <span className={styles.eyebrow}>05 — Intelligence</span>
                   <h2 className={styles.sceneTitle}>
                     Smart elevators for <em>smart buildings.</em>
                   </h2>
@@ -286,7 +329,7 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>05 — Proof</span>
+                  <span className={styles.eyebrow}>06 — Proof</span>
                   <h2 className={styles.sceneTitle}>
                     Trusted by <em>landmark developments.</em>
                   </h2>

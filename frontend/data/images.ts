@@ -58,17 +58,25 @@ const ID = {
   portraitWoman2: "1438761681033-6461ffad8d80",
   abstractBlue: "1451187580459-43490279c0fa",
   cityAerial: "1480714378408-67cf0d13bc1b",
+  // Indian context (web-sourced from Unsplash; review/replace with licensed
+  // brand photography before launch):
+  mumbaiSkyline: "1710582308582-55cc0c461c4e",
+  mumbaiNight: "1726390731208-3656bb0b8e42",
+  personIN1: "1742981365880-698cfb84492d",
+  personIN2: "1653666866518-d01fabfa94c2",
+  personIN3: "1626063240213-c629ae4ef34c",
+  personIN4: "1656221009909-4f202547cd94",
 };
 
 /* ----- Hero & atmospheric --------------------------------------------- */
 export const HERO = {
-  home: img(ID.towerUpward, { w: 2400, q: 80 }),
-  homeAlt: img(ID.curvedTower, { w: 2000 }),
+  home: img(ID.mumbaiSkyline, { w: 2400, q: 80 }),
+  homeAlt: img(ID.mumbaiNight, { w: 2000 }),
   about: img(ID.atriumLight, { w: 2200 }),
   products: img(ID.elevatorCabin, { w: 2200 }),
   technology: img(ID.circuitTech, { w: 2200 }),
   innovation: img(ID.dataServer, { w: 2200 }),
-  projects: img(ID.skylineDusk, { w: 2400 }),
+  projects: img(ID.mumbaiNight, { w: 2400 }),
   services: img(ID.engineerFactory, { w: 2200 }),
   industries: img(ID.glassFacade, { w: 2200 }),
   sustainability: img(ID.greenBuilding, { w: 2200 }),
@@ -77,7 +85,7 @@ export const HERO = {
   blog: img(ID.cityAerial, { w: 2200 }),
   contact: img(ID.facadeNight, { w: 2200 }),
   dealer: img(ID.handshake, { w: 2200 }),
-  global: img(ID.cityNight, { w: 2400 }),
+  global: img(ID.mumbaiSkyline, { w: 2400 }),
   download: img(ID.blueprint, { w: 2200 }),
   faq: img(ID.whiteArch, { w: 2000 }),
 };
@@ -109,8 +117,8 @@ export const INDUSTRY_IMG = {
 
 /* ----- Projects -------------------------------------------------------- */
 export const PROJECT_IMG = {
-  one: img(ID.curvedTower, { w: 1600 }),
-  two: img(ID.skylineDusk, { w: 1600 }),
+  one: img(ID.mumbaiSkyline, { w: 1600 }),
+  two: img(ID.mumbaiNight, { w: 1600 }),
   three: img(ID.hotelLobby, { w: 1600 }),
   four: img(ID.hospitalCorridor, { w: 1600 }),
   five: img(ID.glassFacade, { w: 1600 }),
@@ -139,10 +147,10 @@ export const SERVICE_IMG = {
 
 /* ----- People ---------------------------------------------------------- */
 export const PEOPLE = {
-  a: img(ID.portraitMan, { w: 600, h: 720 }),
-  b: img(ID.portraitWoman, { w: 600, h: 720 }),
-  c: img(ID.portraitMan2, { w: 600, h: 720 }),
-  d: img(ID.portraitWoman2, { w: 600, h: 720 }),
+  a: img(ID.personIN1, { w: 600, h: 720 }),
+  b: img(ID.personIN2, { w: 600, h: 720 }),
+  c: img(ID.personIN3, { w: 600, h: 720 }),
+  d: img(ID.personIN4, { w: 600, h: 720 }),
 };
 
 /* ----- Editorial / misc ------------------------------------------------ */

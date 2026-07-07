@@ -2,7 +2,8 @@
 
 How the cinematic elevator hero on the **homepage (`/`)** is built, how it
 syncs to scroll, and how to extend it. The hero is the first thing on the
-homepage and hands off — via a light-wipe — into the rest of the site.
+homepage; when its pinned scroll ends, the rest of the site scrolls in
+normally.
 
 > There is **no `/experience` route**. The experience *is* the homepage. The
 > hero component lives in `sections/experience/` (folder name only) and is
@@ -16,7 +17,7 @@ homepage and hands off — via a light-wipe — into the rest of the site.
 |---|---|
 | [`app/page.tsx`](../../app/page.tsx) | Homepage. Renders `<ElevatorScene/>` then About → Products → Services → Technology → Projects → Industries → Testimonials → CTA. |
 | [`sections/experience/ElevatorScene.tsx`](ElevatorScene.tsx) | **The hero.** Capability wrapper + the Three.js `Scene3D`. |
-| [`sections/experience/ElevatorScene.module.css`](ElevatorScene.module.css) | Stage / canvas mount / atmosphere / copy positioning / light-wipe. |
+| [`sections/experience/ElevatorScene.module.css`](ElevatorScene.module.css) | Stage / canvas mount / atmosphere / copy positioning. |
 | [`sections/experience/ScrollStory.tsx`](ScrollStory.tsx) | **Fallback hero** (hand-built CSS/GSAP elevator) for no-WebGL / reduced-motion. Also the source of the shared copy/HUD/finale styles. |
 | [`sections/experience/ScrollStory.module.css`](ScrollStory.module.css) | Shared scene/HUD/finale styling, reused by `ElevatorScene` via `import story from "./ScrollStory.module.css"`. |
 | [`data/model.ts`](../../data/model.ts) | Optional GLTF model drop-in config (default off). |
@@ -31,16 +32,16 @@ runs **Lenis** and wires it into the GSAP ticker + `ScrollTrigger` site-wide.
 
 ```
 app/page.tsx
-└─ <ElevatorScene/>     ← 900vh pinned hero; ends in a full-screen light-wipe
-   <AboutPreview/>      ← revealed as the wipe fades  ("step out of the elevator")
+└─ <ElevatorScene/>     ← 1300vh pinned hero
+   <AboutPreview/>      ← scrolls in as soon as the pinned hero ends
    <ClientMarquee/> <ProductsShowcase/> <ServiceEcosystem/> <TechnologyPreview/>
    <Projects/> <IndustriesShowcase/> <StatsBand/> <TestimonialsSection/> <CTASection/>
 ```
 
-The hero is just the first section in normal document flow. Because the wipe
-overlay is appended to `<body>` (not trapped in the hero's stacking context), it
-can cover the whole viewport during the hand-off and then fade to reveal whatever
-section comes next — currently `AboutPreview`.
+The hero is just the first section in normal document flow: when its 1300vh
+wrapper has scrolled past, the sticky stage releases and `AboutPreview` slides
+up like any other section. (An earlier iteration used a full-screen light-wipe
+overlay here; it was removed — no overlay is appended to `<body>` anymore.)
 
 ## 3. Capability wrapper & fallback
 
@@ -69,34 +70,44 @@ scroll → Lenis → ScrollTrigger(scrub) → onUpdate → progress.current
 rAF loop (always) → pose(progress.current, time) → composer.render()
 ```
 
-**Pinning** is CSS: the 900vh section (`SCROLL_VH = 900`) contains a
+**Pinning** is CSS: the 1300vh section (`SCROLL_VH = 1300`) contains a
 `position: sticky; height: 100vh` stage, so the hero stays on screen while the
 section scrolls. We deliberately do **not** use GSAP `pin` (it fights Lenis).
 
-## 5. Scene breakdown (the 6 beats)
+## 5. Scene breakdown (exterior arrival → component explorer)
 
-`sceneFrom(p)` drives the HUD; `pose()` + the copy timeline use explicit thresholds.
+The story now **opens outside at night** and pushes into the building before the
+interior sequence begins. `beatFromP(p)` drives the exterior copy,
+`activeFromP(p)` drives the component explorer, and `pose()` uses the explicit
+thresholds below (`ARRIVE_END` / `APPROACH_END` / `INSIDE_P` / `COMP_START` /
+`COMP_END` in `ElevatorScene.tsx`).
 
-| # | HUD | progress | 3D behaviour | Copy |
-|---|---|---|---|---|
-| 1 | Arrival | 0.00–0.20 | Lobby wide shot, doors closed, indicator counting down | "Engineered for **movement.**" |
-| 2 | The Call | 0.20–0.40 | Camera approaches; **doors part** | "Your elevator **arrives.**" |
-| 3 | Step Inside | 0.40–0.60 | At the doorway; interior light comes up | "Into the **cabin.**" |
-| 4 | Ascending | 0.60–0.82 | **Shaft markers scroll** behind the glass back + floor indicator climbs (environment moves, not the car) | "The **ascent.**" |
-| 5 | Engineering | 0.82–~0.9 | Side panels **fade** to reveal rails / counterweight / machine / ropes | "Beneath the **calm.**" |
-| 6 | Destination | ~0.9–1.0 | Warm light blooms → **full-screen wipe** → hands off to the site | finale: "Engineering Every **Journey.**" + CTA |
+| Beat | progress | 3D behaviour | Copy / UI |
+|---|---|---|---|
+| Arrival (exterior) | 0.00–0.12 | Wide night establishing shot: procedural VERTIQ tower (instanced curtain-wall + lit offices, gold podium, backlit sign, entrance glow), fogged context towers, gradient sky dome, reflective plaza | "Engineered for **movement.**" |
+| The Approach | 0.12–0.24 | Dolly-zoom push toward the entrance — the camera moves in while the fov narrows 52°→38°, so the tower looms | "Your elevator **arrives.**" |
+| Threshold | 0.24–0.34 | Camera passes under the canopy and *through* the entrance glass (the glass + plaza pool light fade just before contact); studio reflections ramp back up; lands on the original lobby wide shot | — |
+| The Call | 0.34–0.42 | Lobby wide → closer; **doors part** (`smoothstep(0.36, 0.45, p)`) | — |
+| Explore | 0.42–0.90 | The 8-component explorer: the camera auto-frames each part; projected hotspot + caption + right-hand rail; clicking opens the detail modal | component captions |
+| Destination | 0.90–1.0 | Glide into the cabin; the pin then releases and the page scrolls on normally | — |
 
-## 6. `pose(progress, time)` — the analytic driver
+## 6. `pose(progress)` — the analytic driver
 
-Pure function of progress + time (perfectly scrubbable). Highlights:
-- **Camera** interpolates a keyframe path (`camKeys`) with `smoothstep` easing and
-  always `lookAt`s the centered elevator. A separate `camKeysG` path is used when a
-  GLTF model is active.
-- **Doors:** `o = smoothstep(0.26, 0.46, p)` slides `doorL/doorR` apart.
-- **Ascent:** shaft `markers` translate on a loop (`travel % spacing`); the
-  counterweight moves opposite; a canvas-texture floor indicator redraws on change.
-- **Engineering reveal:** `panelMat.opacity` fades the side panels.
-- **Destination:** `destLight` + LED emissive bloom up.
+Pure function of progress (perfectly scrubbable). Highlights:
+- **Camera** interpolates the `stops` keyframe path (exterior stops → per-component
+  auto-framing from `FRAMING` → outro) with `smoothstep` easing; a parallel
+  `gltfStops` path is used when a GLTF model is active. `fov` animates for the
+  dolly-zoom (52→38→40) and `updateProjectionMatrix()` runs only when it changes.
+- **Exterior lifecycle:** `exterior.visible = p < INSIDE_P + 0.03`;
+  `scene.environmentIntensity` lerps 0.35 (night) → `ENV.intensity` (interior)
+  across the threshold; the entrance glass + plaza pool light fade before the
+  camera crosses the facade plane.
+- **Doors:** `o = smoothstep(0.36, 0.45, p)` slides `doorL/doorR` apart.
+- **Safety x-ray:** `panelMat.opacity` eases toward 0.12 while the safety
+  component is active.
+- **Emissive pulses:** COP screen + ceiling LED breathe on `performance.now()`.
+- **Hotspots:** the active component's anchor projects to screen space
+  (`vector.project(camera)`) each frame.
 
 ## 7. Three.js structure
 
@@ -113,32 +124,37 @@ Pure function of progress + time (perfectly scrubbable). Highlights:
 - **Car:** steel frame, **glass back** (panoramic — see the shaft during ascent),
   glass doors + steel stiles, gold corner posts, ceiling LED, COP (buttons +
   screen), handrail, mirror strip, transom + **floor indicator**, interior light.
-- **Shaft:** guide rails, counterweight (plates), looping floor markers + lights,
-  machine (motor + sheave) and ropes — revealed during ascent/engineering.
+- **Shaft:** guide rails, counterweight (plates), machine (motor + sheave),
+  ropes, safety brakes + governor.
+- **Exterior (arrival beats):** tower envelope built from slabs around the
+  entrance (so the lit lobby shows through the glass from the street), window
+  grid as two `InstancedMesh`es (dark glass + sparse warm lit offices), gold
+  podium trims + backlit canvas-texture sign, entrance glass + frame + canopy,
+  reflective plaza plane, baked gradient sky dome, one instanced set of fogged
+  context towers sharing a single material, `THREE.Fog` starting beyond every
+  interior camera distance, plus a cool "city moon" directional + warm entrance
+  pool light that live inside the exterior group (hidden with it). Colors are
+  read from `styles/tokens.css` at init.
 - **Lighting:** warm key (shadowed) + cool fill + blue rim + hemisphere + interior
-  point + destination point.
-- **Post:** `EffectComposer` → `RenderPass` → low `UnrealBloomPass`
-  (strength 0.12, threshold 0.9) → `OutputPass` → `SMAAPass`.
+  point + two rect-area softboxes; exterior adds the moon + entrance pool.
+- **Post:** `EffectComposer` → `RenderPass` → NaN-sanitize `ShaderPass` → low
+  `UnrealBloomPass` (strength 0.12, threshold 0.9) → `OutputPass` → `SMAAPass`.
 
-## 8. The light-wipe hand-off
+## 8. The hand-off
 
-A `position: fixed` warm-white overlay (`styles.flash`) is appended to `<body>`
-(z-index 9999, `pointer-events: none`). Two coordinated controls:
-- The hero timeline ramps its opacity 0→1 over progress ~0.91→1.0 (doors open →
-  light floods).
-- A separate `ScrollTrigger` (`start: "bottom bottom"`, `end: "+=100%"`) fades it
-  1→0 as the next section scrolls up — revealing the site beneath.
-
-Net effect: doors open → camera glides in → light floods → the homepage content
-fades in. One continuous scroll, no reload.
+There is **no overlay transition** at the end of the hero (an earlier
+light-wipe was removed — it could sit over the page and read as "stuck").
+When the 1300vh wrapper finishes, the sticky stage simply releases and the
+next section scrolls up over the final cabin shot. If a transition is ever
+reintroduced, drive it from the main timeline and keep it `pointer-events:
+none`, fully faded out at rest.
 
 ## 9. Performance considerations
 
 - One render loop; `pixelRatio` capped at 2.
 - Transmission glass + bloom + shadows are the heaviest costs — keep glass
   surfaces few; shadow map at 2048; bloom subtle.
-- All geometries/materials/textures/render-targets are disposed on unmount; the
-  body-level wipe overlay is removed in the GSAP cleanup.
+- All geometries/materials/textures/render-targets are disposed on unmount.
 - Reduced-motion / no-WebGL users get the lightweight CSS `ScrollStory`.
 
 ## 10. Future extensibility
@@ -148,8 +164,9 @@ fades in. One continuous scroll, no reload.
   standalone *cabin* model (not a full room). Named door nodes can be wired to the
   door-open beat.
 - **Tune pacing:** `SCROLL_VH`. **Tune scrub:** the `scrub` value.
-- **Reframe:** edit `camKeys`. **Re-time scenes:** `sceneFrom()` thresholds +
-  the copy-timeline positions (keep them in sync).
+- **Reframe:** edit `stops` (exterior/outro) or `FRAMING` (per component).
+  **Re-time beats:** the `ARRIVE_END`/`APPROACH_END`/`INSIDE_P`/`COMP_START`/
+  `COMP_END` constants + the door/glass thresholds in `pose()` (keep in sync).
 - **Add realism later:** depth-of-field (BokehPass) and a mirror-reflective floor
   (Reflector) are the next high-impact additions; add once the base look is locked.
 - **Palette:** all colors come from `styles/tokens.css` — change them there.
@@ -157,9 +174,18 @@ fades in. One continuous scroll, no reload.
 ## 11. Gotchas
 
 - Don't add GSAP `pin` — pinning is CSS `position: sticky`.
-- `progress.current` is written only in the timeline `onUpdate`, read in the rAF
-  loop. Keep it that way.
+- `progress.current` is written only via `applyProgress()` (timeline `onUpdate`
+  + the dev hook), read in the rAF loop. Keep it that way.
 - Programmatic `window.scrollTo` doesn't reliably drive Lenis-linked ScrollTrigger;
   scroll via Lenis or set the timeline progress directly when testing.
 - Backgrounded tabs freeze `requestAnimationFrame`, so the 3D won't animate in a
-  hidden/headless preview (it renders one frame on mount). Verify in a real window.
+  hidden/headless preview. In dev, `window.__vertiqHero.set(p)` scrubs the hero
+  synchronously (pose + render + HUD state) — use it for headless screenshots.
+- **Anisotropy + bloom NaN:** anisotropic materials derive tangent frames from
+  screen-space UV derivatives, which collapse when a mesh is sub-pixel small
+  (e.g. the cabin seen from the street). One NaN pixel makes `UnrealBloomPass`
+  black out the whole frame — the sanitize `ShaderPass` before bloom clamps it.
+  Keep that pass if you add bloom passes or new anisotropic materials.
+- The exterior assumes the lobby stays inside the tower footprint
+  (`TW/TD/FRONT_Z` in the exterior block). If you resize the lobby, keep the
+  marble floor and side walls ending at the entrance line `z = FRONT_Z`.

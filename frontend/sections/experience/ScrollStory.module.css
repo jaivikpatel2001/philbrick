@@ -7,7 +7,7 @@
 
 .story {
   position: relative;
-  height: 800vh;
+  height: 920vh; /* +120vh for the exterior arrival beat before the story */
 }
 
 .stage {
@@ -99,6 +99,87 @@
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
+/* ----- Exterior establishing shot (scene 1 — arrival) ---------------------- */
+/* Hidden by default so the reduced-motion stack never shows it; the GSAP
+   baseline makes it visible when the scrubbed story runs. */
+.exterior {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+.extTower {
+  position: absolute;
+  left: 63%;
+  bottom: -3%;
+  width: clamp(190px, 21vw, 300px);
+  height: 86%;
+  transform: translateX(-50%);
+  transform-origin: 50% 92%;
+  will-change: transform;
+  border-inline: 1px solid rgba(199, 205, 213, 0.16);
+  background: linear-gradient(180deg, rgba(199, 205, 213, 0.06), transparent 26%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(199, 205, 213, 0.09) 0 2px,
+      rgba(10, 11, 14, 0.92) 2px 26px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(199, 205, 213, 0.07) 0 2px,
+      transparent 2px 22px
+    ),
+    linear-gradient(180deg, #14161c, #0a0b0e 70%);
+  box-shadow: 0 -40px 90px rgba(0, 0, 0, 0.55);
+}
+/* gold crown line at the parapet */
+.extTower::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.75), transparent);
+}
+/* warm lobby glow at the entrance — the point we "enter" through */
+.extEntrance {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 34%;
+  height: 6.5%;
+  transform: translateX(-50%);
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, rgba(248, 233, 184, 0.92), rgba(212, 175, 55, 0.4));
+  box-shadow: 0 0 34px rgba(212, 175, 55, 0.55), 0 0 90px rgba(212, 175, 55, 0.28);
+}
+/* low neighbouring silhouettes for scale, softened for depth */
+.extSideL,
+.extSideR {
+  position: absolute;
+  bottom: -2%;
+  width: 17vw;
+  height: 46%;
+  filter: blur(1px);
+  background: repeating-linear-gradient(
+      180deg,
+      rgba(199, 205, 213, 0.04) 0 2px,
+      transparent 2px 18px
+    ),
+    linear-gradient(180deg, #101319, #08090c 80%);
+}
+.extSideL {
+  left: 40%;
+  height: 38%;
+}
+.extSideR {
+  left: 82%;
+  height: 52%;
+}
+
 .vignette {
   position: absolute;
   inset: 0;
@@ -1094,6 +1175,7 @@
 .story[data-reduced="true"] .progressTrack,
 .story[data-reduced="true"] .labels,
 .story[data-reduced="true"] .techLayer,
+.story[data-reduced="true"] .exterior,
 .story[data-reduced="true"] .blueprint {
   display: none;
 }
