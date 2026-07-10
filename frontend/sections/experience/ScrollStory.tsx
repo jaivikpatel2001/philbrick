@@ -260,9 +260,10 @@ export function ScrollStory() {
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
                   <span className={styles.eyebrow}>01 Arrival</span>
-                  <h2 className={styles.sceneTitle}>
+                  {/* The fallback hero's opening line doubles as the page H1 */}
+                  <h1 className={styles.sceneTitle}>
                     Engineered for <em>movement.</em>
-                  </h2>
+                  </h1>
                   <p className={styles.sceneSub}>
                     Night falls on the VERTIQ tower. Step through the glass,
                     your elevator is already waiting.

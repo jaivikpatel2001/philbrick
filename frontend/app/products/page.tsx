@@ -4,6 +4,10 @@ import { CTASection } from "@/sections/shared/CTASection";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProductCard } from "@/components/cards/ProductCard";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
+import { PRODUCT_FAQS } from "@/data/faqs";
+import { FAQSection } from "@/sections/shared/FAQSection";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { productListSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { HERO } from "@/data/images";
 import styles from "./products.module.css";
 
@@ -17,6 +21,14 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <>
+      <JsonLd data={productListSchema()} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Products", path: "/products" },
+        ])}
+      />
+      <JsonLd data={faqSchema(PRODUCT_FAQS)} />
       <PageHero
         eyebrow="The portfolio"
         title="Vertical mobility for every building"
@@ -55,6 +67,14 @@ export default function ProductsPage() {
           </section>
         );
       })}
+
+      {/* Buyer guidance — visible Q&A mirrored in FAQPage structured data */}
+      <FAQSection
+        eyebrow="Choosing a system"
+        title="Common questions, answered"
+        description="The questions architects, builders and homeowners ask most when specifying vertical transport."
+        faqs={PRODUCT_FAQS}
+      />
 
       <CTASection
         title="Not sure which system fits?"

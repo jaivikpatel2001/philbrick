@@ -19,6 +19,8 @@ import {
 } from "@/data/company";
 import { TRUST_METRICS, GLOBAL_STATS } from "@/data/stats";
 import { HERO, MISC } from "@/data/images";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { aboutPageSchema, leadershipSchema, breadcrumbSchema } from "@/lib/schema";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -31,6 +33,14 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={aboutPageSchema()} />
+      <JsonLd data={leadershipSchema()} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+        ])}
+      />
       <PageHero
         eyebrow="Our story"
         title="Moving the world upward since 1968"

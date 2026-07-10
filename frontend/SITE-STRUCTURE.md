@@ -78,6 +78,16 @@ The flagship storytelling page. Source: `app/page.tsx`.
 | 8 | **Call to action** (`CTASection`) | Full-bleed image band, left-aligned statement → Request a consultation / Explore products. |
 |  | *Footer* | Global footer — oversized ghost wordmark, link columns, mono certification registry line. |
 
+> **Search & AI discoverability (2026-07):** every route ships JSON-LD in the
+> initial HTML (`components/seo/JsonLd.tsx` + builders in `lib/schema.ts`, real
+> data only): Organization + WebSite site-wide; Product + BreadcrumbList on the
+> 12 product pages; ItemList + FAQPage on /products; AboutPage + Person
+> (leadership) on /about; ContactPage + FAQPage on /contact. Visible FAQ
+> sections (`sections/shared/FAQSection.tsx`, content in `data/faqs.ts`) back
+> the FAQPage schema. The hero's arrival line is the homepage **H1** (3D and
+> fallback paths). `public/llms.txt` summarises the company for AI crawlers;
+> robots.txt + sitemap.xml (16 URLs) already covered all routes.
+
 > **Design direction ("Engineered Editorial", 2026-07):** reference-grade display
 > typography (up to ~8rem, tight leading/tracking) against small mono technical
 > labels; hairline rules + numbered rows instead of icon-box cards; sharp radii;

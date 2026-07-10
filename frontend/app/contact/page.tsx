@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { FiPhone, FiMail, FiMapPin, FiClock, FiAlertCircle } from "react-icons/fi";
 import { PageHero } from "@/sections/shared/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { FAQSection } from "@/sections/shared/FAQSection";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { contactPageSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
+import { CONTACT_FAQS } from "@/data/faqs";
 import { SITE } from "@/constants/site";
 import { HERO } from "@/data/images";
 import styles from "./contact.module.css";
@@ -37,6 +41,14 @@ const METHODS = [
 export default function ContactPage() {
   return (
     <>
+      <JsonLd data={contactPageSchema()} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ])}
+      />
+      <JsonLd data={faqSchema(CONTACT_FAQS)} />
       <PageHero
         eyebrow="Contact"
         title="Let's build upward, together"
@@ -102,6 +114,14 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* Enquiry process — visible Q&A mirrored in FAQPage structured data */}
+      <FAQSection
+        eyebrow="Before you write"
+        title="How working with us starts"
+        description="What to expect from first enquiry to survey, and what VERTIQ covers after handover."
+        faqs={CONTACT_FAQS}
+      />
     </>
   );
 }

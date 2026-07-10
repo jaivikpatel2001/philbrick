@@ -1023,19 +1023,26 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
         <div className={styles.vignette} aria-hidden />
         <div className={styles.topScrim} aria-hidden />
 
-        {/* Exterior-beat copy (arrival / approach), before the explorer takes over */}
+        {/* Exterior-beat copy (arrival / approach), before the explorer takes
+            over. The arrival line is the homepage's H1 — it's present in the
+            initial HTML, so the page has a crawlable primary heading even
+            though the scene itself renders in WebGL. */}
         <div className={`${styles.beatCopy} ${beat >= 0 ? styles.beatShow : ""}`}>
-          {beat >= 0 && (
-            <>
-              <span className={styles.capIndex}>{BEATS[beat].eyebrow}</span>
-              <h2 className={styles.beatTitle}>
-                {BEATS[beat].lead} <em>{BEATS[beat].em}</em>
-              </h2>
-              <p className={styles.capTagline}>
-                {theme === "light" ? BEATS[beat].subDay : BEATS[beat].sub}
-              </p>
-            </>
-          )}
+          {beat >= 0 &&
+            (() => {
+              const Title = beat === 0 ? "h1" : "h2";
+              return (
+                <>
+                  <span className={styles.capIndex}>{BEATS[beat].eyebrow}</span>
+                  <Title className={styles.beatTitle}>
+                    {BEATS[beat].lead} <em>{BEATS[beat].em}</em>
+                  </Title>
+                  <p className={styles.capTagline}>
+                    {theme === "light" ? BEATS[beat].subDay : BEATS[beat].sub}
+                  </p>
+                </>
+              );
+            })()}
         </div>
 
         {/* Clickable component hotspots (positioned each frame over the 3D part) */}

@@ -11,6 +11,8 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { RevealObserver } from "@/components/providers/RevealObserver";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -72,6 +74,9 @@ export default function RootLayout({
     <html lang="en" className={`no-js ${fontVariables}`} suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* Entity-graph anchor: the company + website, referenced by every page */}
+        <JsonLd data={organizationSchema()} />
+        <JsonLd data={websiteSchema()} />
         <a href="#main" className="skip-link">
           Skip to content
         </a>
