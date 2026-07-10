@@ -112,9 +112,23 @@ frontend/
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build    # production build
+npm run build    # static export → frontend/out/ (output: "export")
 npm run lint     # eslint
 ```
+
+**Deployment:** the app is fully prerendered and exports to plain HTML/CSS/JS
+in `out/`. `next start` does not apply in export mode — serve `out/` statically.
+
+- **Render Static Site (staging):** Root Directory `frontend` · Build Command
+  `npm ci && npm run build` · Publish Directory `out`. Clean URLs and
+  `404.html` are handled by Render automatically.
+- **cPanel (production):** run `npm run build` locally, then upload the
+  **contents** of `out/` into `public_html` (zip → upload → extract). The
+  bundled `public/.htaccess` (shipped inside `out/`) provides clean URLs,
+  the 404 page, compression and cache headers on Apache. At launch: set
+  `SITE.url` in `constants/site.ts` to the real domain, rebuild, re-upload,
+  enable AutoSSL in cPanel, and uncomment the HTTPS/www redirect block in
+  the `.htaccess`.
 
 The cinematic hero lives at `/` — see
 [`sections/experience/THREEJS-IMPLEMENTATION.md`](sections/experience/THREEJS-IMPLEMENTATION.md)
