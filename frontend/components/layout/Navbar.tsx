@@ -28,8 +28,10 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    setActive(null);
-    setMobileOpen(false);
+    Promise.resolve().then(() => {
+      setActive(null);
+      setMobileOpen(false);
+    });
   }, [pathname]);
 
   const openMega = (i: number) => {

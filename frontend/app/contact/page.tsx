@@ -87,7 +87,7 @@ export default function ContactPage() {
 
             <p className={styles.note}>
               Prefer to talk to a local team? VERTIQ operates in 40+ countries
-              with over 320 service branches — your enquiry is routed to the
+              with over 320 service branches. Your enquiry is routed to the
               nearest office.
             </p>
           </div>

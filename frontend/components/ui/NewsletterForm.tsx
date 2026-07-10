@@ -35,7 +35,7 @@ export function NewsletterForm() {
         {done ? <FiCheck /> : <FiArrowRight />}
       </button>
       <span className={styles.hint} role="status">
-        {done ? "You're subscribed — welcome aboard." : "Quarterly. No spam."}
+        {done ? "You're subscribed! Welcome aboard." : "Quarterly. No spam."}
       </span>
     </form>
   );

@@ -19,13 +19,13 @@ import styles from "./ScrollStory.module.css";
 
 /* ---- Exploded-view component callouts (scene 3) -------------------------- */
 const PARTS = [
-  { n: "01", name: "Traction Machine", tip: "Gearless permanent-magnet drive with regenerative braking.", side: "left", top: "12%", left: "1%" },
-  { n: "02", name: "Suspension Belts", tip: "Carbon-fibre belts — seven times lighter than steel.", side: "left", top: "27%", left: "0%", mobileHide: true },
-  { n: "03", name: "Guide Rails", tip: "Cold-drawn steel rails machined to micron tolerances.", side: "left", top: "45%", left: "1%" },
+  { n: "01", name: "Traction Machine", tip: "Gearless permanent magnet drive with regenerative braking.", side: "left", top: "12%", left: "1%" },
+  { n: "02", name: "Suspension Belts", tip: "Carbon fibre belts, seven times lighter than steel.", side: "left", top: "27%", left: "0%", mobileHide: true },
+  { n: "03", name: "Guide Rails", tip: "Cold drawn steel rails machined to micron tolerances.", side: "left", top: "45%", left: "1%" },
   { n: "04", name: "Counterweight", tip: "Balances the car to cut motor load and energy use.", side: "left", top: "62%", left: "0%", mobileHide: true },
   { n: "05", name: "Control Systems", tip: "Pulse™ controller with destination dispatch and OTA updates.", side: "right", top: "10%", left: "64%" },
-  { n: "06", name: "Cabin", tip: "Aerospace-grade car frame with active vibration damping.", side: "right", top: "28%", left: "70%", mobileHide: true },
-  { n: "07", name: "Glass Doors", tip: "Silent belt operators and anti-crush infrared curtains.", side: "right", top: "45%", left: "70%" },
+  { n: "06", name: "Cabin", tip: "Aerospace grade car frame with active vibration damping.", side: "right", top: "28%", left: "70%", mobileHide: true },
+  { n: "07", name: "Glass Doors", tip: "Silent belt operators and anti crush infrared curtains.", side: "right", top: "45%", left: "70%" },
   { n: "08", name: "Safety Brakes", tip: "Progressive safety gear arrests the car in milliseconds.", side: "right", top: "58%", left: "64%", mobileHide: true },
   { n: "09", name: "Smart Sensors", tip: "200+ sensors stream live health data to the cloud.", side: "right", top: "72%", left: "66%" },
 ];
@@ -259,12 +259,12 @@ export function ScrollStory() {
             <div className={styles.scenes}>
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>01 — Arrival</span>
+                  <span className={styles.eyebrow}>01 Arrival</span>
                   <h2 className={styles.sceneTitle}>
                     Engineered for <em>movement.</em>
                   </h2>
                   <p className={styles.sceneSub}>
-                    Night falls on the VERTIQ tower. Step through the glass —
+                    Night falls on the VERTIQ tower. Step through the glass,
                     your elevator is already waiting.
                   </p>
                 </div>
@@ -272,7 +272,7 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>02 — Vertical Mobility</span>
+                  <span className={styles.eyebrow}>02 Vertical Mobility</span>
                   <h2 className={styles.sceneTitle}>
                     Engineering <em>Movement.</em>
                   </h2>
@@ -289,20 +289,20 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>03 — Architecture × Engineering</span>
+                  <span className={styles.eyebrow}>03 Architecture × Engineering</span>
                   <h2 className={styles.sceneTitle}>
                     Every great building begins with <em>movement.</em>
                   </h2>
                   <p className={styles.sceneSub}>
                     Our systems are engineered alongside architects, developers
-                    and engineers — from the first blueprint to the final rise.
+                    and engineers, from the first blueprint to the final rise.
                   </p>
                 </div>
               </div>
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>04 — Anatomy</span>
+                  <span className={styles.eyebrow}>04 Anatomy</span>
                   <h2 className={styles.sceneTitle}>
                     Precision in <em>every component.</em>
                   </h2>
@@ -316,7 +316,7 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>05 — Intelligence</span>
+                  <span className={styles.eyebrow}>05 Intelligence</span>
                   <h2 className={styles.sceneTitle}>
                     Smart elevators for <em>smart buildings.</em>
                   </h2>
@@ -329,12 +329,12 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>06 — Proof</span>
+                  <span className={styles.eyebrow}>06 Proof</span>
                   <h2 className={styles.sceneTitle}>
                     Trusted by <em>landmark developments.</em>
                   </h2>
                   <p className={styles.sceneSub}>
-                    From supertall towers to hospitals and hotels — VERTIQ moves
+                    From supertall towers to hospitals and hotels, VERTIQ moves
                     the buildings that define skylines.
                   </p>
                   <div className={styles.projRow}>
@@ -391,7 +391,7 @@ export function ScrollStory() {
                     <div className={styles.cabinGlow} />
                     <div className={styles.ceiling} />
                     <div className={styles.transom}>
-                      <span className={styles.floorNo}>— 24 —</span>
+                      <span className={styles.floorNo}>24</span>
                     </div>
                     <div className={styles.doorL} />
                     <div className={styles.doorR} />

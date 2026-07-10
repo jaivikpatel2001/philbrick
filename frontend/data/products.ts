@@ -8,25 +8,25 @@ export const PRODUCTS: Product[] = [
     category: "Vertical Transport",
     tagline: "Effortless mobility for towers that never sleep.",
     description:
-      "Gearless, machine-room-less elevators engineered for high-rise and mid-rise buildings — quiet, efficient and intelligent.",
+      "Gearless, machine room less elevators engineered for high rise and mid rise buildings. Quiet, efficient and intelligent.",
     longDescription:
-      "The VERTIQ Helix™ passenger platform pairs a permanent-magnet gearless drive with destination-dispatch control to move more people, faster, using up to 40% less energy. Regenerative drives feed braking energy back into the building grid, while a carbon-fibre belt system replaces traditional steel ropes to enable travel heights beyond 600 metres.",
+      "The VERTIQ Helix™ passenger platform pairs a permanent magnet gearless drive with destination dispatch control to move more people, faster, using up to 40% less energy. Regenerative drives feed braking energy back into the building grid, while a carbon fibre belt system replaces traditional steel ropes to enable travel heights beyond 600 metres.",
     heroImage: HERO.products,
     cardImage: PRODUCT_IMG.passenger,
     gallery: [PRODUCT_IMG.passenger, MISC.lobby, PROJECT_IMG.three, TECH_IMG.cabin],
     capacityRange: "630–2500 kg",
     speedRange: "1.0–10.0 m/s",
     highlights: [
-      "Permanent-magnet gearless drive",
-      "Destination-dispatch as standard",
+      "Permanent magnet gearless drive",
+      "Destination dispatch as standard",
       "Regenerative power recovery",
-      "Carbon-fibre belt suspension",
+      "Carbon fibre belt suspension",
     ],
     subcategories: [
-      { name: "Gearless MRL", description: "Machine-room-less gearless traction for new builds." },
-      { name: "Geared Traction", description: "Cost-efficient mid-rise systems up to 1.75 m/s." },
-      { name: "Compact Roomless", description: "Space-saving drive housed inside the shaft." },
-      { name: "High-Rise Group", description: "Destination-dispatched groups for supertall towers." },
+      { name: "Gearless MRL", description: "Machine room less gearless traction for new builds." },
+      { name: "Geared Traction", description: "Cost efficient mid rise systems up to 1.75 m/s." },
+      { name: "Compact Roomless", description: "Space saving drive housed inside the shaft." },
+      { name: "High Rise Group", description: "Destination dispatched groups for supertall towers." },
     ],
     specs: [
       { label: "Capacity", value: "630 – 2,500 kg (8–33 persons)" },
@@ -37,10 +37,10 @@ export const PRODUCTS: Product[] = [
       { label: "Control", value: "VERTIQ Destination Dispatch" },
     ],
     features: [
-      { iconName: "FiZap", title: "Regenerative drive", description: "Recovers braking energy and returns it to the building — cutting power draw by up to 40%." },
+      { iconName: "FiZap", title: "Regenerative drive", description: "Recovers braking energy and returns it to the building, cutting power draw by up to 40%." },
       { iconName: "FiCpu", title: "Destination dispatch", description: "Groups passengers by floor before they board, reducing wait and travel time by up to 30%." },
-      { iconName: "FiActivity", title: "Ride-quality control", description: "Active roller guides and closed-loop control deliver a vibration-free ride at every speed." },
-      { iconName: "FiWifi", title: "Connected by Pulse™", description: "Every unit streams 200+ data points to the cloud for predictive, condition-based service." },
+      { iconName: "FiActivity", title: "Ride quality control", description: "Active roller guides and closed loop control deliver a vibration free ride at every speed." },
+      { iconName: "FiWifi", title: "Connected by Pulse™", description: "Every unit streams 200+ data points to the cloud for predictive, condition based service." },
     ],
   },
   {
@@ -49,9 +49,9 @@ export const PRODUCTS: Product[] = [
     category: "Residential",
     tagline: "A private landmark inside your home.",
     description:
-      "Bespoke residential lifts that combine compact engineering with couture finishes — from glass shaft-less designs to fully enclosed cabins.",
+      "Bespoke residential lifts that combine compact engineering with couture finishes, from glass shaftless designs to fully enclosed cabins.",
     longDescription:
-      "VERTIQ Aura™ home elevators install in as little as a 900 × 900 mm footprint with no machine room and no pit on select models. A self-supporting aluminium structure means minimal building works, while a palette of veneers, stone, leather and glass lets each cabin be tailored to its residence.",
+      "VERTIQ Aura™ home elevators install in as little as a 900 × 900 mm footprint with no machine room and no pit on select models. A self supporting aluminium structure means minimal building works, while a palette of veneers, stone, leather and glass lets each cabin be tailored to its residence.",
     heroImage: PRODUCT_IMG.home,
     cardImage: PRODUCT_IMG.home,
     gallery: [PRODUCT_IMG.home, MISC.lobby, MISC.spiral],
@@ -59,15 +59,15 @@ export const PRODUCTS: Product[] = [
     speedRange: "0.15–1.0 m/s",
     highlights: [
       "Footprint from 900 × 900 mm",
-      "Pit-less & shaft-less options",
+      "Pit less & shaftless options",
       "Couture cabin finishes",
-      "Whisper-quiet < 45 dB",
+      "Whisper quiet < 45 dB",
     ],
     subcategories: [
-      { name: "Hydraulic Home Lift", description: "Smooth, pit-friendly drive for low-rise homes." },
-      { name: "Gearless Traction", description: "Energy-efficient, compact and quiet." },
-      { name: "Vacuum (Pneumatic)", description: "Self-supporting glass tube — no shaft, no pit." },
-      { name: "Shaftless Platform", description: "Open-plan lift for two to three stops." },
+      { name: "Hydraulic Home Lift", description: "Smooth, pit friendly drive for low rise homes." },
+      { name: "Gearless Traction", description: "Energy efficient, compact and quiet." },
+      { name: "Vacuum (Pneumatic)", description: "Self supporting glass tube, no shaft, no pit." },
+      { name: "Shaftless Platform", description: "Open plan lift for two to three stops." },
     ],
     specs: [
       { label: "Capacity", value: "250 – 500 kg (3–6 persons)" },
@@ -78,9 +78,9 @@ export const PRODUCTS: Product[] = [
       { label: "Noise", value: "< 45 dB(A)" },
     ],
     features: [
-      { iconName: "FiHome", title: "Fits where others can't", description: "A self-supporting structure slips into stairwells, corners and new builds with minimal works." },
-      { iconName: "FiFeather", title: "Couture finishes", description: "Veneer, stone, brushed metal, leather and panoramic glass — configured to your interior." },
-      { iconName: "FiShield", title: "Safe by design", description: "Battery home-landing, light curtains and gentle soft-start protect every member of the family." },
+      { iconName: "FiHome", title: "Fits where others can't", description: "A self supporting structure slips into stairwells, corners and new builds with minimal works." },
+      { iconName: "FiFeather", title: "Couture finishes", description: "Veneer, stone, brushed metal, leather and panoramic glass, configured to your interior." },
+      { iconName: "FiShield", title: "Safe by design", description: "Battery home landing, light curtains and gentle soft start protect every member of the family." },
     ],
   },
   {
@@ -89,9 +89,9 @@ export const PRODUCTS: Product[] = [
     category: "Heavy Duty",
     tagline: "Built to carry the weight of industry.",
     description:
-      "Heavy-duty goods and freight elevators engineered for warehouses, factories and logistics hubs that move serious loads.",
+      "Heavy duty goods and freight elevators engineered for warehouses, factories and logistics hubs that move serious loads.",
     longDescription:
-      "VERTIQ Forge™ freight elevators handle from 1,000 kg to 10,000 kg with reinforced platforms, bumper-grade cabins and drive systems rated for thousands of daily cycles. Wide-opening bi-parting doors, forklift-rated sills and abrasion-resistant interiors keep goods — and operators — moving safely.",
+      "VERTIQ Forge™ freight elevators handle from 1,000 kg to 10,000 kg with reinforced platforms, bumper grade cabins and drive systems rated for thousands of daily cycles. Wide opening bi parting doors, forklift rated sills and abrasion resistant interiors keep goods and operators moving safely.",
     heroImage: PRODUCT_IMG.freight,
     cardImage: PRODUCT_IMG.freight,
     gallery: [PRODUCT_IMG.freight, MISC.factory, TECH_IMG.drive],
@@ -99,9 +99,9 @@ export const PRODUCTS: Product[] = [
     speedRange: "0.25–2.0 m/s",
     highlights: [
       "Loads up to 10,000 kg",
-      "Forklift-rated platform",
-      "Bi-parting heavy doors",
-      "High-cycle duty rating",
+      "Forklift rated platform",
+      "Bi parting heavy doors",
+      "High cycle duty rating",
     ],
     subcategories: [
       { name: "Industrial Freight", description: "Reinforced cars for factory and plant duty." },
@@ -112,15 +112,15 @@ export const PRODUCTS: Product[] = [
     specs: [
       { label: "Capacity", value: "1,000 – 10,000 kg" },
       { label: "Speed", value: "0.25 – 2.0 m/s" },
-      { label: "Door type", value: "Bi-parting / vertical-rising" },
-      { label: "Platform", value: "Forklift-rated steel chequer" },
+      { label: "Door type", value: "Bi parting / vertical rising" },
+      { label: "Platform", value: "Forklift rated steel chequer" },
       { label: "Duty", value: "Up to 300 starts / hour" },
       { label: "Drive", value: "Geared traction or hydraulic" },
     ],
     features: [
       { iconName: "FiTruck", title: "Industrial capacity", description: "Reinforced car frames and platforms rated to 10 tonnes, with custom sizing on request." },
       { iconName: "FiSettings", title: "High-cycle endurance", description: "Duty-rated drives and doors built for thousands of demanding cycles every day." },
-      { iconName: "FiShield", title: "Operator safety", description: "Robust interlocks, overload sensing and anti-crush door edges protect crews on every floor." },
+      { iconName: "FiShield", title: "Operator safety", description: "Robust interlocks, overload sensing and anti crush door edges protect crews on every floor." },
     ],
   },
   {
@@ -129,15 +129,15 @@ export const PRODUCTS: Product[] = [
     category: "Healthcare",
     tagline: "Calm, clinical transport when seconds matter.",
     description:
-      "Bed and stretcher elevators with hygienic surfaces, ultra-smooth ride and priority control for critical care environments.",
+      "Bed and stretcher elevators with hygienic surfaces, ultra smooth ride and priority control for critical care environments.",
     longDescription:
-      "VERTIQ Care™ hospital elevators move beds, equipment and people with hospital-grade calm. Deep cars accommodate stretchers and crash teams, antimicrobial surfaces resist infection, and a medical-priority mode summons a car instantly for emergencies — all with a levelling accuracy of ±3 mm for safe trolley transfer.",
+      "VERTIQ Care™ hospital elevators move beds, equipment and people with hospital grade calm. Deep cars accommodate stretchers and crash teams, antimicrobial surfaces resist infection, and a medical priority mode summons a car instantly for emergencies, all with a levelling accuracy of ±3 mm for safe trolley transfer.",
     heroImage: PRODUCT_IMG.hospital,
     cardImage: PRODUCT_IMG.hospital,
     gallery: [PRODUCT_IMG.hospital, HERO.quality, MISC.lobby],
     capacityRange: "1600–2500 kg",
     speedRange: "1.0–2.5 m/s",
-    highlights: ["Stretcher-depth cars", "Antimicrobial surfaces", "Medical priority mode", "±3 mm levelling"],
+    highlights: ["Stretcher depth cars", "Antimicrobial surfaces", "Medical priority mode", "±3 mm levelling"],
     subcategories: [
       { name: "Bed Elevator", description: "Deep cars sized for hospital beds and teams." },
       { name: "Stretcher Elevator", description: "Rapid, smooth transfer for emergency transport." },
@@ -155,7 +155,7 @@ export const PRODUCTS: Product[] = [
     features: [
       { iconName: "FiHeart", title: "Medical priority", description: "A single call commandeers the nearest car for emergency transfers, bypassing normal traffic." },
       { iconName: "FiShield", title: "Infection control", description: "Antimicrobial stainless surfaces and sealed joints support rigorous hygiene protocols." },
-      { iconName: "FiActivity", title: "Stretcher-smooth ride", description: "Precision levelling and jerk-limited motion keep patients stable from floor to floor." },
+      { iconName: "FiActivity", title: "Stretcher smooth ride", description: "Precision levelling and jerk limited motion keep patients stable from floor to floor." },
     ],
   },
   {
@@ -164,18 +164,18 @@ export const PRODUCTS: Product[] = [
     category: "Mobility Systems",
     tagline: "Moving crowds, beautifully.",
     description:
-      "Commercial and heavy-duty escalators for transit hubs, malls and airports — safe, efficient and built to last.",
+      "Commercial and heavy duty escalators for transit hubs, malls and airports. Safe, efficient and built to last.",
     longDescription:
-      "VERTIQ Flow™ escalators are engineered for relentless public duty. Eco-drive standby slows or stops the unit when no one is near, cutting energy use by up to 50%, while a sealed truss, LED skirt lighting and anti-slip combs deliver a safe, premium passenger experience for decades.",
+      "VERTIQ Flow™ escalators are engineered for relentless public duty. Eco drive standby slows or stops the unit when no one is near, cutting energy use by up to 50%, while a sealed truss, LED skirt lighting and anti slip combs deliver a safe, premium passenger experience for decades.",
     heroImage: HERO.industries,
     cardImage: PRODUCT_IMG.escalators,
     gallery: [PRODUCT_IMG.escalators, HERO.global, MISC.aerial],
     capacityRange: "6000–13500 persons/h",
     speedRange: "0.5–0.75 m/s",
-    highlights: ["Eco-drive standby", "Up to 13,500 persons/hour", "Sealed weatherproof truss", "LED safety lighting"],
+    highlights: ["Eco drive standby", "Up to 13,500 persons/hour", "Sealed weatherproof truss", "LED safety lighting"],
     subcategories: [
       { name: "Commercial Escalator", description: "Malls, offices and public buildings." },
-      { name: "Heavy-Duty Transit", description: "Airports, metros and stadiums, 24/7 duty." },
+      { name: "Heavy Duty Transit", description: "Airports, metros and stadiums, 24/7 duty." },
       { name: "Crystal / Glass", description: "Glass balustrade for signature interiors." },
       { name: "Spiral Escalator", description: "Curved escalators for landmark architecture." },
     ],
@@ -184,12 +184,12 @@ export const PRODUCTS: Product[] = [
       { label: "Speed", value: "0.5 – 0.75 m/s" },
       { label: "Incline", value: "30° / 35°" },
       { label: "Rise", value: "Up to 12 m (single rise)" },
-      { label: "Standby", value: "Eco-drive auto slow/stop" },
-      { label: "Use", value: "Public / heavy-duty transit" },
+      { label: "Standby", value: "Eco drive auto slow/stop" },
+      { label: "Use", value: "Public / heavy duty transit" },
     ],
     features: [
-      { iconName: "FiZap", title: "Eco-drive", description: "Sensors slow or pause the unit when idle, saving up to 50% of running energy." },
-      { iconName: "FiTrendingUp", title: "Transit-grade", description: "Sealed trusses and heavy-duty steps rated for airports, metros and stadiums." },
+      { iconName: "FiZap", title: "Eco drive", description: "Sensors slow or pause the unit when idle, saving up to 50% of running energy." },
+      { iconName: "FiTrendingUp", title: "Transit grade", description: "Sealed trusses and heavy duty steps rated for airports, metros and stadiums." },
       { iconName: "FiSun", title: "Safety lighting", description: "Comb, skirt and balustrade LEDs guide passengers and highlight every step edge." },
     ],
   },
@@ -199,31 +199,31 @@ export const PRODUCTS: Product[] = [
     category: "Mobility Systems",
     tagline: "Covering distance, effortlessly.",
     description:
-      "Horizontal and inclined moving walkways that carry people — and trolleys — across airports, transit hubs and large retail floors.",
+      "Horizontal and inclined moving walkways that carry people and trolleys across airports, transit hubs and large retail floors.",
     longDescription:
-      "VERTIQ Glide™ autowalks move passengers smoothly across long horizontal spans and gentle inclines. Trolley-friendly pallets, eco-drive standby and modular truss construction make them ideal for airports, exhibition centres and big-box retail.",
+      "VERTIQ Glide™ autowalks move passengers smoothly across long horizontal spans and gentle inclines. Trolley friendly pallets, eco drive standby and modular truss construction make them ideal for airports, exhibition centres and big box retail.",
     heroImage: HERO.global,
     cardImage: PRODUCT_IMG.walkways,
     gallery: [PRODUCT_IMG.walkways, HERO.global, MISC.aerial],
     capacityRange: "Up to 9000 persons/h",
     speedRange: "0.5–0.75 m/s",
-    highlights: ["Trolley-friendly pallets", "Horizontal & inclined", "Eco-drive standby", "Modular long spans"],
+    highlights: ["Trolley friendly pallets", "Horizontal & inclined", "Eco drive standby", "Modular long spans"],
     subcategories: [
       { name: "Horizontal Autowalk", description: "Flat travelators for long concourses." },
-      { name: "Inclined Travelator", description: "Gentle inclines for multi-level retail." },
+      { name: "Inclined Travelator", description: "Gentle inclines for multi level retail." },
     ],
     specs: [
       { label: "Throughput", value: "Up to 9,000 persons/hour" },
       { label: "Speed", value: "0.5 – 0.75 m/s" },
       { label: "Incline", value: "0° – 12°" },
       { label: "Pallet width", value: "1,000 / 1,200 / 1,400 mm" },
-      { label: "Standby", value: "Eco-drive auto slow/stop" },
+      { label: "Standby", value: "Eco drive auto slow/stop" },
       { label: "Use", value: "Airports, transit, retail" },
     ],
     features: [
-      { iconName: "FiNavigation", title: "Long-span ready", description: "Modular trusses bridge the longest concourses without intermediate supports." },
-      { iconName: "FiTruck", title: "Trolley-friendly", description: "Magnetised pallets keep luggage and shopping trolleys safely in place." },
-      { iconName: "FiZap", title: "Eco-drive", description: "Idle detection slows the walkway when no one is travelling." },
+      { iconName: "FiNavigation", title: "Long span ready", description: "Modular trusses bridge the longest concourses without intermediate supports." },
+      { iconName: "FiTruck", title: "Trolley friendly", description: "Magnetised pallets keep luggage and shopping trolleys safely in place." },
+      { iconName: "FiZap", title: "Eco drive", description: "Idle detection slows the walkway when no one is travelling." },
     ],
   },
   {
@@ -232,19 +232,19 @@ export const PRODUCTS: Product[] = [
     category: "Scenic",
     tagline: "Turn the journey into the view.",
     description:
-      "Glass-walled observation elevators that become an architectural feature in atriums, hotels and retail landmarks.",
+      "Glass walled observation elevators that become an architectural feature in atriums, hotels and retail landmarks.",
     longDescription:
-      "VERTIQ Vista™ panoramic elevators frame the journey in glass. Round, square or wall-climbing configurations rise through atriums and façades, pairing scenic transparency with the same gearless efficiency and Pulse™ intelligence as our passenger range.",
+      "VERTIQ Vista™ panoramic elevators frame the journey in glass. Round, square or wall climbing configurations rise through atriums and façades, pairing scenic transparency with the same gearless efficiency and Pulse™ intelligence as our passenger range.",
     heroImage: HERO.about,
     cardImage: PRODUCT_IMG.panoramic,
     gallery: [PRODUCT_IMG.panoramic, MISC.lobby, HERO.about],
     capacityRange: "630–1600 kg",
     speedRange: "1.0–4.0 m/s",
-    highlights: ["Full-height glass cabins", "Round, square & wall-climbing", "Atrium & façade mounting", "Gearless & quiet"],
+    highlights: ["Full height glass cabins", "Round, square & wall climbing", "Atrium & façade mounting", "Gearless & quiet"],
     subcategories: [
       { name: "Round / Capsule Glass", description: "Curved glass capsules for dramatic atriums." },
-      { name: "Square Panoramic", description: "Three-side glass cabins for clean lines." },
-      { name: "Wall-Climbing", description: "Façade-mounted scenic lifts with a view." },
+      { name: "Square Panoramic", description: "Three side glass cabins for clean lines." },
+      { name: "Wall Climbing", description: "Façade mounted scenic lifts with a view." },
     ],
     specs: [
       { label: "Capacity", value: "630 – 1,600 kg" },
@@ -255,29 +255,29 @@ export const PRODUCTS: Product[] = [
       { label: "Mounting", value: "Atrium or external façade" },
     ],
     features: [
-      { iconName: "FiEye", title: "A moving vantage", description: "Full-height laminated glass turns every trip into a panorama of the space." },
-      { iconName: "FiFeather", title: "Architectural feature", description: "Round, square and wall-climbing forms become the centrepiece of an atrium." },
-      { iconName: "FiZap", title: "Efficient & quiet", description: "Gearless drives keep scenic cabins smooth, silent and energy-light." },
+      { iconName: "FiEye", title: "A moving vantage", description: "Full height laminated glass turns every trip into a panorama of the space." },
+      { iconName: "FiFeather", title: "Architectural feature", description: "Round, square and wall climbing forms become the centrepiece of an atrium." },
+      { iconName: "FiZap", title: "Efficient & quiet", description: "Gearless drives keep scenic cabins smooth, silent and energy light." },
     ],
   },
   {
     slug: "high-speed-elevators",
-    name: "High-Speed Elevators",
+    name: "High Speed Elevators",
     category: "Supertall",
     tagline: "The express route to the sky.",
     description:
-      "Ultra-high-speed and double-deck elevators engineered for supertall towers and observation decks.",
+      "Ultra high speed and double deck elevators engineered for supertall towers and observation decks.",
     longDescription:
-      "VERTIQ Apex™ high-speed elevators reach speeds beyond 10 m/s with aerodynamic cars, active vibration control and pressure management for ear comfort. Double-deck and shuttle configurations move the largest populations through the tallest buildings on earth.",
+      "VERTIQ Apex™ high speed elevators reach speeds beyond 10 m/s with aerodynamic cars, active vibration control and pressure management for ear comfort. Double deck and shuttle configurations move the largest populations through the tallest buildings on earth.",
     heroImage: HERO.projects,
     cardImage: PRODUCT_IMG.highspeed,
     gallery: [PRODUCT_IMG.highspeed, PROJECT_IMG.two, HERO.projects],
     capacityRange: "1200–2500 kg",
     speedRange: "6.0–12.0+ m/s",
-    highlights: ["Speeds beyond 10 m/s", "Double-deck option", "Active vibration control", "Cabin pressure management"],
+    highlights: ["Speeds beyond 10 m/s", "Double deck option", "Active vibration control", "Cabin pressure management"],
     subcategories: [
-      { name: "Express Shuttle", description: "Non-stop runs to sky-lobbies." },
-      { name: "Double-Deck", description: "Two cabins per shaft for peak capacity." },
+      { name: "Express Shuttle", description: "Non stop runs to sky lobbies." },
+      { name: "Double Deck", description: "Two cabins per shaft for peak capacity." },
       { name: "Observation Express", description: "Rapid, smooth ascent to viewing decks." },
     ],
     specs: [
@@ -285,24 +285,24 @@ export const PRODUCTS: Product[] = [
       { label: "Speed", value: "6.0 – 12.0+ m/s" },
       { label: "Travel", value: "Up to 600 m single rise" },
       { label: "Comfort", value: "Cabin pressure control" },
-      { label: "Suspension", value: "Carbon-fibre belt" },
+      { label: "Suspension", value: "Carbon fibre belt" },
       { label: "Control", value: "Active vibration damping" },
     ],
     features: [
-      { iconName: "FiTrendingUp", title: "Express ascent", description: "Aerodynamic cars carry passengers to sky-lobbies in seconds, not minutes." },
+      { iconName: "FiTrendingUp", title: "Express ascent", description: "Aerodynamic cars carry passengers to sky lobbies in seconds, not minutes." },
       { iconName: "FiActivity", title: "Comfort at speed", description: "Active dampers and pressure control keep the ride smooth and ears comfortable." },
-      { iconName: "FiLayers", title: "Double-deck capacity", description: "Two stacked cabins serve adjacent floors, doubling shaft throughput." },
+      { iconName: "FiLayers", title: "Double deck capacity", description: "Two stacked cabins serve adjacent floors, doubling shaft throughput." },
     ],
   },
   {
     slug: "mrl-elevators",
-    name: "Machine-Room-Less Elevators",
-    category: "Space-Saving",
+    name: "Machine Room Less Elevators",
+    category: "Space Saving",
     tagline: "All the engineering. None of the machine room.",
     description:
-      "Compact MRL elevators that house the gearless drive inside the shaft — freeing rooftop space and simplifying design.",
+      "Compact MRL elevators that house the gearless drive inside the shaft, freeing rooftop space and simplifying design.",
     longDescription:
-      "VERTIQ Slim™ MRL elevators place a compact permanent-magnet machine inside the hoistway, removing the rooftop machine room entirely. The result is lower build cost, more usable roof area and a clean architectural envelope — with full gearless efficiency.",
+      "VERTIQ Slim™ MRL elevators place a compact permanent magnet machine inside the hoistway, removing the rooftop machine room entirely. The result is lower build cost, more usable roof area and a clean architectural envelope, with full gearless efficiency.",
     heroImage: HERO.technology,
     cardImage: PRODUCT_IMG.mrl,
     gallery: [PRODUCT_IMG.mrl, TECH_IMG.drive, MISC.lobby],
@@ -310,21 +310,21 @@ export const PRODUCTS: Product[] = [
     speedRange: "1.0–2.5 m/s",
     highlights: ["No machine room", "Frees rooftop space", "Lower build cost", "Gearless efficiency"],
     subcategories: [
-      { name: "Compact MRL", description: "Tight-footprint systems for low-rise." },
-      { name: "Mid-Rise MRL", description: "Up to 2.5 m/s for offices and residences." },
+      { name: "Compact MRL", description: "Tight footprint systems for low rise." },
+      { name: "Mid Rise MRL", description: "Up to 2.5 m/s for offices and residences." },
       { name: "Eco MRL", description: "Regenerative drive and standby for greenest duty." },
     ],
     specs: [
       { label: "Capacity", value: "450 – 1,600 kg" },
       { label: "Speed", value: "1.0 – 2.5 m/s" },
-      { label: "Machine room", value: "None — in-shaft drive" },
+      { label: "Machine room", value: "None, in shaft drive" },
       { label: "Travel", value: "Up to 75 m" },
       { label: "Energy class", value: "VDI 4707 Class A" },
       { label: "Drive", value: "Gearless PM, regenerative" },
     ],
     features: [
       { iconName: "FiGrid", title: "Reclaim the roof", description: "No machine room means more usable space and a cleaner building envelope." },
-      { iconName: "FiZap", title: "Gearless & green", description: "Regenerative permanent-magnet drives keep energy use to a minimum." },
+      { iconName: "FiZap", title: "Gearless & green", description: "Regenerative permanent magnet drives keep energy use to a minimum." },
       { iconName: "FiSettings", title: "Simpler to build", description: "Fewer structural demands lower cost and speed up construction." },
     ],
   },
@@ -334,9 +334,9 @@ export const PRODUCTS: Product[] = [
     category: "Service",
     tagline: "Small lifts that do the heavy lifting.",
     description:
-      "Compact service elevators and dumbwaiters for kitchens, libraries, hospitals and retail back-of-house.",
+      "Compact service elevators and dumbwaiters for kitchens, libraries, hospitals and retail back of house.",
     longDescription:
-      "VERTIQ Porter™ dumbwaiters and service lifts move food, documents, linen and supplies quietly between floors. Stainless interiors, floor-level or counter-height loading and compact drives make them ideal for restaurants, hotels, hospitals and homes.",
+      "VERTIQ Porter™ dumbwaiters and service lifts move food, documents, linen and supplies quietly between floors. Stainless interiors, floor level or counter height loading and compact drives make them ideal for restaurants, hotels, hospitals and homes.",
     heroImage: HERO.services,
     cardImage: PRODUCT_IMG.dumbwaiter,
     gallery: [PRODUCT_IMG.dumbwaiter, MISC.lobby, MISC.factory],
@@ -344,9 +344,9 @@ export const PRODUCTS: Product[] = [
     speedRange: "0.3–0.6 m/s",
     highlights: ["Compact footprint", "Stainless hygienic interior", "Counter or floor loading", "Quiet operation"],
     subcategories: [
-      { name: "Kitchen Dumbwaiter", description: "Counter-height food transport for restaurants." },
+      { name: "Kitchen Dumbwaiter", description: "Counter height food transport for restaurants." },
       { name: "Document / Service Lift", description: "Move files and supplies in offices and libraries." },
-      { name: "Floor-Level Service", description: "Trolley-loaded lifts for hospitals and hotels." },
+      { name: "Floor Level Service", description: "Trolley loaded lifts for hospitals and hotels." },
     ],
     specs: [
       { label: "Capacity", value: "50 – 300 kg" },
@@ -368,19 +368,19 @@ export const PRODUCTS: Product[] = [
     category: "Scenic",
     tagline: "A jewel of glass and light.",
     description:
-      "Sculptural capsule elevators — indoor or wall-mounted — that add a touch of theatre to homes, hotels and showrooms.",
+      "Sculptural capsule elevators, indoor or wall mounted, that add a touch of theatre to homes, hotels and showrooms.",
     longDescription:
-      "VERTIQ Lumen™ capsule elevators wrap a panoramic glass cabin in a slender frame of steel and light. Perfect for villas, boutique hotels and showrooms, they combine scenic glamour with compact, low-impact installation.",
+      "VERTIQ Lumen™ capsule elevators wrap a panoramic glass cabin in a slender frame of steel and light. Perfect for villas, boutique hotels and showrooms, they combine scenic glamour with compact, low impact installation.",
     heroImage: HERO.about,
     cardImage: PRODUCT_IMG.capsule,
     gallery: [PRODUCT_IMG.capsule, MISC.spiral, HERO.about],
     capacityRange: "250–1000 kg",
     speedRange: "0.3–1.75 m/s",
-    highlights: ["Panoramic glass capsule", "Indoor or wall-mounted", "Slender lit frame", "Low-impact install"],
+    highlights: ["Panoramic glass capsule", "Indoor or wall mounted", "Slender lit frame", "Low impact install"],
     subcategories: [
-      { name: "Indoor Capsule", description: "Free-standing glass capsule for atriums and villas." },
-      { name: "Outdoor Wall-Mounted", description: "Façade-fixed capsules with weather sealing." },
-      { name: "Pneumatic Capsule", description: "Vacuum-driven capsule — no pit, no machine room." },
+      { name: "Indoor Capsule", description: "Free standing glass capsule for atriums and villas." },
+      { name: "Outdoor Wall Mounted", description: "Façade fixed capsules with weather sealing." },
+      { name: "Pneumatic Capsule", description: "Vacuum driven capsule, no pit, no machine room." },
     ],
     specs: [
       { label: "Capacity", value: "250 – 1,000 kg" },
@@ -393,7 +393,7 @@ export const PRODUCTS: Product[] = [
     features: [
       { iconName: "FiEye", title: "Scenic by design", description: "A panoramic glass capsule turns the lift into a centrepiece." },
       { iconName: "FiSun", title: "Lit to impress", description: "Integrated LED framing makes the cabin glow day and night." },
-      { iconName: "FiFeather", title: "Light footprint", description: "Compact, self-supporting designs install with minimal building works." },
+      { iconName: "FiFeather", title: "Light footprint", description: "Compact, self supporting designs install with minimal building works." },
     ],
   },
   {
@@ -402,9 +402,9 @@ export const PRODUCTS: Product[] = [
     category: "Systems",
     tagline: "The intelligence behind every rise.",
     description:
-      "Drives, controllers, fixtures and safety gear — VERTIQ engineering available as modular components for OEMs and modernization.",
+      "Drives, controllers, fixtures and safety gear. VERTIQ engineering available as modular components for OEMs and modernization.",
     longDescription:
-      "Behind every VERTIQ elevator is a portfolio of in-house components: permanent-magnet machines, regenerative VFD drives, the VERTIQ Pulse™ controller, COP/LOP fixtures and certified safety gear. Available individually for modernization projects and OEM partners, each part carries the same engineering and certification as our complete systems.",
+      "Behind every VERTIQ elevator is a portfolio of in house components: permanent magnet machines, regenerative VFD drives, the VERTIQ Pulse™ controller, COP/LOP fixtures and certified safety gear. Available individually for modernization projects and OEM partners, each part carries the same engineering and certification as our complete systems.",
     heroImage: HERO.technology,
     cardImage: PRODUCT_IMG.components,
     gallery: [PRODUCT_IMG.components, TECH_IMG.drive, TECH_IMG.iot],
@@ -412,7 +412,7 @@ export const PRODUCTS: Product[] = [
     subcategories: [
       { name: "Gearless Machines", description: "PM synchronous machines, 320–2500 kg." },
       { name: "Regenerative Drives", description: "IGBT VFD drives with energy recovery." },
-      { name: "Pulse™ Controllers", description: "Connected control with on-board diagnostics." },
+      { name: "Pulse™ Controllers", description: "Connected control with on board diagnostics." },
       { name: "COP / LOP Fixtures", description: "Car and landing fixtures in bespoke finishes." },
       { name: "Safety Gear", description: "Governors, buffers and safety circuits." },
       { name: "Landing Doors", description: "Certified door operators and panels." },
@@ -426,7 +426,7 @@ export const PRODUCTS: Product[] = [
       { label: "Certification", value: "EN 81-20/50, A17.1" },
     ],
     features: [
-      { iconName: "FiCpu", title: "Pulse™ controller", description: "An open, connected control platform with on-board diagnostics and OTA updates." },
+      { iconName: "FiCpu", title: "Pulse™ controller", description: "An open, connected control platform with on board diagnostics and OTA updates." },
       { iconName: "FiZap", title: "Regenerative drives", description: "IGBT VFD drives with clean power and energy recovery for any traction application." },
       { iconName: "FiLayers", title: "Modular fixtures", description: "COP and LOP fixtures in bespoke finishes, ready for new builds or modernization." },
     ],

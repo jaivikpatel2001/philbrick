@@ -2,8 +2,8 @@
 
 A flagship, cinematic marketing website for **VERTIQ**, a premium elevator &
 vertical-transportation manufacturer. The homepage opens with a real-time
-Three.js elevator experience and flows into the brand's products, services,
-technology, projects and industries — designed to feel like a premium
+Three.js elevator experience and flows into the brand's products, lifecycle
+support, projects and industries — designed to feel like a premium
 architectural product, not a traditional corporate template.
 
 > **Note on Next.js:** this project runs a newer Next.js than most references
@@ -47,7 +47,7 @@ frontend/
 │   ├── layout.tsx   #   global chrome: ThemeProvider, Lenis SmoothScroll,
 │   │                #   Navbar, <main>, Footer, RevealObserver + site metadata
 │   ├── page.tsx     #   HOMEPAGE — elevator hero + full content flow
-│   ├── about/  products/  products/[slug]/  services/  testimonials/  contact/
+│   ├── about/  products/  products/[slug]/  contact/
 │   ├── sitemap.ts  robots.ts  not-found.tsx
 ├── components/      # Reusable, presentational building blocks
 │   ├── layout/      #   Navbar, Footer, MegaMenu, MobileNav
@@ -56,13 +56,13 @@ frontend/
 │   ├── forms/       #   ContactForm
 │   └── providers/   #   ThemeProvider, SmoothScroll (Lenis), RevealObserver
 ├── sections/        # Page-level composed sections (the "blocks" of a page)
-│   ├── home/        #   AboutPreview, ProductsShowcase, ServiceEcosystem,
-│   │                #   TechnologyPreview, IndustriesShowcase
+│   ├── home/        #   AboutPreview, ProductsShowcase, ServiceEcosystem
+│   │                #   (lifecycle support), IndustriesShowcase
 │   ├── experience/  #   ElevatorScene (Three.js hero), ScrollStory (CSS
 │   │                #   fallback), Projects  +  THREEJS-IMPLEMENTATION.md
-│   └── shared/      #   StatsBand, ClientMarquee, TestimonialsSection, CTASection, …
-├── data/            # Content as typed data (products, services, technology,
-│                    # company, testimonials, stats, images, model)
+│   └── shared/      #   PageHero, StatsBand, FeatureGrid, TechShowcase, CTASection, …
+├── data/            # Content as typed data (products, services, company,
+│                    # stats, images, model — services feeds the home section)
 ├── constants/       # site.ts (brand/contact), navigation.ts (nav + footer)
 ├── lib/             # fonts.ts (next/font), icons.ts (icon registry)
 ├── styles/          # tokens.css (design tokens — single source of truth),

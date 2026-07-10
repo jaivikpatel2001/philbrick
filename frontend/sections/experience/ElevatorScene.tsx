@@ -40,13 +40,13 @@ const COMP_END = 0.9;
 /* Copy for the exterior beats (the component captions take over afterwards) */
 const BEATS = [
   {
-    eyebrow: "01 — Arrival",
+    eyebrow: "01 Arrival",
     lead: "Engineered for",
     em: "movement.",
     sub: "Night falls on the VERTIQ tower. Every journey begins at the street.",
   },
   {
-    eyebrow: "02 — The Approach",
+    eyebrow: "02 The Approach",
     lead: "Your elevator",
     em: "arrives.",
     sub: "Through the glass, the lobby is already waiting.",
@@ -894,7 +894,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
   );
 
   return (
-    <section ref={root} className={styles.section} style={{ height: `${SCROLL_VH}vh` }} aria-label="Arrival at the VERTIQ tower and interactive elevator — explore the components">
+    <section ref={root} className={styles.section} style={{ height: `${SCROLL_VH}vh` }} aria-label="Arrival at the VERTIQ tower and interactive elevator, explore the components">
       <div className={styles.stage}>
         <div ref={mount} className={styles.mount} aria-hidden />
         <div className={styles.vignette} aria-hidden />
@@ -923,7 +923,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
             type="button"
             className={styles.hotspot}
             onClick={() => setOpenComponent(c)}
-            aria-label={`${c.name} — view details`}
+            aria-label={`${c.name}, view details`}
           >
             <span className={styles.hotspotDot} />
             <span className={styles.hotspotLabel}>{c.name}</span>
@@ -935,7 +935,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
           {active >= 0 && (
             <>
               <span className={styles.capIndex}>
-                {ELEVATOR_COMPONENTS[active].index} — Component
+                {ELEVATOR_COMPONENTS[active].index} Component
               </span>
               <h2 className={styles.capName}>{ELEVATOR_COMPONENTS[active].name}</h2>
               <p className={styles.capTagline}>{ELEVATOR_COMPONENTS[active].tagline}</p>

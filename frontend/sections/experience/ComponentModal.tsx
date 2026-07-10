@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, createElement } from "react";
 import { createPortal } from "react-dom";
 import { FiX } from "react-icons/fi";
 import type { ElevatorComponent } from "@/data/elevatorComponents";
@@ -29,7 +29,7 @@ export function ComponentModal({
   }, [component, onClose]);
 
   if (typeof document === "undefined" || !component) return null;
-  const Icon = getIcon(component.iconName);
+  const icon = getIcon(component.iconName);
 
   return createPortal(
     <div className={styles.overlay} role="presentation" onClick={onClose}>
@@ -48,7 +48,7 @@ export function ComponentModal({
 
         <div className={styles.head}>
           <span className={styles.icon}>
-            <Icon />
+            {createElement(icon)}
           </span>
           <span className={styles.index}>{component.index}</span>
           <span className={styles.tagline}>{component.tagline}</span>

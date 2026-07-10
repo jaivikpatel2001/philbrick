@@ -15,7 +15,7 @@ normally.
 
 | File | Role |
 |---|---|
-| [`app/page.tsx`](../../app/page.tsx) | Homepage. Renders `<ElevatorScene/>` then About → Products → Services → Technology → Projects → Industries → Testimonials → CTA. |
+| [`app/page.tsx`](../../app/page.tsx) | Homepage. Renders `<ElevatorScene/>` then About → Products → Lifecycle support → Projects → Industries → Stats → CTA. |
 | [`sections/experience/ElevatorScene.tsx`](ElevatorScene.tsx) | **The hero.** Capability wrapper + the Three.js `Scene3D`. |
 | [`sections/experience/ElevatorScene.module.css`](ElevatorScene.module.css) | Stage / canvas mount / atmosphere / copy positioning. |
 | [`sections/experience/ScrollStory.tsx`](ScrollStory.tsx) | **Fallback hero** (hand-built CSS/GSAP elevator) for no-WebGL / reduced-motion. Also the source of the shared copy/HUD/finale styles. |
@@ -34,8 +34,8 @@ runs **Lenis** and wires it into the GSAP ticker + `ScrollTrigger` site-wide.
 app/page.tsx
 └─ <ElevatorScene/>     ← 1300vh pinned hero
    <AboutPreview/>      ← scrolls in as soon as the pinned hero ends
-   <ClientMarquee/> <ProductsShowcase/> <ServiceEcosystem/> <TechnologyPreview/>
-   <Projects/> <IndustriesShowcase/> <StatsBand/> <TestimonialsSection/> <CTASection/>
+   <ProductsShowcase/> <ServiceEcosystem/> <Projects/> <IndustriesShowcase/>
+   <StatsBand/> <CTASection/>
 ```
 
 The hero is just the first section in normal document flow: when its 1300vh

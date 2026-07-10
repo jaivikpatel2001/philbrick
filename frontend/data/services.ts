@@ -16,31 +16,31 @@ export const SERVICES: Service[] = [
         iconName: "FiClock",
         title: "On-time delivery",
         description:
-          "BIM-coordinated planning and pre-fabrication keep installation on the critical path — not on it.",
+          "BIM coordinated planning and pre fabrication keep installation on the critical path, not on it.",
       },
       {
         iconName: "FiShield",
         title: "Safety-first crews",
         description:
-          "Factory-certified technicians work to a single global safety standard on every site.",
+          "Factory certified technicians work to a single global safety standard on every site.",
       },
       {
         iconName: "FiCheckCircle",
         title: "Commissioned & certified",
         description:
-          "Every unit is load-tested, ride-tuned and certified to local code before handover.",
+          "Every unit is load tested, ride tuned and certified to local code before handover.",
       },
     ],
     process: [
       { step: "01", title: "Survey & BIM", description: "Laser shaft survey and BIM coordination with your structure and MEP." },
-      { step: "02", title: "Pre-fabrication", description: "Components pre-assembled and tested in the factory to cut site time." },
+      { step: "02", title: "Pre fabrication", description: "Components pre assembled and tested in the factory to cut site time." },
       { step: "03", title: "Installation", description: "Certified crews install rails, car, drive and fixtures to spec." },
       { step: "04", title: "Commissioning", description: "Load tests, ride tuning, code certification and full handover." },
     ],
     stats: [
-      { value: 99.2, suffix: "%", decimals: 1, label: "On-time handover" },
-      { value: 14, suffix: " days", label: "Avg. install (low-rise)" },
-      { value: 0, label: "Lost-time incidents 2025" },
+      { value: 99.2, suffix: "%", decimals: 1, label: "On time handover" },
+      { value: 14, suffix: " days", label: "Avg install (low rise)" },
+      { value: 0, label: "Lost time incidents 2025" },
     ],
   },
   {
@@ -63,13 +63,13 @@ export const SERVICES: Service[] = [
         iconName: "FiTrendingUp",
         title: "Predict, don't react",
         description:
-          "Machine-learning models flag wear weeks ahead — 6 in 10 issues resolved remotely.",
+          "Machine learning models flag wear weeks ahead. 6 in 10 issues resolved remotely.",
       },
       {
         iconName: "FiClock",
         title: "99.9% uptime",
         description:
-          "Condition-based service keeps availability high and call-backs rare.",
+          "Condition based service keeps availability high and call backs rare.",
       },
     ],
     process: [
@@ -81,7 +81,7 @@ export const SERVICES: Service[] = [
     stats: [
       { value: 99.9, suffix: "%", decimals: 1, label: "Fleet uptime" },
       { value: 60, suffix: "%", label: "Issues fixed remotely" },
-      { value: 35, suffix: "%", label: "Fewer call-backs" },
+      { value: 35, suffix: "%", label: "Fewer call backs" },
     ],
   },
   {
@@ -90,7 +90,7 @@ export const SERVICES: Service[] = [
     shortName: "Modernization",
     tagline: "Renew the ride without rebuilding the shaft.",
     description:
-      "Bring ageing elevators up to modern standards of performance, efficiency and safety — in stages, with minimal disruption to your building.",
+      "Bring ageing elevators up to modern standards of performance, efficiency and safety, in stages, with minimal disruption to your building.",
     heroImage: SERVICE_IMG.modernization,
     iconName: "FiRefreshCw",
     benefits: [
@@ -104,7 +104,7 @@ export const SERVICES: Service[] = [
         iconName: "FiLayers",
         title: "Phased upgrades",
         description:
-          "Modernize controllers, drives, cabs or doors independently — keep cars running.",
+          "Modernize controllers, drives, cabs or doors independently. Keep cars running.",
       },
       {
         iconName: "FiShield",
@@ -131,7 +131,7 @@ export const SERVICES: Service[] = [
     shortName: "AMC",
     tagline: "One contract. Total peace of mind.",
     description:
-      "Flexible AMC plans — from essential cover to fully comprehensive — backed by guaranteed response times and our 24/7 command centre.",
+      "Flexible AMC plans, from essential cover to fully comprehensive, backed by guaranteed response times and our 24/7 command centre.",
     heroImage: SERVICE_IMG.amc,
     iconName: "FiShield",
     benefits: [
@@ -151,12 +151,12 @@ export const SERVICES: Service[] = [
         iconName: "FiCheckCircle",
         title: "Predictable cost",
         description:
-          "Fixed annual fees with comprehensive parts cover — no surprise invoices.",
+          "Fixed annual fees with comprehensive parts cover. No surprise invoices.",
       },
     ],
     process: [
       { step: "01", title: "Assess", description: "We survey your equipment and recommend the right cover tier." },
-      { step: "02", title: "Agree", description: "Choose Essential, Plus or Comprehensive — clear SLAs, fixed fee." },
+      { step: "02", title: "Agree", description: "Choose Essential, Plus or Comprehensive. Clear SLAs, fixed fee." },
       { step: "03", title: "Maintain", description: "Scheduled visits plus Pulse™ monitoring keep cars healthy." },
       { step: "04", title: "Report", description: "Live KPIs and quarterly reviews keep you fully informed." },
     ],

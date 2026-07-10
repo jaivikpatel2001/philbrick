@@ -104,9 +104,12 @@ in sync with the code so a new developer (or AI) can get productive fast.
 ## Current architecture (high level)
 
 - **Homepage `/` is the flagship experience:** `app/page.tsx` renders the Three.js
-  elevator hero, then About → Products → Services → Technology → Projects →
-  Industries → (stats) → Testimonials → Contact/CTA. The global `app/layout.tsx`
-  adds Navbar, Lenis smooth scroll, Footer, theme + reveal providers.
+  elevator hero, then About → Products → Lifecycle support (installation ·
+  maintenance · modernization · AMC) → Projects → Industries → (stats) →
+  Contact/CTA. The global `app/layout.tsx` adds Navbar, Lenis smooth scroll,
+  Footer, theme + reveal providers.
 - There is **no standalone `/experience` route** — the experience IS the homepage.
-- Other routes: `/about`, `/products`, `/products/[slug]`, `/services`,
-  `/testimonials`, `/contact`.
+- Routes: `/`, `/about`, `/products`, `/products/[slug]`, `/contact` (+ `/sitemap.xml`,
+  `/robots.txt`). There is **no `/services` or `/testimonials` route** — those pages
+  were removed; the company's offerings live as the lifecycle-support section on the
+  homepage, and the About page carries an **Infrastructure & manufacturing** section.

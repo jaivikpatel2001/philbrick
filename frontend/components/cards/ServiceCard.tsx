@@ -1,20 +1,21 @@
-import Link from "next/link";
-import { FiArrowRight, FiCheck } from "react-icons/fi";
+import { createElement } from "react";
+import { FiCheck } from "react-icons/fi";
 import type { Service } from "@/types";
 import { getIcon } from "@/lib/icons";
 import styles from "./ServiceCard.module.css";
 
+/**
+ * Presentational lifecycle-support card (installation / maintenance /
+ * modernization / AMC). Used by the home ServiceEcosystem section. Non-linking:
+ * there is no dedicated services route — enquiries route through Contact.
+ */
 export function ServiceCard({ service }: { service: Service }) {
-  const Icon = getIcon(service.iconName);
+  const icon = getIcon(service.iconName);
   return (
-    <Link
-      href={`/services/${service.slug}`}
-      className={styles.card}
-      data-reveal="up"
-    >
+    <article className={styles.card} data-reveal="up">
       <div className={styles.top}>
         <span className={styles.icon}>
-          <Icon />
+          {createElement(icon)}
         </span>
         <h3 className={styles.title}>{service.shortName}</h3>
       </div>
@@ -27,9 +28,6 @@ export function ServiceCard({ service }: { service: Service }) {
           </li>
         ))}
       </ul>
-      <span className={styles.cta}>
-        Learn more <FiArrowRight />
-      </span>
-    </Link>
+    </article>
   );
 }

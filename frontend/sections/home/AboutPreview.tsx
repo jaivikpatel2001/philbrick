@@ -11,7 +11,7 @@ export function AboutPreview() {
         <div className={styles.media} data-reveal="left">
           <Image
             src={HERO.about}
-            alt="VERTIQ engineering — a luminous building atrium"
+            alt="VERTIQ engineering, a luminous building atrium"
             fill
             sizes="(max-width: 900px) 100vw, 50vw"
             className={styles.img}
@@ -35,8 +35,8 @@ export function AboutPreview() {
             Fifty-seven years of moving the world upward.
           </h2>
           <p className={styles.text} data-reveal="up">
-            VERTIQ began with one conviction: that the elevator — the most-used
-            vehicle on earth — deserved to be engineered like the most advanced
+            VERTIQ began with one conviction: that the elevator, the most used
+            vehicle on earth, deserved to be engineered like the most advanced
             one. Today our systems carry millions of people every day, from
             family homes to the world&apos;s tallest towers.
           </p>

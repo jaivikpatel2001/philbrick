@@ -8,7 +8,9 @@ import styles from "./ThemeToggle.module.css";
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    Promise.resolve().then(() => setMounted(true));
+  }, []);
 
   const isDark = theme === "dark";
 

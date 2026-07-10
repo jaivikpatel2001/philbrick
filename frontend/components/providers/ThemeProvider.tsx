@@ -24,12 +24,13 @@ export const themeInitScript = `(function(){try{var t=localStorage.getItem('${ST
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>("dark");
 
-  // Sync state with the attribute the init script already applied.
   useEffect(() => {
     const current =
       (document.documentElement.getAttribute("data-theme") as ThemeMode) ||
       "dark";
-    setThemeState(current);
+    Promise.resolve().then(() => {
+      setThemeState(current);
+    });
   }, []);
 
   const apply = useCallback((t: ThemeMode) => {

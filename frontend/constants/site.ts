@@ -7,7 +7,7 @@ export const SITE = {
   legalName: "Vertiq Vertical Mobility Pvt. Ltd.",
   tagline: "Vertical mobility, engineered in India.",
   description:
-    "VERTIQ designs, manufactures and maintains intelligent elevators, escalators and vertical-mobility systems for India's most ambitious buildings — engineered in India, for India.",
+    "VERTIQ designs, manufactures and maintains intelligent elevators, escalators and vertical mobility systems for India's most ambitious buildings, engineered in India, for India.",
   url: "https://www.vertiq.in",
   locale: "en_IN",
   founded: 1968,
@@ -31,18 +31,4 @@ export const SOCIALS = [
   { label: "X", href: "https://x.com", icon: "FiTwitter" },
   { label: "YouTube", href: "https://youtube.com", icon: "FiYoutube" },
   { label: "Instagram", href: "https://instagram.com", icon: "FiInstagram" },
-] as const;
-
-/* Marquee of marquee Indian developers, hospitality & healthcare groups. */
-export const TRUST_LOGOS = [
-  "DLF",
-  "Lodha",
-  "Godrej Properties",
-  "Prestige Group",
-  "Brigade Group",
-  "Oberoi Realty",
-  "L&T Realty",
-  "Tata Projects",
-  "Taj Hotels",
-  "Apollo Hospitals",
 ] as const;

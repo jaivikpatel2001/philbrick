@@ -5,6 +5,7 @@ import { FeatureGrid } from "@/sections/shared/FeatureGrid";
 import { CTASection } from "@/sections/shared/CTASection";
 import { StatsBand } from "@/sections/shared/StatsBand";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Stats } from "@/components/ui/Stats";
 import { Timeline } from "@/components/ui/Timeline";
 import { TeamCard } from "@/components/cards/TeamCard";
 import {
@@ -12,10 +13,11 @@ import {
   VISION,
   ABOUT_STORY,
   VALUES,
+  INFRASTRUCTURE,
   TIMELINE,
   LEADERSHIP,
 } from "@/data/company";
-import { TRUST_METRICS } from "@/data/stats";
+import { TRUST_METRICS, GLOBAL_STATS } from "@/data/stats";
 import { HERO, MISC } from "@/data/images";
 import styles from "./about.module.css";
 
@@ -32,7 +34,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="Our story"
         title="Moving the world upward since 1968"
-        description="From a single workshop to 1.4 million units across six continents — built on one engineering obsession that never changed."
+        description="From a single workshop to 1.4 million units across six continents, built on one engineering obsession that never changed."
         image={HERO.about}
         imageAlt="VERTIQ building atrium"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
@@ -64,6 +66,23 @@ export default function AboutPage() {
               sizes="(max-width: 900px) 100vw, 45vw"
               className={styles.storyImg}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Infrastructure & Manufacturing capabilities */}
+      <section className="section">
+        <div className="container--wide">
+          <FeatureGrid
+            eyebrow="Infrastructure"
+            title="Manufacturing & engineering, built in-house"
+            description="From raw steel to a commissioned car, VERTIQ controls every stage of the build, so quality, safety and lead time never leave our hands."
+            align="center"
+            columns={3}
+            features={INFRASTRUCTURE}
+          />
+          <div className={styles.infraStats}>
+            <Stats stats={GLOBAL_STATS} columns={4} variant="bordered" />
           </div>
         </div>
       </section>

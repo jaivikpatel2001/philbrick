@@ -7,7 +7,7 @@ import styles from "./IndustriesShowcase.module.css";
 
 const INDUSTRIES = [
   { name: "Residential", tagline: "Homes, villas & residential towers", img: INDUSTRY_IMG.residential },
-  { name: "Commercial", tagline: "Offices, retail & mixed-use", img: INDUSTRY_IMG.commercial },
+  { name: "Commercial", tagline: "Offices, retail & mixed use", img: INDUSTRY_IMG.commercial },
   { name: "Healthcare", tagline: "Hospitals, clinics & critical care", img: INDUSTRY_IMG.healthcare },
   { name: "Hospitality", tagline: "Hotels, resorts & leisure", img: INDUSTRY_IMG.hospitality },
   { name: "Industrial", tagline: "Warehouses, plants & logistics", img: INDUSTRY_IMG.industrial },
@@ -20,7 +20,7 @@ export function IndustriesShowcase() {
         <SectionHeader
           eyebrow="Industries"
           title="Engineered for every kind of building."
-          description="From private residences to hospitals, transit hubs and supertall towers — VERTIQ tailors vertical mobility to the demands of each sector."
+          description="From private residences to hospitals, transit hubs and supertall towers, VERTIQ tailors vertical mobility to the demands of each sector."
         />
         <div className={styles.grid}>
           {INDUSTRIES.map((it, i) => (

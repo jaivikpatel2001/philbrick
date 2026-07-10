@@ -13,7 +13,7 @@ export function Logo({ className, compact = false }: LogoProps) {
     <Link
       href="/"
       className={cn(styles.logo, className)}
-      aria-label="VERTIQ — home"
+      aria-label="VERTIQ, home"
     >
       <svg
         className={styles.mark}
