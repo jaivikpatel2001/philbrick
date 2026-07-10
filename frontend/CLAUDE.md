@@ -59,7 +59,14 @@ All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, 
   Electric Blue `--accent-2`/`--blue`, Pure White text. No other color systems.
 - **Typography:** display = Space Grotesk (`--font-display`), body = Inter
   (`--font-body`); fluid scale (`--fs-display-1 … --fs-xs`); tight tracking on
-  headings (`--ls-tight`), uppercase eyebrows (`--ls-eyebrow`).
+  headings (`--ls-tight`), mono uppercase eyebrows with a machined tick
+  (`.eyebrow`), `.statement` for editorial display-voice paragraphs.
+- **"Engineered Editorial" direction (2026-07):** oversized display statements
+  (display-1 tops at ~8rem) vs small mono technical labels; content sits on
+  **hairline rules with index numerals**, not icon-box cards; radii are sharp
+  (`--radius-*` 3–22px; pills only on buttons/controls); one full-bleed moment
+  per page (`.bleed`); asymmetric, left-aligned compositions over centered
+  blocks. Don't reintroduce icon-badge card grids or pill badges.
 - **Spacing & layout:** the spacing scale + `--section-y`; containers
   (`.container--wide/--narrow/--prose`); one max-width system; consistent section padding.
 - **Motion:** smooth, premium, intentional. Eases `--ease-out`/`--ease-in-out`;

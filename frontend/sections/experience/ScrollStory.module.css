@@ -1070,19 +1070,24 @@
   background: var(--grad-accent);
   box-shadow: 0 0 14px rgba(212, 175, 55, 0.6);
 }
+/* Bottom-center scroll cue (shared by the 3D hero and the fallback) */
 .cue {
   position: absolute;
-  left: var(--gutter);
+  left: 50%;
   bottom: 1.8rem;
+  transform: translateX(-50%);
   z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   gap: 0.5rem;
   font-size: 0.66rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-muted);
+  white-space: nowrap;
+  pointer-events: none;
 }
 .cueLine {
   width: 1px;

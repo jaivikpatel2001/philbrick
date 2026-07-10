@@ -15,40 +15,37 @@ const INDUSTRIES = [
 
 export function IndustriesShowcase() {
   return (
-    <section id="industries" className="section">
+    <section id="industries" className="section section--flush-bottom">
       <div className="container--wide">
         <SectionHeader
-          eyebrow="Industries"
+          eyebrow="05 — Industries"
           title="Engineered for every kind of building."
-          description="From private residences to hospitals, transit hubs and supertall towers, VERTIQ tailors vertical mobility to the demands of each sector."
+          description="From private residences to hospitals, transit hubs and supertall towers — VERTIQ tailors vertical mobility to the demands of each sector."
         />
-        <div className={styles.grid}>
-          {INDUSTRIES.map((it, i) => (
-            <Link
-              key={it.name}
-              href="/products"
-              className={styles.card}
-              data-reveal="up"
-              style={{ "--reveal-delay": `${i * 0.05}s` } as React.CSSProperties}
-            >
-              <Image
-                src={it.img}
-                alt={it.name}
-                fill
-                sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
-                className={styles.img}
-              />
-              <div className={styles.overlay} />
-              <div className={styles.body}>
-                <h3 className={styles.name}>{it.name}</h3>
-                <p className={styles.tagline}>{it.tagline}</p>
-                <span className={styles.cta}>
-                  Explore solutions <FiArrowUpRight />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+      </div>
+
+      {/* Full-bleed panel strip — panels breathe open on hover */}
+      <div className={`bleed ${styles.strip}`} data-reveal="fade">
+        {INDUSTRIES.map((it, i) => (
+          <Link key={it.name} href="/products" className={styles.panel}>
+            <Image
+              src={it.img}
+              alt={it.name}
+              fill
+              sizes="(max-width: 900px) 78vw, 22vw"
+              className={styles.img}
+            />
+            <span className={styles.shade} aria-hidden />
+            <span className={styles.num}>{String(i + 1).padStart(2, "0")}</span>
+            <span className={styles.body}>
+              <span className={styles.name}>{it.name}</span>
+              <span className={styles.tagline}>{it.tagline}</span>
+              <span className={styles.cta}>
+                Explore solutions <FiArrowUpRight />
+              </span>
+            </span>
+          </Link>
+        ))}
       </div>
     </section>
   );

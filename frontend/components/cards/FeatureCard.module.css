@@ -1,20 +1,19 @@
+/* Editorial feature entry — content on a hairline, not in a box. */
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  padding: clamp(1.5rem, 2.5vw, 2.25rem);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  transition: transform var(--dur) var(--ease-out),
-    border-color var(--dur) var(--ease-out),
-    background var(--dur) var(--ease-out);
+  gap: 0.9rem;
+  padding: 1.6rem 0 0.5rem;
+  background: transparent;
+  border-top: 1px solid var(--border);
+  transition: border-color var(--dur) var(--ease-out);
+}
+.card:hover {
+  border-top-color: var(--border-accent);
 }
 .link:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-accent);
-  background: var(--surface-2);
+  background: transparent;
 }
 
 .head {
@@ -23,19 +22,15 @@
   justify-content: space-between;
 }
 .iconBadge {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-sm);
-  background: var(--accent-soft);
+  display: inline-flex;
   color: var(--accent);
-  font-size: 1.4rem;
+  font-size: 1.35rem;
 }
 .num {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: var(--fw-semibold);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.08em;
   color: var(--accent);
   font-feature-settings: "tnum";
 }
@@ -59,32 +54,22 @@
   font-size: var(--fs-sm);
   line-height: var(--lh-relaxed);
   color: var(--text-secondary);
+  max-width: 40ch;
 }
 
-/* ----- Plain (no surface) ----- */
+/* ----- Plain (no rule) ----- */
 .plain {
-  background: transparent;
-  border-color: transparent;
-  padding-inline: 0;
+  border-top-color: transparent;
+  padding-top: 0;
 }
 .plain:hover {
-  background: transparent;
-  transform: none;
+  border-top-color: transparent;
 }
 
-/* ----- Numbered (editorial) ----- */
+/* ----- Numbered (kept for process steps) ----- */
 .numbered {
   border-top: 1px solid var(--border);
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
-  border-radius: 0;
-  background: transparent;
-  padding-inline: 0;
-  padding-top: 1.5rem;
 }
 .numbered:hover {
-  background: transparent;
-  transform: none;
-  border-color: var(--border);
+  border-top-color: var(--border-accent);
 }

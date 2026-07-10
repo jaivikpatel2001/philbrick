@@ -2,7 +2,27 @@
   position: relative;
   background: var(--bg-secondary);
   border-top: 1px solid var(--border);
-  padding-block: clamp(3.5rem, 6vw, 6rem) 2.5rem;
+  padding-block: clamp(3rem, 5vw, 5rem) 2.5rem;
+  overflow: hidden;
+}
+
+/* Oversized closing wordmark */
+.wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 14vw, 13.5rem);
+  font-weight: var(--fw-bold);
+  line-height: 0.9;
+  letter-spacing: var(--ls-tight);
+  color: var(--text-primary);
+  opacity: 0.08;
+  user-select: none;
+  pointer-events: none;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  white-space: nowrap;
+}
+.wordmarkDot {
+  color: var(--accent);
+  opacity: 1;
 }
 
 .top {
@@ -78,22 +98,33 @@
   color: var(--accent);
 }
 
-/* ----- Certs ----- */
+/* ----- Certs — a technical registry line, not pill badges ----- */
 .certs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.75rem 2.25rem;
   margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--border);
 }
 .cert {
-  padding: 0.45rem 0.9rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  font-size: var(--fs-xs);
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   font-weight: var(--fw-medium);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--text-muted);
-  letter-spacing: 0.02em;
+}
+.cert::before {
+  content: "";
+  display: inline-block;
+  width: 0.45rem;
+  height: 1px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-right: 0.7rem;
+  opacity: 0.7;
 }
 
 .divider {

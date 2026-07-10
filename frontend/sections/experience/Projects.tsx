@@ -74,7 +74,7 @@ export function Projects() {
     <section id="projects" className={`section ${styles.section}`} ref={root}>
       <div className="container--wide">
         <header className={styles.head} data-reveal>
-          <span className="eyebrow">Projects</span>
+          <span className="eyebrow">04 — Projects</span>
           <h2 className={styles.title}>
             The buildings that{" "}
             <span className="text-accent-gradient">define skylines.</span>

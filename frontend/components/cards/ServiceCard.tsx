@@ -1,31 +1,23 @@
-import { createElement } from "react";
-import { FiCheck } from "react-icons/fi";
 import type { Service } from "@/types";
-import { getIcon } from "@/lib/icons";
 import styles from "./ServiceCard.module.css";
 
 /**
- * Presentational lifecycle-support card (installation / maintenance /
- * modernization / AMC). Used by the home ServiceEcosystem section. Non-linking:
- * there is no dedicated services route — enquiries route through Contact.
+ * Lifecycle-support row (installation / maintenance / modernization / AMC) —
+ * an indexed editorial entry on a hairline, not a boxed card. Used by the home
+ * ServiceEcosystem section. Non-linking: there is no dedicated services route —
+ * enquiries route through Contact.
  */
-export function ServiceCard({ service }: { service: Service }) {
-  const icon = getIcon(service.iconName);
+export function ServiceCard({ service, index }: { service: Service; index: number }) {
   return (
-    <article className={styles.card} data-reveal="up">
-      <div className={styles.top}>
-        <span className={styles.icon}>
-          {createElement(icon)}
-        </span>
+    <article className={styles.row} data-reveal="up" style={{ "--reveal-delay": `${index * 0.06}s` } as React.CSSProperties}>
+      <span className={styles.num}>{String(index + 1).padStart(2, "0")}</span>
+      <div className={styles.main}>
         <h3 className={styles.title}>{service.shortName}</h3>
+        <p className={styles.desc}>{service.tagline}</p>
       </div>
-      <p className={styles.desc}>{service.tagline}</p>
       <ul className={styles.list}>
         {service.benefits.slice(0, 3).map((b) => (
-          <li key={b.title}>
-            <FiCheck className={styles.check} />
-            {b.title}
-          </li>
+          <li key={b.title}>{b.title}</li>
         ))}
       </ul>
     </article>

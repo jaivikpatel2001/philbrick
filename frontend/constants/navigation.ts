@@ -19,6 +19,7 @@ const productColumns = PRODUCT_GROUPS.map((group) => ({
 }));
 
 export const MAIN_NAV: NavItem[] = [
+  { label: "Home", href: "/" },
   {
     label: "Products",
     href: "/products",

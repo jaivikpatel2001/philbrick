@@ -38,12 +38,13 @@ export default function HomePage() {
 
       {/* By the numbers */}
       <StatsBand
-        eyebrow="By the numbers"
+        eyebrow="06 — By the numbers"
         title="Performance you can measure"
         description="The intelligence inside every VERTIQ system shows up where it counts: in energy, in uptime and in time saved."
         stats={COMPANY_STATS}
         columns={4}
         variant="bordered"
+        align="left"
       />
 
       {/* Contact / CTA */}

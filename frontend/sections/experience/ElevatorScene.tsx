@@ -17,6 +17,7 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js";
 import { FiArrowDown } from "react-icons/fi";
 import { Button } from "@/components/ui/Button";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { MODEL } from "@/data/model";
 import { ENV } from "@/data/environment";
 import { SITE } from "@/constants/site";
@@ -37,19 +38,22 @@ const INSIDE_P = 0.34; // camera fully inside — the lobby wide shot
 const COMP_START = 0.42;
 const COMP_END = 0.9;
 
-/* Copy for the exterior beats (the component captions take over afterwards) */
+/* Copy for the exterior beats (the component captions take over afterwards).
+   The arrival line follows the theme: night scene in dark mode, daylight in light. */
 const BEATS = [
   {
     eyebrow: "01 Arrival",
     lead: "Engineered for",
     em: "movement.",
     sub: "Night falls on the VERTIQ tower. Every journey begins at the street.",
+    subDay: "Daylight on the VERTIQ tower. Every journey begins at the street.",
   },
   {
     eyebrow: "02 The Approach",
     lead: "Your elevator",
     em: "arrives.",
     sub: "Through the glass, the lobby is already waiting.",
+    subDay: "Through the glass, the lobby is already waiting.",
   },
 ];
 function beatFromP(p: number) {
@@ -114,6 +118,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
   const [active, setActive] = useState(-1);
   const [beat, setBeat] = useState(0);
   const [openComponent, setOpenComponent] = useState<ElevatorComponent | null>(null);
+  const { theme } = useTheme();
 
   /* Single write point for everything driven by scroll progress (3D pose reads
      progress.current in the rAF loop; HUD state updates here). Also reused by
@@ -166,6 +171,19 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     const BLUE = new THREE.Color(cssVar("--blue", "#2f6bff"));
     const STEEL = new THREE.Color(cssVar("--silver", "#c7cdd5"));
     const WARM_WINDOW = GOLD.clone().lerp(new THREE.Color("#ffffff"), 0.35);
+    const WHITE = new THREE.Color("#ffffff");
+
+    /* Day/night follows the site theme ([data-theme] on <html>), blended
+       smoothly in the pose loop. Every themed change below is uniform- or
+       texture-only — never a shader define — so switching themes (or fading
+       lights) can never trigger a mid-scroll shader recompile stall. */
+    const themeIsLight = () => document.documentElement.getAttribute("data-theme") === "light";
+    let dayTarget = themeIsLight() ? 1 : 0;
+    let dayBlend = dayTarget;
+    const themeObserver = new MutationObserver(() => {
+      dayTarget = themeIsLight() ? 1 : 0;
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     /* Atmospheric depth for the exterior beats. Starts well beyond every
        interior camera distance, so the lobby/cabin shots are untouched. */
@@ -452,6 +470,31 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     skyDome.position.y = 20;
     exterior.add(skyDome);
 
+    /* Day sky — a second dome crossfaded over the night one by the theme
+       blend. It exists (and compiles) from mount; only its opacity animates. */
+    const daySkyCanvas = document.createElement("canvas");
+    daySkyCanvas.width = 2;
+    daySkyCanvas.height = 512;
+    const dayCtx = daySkyCanvas.getContext("2d")!;
+    const dayGrad = dayCtx.createLinearGradient(0, 0, 0, 512);
+    /* A real sky: saturated zenith blue easing to a cool haze at the horizon —
+       never white-on-white, so the tower always reads against it. */
+    dayGrad.addColorStop(0, `#${BLUE.clone().lerp(WHITE, 0.1).getHexString()}`);
+    dayGrad.addColorStop(0.3, `#${BLUE.clone().lerp(WHITE, 0.34).getHexString()}`);
+    dayGrad.addColorStop(0.5, `#${STEEL.clone().lerp(WHITE, 0.42).getHexString()}`); // horizon haze
+    dayGrad.addColorStop(0.56, `#${STEEL.clone().lerp(WHITE, 0.18).getHexString()}`);
+    dayGrad.addColorStop(1, `#${STEEL.clone().lerp(GRAPHITE, 0.35).getHexString()}`);
+    dayCtx.fillStyle = dayGrad;
+    dayCtx.fillRect(0, 0, 2, 512);
+    const daySkyTex = track(new THREE.CanvasTexture(daySkyCanvas));
+    daySkyTex.colorSpace = THREE.SRGBColorSpace;
+    const daySkyGeo = new THREE.SphereGeometry(376, 24, 16);
+    disposables.push(daySkyGeo);
+    const daySkyMat = new THREE.MeshBasicMaterial({ map: daySkyTex, side: THREE.BackSide, fog: false, depthWrite: false, transparent: true, opacity: 0 });
+    const daySky = new THREE.Mesh(daySkyGeo, daySkyMat);
+    daySky.position.y = 20;
+    exterior.add(daySky);
+
     const ctxCanvas = document.createElement("canvas");
     ctxCanvas.width = ctxCanvas.height = 64;
     const cctx = ctxCanvas.getContext("2d")!;
@@ -486,16 +529,21 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     exterior.add(ctxMesh);
     disposables.push(ctxMesh);
 
-    /* Night lighting for the exterior only (hidden with the group, so the
-       interior beats pay nothing): a cool city/moon key that sculpts the
-       facade, and a warm pool spilling from the entrance onto the plaza. */
+    /* Exterior lighting: a moon/sun key that sculpts the facade, and a warm
+       pool spilling from the entrance onto the plaza.
+       IMPORTANT: these are added to the SCENE, not the toggled exterior group.
+       Three.js keys every shader program on the scene's light counts — if
+       these lights disappeared with `exterior.visible`, every physical
+       material would compile a new shader variant mid-scroll (a multi-second
+       main-thread stall that shows up as a freeze-then-jump on first scroll).
+       They are faded via intensity instead, which is uniform-only. */
     const moon = new THREE.DirectionalLight(STEEL.clone().lerp(BLUE, 0.25), 0.7);
     moon.position.set(-40, 55, 90);
-    exterior.add(moon);
-    exterior.add(moon.target);
+    scene.add(moon);
+    scene.add(moon.target);
     const entrancePool = new THREE.PointLight(WARM_WINDOW, 2.4, 30, 1.8);
     entrancePool.position.set(0, 2.6, 15.5);
-    exterior.add(entrancePool);
+    scene.add(entrancePool);
 
     /* ===== Elevator car ===== */
     const car = new THREE.Group();
@@ -638,7 +686,8 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     const rim = new THREE.DirectionalLight(0x9ab4ff, 0.8);
     rim.position.set(-4, 4, -5);
     scene.add(rim);
-    scene.add(new THREE.HemisphereLight(0x6b7384, 0x0a0b0e, 0.5));
+    const hemi = new THREE.HemisphereLight(0x6b7384, 0x0a0b0e, 0.5);
+    scene.add(hemi);
     // Soft area lights = even, photographic illumination on the metal (softboxes).
     RectAreaLightUniformsLib.init();
     const soft1 = new THREE.RectAreaLight(0xfff2e4, 3.2, 7, 4.5);
@@ -752,18 +801,86 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       }
     };
 
+    /* Day/night palettes, lerped by the theme blend each frame. Uniform-only. */
+    const NIGHT = {
+      fog: BLACK.clone().lerp(GRAPHITE, 0.5),
+      moonColor: STEEL.clone().lerp(BLUE, 0.25),
+      moonI: 0.7,
+      hemiSky: new THREE.Color(0x6b7384),
+      hemiGround: new THREE.Color(0x0a0b0e),
+      hemiI: 0.5,
+      envExterior: 0.35,
+      litWin: 1.5,
+      pool: 2.4,
+      street: BLACK.clone().lerp(GRAPHITE, 0.55),
+      mass: GRAPHITE.clone().lerp(BLACK, 0.15),
+      win: GRAPHITE.clone().lerp(BLUE, 0.12),
+      ctx: GRAPHITE.clone().lerp(BLACK, 0.5),
+      ctxEmissive: 0.3,
+      exposure: 1.2,
+    };
+    /* Balanced daylight: one clear sun, restrained ambient/env/exposure so
+       surfaces keep their material read — bright, never washed out. */
+    const DAY = {
+      fog: STEEL.clone().lerp(WHITE, 0.26),
+      moonColor: new THREE.Color("#fff3e0"), // the moon becomes the sun
+      moonI: 1.55,
+      hemiSky: BLUE.clone().lerp(WHITE, 0.48),
+      hemiGround: STEEL.clone().lerp(GRAPHITE, 0.5),
+      hemiI: 0.72,
+      envExterior: 0.62,
+      litWin: 0.12,
+      pool: 0.5,
+      street: STEEL.clone().lerp(GRAPHITE, 0.38),
+      mass: GRAPHITE.clone().lerp(STEEL, 0.2),
+      win: BLUE.clone().lerp(STEEL, 0.18),
+      ctx: GRAPHITE.clone().lerp(STEEL, 0.32),
+      ctxEmissive: 0.04,
+      exposure: 1.08,
+    };
+
     const startT = performance.now();
+    let lastT = startT;
     const pose = (p: number) => {
       updateCamera(p);
       // exterior only participates while we're outside / crossing the facade
       exterior.visible = !gltfActive && p < INSIDE_P + 0.03;
-      // night outside → the studio reflections bloom back up as we step inside
-      scene.environmentIntensity = lerp(0.35, ENV.intensity, smoothstep(APPROACH_END, INSIDE_P, p));
+      const insideT = smoothstep(APPROACH_END, INSIDE_P, p);
+
+      // ease toward the current theme (light = daylight, dark = night).
+      // Delta-time based so the ~1s transition is identical at any frame rate.
+      const nowT = performance.now();
+      const dt = Math.min(0.06, (nowT - lastT) / 1000);
+      lastT = nowT;
+      dayBlend += (dayTarget - dayBlend) * Math.min(1, dt * 4.5);
+      if (Math.abs(dayTarget - dayBlend) < 0.002) dayBlend = dayTarget;
+      const day = dayBlend;
+      (scene.fog as THREE.Fog).color.lerpColors(NIGHT.fog, DAY.fog, day);
+      moon.color.lerpColors(NIGHT.moonColor, DAY.moonColor, day);
+      hemi.color.lerpColors(NIGHT.hemiSky, DAY.hemiSky, day);
+      hemi.groundColor.lerpColors(NIGHT.hemiGround, DAY.hemiGround, day);
+      // daylight lifts the ambient outside; ease back so the interior keeps
+      // its studio look in both themes
+      hemi.intensity = lerp(NIGHT.hemiI, lerp(DAY.hemiI, 0.65, insideT), day);
+      winLitMat.emissiveIntensity = lerp(NIGHT.litWin, DAY.litWin, day);
+      streetMat.color.lerpColors(NIGHT.street, DAY.street, day);
+      massMat.color.lerpColors(NIGHT.mass, DAY.mass, day);
+      winMat.color.lerpColors(NIGHT.win, DAY.win, day);
+      ctxMat.color.lerpColors(NIGHT.ctx, DAY.ctx, day);
+      ctxMat.emissiveIntensity = lerp(NIGHT.ctxEmissive, DAY.ctxEmissive, day);
+      renderer.toneMappingExposure = lerp(NIGHT.exposure, DAY.exposure, day);
+      daySkyMat.opacity = day;
+      daySky.visible = day > 0.002;
+
+      // night/day outside → the studio reflections bloom back up as we step inside
+      scene.environmentIntensity = lerp(lerp(NIGHT.envExterior, DAY.envExterior, day), ENV.intensity, insideT);
+      // the exterior key light hands over to the interior rig at the threshold
+      moon.intensity = lerp(NIGHT.moonI, DAY.moonI, day) * (1 - smoothstep(0.3, INSIDE_P + 0.03, p));
       // the entrance glass dissolves just before the camera passes through it,
       // and the plaza pool light dims so it can't blow out at point-blank range
       entGlassMat.opacity = 0.16 * (1 - smoothstep(0.26, 0.3, p));
       entGlass.visible = entGlassMat.opacity > 0.004;
-      entrancePool.intensity = 2.4 * (1 - smoothstep(0.22, 0.29, p));
+      entrancePool.intensity = lerp(NIGHT.pool, DAY.pool, day) * (1 - smoothstep(0.22, 0.29, p));
       // doors part once we've settled inside the lobby ("the call")
       const o = smoothstep(0.36, 0.45, p);
       doorL.position.x = -W / 4 - o * (doorW + 0.02);
@@ -818,6 +935,11 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     resize();
     window.addEventListener("resize", resize);
 
+    /* Warm-up: compile every shader program up-front (including the day-sky
+       dome, which is hidden at night) so neither scrolling nor a theme switch
+       can ever hit a first-use compile stall. */
+    renderer.compile(scene, camera);
+
     let raf = 0;
     const animate = () => {
       raf = requestAnimationFrame(animate);
@@ -853,6 +975,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      themeObserver.disconnect();
       delete devWindow.__vertiqHero;
       window.removeEventListener("resize", resize);
       scene.traverse((obj) => {
@@ -908,7 +1031,9 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
               <h2 className={styles.beatTitle}>
                 {BEATS[beat].lead} <em>{BEATS[beat].em}</em>
               </h2>
-              <p className={styles.capTagline}>{BEATS[beat].sub}</p>
+              <p className={styles.capTagline}>
+                {theme === "light" ? BEATS[beat].subDay : BEATS[beat].sub}
+              </p>
             </>
           )}
         </div>
@@ -966,7 +1091,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
         <div className={story.progressTrack} aria-hidden>
           <div ref={bar} className={story.progressBar} />
         </div>
-        <div className={story.cue} aria-hidden>
+        <div className={`${story.cue} ${styles.cueHalo}`} aria-hidden>
           <span>Scroll to explore</span>
           <span className={story.cueLine} />
           <FiArrowDown />

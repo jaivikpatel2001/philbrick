@@ -58,6 +58,7 @@ const ID = {
   portraitWoman2: "1438761681033-6461ffad8d80",
   abstractBlue: "1451187580459-43490279c0fa",
   cityAerial: "1480714378408-67cf0d13bc1b",
+  ctoPortrait: "1560250097-0b93528c311a", // professional exec in glasses + navy suit
   // Indian context (web-sourced from Unsplash; review/replace with licensed
   // brand photography before launch):
   mumbaiSkyline: "1710582308582-55cc0c461c4e",
@@ -149,7 +150,7 @@ export const SERVICE_IMG = {
 export const PEOPLE = {
   a: img(ID.personIN1, { w: 600, h: 720 }),
   b: img(ID.personIN2, { w: 600, h: 720 }),
-  c: img(ID.personIN3, { w: 600, h: 720 }),
+  c: img(ID.ctoPortrait, { w: 600, h: 720 }), // CTO — professional corporate portrait
   d: img(ID.personIN4, { w: 600, h: 720 }),
 };
 

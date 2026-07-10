@@ -23,8 +23,8 @@
     radial-gradient(90% 70% at 70% -20%, rgba(47, 107, 255, 0.07), transparent 65%),
     linear-gradient(180deg, #060608 0%, #050505 55%, #070708 100%);
 
-  /* The 3D stage is always dark in BOTH themes — force light copy tokens so the
-     overlay text/HUD stay legible even when the site is in light mode. */
+  /* Dark theme = night scene: force light copy tokens so the overlay text/HUD
+     stay legible over the cinematic render. */
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.66);
   --text-muted: rgba(255, 255, 255, 0.46);
@@ -34,6 +34,44 @@
   --surface: rgba(255, 255, 255, 0.04);
   --surface-2: rgba(255, 255, 255, 0.06);
   --surface-glass-strong: rgba(7, 8, 10, 0.82);
+}
+
+/* Light theme = daylight scene: bright sky backdrop + dark copy. The Three.js
+   scene itself crossfades to its day palette in sync with [data-theme]. */
+[data-theme="light"] .stage {
+  background: radial-gradient(
+      130% 90% at 72% 120%,
+      rgba(201, 168, 106, 0.14),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #b6cdec 0%, #dbe6f3 55%, #e9edf2 100%);
+  --text-primary: #0b0c0e;
+  --text-secondary: rgba(11, 12, 14, 0.72);
+  --text-muted: rgba(11, 12, 14, 0.52);
+  --text-faint: rgba(11, 12, 14, 0.34);
+  --border: rgba(5, 6, 8, 0.12);
+  --border-strong: rgba(5, 6, 8, 0.2);
+  --surface: rgba(255, 255, 255, 0.55);
+  --surface-2: rgba(255, 255, 255, 0.7);
+  --surface-glass-strong: rgba(255, 255, 255, 0.85);
+}
+[data-theme="light"] .vignette {
+  background: radial-gradient(
+    130% 95% at 70% 48%,
+    transparent 56%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+}
+[data-theme="light"] .topScrim {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent);
+}
+/* The bottom-center cue can sit over the dark podium at p=0 — a soft halo
+   keeps it readable over any backdrop in both themes. */
+.cueHalo {
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7);
+}
+[data-theme="light"] .cueHalo {
+  text-shadow: 0 1px 14px rgba(255, 255, 255, 0.85);
 }
 
 /* WebGL canvas mount */
@@ -178,7 +216,7 @@
   font-family: var(--font-display);
   font-size: 0.82rem;
   font-weight: var(--fw-semibold);
-  color: #fff;
+  color: var(--text-primary);
   background: var(--surface-glass-strong);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
@@ -211,8 +249,11 @@
   line-height: 1.02;
   letter-spacing: var(--ls-tight);
   margin-top: 0.55rem;
-  color: #fff;
+  color: var(--text-primary);
   text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6);
+}
+[data-theme="light"] .beatTitle {
+  text-shadow: 0 2px 30px rgba(255, 255, 255, 0.55);
 }
 .beatTitle em {
   font-style: normal;
@@ -223,21 +264,33 @@
   color: transparent;
 }
 
-/* ----- Active-component caption (bottom-left) ----------------------------- */
+/* ----- Active-component caption (left, vertically centered) --------------- */
 .caption {
   position: absolute;
   left: var(--gutter);
-  bottom: clamp(3rem, 9vh, 6rem);
+  top: 50%;
   z-index: 6;
   max-width: 30rem;
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(-50%) translateY(14px);
   transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
   pointer-events: none;
 }
 .captionShow {
   opacity: 1;
-  transform: none;
+  transform: translateY(-50%);
+}
+/* On small screens the model fills the frame — keep the caption low so it
+   doesn't cover the focused component. */
+@media (max-width: 860px) {
+  .caption {
+    top: auto;
+    bottom: clamp(3rem, 9vh, 6rem);
+    transform: translateY(14px);
+  }
+  .captionShow {
+    transform: none;
+  }
 }
 .capIndex {
   font-family: var(--font-mono);
@@ -253,11 +306,11 @@
   line-height: 1.04;
   letter-spacing: var(--ls-tight);
   margin-top: 0.45rem;
-  color: #fff;
+  color: var(--text-primary);
 }
 .capTagline {
   font-size: var(--fs-lead);
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   margin-top: 0.5rem;
 }
 .capBtn {
@@ -292,6 +345,12 @@
 }
 .railItem:hover {
   color: #fff;
+}
+[data-theme="light"] .railItem {
+  color: rgba(11, 12, 14, 0.45);
+}
+[data-theme="light"] .railItem:hover {
+  color: #0b0c0e;
 }
 .railDot {
   width: 8px;

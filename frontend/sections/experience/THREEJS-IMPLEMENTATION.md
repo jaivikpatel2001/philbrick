@@ -136,7 +136,17 @@ Pure function of progress (perfectly scrubbable). Highlights:
   pool light that live inside the exterior group (hidden with it). Colors are
   read from `styles/tokens.css` at init.
 - **Lighting:** warm key (shadowed) + cool fill + blue rim + hemisphere + interior
-  point + two rect-area softboxes; exterior adds the moon + entrance pool.
+  point + two rect-area softboxes, plus a moon/sun key and a warm entrance pool
+  light for the exterior beats. The exterior lights live on the **scene** (never
+  inside the toggled exterior group) and fade via intensity — see Gotchas.
+- **Day/night theme:** the scene follows the site theme (`[data-theme]` on
+  `<html>`, watched via MutationObserver). A delta-time-eased `dayBlend` (~1s)
+  lerps fog color, sun/moon color+intensity, hemisphere, exterior environment
+  intensity, lit-window/context emissives, street/mass/glass tints, exposure,
+  and crossfades a second day-sky dome. Everything is a uniform or texture —
+  never a shader define — so theme switching can't cause a compile stall. The
+  hero stage CSS has a matching `[data-theme="light"]` daylight backdrop and
+  dark-copy token overrides.
 - **Post:** `EffectComposer` → `RenderPass` → NaN-sanitize `ShaderPass` → low
   `UnrealBloomPass` (strength 0.12, threshold 0.9) → `OutputPass` → `SMAAPass`.
 
@@ -186,6 +196,13 @@ none`, fully faded out at rest.
   (e.g. the cabin seen from the street). One NaN pixel makes `UnrealBloomPass`
   black out the whole frame — the sanitize `ShaderPass` before bloom clamps it.
   Keep that pass if you add bloom passes or new anisotropic materials.
+- **Never put lights inside a visibility-toggled group.** Three.js keys every
+  shader program on the scene's light counts; hiding a group that contains a
+  light forces every physical material to compile a new variant on the next
+  frame — a multi-second main-thread stall that reads as "the scroll froze,
+  then the elevator jumped" (this shipped as a real bug). Add lights to the
+  scene and fade them with `intensity` (uniform-only). `renderer.compile()`
+  runs once before the rAF loop as a warm-up so nothing compiles lazily.
 - The exterior assumes the lobby stays inside the tower footprint
   (`TW/TD/FRONT_Z` in the exterior block). If you resize the lobby, keep the
   marble floor and side walls ending at the entrance line `z = FRONT_Z`.

@@ -56,7 +56,7 @@ Defined once in `app/layout.tsx` and wrapped around all pages:
 | **Footer** (`components/layout/Footer.tsx`) | Brand + newsletter + HQ contact · 3 link columns · certifications (ISO 9001, ISO 14001, EN 81-20/50, LEED Platinum) · socials · copyright. |
 | Providers | Theme (dark/light), Lenis smooth-scroll, scroll-reveal observer, "Skip to content" link. |
 
-**Primary nav order:** Products (mega) · About · Contact
+**Primary nav order:** Home · Products (mega) · About · Contact
 **Footer columns:** Elevators · Specialised & Mobility · Company (About VERTIQ · All Products · Contact)
 
 ---
@@ -69,14 +69,20 @@ The flagship storytelling page. Source: `app/page.tsx`.
 | # | Section | What the visitor sees |
 |---|---|---|
 | 1 | **3D Elevator Experience** (`ElevatorScene`) | Scroll-driven WebGL hero — see [§5](#5-the-3d-hero-scroll-experience). Night city → zoom to the tower → through the glass → into the lobby → components reveal one by one. |
-| 2 | **Who we are** (`AboutPreview`) | "Fifty-seven years of moving the world upward." — company intro + link to About. |
-| 3 | **Products** (`ProductsShowcase`) | "One platform. Every kind of rise." — featured elevator product families. |
-| 4 | **Lifecycle support** (`ServiceEcosystem`) | "We don't just install. We stay." — installation · maintenance · modernization · AMC, with a "Discuss your project" CTA to Contact. |
-| 5 | **Portfolio / Projects** (`Projects`) | "The buildings that…" — landmark projects (Lodha Marquise, Prestige Financial Hub, Taj Skyline, Apollo Medicity). |
-| 6 | **Industries** (`IndustriesShowcase`) | "Engineered for every kind of building." — residential, commercial, healthcare, hospitality, industrial. |
-| 7 | **By the numbers** (`StatsBand`) | "Performance you can measure." — headline company metrics. |
-| 8 | **Call to action** (`CTASection`) | "Ready to move your building into the future?" → Request a consultation / Explore products. |
-|  | *Footer* | Global footer. |
+| 2 | **Who we are** (`AboutPreview`) | "01 — Who we are": oversized statement headline + editorial text/stat column, offset media. |
+| 3 | **Products** (`ProductsShowcase`) | "02 — The portfolio": editorial index of 6 featured families — numeral · large name · mono specs · hover image reveal; full catalogue at /products. |
+| 4 | **Lifecycle support** (`ServiceEcosystem`) | "03 — Lifecycle support": numbered hairline rows (installation · maintenance · modernization · AMC) with benefit lists; CTA to Contact. |
+| 5 | **Portfolio / Projects** (`Projects`) | "04 — Projects": alternating parallax rows — landmark projects (Lodha Marquise, Prestige Financial Hub, Taj Skyline, Apollo Medicity). |
+| 6 | **Industries** (`IndustriesShowcase`) | "05 — Industries": full-bleed slat strip (5 sectors) — panels breathe open on hover; scroll-snap on mobile. |
+| 7 | **By the numbers** (`StatsBand`) | "06 — By the numbers": oversized gold numerals on hairlines, left-aligned. |
+| 8 | **Call to action** (`CTASection`) | Full-bleed image band, left-aligned statement → Request a consultation / Explore products. |
+|  | *Footer* | Global footer — oversized ghost wordmark, link columns, mono certification registry line. |
+
+> **Design direction ("Engineered Editorial", 2026-07):** reference-grade display
+> typography (up to ~8rem, tight leading/tracking) against small mono technical
+> labels; hairline rules + numbered rows instead of icon-box cards; sharp radii;
+> one full-bleed moment per page; asymmetric compositions. Encoded in
+> `styles/tokens.css` + `.eyebrow/.statement/.bleed` helpers in `globals.css`.
 
 > **Removed from Home:** *Trusted By* (`ClientMarquee`), *Technology* (`TechnologyPreview`)
 > and *Testimonials* (`TestimonialsSection`) sections were taken out; the flow above
