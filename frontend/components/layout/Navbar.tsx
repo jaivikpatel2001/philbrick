@@ -8,6 +8,7 @@ import { MAIN_NAV } from "@/constants/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { MegaMenu } from "./MegaMenu";
 import { MobileNav } from "./MobileNav";
 import { cn } from "@/utils/cn";
@@ -19,6 +20,12 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeTimer = useRef<number | undefined>(undefined);
   const pathname = usePathname();
+  const { theme } = useTheme();
+
+  /* What sits under the transparent navbar at the top of the page: inner pages
+     always open on a dark photo hero; the homepage's 3D scene is dark at night
+     but daylight in light theme — the only case needing dark-text controls. */
+  const overlay = pathname === "/" && theme === "light" ? "light" : "dark";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -28,8 +35,10 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    setActive(null);
-    setMobileOpen(false);
+    Promise.resolve().then(() => {
+      setActive(null);
+      setMobileOpen(false);
+    });
   }, [pathname]);
 
   const openMega = (i: number) => {
@@ -46,6 +55,7 @@ export function Navbar() {
       <header
         className={cn(styles.header, active !== null && styles.megaOpen)}
         data-scrolled={scrolled}
+        data-overlay={overlay}
         onMouseLeave={scheduleClose}
       >
         <div className={cn("container--wide", styles.inner)}>

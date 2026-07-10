@@ -1,6 +1,6 @@
 /* =============================================================================
    VERTIQ — NAVIGATION ARCHITECTURE (focused scope)
-   Home · Products (12 categories) · Services · About · Testimonials · Contact
+   Home · Products (12 categories) · About · Contact
    ========================================================================== */
 import type { NavItem } from "@/types";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
@@ -19,6 +19,7 @@ const productColumns = PRODUCT_GROUPS.map((group) => ({
 }));
 
 export const MAIN_NAV: NavItem[] = [
+  { label: "Home", href: "/" },
   {
     label: "Products",
     href: "/products",
@@ -28,15 +29,13 @@ export const MAIN_NAV: NavItem[] = [
         eyebrow: "Flagship",
         title: "VERTIQ Helix™",
         description:
-          "Our gearless MRL platform — 40% more efficient, whisper-quiet, destination-dispatched.",
+          "Our gearless MRL platform, 40% more efficient, whisper quiet, destination dispatched.",
         href: "/products/passenger-elevators",
         image: PRODUCT_IMG.passenger,
       },
     },
   },
-  { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
-  { label: "Testimonials", href: "/testimonials" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -51,7 +50,7 @@ export const FOOTER_NAV: FooterColumn[] = [
     links: [
       { label: "Passenger Elevators", href: "/products/passenger-elevators" },
       { label: "Home Elevators", href: "/products/home-elevators" },
-      { label: "High-Speed Elevators", href: "/products/high-speed-elevators" },
+      { label: "High Speed Elevators", href: "/products/high-speed-elevators" },
       { label: "MRL Elevators", href: "/products/mrl-elevators" },
       { label: "Panoramic Elevators", href: "/products/panoramic-elevators" },
       { label: "Capsule Elevators", href: "/products/capsule-elevators" },
@@ -72,10 +71,8 @@ export const FOOTER_NAV: FooterColumn[] = [
     title: "Company",
     links: [
       { label: "About VERTIQ", href: "/about" },
-      { label: "Services", href: "/services" },
-      { label: "Testimonials", href: "/testimonials" },
-      { label: "Contact", href: "/contact" },
       { label: "All Products", href: "/products" },
+      { label: "Contact", href: "/contact" },
     ],
   },
 ];

@@ -1,0 +1,38 @@
+# VERTIQ
+
+> VERTIQ (Vertiq Vertical Mobility Pvt. Ltd.) designs, manufactures and
+> maintains elevators, escalators and vertical-mobility systems in India.
+> Founded 1968. Headquarters: Vertiq House, G Block, Bandra Kurla Complex,
+> Mumbai 400 051, Maharashtra, India. Sales: +91 22 6789 1968 ·
+> sales@vertiq.in · 24/7 emergency line: 1800 209 1968.
+
+VERTIQ manufactures twelve product families: passenger elevators, home
+elevators, high-speed elevators (6–12+ m/s), machine-room-less (MRL)
+elevators, panoramic elevators, capsule elevators, hospital bed/stretcher
+elevators, freight elevators (up to 10,000 kg, including vehicle/car
+elevators), dumbwaiters and service lifts, escalators, moving walkways, and
+elevator components (gearless machines, regenerative drives, Pulse™
+controllers, fixtures, safety gear). Systems are engineered to IS 14665 and
+EN 81-20/50. Lifecycle services cover installation, preventive and
+predictive maintenance, modernization and annual maintenance contracts.
+
+## Pages
+
+- [Home](https://www.vertiq.in/): interactive 3D elevator experience and company overview
+- [Products](https://www.vertiq.in/products): all twelve product families with specifications
+- [Passenger Elevators](https://www.vertiq.in/products/passenger-elevators)
+- [Home Elevators](https://www.vertiq.in/products/home-elevators)
+- [High-Speed Elevators](https://www.vertiq.in/products/high-speed-elevators)
+- [MRL Elevators](https://www.vertiq.in/products/mrl-elevators)
+- [Hospital Elevators](https://www.vertiq.in/products/hospital-elevators)
+- [Freight Elevators](https://www.vertiq.in/products/freight-elevators)
+- [About](https://www.vertiq.in/about): history since 1968, manufacturing infrastructure, leadership
+- [Contact](https://www.vertiq.in/contact): consultations, quotations, service enquiries
+
+## Facts
+
+- Legal name: Vertiq Vertical Mobility Pvt. Ltd.
+- Founded: 1968 (Pune, India)
+- Market: India (pan-India sales and service network)
+- Standards: IS 14665, EN 81-20/50
+- IoT platform: Pulse™ (connected monitoring and predictive maintenance)

@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import type { IconType } from "react-icons";
@@ -27,7 +28,7 @@ export function FeatureCard({
   variant = "default",
   className,
 }: FeatureCardProps) {
-  const Icon = icon ?? getIcon(iconName);
+  const resolvedIcon = icon ?? getIcon(iconName);
   const classes = cn(
     styles.card,
     styles[variant],
@@ -42,7 +43,7 @@ export function FeatureCard({
           <span className={styles.num}>{pad2(index + 1)}</span>
         ) : (
           <span className={styles.iconBadge}>
-            <Icon />
+            {createElement(resolvedIcon)}
           </span>
         )}
         {href && <FiArrowUpRight className={styles.arrow} />}

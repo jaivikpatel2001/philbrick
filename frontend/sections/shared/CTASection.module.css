@@ -1,10 +1,16 @@
+/* Full-bleed closing statement — the section itself is the canvas. */
+.wrap {
+  padding-block: 0;
+}
+
 .cta {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  border-radius: var(--radius-xl);
-  padding: clamp(3rem, 7vw, 7rem) clamp(1.75rem, 5vw, 5.5rem);
-  text-align: center;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding-block: clamp(5rem, 12vw, 11rem);
+  border-block: 1px solid var(--border);
 }
 
 .image {
@@ -19,11 +25,11 @@
   inset: 0;
   z-index: -1;
   background: linear-gradient(
-      130deg,
-      rgba(8, 12, 22, 0.82),
-      rgba(8, 12, 22, 0.55)
-    ),
-    radial-gradient(60% 80% at 85% 20%, rgba(0, 212, 255, 0.28), transparent 60%);
+      100deg,
+      rgba(6, 7, 10, 0.92) 20%,
+      rgba(6, 7, 10, 0.45) 75%,
+      rgba(6, 7, 10, 0.7)
+    );
 }
 
 .gradient {
@@ -37,23 +43,29 @@
   color: rgba(255, 255, 255, 0.88);
 }
 
+/* Body aligns to the site grid inside the bleed. */
 .body {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  max-width: 56rem;
+  align-items: flex-start;
+  text-align: left;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: var(--container-wide);
   margin-inline: auto;
+  padding-inline: var(--gutter);
 }
 .eyebrow {
-  color: var(--brand-cyan);
+  color: var(--gold-soft);
 }
 .title {
   font-size: var(--fs-display-2);
+  font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-tight);
   line-height: var(--lh-tight);
   text-wrap: balance;
+  max-width: 16ch;
 }
 .desc {
   font-size: var(--fs-lead);
@@ -65,6 +77,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: center;
-  margin-top: 0.75rem;
+  justify-content: flex-start;
+  margin-top: 1rem;
 }

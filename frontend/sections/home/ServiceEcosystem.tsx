@@ -9,18 +9,18 @@ export function ServiceEcosystem() {
     <section className="section">
       <div className="container--wide">
         <SectionHeader
-          eyebrow="Lifecycle services"
+          eyebrow="03 — Lifecycle support"
           title="We don't just install. We stay."
-          description="An elevator lasts decades — and so should the relationship behind it. From first survey to predictive care, VERTIQ covers the whole lifecycle."
+          description="An elevator lasts decades — and so should the relationship behind it. From first survey to predictive care, VERTIQ covers installation, maintenance, modernization and AMC across the whole lifecycle."
           action={
-            <Button href="/services" variant="ghost" withArrow>
-              All services
+            <Button href="/contact" variant="ghost" withArrow>
+              Discuss your project
             </Button>
           }
         />
-        <div className={styles.grid}>
-          {SERVICES.map((service) => (
-            <ServiceCard key={service.slug} service={service} />
+        <div className={styles.rows}>
+          {SERVICES.map((service, i) => (
+            <ServiceCard key={service.slug} service={service} index={i} />
           ))}
         </div>
       </div>

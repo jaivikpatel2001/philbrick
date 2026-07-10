@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowUpRight } from "react-icons/fi";
@@ -13,7 +14,7 @@ export function IndustryCard({
   industry: Industry;
   large?: boolean;
 }) {
-  const Icon = getIcon(industry.iconName);
+  const icon = getIcon(industry.iconName);
   return (
     <Link
       href={`/industries/${industry.slug}`}
@@ -30,7 +31,7 @@ export function IndustryCard({
       <div className={styles.overlay} />
       <div className={styles.body}>
         <span className={styles.icon}>
-          <Icon />
+          {createElement(icon)}
         </span>
         <div className={styles.text}>
           <h3 className={styles.title}>{industry.name}</h3>

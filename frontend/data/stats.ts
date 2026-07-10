@@ -2,9 +2,9 @@ import type { Stat } from "@/types";
 
 /** Headline trust metrics — homepage hero band. */
 export const TRUST_METRICS: Stat[] = [
-  { value: 57, label: "Years of engineering", description: "Founded 1968" },
-  { value: 1.4, decimals: 1, suffix: "M", label: "Units in service", description: "Across 6 continents" },
-  { value: 40, suffix: "+", label: "Countries", description: "Local teams, global standard" },
+  { value: 57, label: "Years of engineering", description: "Founded in Pune, 1968" },
+  { value: 1.4, decimals: 1, suffix: "M", label: "Units in service", description: "Across India" },
+  { value: 28, suffix: "+", label: "States & UTs", description: "Pan-India network" },
   { value: 99.9, decimals: 1, suffix: "%", label: "Fleet uptime", description: "Pulse™ monitored" },
 ];
 
@@ -24,15 +24,15 @@ export const SUSTAINABILITY_STATS: Stat[] = [
 ];
 
 export const CAREERS_STATS: Stat[] = [
-  { value: 1200, suffix: "+", label: "Employees" },
-  { value: 40, suffix: "+", label: "Countries" },
+  { value: 9000, suffix: "+", label: "Employees" },
+  { value: 28, suffix: "+", label: "States & UTs" },
   { value: 38, suffix: "%", label: "Women in engineering" },
   { value: 4.6, decimals: 1, suffix: "/5", label: "Glassdoor rating" },
 ];
 
 export const GLOBAL_STATS: Stat[] = [
-  { value: 40, suffix: "+", label: "Countries served" },
-  { value: 7, label: "Manufacturing sites" },
-  { value: 4, label: "R&D centres" },
+  { value: 120, suffix: "+", label: "Cities served" },
+  { value: 4, label: "Manufacturing sites" },
+  { value: 3, label: "R&D centres" },
   { value: 320, suffix: "+", label: "Service branches" },
 ];

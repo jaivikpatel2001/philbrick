@@ -14,6 +14,11 @@ export function Footer() {
   return (
     <footer className={styles.footer}>
       <div className="container--wide">
+        {/* Oversized closing wordmark — the site signs its name */}
+        <p className={styles.wordmark} aria-hidden>
+          VERTIQ<span className={styles.wordmarkDot}>.</span>
+        </p>
+
         <div className={styles.top}>
           <div className={styles.brand}>
             <Logo />

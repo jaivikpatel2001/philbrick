@@ -1,51 +1,57 @@
-import { HomeHero } from "@/sections/home/HomeHero";
+import { ElevatorScene } from "@/sections/experience/ElevatorScene";
 import { AboutPreview } from "@/sections/home/AboutPreview";
 import { ProductsShowcase } from "@/sections/home/ProductsShowcase";
-import { TechnologyPreview } from "@/sections/home/TechnologyPreview";
 import { ServiceEcosystem } from "@/sections/home/ServiceEcosystem";
+import { IndustriesShowcase } from "@/sections/home/IndustriesShowcase";
+import { Projects } from "@/sections/experience/Projects";
 import { StatsBand } from "@/sections/shared/StatsBand";
-import { ClientMarquee } from "@/sections/shared/ClientMarquee";
-import { TestimonialsSection } from "@/sections/shared/TestimonialsSection";
 import { CTASection } from "@/sections/shared/CTASection";
-import { TRUST_METRICS, COMPANY_STATS } from "@/data/stats";
-import { TESTIMONIALS } from "@/data/testimonials";
-import { TRUST_LOGOS } from "@/constants/site";
+import { COMPANY_STATS } from "@/data/stats";
 
+/**
+ * Homepage = the flagship storytelling experience.
+ * The cinematic Three.js elevator hero hands off into the brand's content flow:
+ * who we are → what we make → how we support it → proof → industries → numbers →
+ * a conversion CTA, then the global footer.
+ */
 export default function HomePage() {
   return (
     <>
-      <HomeHero />
+      {/* Cinematic elevator hero (Three.js) — night arrival → dolly-zoom through
+          the facade → lobby → component-by-component reveal */}
+      <ElevatorScene />
 
-      <StatsBand
-        id="trust"
-        stats={TRUST_METRICS}
-        columns={4}
-        variant="default"
-        surface
-      />
-
-      <ClientMarquee items={TRUST_LOGOS} />
-
+      {/* About the company */}
       <AboutPreview />
+
+      {/* Products — the elevator portfolio */}
       <ProductsShowcase />
-      <TechnologyPreview />
+
+      {/* Installation · maintenance · modernization · AMC */}
       <ServiceEcosystem />
 
+      {/* Projects */}
+      <Projects />
+
+      {/* Industries */}
+      <IndustriesShowcase />
+
+      {/* By the numbers */}
       <StatsBand
-        eyebrow="By the numbers"
+        eyebrow="06 — By the numbers"
         title="Performance you can measure"
-        description="The intelligence inside every VERTIQ system shows up where it counts — in energy, in uptime and in time saved."
+        description="The intelligence inside every VERTIQ system shows up where it counts: in energy, in uptime and in time saved."
         stats={COMPANY_STATS}
         columns={4}
         variant="bordered"
+        align="left"
       />
 
-      <TestimonialsSection testimonials={TESTIMONIALS} />
-
+      {/* Contact / CTA */}
       <CTASection
         eyebrow="Let's build upward"
         title="Ready to move your building into the future?"
-        description="Tell us about your project and a VERTIQ specialist will design the right vertical-mobility solution with you."
+        description="Tell us about your project and a VERTIQ specialist will design the right vertical mobility solution with you."
         primary={{ label: "Request a consultation", href: "/contact" }}
         secondary={{ label: "Explore products", href: "/products" }}
       />

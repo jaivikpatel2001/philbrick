@@ -1,21 +1,25 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
+/* Technical micro-label */
 .label {
-  font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   font-weight: var(--fw-medium);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--text-secondary);
 }
 .req {
@@ -59,6 +63,27 @@
   background-size: 18px;
   padding-right: 2.75rem;
   cursor: pointer;
+  /* The native popup follows the control's color-scheme (set per-theme on
+     :root in tokens.css), so the option list renders dark in dark mode. */
+  color-scheme: inherit;
+}
+/* Options don't inherit the translucent surface correctly — the native popup
+   composites it over white, breaking dark mode. Only SOLID theme colors here. */
+.select option {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
+.select option:checked,
+.select option:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+/* Explicit per-theme color-scheme so the native popup chrome matches. */
+[data-theme="dark"] .select {
+  color-scheme: dark;
+}
+[data-theme="light"] .select {
+  color-scheme: light;
 }
 .invalid {
   border-color: #f87171;

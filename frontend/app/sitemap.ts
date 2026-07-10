@@ -2,18 +2,14 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/constants/site";
 import { PRODUCTS } from "@/data/products";
 
+/* Required for `output: "export"` — the sitemap is generated once at build. */
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url;
   const now = new Date();
 
-  const staticRoutes = [
-    "",
-    "/about",
-    "/products",
-    "/services",
-    "/testimonials",
-    "/contact",
-  ].map((path) => ({
+  const staticRoutes = ["", "/about", "/products", "/contact"].map((path) => ({
     url: `${base}${path}`,
     lastModified: now,
     changeFrequency: "monthly" as const,

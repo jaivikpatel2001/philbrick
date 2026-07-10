@@ -8,6 +8,8 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProductCard } from "@/components/cards/ProductCard";
 import { ImageGallery } from "@/components/ui/ImageGallery";
 import { PRODUCTS, getProduct } from "@/data/products";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { productSchema, breadcrumbSchema } from "@/lib/schema";
 import styles from "./detail.module.css";
 
 interface Props {
@@ -43,6 +45,14 @@ export default async function ProductDetailPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd data={productSchema(product)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Products", path: "/products" },
+          { name: product.name, path: `/products/${product.slug}` },
+        ])}
+      />
       <PageHero
         eyebrow={product.category}
         title={product.name}
@@ -119,7 +129,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <SectionHeader
               eyebrow="Technical"
               title="Specifications"
-              description="Indicative figures — final specifications are confirmed during engineering."
+              description="Indicative figures. Final specifications are confirmed during engineering."
             />
             <dl className={styles.specs}>
               {product.specs.map((spec) => (

@@ -17,7 +17,9 @@ interface ModalProps {
 
 export function Modal({ open, onClose, title, children, size = "md" }: ModalProps) {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    Promise.resolve().then(() => setMounted(true));
+  }, []);
   useLockBody(open);
 
   useEffect(() => {

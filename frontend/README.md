@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VERTIQ — Premium Vertical-Mobility Website
 
-## Getting Started
+A flagship, cinematic marketing website for **VERTIQ**, a premium elevator &
+vertical-transportation manufacturer. The homepage opens with a real-time
+Three.js elevator experience and flows into the brand's products, lifecycle
+support, projects and industries — designed to feel like a premium
+architectural product, not a traditional corporate template.
 
-First, run the development server:
+> **Note on Next.js:** this project runs a newer Next.js than most references
+> assume. Read the relevant guide in `node_modules/next/dist/docs/` before
+> writing routing/rendering code (see [`AGENTS.md`](AGENTS.md)).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Project overview (business purpose)
+
+The site exists to **generate qualified leads and quotation requests** for a
+premium elevator brand, while communicating engineering excellence, safety and
+innovation. Primary audiences: architects, builders, developers, consultants,
+and commercial / industrial property owners. The experience is the pitch — it
+should make a multi-million-dollar vertical-transport system feel desirable.
+
+See [`CLAUDE.md`](CLAUDE.md) for the full vision, brand positioning and standards.
+
+---
+
+## Technology stack
+
+| Tool | Role |
+|---|---|
+| **Next.js (App Router)** | Routing, server components, metadata, image optimization |
+| **TypeScript (strict)** | Type safety across the app |
+| **Three.js** | Real-time 3D elevator hero (`sections/experience/ElevatorScene.tsx`) |
+| **GSAP + ScrollTrigger** | Scroll-scrubbed timelines and reveal animation |
+| **Lenis** | Smooth scrolling (wired into the GSAP ticker globally) |
+| **Custom CSS (CSS Modules + tokens)** | All styling — **no Tailwind, no UI kit** |
+| **Framer Motion** | Small entrance/interaction animations |
+| **react-icons** | Iconography (Feather set) |
+
+---
+
+## Folder structure
+
+```
+frontend/
+├── app/             # Next.js App Router — one folder per route
+│   ├── layout.tsx   #   global chrome: ThemeProvider, Lenis SmoothScroll,
+│   │                #   Navbar, <main>, Footer, RevealObserver + site metadata
+│   ├── page.tsx     #   HOMEPAGE — elevator hero + full content flow
+│   ├── about/  products/  products/[slug]/  contact/
+│   ├── sitemap.ts  robots.ts  not-found.tsx
+├── components/      # Reusable, presentational building blocks
+│   ├── layout/      #   Navbar, Footer, MegaMenu, MobileNav
+│   ├── ui/          #   Button, Logo, SectionHeader, Counter, Reveal, …
+│   ├── cards/       #   ProductCard, ServiceCard, IndustryCard, …
+│   ├── forms/       #   ContactForm
+│   └── providers/   #   ThemeProvider, SmoothScroll (Lenis), RevealObserver
+├── sections/        # Page-level composed sections (the "blocks" of a page)
+│   ├── home/        #   AboutPreview, ProductsShowcase, ServiceEcosystem
+│   │                #   (lifecycle support), IndustriesShowcase
+│   ├── experience/  #   ElevatorScene (Three.js hero), ScrollStory (CSS
+│   │                #   fallback), Projects  +  THREEJS-IMPLEMENTATION.md
+│   └── shared/      #   PageHero, StatsBand, FeatureGrid, TechShowcase, CTASection, …
+├── data/            # Content as typed data (products, services, company,
+│                    # stats, images, model — services feeds the home section)
+├── constants/       # site.ts (brand/contact), navigation.ts (nav + footer)
+├── lib/             # fonts.ts (next/font), icons.ts (icon registry)
+├── styles/          # tokens.css (design tokens — single source of truth),
+│                    # animations.css, globals.css
+├── types/           # Shared TypeScript domain models
+├── utils/           # cn (classnames), format
+└── public/          # Static assets, public/models/ (optional GLTF drop-in)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Responsibilities, in one line each:**
+- `app/` owns routes + the global layout/chrome and SEO metadata.
+- `sections/` composes `components/` + `data/` into the visible page blocks.
+- `components/` are reusable and dumb; they read tokens, not hard-coded colors.
+- `data/` + `constants/` are the single source of content; never hard-code copy/URLs/images in components.
+- `styles/tokens.css` is the **single source of truth for color, type, spacing and motion**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design principles
 
-## Learn More
+- **Premium** — champagne gold + electric blue on deep black; generous space; editorial type.
+- **Architectural** — restraint, alignment, real materials and light, museum-quality layout.
+- **Engineering-focused** — the elevator's precision is the story; details earn trust.
+- **Conversion-oriented** — every section leads toward a quote/consultation CTA.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Development guidelines
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **No Tailwind / no CSS frameworks.** Custom CSS only — **CSS Modules** per
+  component/section, driven by the tokens in `styles/tokens.css`.
+- **One design system.** Use semantic tokens (`var(--accent)`, `var(--bg-primary)`,
+  `var(--fs-h2)`, …). Don't introduce new colors/spacings outside tokens.
+- **Reusable sections.** New page blocks go in `sections/`, built from `components/`
+  and fed by `data/`.
+- **Performance-first.** `next/image` for all imagery; lazy/IO-driven reveals;
+  cap Three.js pixel ratio; dispose GPU resources; respect `prefers-reduced-motion`.
+- **Mobile-first, responsive.** Fluid `clamp()` type/spacing; test small screens;
+  the 3D hero falls back to a CSS experience on no-WebGL / reduced-motion.
+- **TypeScript strict.** Avoid `any`; model content in `types/`.
+- **Accessibility.** Semantic HTML, focus states, `aria-*`, skip link, reduced-motion.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Getting started
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # static export → frontend/out/ (output: "export")
+npm run lint     # eslint
+```
+
+**Deployment:** the app is fully prerendered and exports to plain HTML/CSS/JS
+in `out/`. `next start` does not apply in export mode — serve `out/` statically.
+
+- **Render Static Site (staging):** Root Directory `frontend` · Build Command
+  `npm ci && npm run build` · Publish Directory `out`. Clean URLs and
+  `404.html` are handled by Render automatically.
+- **cPanel (production):** run `npm run build` locally, then upload the
+  **contents** of `out/` into `public_html` (zip → upload → extract). The
+  bundled `public/.htaccess` (shipped inside `out/`) provides clean URLs,
+  the 404 page, compression and cache headers on Apache. At launch: set
+  `SITE.url` in `constants/site.ts` to the real domain, rebuild, re-upload,
+  enable AutoSSL in cPanel, and uncomment the HTTPS/www redirect block in
+  the `.htaccess`.
+
+The cinematic hero lives at `/` — see
+[`sections/experience/THREEJS-IMPLEMENTATION.md`](sections/experience/THREEJS-IMPLEMENTATION.md)
+for how it works and how to tune it.

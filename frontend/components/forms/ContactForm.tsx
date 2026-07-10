@@ -63,7 +63,7 @@ export function ContactForm({
         <span className={styles.successIcon}>
           <FiCheck />
         </span>
-        <h3>Thank you — we&apos;ll be in touch.</h3>
+        <h3>Thank you, we&apos;ll be in touch.</h3>
         <p>
           A VERTIQ specialist will respond within one business day. For urgent
           service, call our 24/7 line.

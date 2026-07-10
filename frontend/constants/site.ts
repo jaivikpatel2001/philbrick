@@ -1,29 +1,29 @@
 /* =============================================================================
-   VERTIQ — SITE CONFIGURATION
+   VERTIQ — SITE CONFIGURATION  (Indian vertical-mobility brand)
    ========================================================================== */
 
 export const SITE = {
   name: "VERTIQ",
-  legalName: "Vertiq Vertical Mobility S.A.",
-  tagline: "Vertical mobility, engineered.",
+  legalName: "Vertiq Vertical Mobility Pvt. Ltd.",
+  tagline: "Vertical mobility, engineered in India.",
   description:
-    "VERTIQ designs, manufactures and maintains intelligent elevators, escalators and vertical-mobility systems for the world's most ambitious buildings.",
-  url: "https://www.vertiq.com",
-  locale: "en_US",
+    "VERTIQ designs, manufactures and maintains intelligent elevators, escalators and vertical mobility systems for India's most ambitious buildings, engineered in India, for India.",
+  url: "https://www.vertiq.in",
+  locale: "en_IN",
   founded: 1968,
-  themeColor: "#0B0F17",
-  email: "hello@vertiq.com",
-  salesEmail: "sales@vertiq.com",
-  careersEmail: "careers@vertiq.com",
-  phone: "+1 (212) 555-0190",
-  phoneHref: "tel:+12125550190",
-  emergency: "+1 (800) 555-0911",
+  themeColor: "#050506",
+  email: "hello@vertiq.in",
+  salesEmail: "sales@vertiq.in",
+  careersEmail: "careers@vertiq.in",
+  phone: "+91 22 6789 1968",
+  phoneHref: "tel:+912267891968",
+  emergency: "1800 209 1968",
   address: {
-    line1: "Vertiq Tower, 8 Skyline Avenue",
-    line2: "New York, NY 10018",
-    country: "United States",
+    line1: "Vertiq House, G Block, Bandra Kurla Complex",
+    line2: "Mumbai 400 051, Maharashtra",
+    country: "India",
   },
-  hours: "24 / 7 service · Mon–Fri 08:00–18:00 sales",
+  hours: "24 / 7 service · Mon–Sat 09:30–18:30 sales",
 } as const;
 
 export const SOCIALS = [
@@ -31,17 +31,4 @@ export const SOCIALS = [
   { label: "X", href: "https://x.com", icon: "FiTwitter" },
   { label: "YouTube", href: "https://youtube.com", icon: "FiYoutube" },
   { label: "Instagram", href: "https://instagram.com", icon: "FiInstagram" },
-] as const;
-
-export const TRUST_LOGOS = [
-  "Skanska",
-  "Foster + Partners",
-  "Hines",
-  "Marriott",
-  "Mayo Clinic",
-  "Emaar",
-  "Lendlease",
-  "Gensler",
-  "Mitsubishi Estate",
-  "BlackRock",
 ] as const;

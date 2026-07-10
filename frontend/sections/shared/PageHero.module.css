@@ -25,11 +25,11 @@
   z-index: -1;
   background: linear-gradient(
       180deg,
-      rgba(11, 15, 23, 0.55) 0%,
-      rgba(11, 15, 23, 0.35) 35%,
-      rgba(11, 15, 23, 0.88) 100%
+      rgba(5, 6, 8, 0.55) 0%,
+      rgba(5, 6, 8, 0.35) 35%,
+      rgba(5, 6, 8, 0.9) 100%
     ),
-    radial-gradient(70% 60% at 80% 10%, rgba(0, 212, 255, 0.18), transparent 60%);
+    radial-gradient(70% 60% at 80% 10%, rgba(201, 168, 106, 0.16), transparent 60%);
 }
 
 .inner {
@@ -83,16 +83,12 @@
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 .statsCard {
-  /* Override theme tokens locally so Stats renders light over the dark scrim */
+  /* Override theme tokens locally so Stats renders light over the dark scrim.
+     Open composition — numerals on hairlines, no glass box. */
   --text-primary: #fff;
   --text-secondary: rgba(255, 255, 255, 0.82);
   --text-muted: rgba(255, 255, 255, 0.6);
-  --accent: var(--brand-cyan);
+  --accent: var(--gold-soft);
+  --border-strong: rgba(255, 255, 255, 0.34);
   --border: rgba(255, 255, 255, 0.14);
-  background: var(--surface-glass);
-  backdrop-filter: saturate(180%) blur(16px);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
 }

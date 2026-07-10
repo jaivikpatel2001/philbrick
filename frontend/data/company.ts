@@ -1,16 +1,16 @@
-import type { TimelineItem, Value, TeamMember } from "@/types";
+import type { TimelineItem, Value, TeamMember, Feature } from "@/types";
 import { PEOPLE } from "./images";
 
 export const MISSION =
-  "To move people through the buildings that shape our cities — safely, efficiently and beautifully — while leaving the lightest possible footprint.";
+  "To move people through the buildings that shape India's cities, safely, efficiently and beautifully, while leaving the lightest possible footprint.";
 
 export const VISION =
   "A world where vertical mobility is invisible: always there, never noticed, endlessly intelligent.";
 
 export const ABOUT_STORY = [
-  "VERTIQ began in 1968 in a single workshop with one conviction: that the elevator — the most-used vehicle on earth — deserved to be engineered like the most advanced one.",
-  "Over five decades we grew from a regional manufacturer into a global vertical-mobility company, never losing the engineering obsession we started with. Today our systems carry millions of people every day, from family homes to the world's tallest towers.",
-  "What sets VERTIQ apart isn't only the hardware. It's the intelligence we wrap around it — the Pulse™ platform that turns every elevator into a connected, self-aware machine, and the people who keep 1.4 million of them running across forty countries.",
+  "VERTIQ began in 1968 in a single Pune workshop with one conviction: that the elevator, the most used vehicle on earth, deserved to be engineered like the most advanced one.",
+  "Over five decades we grew from a regional manufacturer into one of India's leading vertical mobility companies, never losing the engineering obsession we started with. Today our systems carry millions of people every day, from family homes in tier 2 towns to the country's tallest towers.",
+  "What sets VERTIQ apart isn't only the hardware. It's the intelligence we wrap around it: the Pulse™ platform that turns every elevator into a connected, self-aware machine, and the people who keep 1.4 million of them running across India and 18 export markets.",
 ];
 
 export const VALUES: Value[] = [
@@ -18,13 +18,13 @@ export const VALUES: Value[] = [
     iconName: "FiShield",
     title: "Safety is sacred",
     description:
-      "Every decision starts with the people who ride and service our equipment. We design for zero harm — and accept nothing less.",
+      "Every decision starts with the people who ride and service our equipment. We design for zero harm and accept nothing less.",
   },
   {
     iconName: "FiCpu",
     title: "Engineer relentlessly",
     description:
-      "We treat the elevator as a frontier, not a finished product. Better, quieter, greener — always.",
+      "We treat the elevator as a frontier, not a finished product. Better, quieter, greener, always.",
   },
   {
     iconName: "FiHeart",
@@ -40,9 +40,9 @@ export const VALUES: Value[] = [
   },
   {
     iconName: "FiUsers",
-    title: "One global team",
+    title: "One India team",
     description:
-      "Forty countries, one standard. Local hands, shared engineering, collective pride in the craft.",
+      "Twenty-eight states, one standard. Local hands, shared engineering, collective pride in the craft.",
   },
   {
     iconName: "FiEye",
@@ -52,43 +52,89 @@ export const VALUES: Value[] = [
   },
 ];
 
+/* Manufacturing & engineering infrastructure — About page.
+   Covers facility, machinery, in-house component production, QC/testing, R&D,
+   workforce, safety/compliance and logistics for an elevator manufacturer. */
+export const INFRASTRUCTURE: Feature[] = [
+  {
+    iconName: "FiGrid",
+    title: "Modern manufacturing plants",
+    description:
+      "Multi plant production of complete elevator and escalator systems, from cabin fabrication to final assembly, on precision lines built for consistent quality at scale.",
+  },
+  {
+    iconName: "FiTool",
+    title: "Advanced fabrication & assembly",
+    description:
+      "In house sheet metal fabrication, CNC machining, powder coating and cabin assembly give us end to end control of fit, finish and lead time.",
+  },
+  {
+    iconName: "FiCpu",
+    title: "In-house component production",
+    description:
+      "Gearless machines, regenerative drives, Pulse™ controllers and COP/LOP fixtures are engineered and built under our own roof, not bought in.",
+  },
+  {
+    iconName: "FiCheckCircle",
+    title: "Quality control & test towers",
+    description:
+      "Dedicated test towers and QA labs load, endurance and ride test every machine, drive and safety component against IS 14665 and EN 81-20/50 before dispatch.",
+  },
+  {
+    iconName: "FiActivity",
+    title: "Engineering & R&D",
+    description:
+      "R&D centres run design, simulation and prototyping, advancing drive efficiency, ride quality and the Pulse™ platform with a skilled technical workforce.",
+  },
+  {
+    iconName: "FiTruck",
+    title: "Warehouse & logistics",
+    description:
+      "Regional spares warehousing and a pan-India distribution and service network keep installation, modernization and maintenance moving.",
+  },
+];
+
 export const TIMELINE: TimelineItem[] = [
-  { year: "1968", title: "The first workshop", description: "VERTIQ is founded with a handful of engineers and one geared traction elevator.", milestone: true },
-  { year: "1981", title: "Going gearless", description: "We pioneer one of the industry's earliest permanent-magnet gearless drives." },
-  { year: "1994", title: "Crossing borders", description: "Operations expand across Europe and into the Middle East and Asia." },
-  { year: "2003", title: "Machine-room-less", description: "The MRL platform launches, freeing architects from the rooftop machine room." },
+  { year: "1968", title: "The first workshop", description: "VERTIQ is founded in Pune with a handful of engineers and one geared traction elevator.", milestone: true },
+
+  { year: "1981", title: "Going gearless", description: "We pioneer one of India's earliest permanent magnet gearless drives." },
+  { year: "1994", title: "Across the metros", description: "Operations expand to Mumbai, Delhi, Bengaluru, Chennai and Hyderabad." },
+  { year: "2003", title: "Machine room less", description: "The MRL platform launches, freeing architects from the rooftop machine room." },
   { year: "2012", title: "Regeneration", description: "Regenerative drives become standard, cutting fleet energy use dramatically.", milestone: true },
-  { year: "2018", title: "Pulse™ goes live", description: "Our IoT platform connects the first 100,000 elevators to the cloud." },
-  { year: "2022", title: "Carbon-fibre rope", description: "Carbon-fibre belt technology pushes travel heights past 600 metres." },
-  { year: "2025", title: "Toward net-zero", description: "1.4M units in service and a committed path to net-zero operations by 2035.", milestone: true },
+
+  { year: "2016", title: "Made in India", description: "A new Pune mega factory scales in house manufacturing of machines, drives and fixtures." },
+  { year: "2018", title: "Pulse™ goes live", description: "Our IoT platform connects the first 100,000 elevators across India to the cloud." },
+
+  { year: "2022", title: "Carbon fibre rope", description: "Carbon fibre belt technology pushes travel heights past 600 metres." },
+  { year: "2025", title: "Toward net zero", description: "1.4M units in service across India and a committed path to net zero operations by 2035.", milestone: true },
 ];
 
 export const LEADERSHIP: TeamMember[] = [
   {
-    name: "Helena Vasquez",
+    name: "Aarti Deshpande",
     role: "Chief Executive Officer",
-    bio: "Two decades in vertical transport; joined VERTIQ to scale intelligence across the fleet.",
+    bio: "Two decades in vertical transport. Joined VERTIQ to scale intelligence across the fleet.",
     image: PEOPLE.b,
     linkedin: "https://linkedin.com",
   },
   {
-    name: "Kenji Tanaka",
+    name: "Rohit Khanna",
     role: "Chief Technology Officer",
     bio: "Led the Pulse™ platform from prototype to 1.2 million live sensors.",
     image: PEOPLE.c,
     linkedin: "https://linkedin.com",
   },
   {
-    name: "Sofia Bianchi",
+    name: "Neha Verma",
     role: "Chief Operating Officer",
-    bio: "Runs delivery and service across 40 countries with a zero-harm obsession.",
+    bio: "Runs delivery and service across 28 states with a zero harm obsession.",
     image: PEOPLE.d,
     linkedin: "https://linkedin.com",
   },
   {
-    name: "Marcus Whitfield",
+    name: "Sundar Krishnan",
     role: "Chief Sustainability Officer",
-    bio: "Architect of VERTIQ's net-zero-by-2035 roadmap.",
+    bio: "Architect of VERTIQ's net zero by 2035 roadmap.",
     image: PEOPLE.a,
     linkedin: "https://linkedin.com",
   },
