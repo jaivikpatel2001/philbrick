@@ -1,17 +1,29 @@
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 import { getCategory, getProduct } from "@/data/products";
+import { releasedRoutes } from "@/lib/release";
 import styles from "./ComingSoon.module.css";
 
 /* Friendly labels for the known static routes. Product routes resolve their
    name from the product tree; anything else falls back to a title-cased slug. */
 const STATIC_LABELS: Record<string, string> = {
+  "/": "Home",
+  "/about": "About",
+  "/contact": "Contact",
+  "/products": "Products",
   "/vision-mission": "Vision & Mission",
   "/milestone": "Milestone & Awards",
   "/infrastructure": "Infrastructure",
   "/network": "Network",
   "/news-events": "News & Events",
 };
+
+/** English list join: ["Home"] → "Home"; ["Home","About","Contact"] →
+   "Home, About and Contact". */
+function joinLabels(labels: string[]): string {
+  if (labels.length <= 1) return labels[0] ?? "";
+  return `${labels.slice(0, -1).join(", ")} and ${labels[labels.length - 1]}`;
+}
 
 function titleCase(slug: string): string {
   return slug
@@ -47,6 +59,24 @@ interface ComingSoonProps {
 export function ComingSoon({ route, label }: ComingSoonProps) {
   const name = label ?? labelForRoute(route);
 
+  // Only ever point visitors at pages that are genuinely live right now: the
+  // released top-level pages (excludes the current gated route + deep product
+  // routes). In production this is just Home until more pages are released; it
+  // expands automatically as routes are flagged live in config/pageReleases.ts.
+  const live = releasedRoutes()
+    .filter((r) => r !== route && !r.includes("["))
+    .filter((r) => r === "/" || r.split("/").filter(Boolean).length === 1)
+    .sort((a, b) => (a === "/" ? -1 : b === "/" ? 1 : a.localeCompare(b)))
+    .slice(0, 4)
+    .map((r) => ({ href: r, label: STATIC_LABELS[r] ?? labelForRoute(r) }));
+
+  const liveLabels = live.map((l) => l.label);
+  const liveSentence = liveLabels.length
+    ? `In the meantime, explore our ${joinLabels(liveLabels)} ${
+        liveLabels.length > 1 ? "pages" : "page"
+      }.`
+    : "In the meantime, please check back soon.";
+
   return (
     <section className={styles.wrap} aria-labelledby="coming-soon-title">
       {/* Ambient background */}
@@ -76,17 +106,20 @@ export function ComingSoon({ route, label }: ComingSoonProps) {
         </h1>
         <p className={styles.text}>
           We&apos;re putting the finishing touches on this section. It will be
-          available here shortly. In the meantime, explore our products or get
-          in touch with the Philbrick team.
+          available here shortly. {liveSentence}
         </p>
 
         <div className={styles.actions}>
-          <Button href="/" withArrow>
-            Back to home
-          </Button>
-          <Button href="/contact" variant="secondary">
-            Contact us
-          </Button>
+          {(live.length ? live : [{ href: "/", label: "Home" }]).map((l, i) => (
+            <Button
+              key={l.href}
+              href={l.href}
+              withArrow={i === 0}
+              variant={i === 0 ? undefined : "secondary"}
+            >
+              {l.href === "/" ? "Back to home" : l.label}
+            </Button>
+          ))}
         </div>
       </div>
     </section>
