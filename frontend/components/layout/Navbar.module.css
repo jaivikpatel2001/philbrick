@@ -136,7 +136,7 @@
   border-color: var(--border-strong);
 }
 
-@media (min-width: 993px) {
+@media (min-width: 1080px) {
   .nav {
     display: block;
   }

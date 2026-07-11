@@ -5,10 +5,10 @@
    Entity graph: Organization (#organization) ← WebSite, Products, pages.
    ========================================================================== */
 import { SITE, SOCIALS } from "@/constants/site";
-import { PRODUCTS } from "@/data/products";
+import { PRODUCT_TREE, categoryHref } from "@/data/products";
 import { LEADERSHIP } from "@/data/company";
 import { OG_IMAGE } from "@/data/images";
-import type { Product } from "@/types";
+import type { ProductNode } from "@/types";
 import type { Faq } from "@/data/faqs";
 
 export const ORG_ID = `${SITE.url}/#organization`;
@@ -29,12 +29,13 @@ export function organizationSchema() {
     image: OG_IMAGE,
     email: SITE.email,
     telephone: SITE.phone,
+    taxID: SITE.gst,
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE.address.line1,
-      addressLocality: "Mumbai",
-      postalCode: "400051",
-      addressRegion: "Maharashtra",
+      addressLocality: SITE.address.city,
+      postalCode: SITE.address.postalCode,
+      addressRegion: SITE.address.region,
       addressCountry: "IN",
     },
     areaServed: { "@type": "Country", name: "India" },
@@ -44,23 +45,15 @@ export function organizationSchema() {
         contactType: "sales",
         telephone: SITE.phone,
         email: SITE.salesEmail,
-        availableLanguage: ["en", "hi"],
-      },
-      {
-        "@type": "ContactPoint",
-        contactType: "emergency",
-        telephone: SITE.emergency,
-        hoursAvailable: "Mo-Su 00:00-24:00",
+        availableLanguage: ["en", "hi", "gu"],
       },
     ],
-    sameAs: SOCIALS.map((s) => s.href),
+    ...(SOCIALS.length > 0 && { sameAs: SOCIALS.map((s) => s.href) }),
     knowsAbout: [
-      "Elevator manufacturing",
-      "Vertical transportation",
-      ...PRODUCTS.map((p) => p.name),
-      "Elevator installation",
-      "Elevator maintenance",
-      "Elevator modernization",
+      "Elevator components",
+      "Elevator control panels",
+      "Automatic Rescue Device",
+      ...PRODUCT_TREE.map((c) => c.name),
     ],
   };
 }
@@ -90,38 +83,42 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
-/** Product entity: specifications become machine-readable PropertyValues. */
-export function productSchema(product: Product) {
+/** Product entity. `path` is the full route (nested for sub-products). */
+export function productSchema(product: ProductNode, path: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
     description: product.longDescription ?? product.description,
-    url: `${SITE.url}/products/${product.slug}`,
-    image: [product.cardImage, product.heroImage],
+    url: `${SITE.url}${path}`,
+    image: product.image,
     category: product.category,
     brand: { "@id": ORG_ID },
     manufacturer: { "@id": ORG_ID },
-    additionalProperty: product.specs.map((spec) => ({
-      "@type": "PropertyValue",
-      name: spec.label,
-      value: spec.value,
-    })),
+    ...(product.specs && product.specs.length > 0
+      ? {
+          additionalProperty: product.specs.map((spec) => ({
+            "@type": "PropertyValue",
+            name: spec.label,
+            value: spec.value,
+          })),
+        }
+      : {}),
   };
 }
 
-/** The product catalogue as an ordered list (products index page). */
+/** The product catalogue (top-level categories) as an ordered list. */
 export function productListSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: `${SITE.name} product families`,
-    numberOfItems: PRODUCTS.length,
-    itemListElement: PRODUCTS.map((p, i) => ({
+    name: `${SITE.name} product range`,
+    numberOfItems: PRODUCT_TREE.length,
+    itemListElement: PRODUCT_TREE.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      name: p.name,
-      url: `${SITE.url}/products/${p.slug}`,
+      name: c.name,
+      url: `${SITE.url}${categoryHref(c.slug)}`,
     })),
   };
 }

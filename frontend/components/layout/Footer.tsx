@@ -7,7 +7,12 @@ import { NewsletterForm } from "@/components/ui/NewsletterForm";
 import { getIcon } from "@/lib/icons";
 import styles from "./Footer.module.css";
 
-const CERTS = ["ISO 9001", "ISO 14001", "EN 81-20/50", "LEED Platinum"];
+/* Statutory identifiers (publicly displayed) — replaces unverifiable cert claims. */
+const REGISTRY = [
+  `GST ${SITE.gst}`,
+  `CIN ${SITE.cin}`,
+  `IEC ${SITE.iec}`,
+];
 
 export function Footer() {
   const year = 2026;
@@ -16,19 +21,20 @@ export function Footer() {
       <div className="container--wide">
         {/* Oversized closing wordmark — the site signs its name */}
         <p className={styles.wordmark} aria-hidden>
-          VERTIQ<span className={styles.wordmarkDot}>.</span>
+          PHILBRICK<span className={styles.wordmarkDot}>.</span>
         </p>
 
         <div className={styles.top}>
           <div className={styles.brand}>
             <Logo />
             <p className={styles.tagline}>
-              Designing the vertical mobility of the world&apos;s most ambitious
-              buildings since {SITE.founded}.
+              Providing elevator solutions since {SITE.founded} — control
+              panels, safety devices, doors, cabins and signalling, engineered
+              in-house in Ahmedabad, India.
             </p>
 
             <div className={styles.newsletter}>
-              <p className={styles.newsTitle}>Get the VERTIQ briefing</p>
+              <p className={styles.newsTitle}>Stay updated</p>
               <NewsletterForm />
             </div>
 
@@ -56,7 +62,7 @@ export function Footer() {
                 <p className={styles.colTitle}>{col.title}</p>
                 <ul>
                   {col.links.map((link) => (
-                    <li key={link.href}>
+                    <li key={`${col.title}-${link.label}`}>
                       <Link href={link.href} className={styles.link}>
                         {link.label}
                       </Link>
@@ -69,7 +75,7 @@ export function Footer() {
         </div>
 
         <div className={styles.certs}>
-          {CERTS.map((c) => (
+          {REGISTRY.map((c) => (
             <span key={c} className={styles.cert}>
               {c}
             </span>
@@ -83,27 +89,27 @@ export function Footer() {
             © {year} {SITE.legalName}. All rights reserved.
           </p>
 
-          <div className={styles.social}>
-            {SOCIALS.map((s) => {
-              const Icon = getIcon(s.icon);
-              return (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  className={styles.socialLink}
-                  aria-label={s.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon />
-                </a>
-              );
-            })}
-          </div>
+          {SOCIALS.length > 0 && (
+            <div className={styles.social}>
+              {SOCIALS.map((s) => {
+                const Icon = getIcon(s.icon);
+                return (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    className={styles.socialLink}
+                    aria-label={s.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon />
+                  </a>
+                );
+              })}
+            </div>
+          )}
 
-          <p className={styles.legalNote}>
-            {SITE.tagline} · ISO 9001 &amp; EN 81-20 certified
-          </p>
+          <p className={styles.legalNote}>{SITE.tagline}</p>
         </div>
       </div>
     </footer>

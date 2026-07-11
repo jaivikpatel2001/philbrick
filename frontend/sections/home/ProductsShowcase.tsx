@@ -3,32 +3,36 @@ import Image from "next/image";
 import { FiArrowUpRight } from "react-icons/fi";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
-import { PRODUCTS } from "@/data/products";
+import { getCategory, categoryHref } from "@/data/products";
+import type { ProductNode } from "@/types";
 import styles from "./ProductsShowcase.module.css";
 
-/* The six families that carry the story on the homepage; the full catalogue
-   of twelve lives at /products. */
+/* Six categories that carry the story on the homepage; the full range lives
+   at /products. */
 const FEATURED = [
-  "passenger-elevators",
-  "high-speed-elevators",
-  "panoramic-elevators",
-  "home-elevators",
-  "hospital-elevators",
-  "freight-elevators",
+  "elevator-control-panel",
+  "integrated-control-panel",
+  "ard",
+  "elevator-iot",
+  "synergy-auto-door",
+  "elevator-display",
 ];
 
 export function ProductsShowcase() {
-  const featured = FEATURED.map((slug) => PRODUCTS.find((p) => p.slug === slug)!).filter(Boolean);
+  const featured = FEATURED.map((slug) => getCategory(slug)).filter(
+    Boolean
+  ) as ProductNode[];
+
   return (
     <section className={`section ${styles.section}`}>
       <div className="container--wide">
         <SectionHeader
-          eyebrow="02 — The portfolio"
-          title="One platform. Every kind of rise."
-          description="From a single home lift to forty-two cars in a supertall, every VERTIQ system shares the same intelligent core."
+          eyebrow="02 — The range"
+          title="Everything an elevator needs."
+          description="Control, safety, doors, cabins and signalling — Philbrick engineers and builds the components that make a lift run, all under one roof."
           action={
             <Button href="/products" variant="ghost" withArrow>
-              All 12 product families
+              All products
             </Button>
           }
         />
@@ -38,7 +42,7 @@ export function ProductsShowcase() {
             <Link
               key={product.slug}
               role="listitem"
-              href={`/products/${product.slug}`}
+              href={categoryHref(product.slug)}
               className={styles.row}
               data-reveal="up"
               style={{ "--reveal-delay": `${i * 0.05}s` } as React.CSSProperties}
@@ -47,16 +51,10 @@ export function ProductsShowcase() {
               <span className={styles.name}>{product.name}</span>
               <span className={styles.meta}>
                 <span className={styles.metaItem}>{product.category}</span>
-                {product.capacityRange && (
-                  <span className={styles.metaItem}>{product.capacityRange}</span>
-                )}
-                {product.speedRange && (
-                  <span className={styles.metaItem}>{product.speedRange}</span>
-                )}
               </span>
               <span className={styles.thumb} aria-hidden>
                 <Image
-                  src={product.cardImage}
+                  src={product.image}
                   alt=""
                   fill
                   sizes="260px"

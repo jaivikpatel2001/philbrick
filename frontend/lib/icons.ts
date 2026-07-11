@@ -40,6 +40,7 @@ import {
   FiThermometer,
   FiEye,
   FiTarget,
+  FiPackage,
 } from "react-icons/fi";
 
 /** Central icon registry — data files reference icons by string name. */
@@ -84,6 +85,7 @@ export const ICONS: Record<string, IconType> = {
   FiThermometer,
   FiEye,
   FiTarget,
+  FiPackage,
 };
 
 /** Resolve an icon by name, falling back to a neutral glyph. */

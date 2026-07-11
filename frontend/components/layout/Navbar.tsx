@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { MegaMenu } from "./MegaMenu";
+import { NavDropdown } from "./NavDropdown";
 import { MobileNav } from "./MobileNav";
 import { cn } from "@/utils/cn";
 import styles from "./Navbar.module.css";
@@ -41,14 +42,18 @@ export function Navbar() {
     });
   }, [pathname]);
 
-  const openMega = (i: number) => {
+  const hasSubmenu = (i: number) =>
+    Boolean(MAIN_NAV[i].mega || MAIN_NAV[i].dropdown);
+
+  const openSub = (i: number) => {
     window.clearTimeout(closeTimer.current);
-    setActive(MAIN_NAV[i].mega ? i : null);
+    setActive(hasSubmenu(i) ? i : null);
   };
   const scheduleClose = () => {
     window.clearTimeout(closeTimer.current);
     closeTimer.current = window.setTimeout(() => setActive(null), 140);
   };
+  const keepOpen = () => window.clearTimeout(closeTimer.current);
 
   return (
     <>
@@ -59,7 +64,7 @@ export function Navbar() {
         onMouseLeave={scheduleClose}
       >
         <div className={cn("container--wide", styles.inner)}>
-          <Logo />
+          <Logo priority />
 
           <nav className={styles.nav} aria-label="Primary">
             <ul className={styles.navList}>
@@ -71,7 +76,12 @@ export function Navbar() {
                   <li
                     key={item.label}
                     className={styles.navItem}
-                    onMouseEnter={() => openMega(i)}
+                    onMouseEnter={() => openSub(i)}
+                    onFocus={() => openSub(i)}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget as Node))
+                        scheduleClose();
+                    }}
                   >
                     <Link
                       href={item.href}
@@ -79,11 +89,25 @@ export function Navbar() {
                         styles.navLink,
                         (isActive || active === i) && styles.navLinkActive
                       )}
-                      aria-expanded={item.mega ? active === i : undefined}
+                      aria-expanded={hasSubmenu(i) ? active === i : undefined}
+                      aria-haspopup={hasSubmenu(i) ? "menu" : undefined}
                     >
                       {item.label}
-                      {item.mega && <span className={styles.caret} aria-hidden />}
+                      {hasSubmenu(i) && (
+                        <span className={styles.caret} aria-hidden />
+                      )}
                     </Link>
+
+                    {/* Flat dropdown (e.g. About) — anchored to this item */}
+                    <AnimatePresence>
+                      {active === i && item.dropdown && (
+                        <NavDropdown
+                          links={item.dropdown}
+                          onEnter={keepOpen}
+                          onLeave={scheduleClose}
+                        />
+                      )}
+                    </AnimatePresence>
                   </li>
                 );
               })}
@@ -92,12 +116,7 @@ export function Navbar() {
 
           <div className={styles.actions}>
             <ThemeToggle className={styles.themeToggle} />
-            <Button
-              href="/contact"
-              size="sm"
-              className={styles.cta}
-              withArrow
-            >
+            <Button href="/contact" size="sm" className={styles.cta} withArrow>
               Get a quote
             </Button>
             <button
@@ -112,11 +131,12 @@ export function Navbar() {
           </div>
         </div>
 
+        {/* Full-width mega menu (Products) */}
         <AnimatePresence>
           {active !== null && MAIN_NAV[active].mega && (
             <MegaMenu
               item={MAIN_NAV[active]}
-              onEnter={() => window.clearTimeout(closeTimer.current)}
+              onEnter={keepOpen}
               onLeave={scheduleClose}
             />
           )}

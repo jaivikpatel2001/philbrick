@@ -3,9 +3,11 @@ import { PageHero } from "@/sections/shared/PageHero";
 import { CTASection } from "@/sections/shared/CTASection";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProductCard } from "@/components/cards/ProductCard";
-import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
+import { PRODUCT_GROUPS, getCategory, categoryHref } from "@/data/products";
+import { TRUST_METRICS } from "@/data/stats";
 import { PRODUCT_FAQS } from "@/data/faqs";
 import { FAQSection } from "@/sections/shared/FAQSection";
+import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { productListSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { HERO } from "@/data/images";
@@ -14,13 +16,13 @@ import styles from "./products.module.css";
 export const metadata: Metadata = {
   title: "Products",
   description:
-    "Explore the full VERTIQ portfolio: passenger, home, high speed, hospital and freight elevators, escalators, walkways and components.",
+    "Explore Philbrick's elevator component range: control panels, integrated controllers, ARD, door operators, Synergy auto doors, cabins, displays, COP/LOP and voice systems.",
   alternates: { canonical: "/products" },
 };
 
 export default function ProductsPage() {
   return (
-    <>
+    <ReleaseGate route="/products" label="Products">
       <JsonLd data={productListSchema()} />
       <JsonLd
         data={breadcrumbSchema([
@@ -29,28 +31,23 @@ export default function ProductsPage() {
         ])}
       />
       <JsonLd data={faqSchema(PRODUCT_FAQS)} />
+
       <PageHero
-        eyebrow="The portfolio"
-        title="Vertical mobility for every building"
-        description="Twelve product families, one intelligent platform. From a single home lift to forty cars in a supertall, engineered, connected and built to last."
+        eyebrow="The range"
+        title="Complete elevator components, engineered in-house"
+        description="From control panels and the Automatic Rescue Device to doors, cabins, displays and signalling — everything needed to build, upgrade and maintain a lift, from one source."
         image={HERO.products}
-        imageAlt="Modern elevator cabin interior"
+        imageAlt="Elevator control components"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Products" }]}
-        stats={[
-          { value: 12, label: "Product families" },
-          { value: 40, suffix: "+", label: "Countries served" },
-          { value: 1.4, decimals: 1, suffix: "M", label: "Units in service" },
-        ]}
+        stats={TRUST_METRICS.slice(0, 3)}
       />
 
       {PRODUCT_GROUPS.map((group, gi) => {
-        const items = group.slugs
-          .map((slug) => PRODUCTS.find((p) => p.slug === slug)!)
-          .filter(Boolean);
+        const items = group.slugs.map((slug) => getCategory(slug)!).filter(Boolean);
         return (
           <section
             key={group.title}
-            className={`section ${gi === 1 ? styles.alt : ""}`}
+            className={`section ${gi % 2 === 1 ? styles.alt : ""}`}
           >
             <div className="container--wide">
               <SectionHeader
@@ -59,8 +56,12 @@ export default function ProductsPage() {
                 align="left"
               />
               <div className={styles.grid}>
-                {items.map((product) => (
-                  <ProductCard key={product.slug} product={product} />
+                {items.map((cat) => (
+                  <ProductCard
+                    key={cat.slug}
+                    node={cat}
+                    href={categoryHref(cat.slug)}
+                  />
                 ))}
               </div>
             </div>
@@ -72,16 +73,16 @@ export default function ProductsPage() {
       <FAQSection
         eyebrow="Choosing a system"
         title="Common questions, answered"
-        description="The questions architects, builders and homeowners ask most when specifying vertical transport."
+        description="What installers, builders and OEMs ask most when specifying elevator control, safety and signalling."
         faqs={PRODUCT_FAQS}
       />
 
       <CTASection
-        title="Not sure which system fits?"
-        description="Tell us about your building and our engineers will recommend the right product, capacity and configuration."
+        title="Not sure which product fits?"
+        description="Tell us about your elevator and our engineers will recommend the right control, safety and signalling components."
         primary={{ label: "Get expert advice", href: "/contact" }}
-        secondary={{ label: "Why VERTIQ", href: "/about" }}
+        secondary={{ label: "About Philbrick", href: "/about" }}
       />
-    </>
+    </ReleaseGate>
   );
 }

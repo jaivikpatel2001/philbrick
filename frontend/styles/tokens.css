@@ -1,33 +1,54 @@
 /* =============================================================================
-   VERTIQ — DESIGN TOKENS  (single source of truth)
-   Premium architectural palette: Deep Black · Graphite · Brushed Steel ·
-   Champagne Gold · Electric Blue · Pure White.
+   PHILBRICK — DESIGN TOKENS  (single source of truth)
+   Brand palette derived from the Philbrick logo: azure blue (primary,
+   from the wordmark) + signal red (accent, from the emblem), on a
+   navy-black / cool-white neutral base. Blue leads; red is a restrained accent.
    Brand constants are theme-independent; semantic tokens swap per [data-theme].
+   Scale values are contrast-tuned for WCAG AA in both themes.
    Default theme = dark (cinematic). Light = clean, editorial.
    ========================================================================== */
 
 :root {
-  /* ----- Brand constants (palette — theme-independent) ------------------- */
-  --black: #050506;
-  --graphite: #0f1115;
+  /* ----- Brand scales (palette — theme-independent) ---------------------- */
+  /* Philbrick azure blue (primary) */
+  --blue-050: #e9f6fd;
+  --blue-100: #cbeafb;
+  --blue-200: #9cd8f7;
+  --blue-300: #63c2f1;
+  --blue-400: #2facec; /* bright azure — logo, dark-theme accent */
+  --blue-500: #109bdd; /* brand blue */
+  --blue-600: #0c7fb8;
+  --blue-700: #0a6a9c; /* AA text/button on white */
+  --blue-800: #075a85;
+  /* Philbrick signal red (accent) */
+  --red-400: #f0353b; /* dark-theme accent */
+  --red-500: #e11f26; /* brand red */
+  --red-600: #c4161c; /* AA text/fill on white */
+  --red-700: #a11217;
+
+  --black: #070a0f;
+  --graphite: #0f141c;
   --steel: #c7cdd5;
-  --gold: #c9a86a;
-  --gold-soft: #dcc089;
-  --gold-deep: #a9863f;
-  --blue: #2f6bff;
+  --blue: #109bdd;
   --white: #ffffff;
   --silver: #c7cdd5;
+  --ink: #0b1017;
 
-  /* Legacy aliases (kept so existing components keep working — now point at
-     the premium palette instead of the old cyan system). */
-  --brand-cyan: #c9a86a;
-  --brand-cyan-400: #dcc089;
-  --brand-cyan-600: #b8975a;
-  --brand-cyan-700: #a9863f;
-  --brand-blue: #2f6bff;
-  --brand-blue-600: #1f5be0;
-  --brand-blue-700: #1747b8;
-  --brand-ink: #050506;
+  /* Legacy aliases (kept so existing components keep working — the old
+     champagne-gold "cyan" primary now points at Philbrick azure blue; the old
+     secondary blue keeps mapping to blue as well — red is applied via
+     --accent-2 only, so it stays a deliberate, restrained accent). */
+  --gold: #109bdd;
+  --gold-soft: #2facec;
+  --gold-deep: #0a6a9c;
+  --brand-cyan: #109bdd;
+  --brand-cyan-400: #2facec;
+  --brand-cyan-600: #0c7fb8;
+  --brand-cyan-700: #0a6a9c;
+  --brand-blue: #0c7fb8;
+  --brand-blue-600: #0a6a9c;
+  --brand-blue-700: #075a85;
+  --brand-ink: #0b1017;
 
   /* ----- Typography families -------------------------------------------- */
   --font-display: var(--font-space-grotesk), "Clash Display", "SF Pro Display",
@@ -125,58 +146,66 @@
 }
 
 /* =============================================================================
-   DARK THEME (default) — deep black + graphite + champagne gold + electric blue
+   DARK THEME (default) — navy-black + graphite + bright azure + signal red
    ========================================================================== */
 :root,
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --bg-primary: #050506;
-  --bg-secondary: #0d0f12;
-  --bg-tertiary: #121419;
-  --bg-elevated: #0c0e11;
+  --bg-primary: #0a0e14;
+  --bg-secondary: #0e131b;
+  --bg-tertiary: #141b24;
+  --bg-elevated: #0c1219;
 
   --surface: rgba(255, 255, 255, 0.04);
   --surface-2: rgba(255, 255, 255, 0.06);
   --surface-3: rgba(255, 255, 255, 0.09);
   --surface-hover: rgba(255, 255, 255, 0.08);
-  --surface-glass: rgba(14, 16, 20, 0.62);
-  --surface-glass-strong: rgba(7, 8, 10, 0.82);
+  --surface-glass: rgba(12, 16, 22, 0.62);
+  --surface-glass-strong: rgba(8, 11, 16, 0.82);
 
   --border: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.2);
-  --border-accent: rgba(201, 168, 106, 0.42);
+  --border-accent: rgba(47, 172, 236, 0.42);
   --hairline: rgba(255, 255, 255, 0.07);
 
-  --accent: #c9a86a;
-  --accent-hover: #dcc089;
-  --accent-2: #2f6bff;
-  --accent-soft: rgba(201, 168, 106, 0.12);
-  --accent-contrast: #0a0a0c;
+  --accent: #2facec;
+  --accent-hover: #63c2f1;
+  --accent-2: #f0353b;
+  --accent-soft: rgba(47, 172, 236, 0.12);
+  --accent-contrast: #041019;
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.66);
   --text-muted: rgba(255, 255, 255, 0.46);
   --text-faint: rgba(255, 255, 255, 0.3);
-  --text-on-accent: #0a0a0c;
+  --text-on-accent: #041019;
 
-  --grad-accent: linear-gradient(118deg, #dcc089 0%, #c9a86a 55%, #a9863f 100%);
+  /* Semantic status (brightened for dark surfaces; distinct from brand red) */
+  --success: #34d399;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --success-soft: rgba(52, 211, 153, 0.14);
+  --warning-soft: rgba(251, 191, 36, 0.14);
+  --error-soft: rgba(248, 113, 113, 0.14);
+
+  --grad-accent: linear-gradient(118deg, #63c2f1 0%, #2facec 55%, #109bdd 100%);
   --grad-accent-soft: linear-gradient(
     118deg,
-    rgba(201, 168, 106, 0.16),
-    rgba(47, 107, 255, 0.14)
+    rgba(47, 172, 236, 0.16),
+    rgba(225, 31, 38, 0.12)
   );
   --grad-surface: linear-gradient(
     180deg,
-    rgba(20, 22, 28, 0.9),
-    rgba(10, 11, 14, 0.6)
+    rgba(20, 26, 34, 0.9),
+    rgba(10, 14, 20, 0.6)
   );
-  --grad-text: linear-gradient(118deg, #ffffff 28%, #e7d6a8 108%);
-  --grad-gold-blue: linear-gradient(120deg, #c9a86a, #2f6bff);
+  --grad-text: linear-gradient(118deg, #ffffff 28%, #a9dcf6 108%);
+  --grad-gold-blue: linear-gradient(120deg, #2facec, #e11f26);
   --grad-fade-b: linear-gradient(180deg, transparent, var(--bg-primary));
   --grad-radial-accent: radial-gradient(
     60% 60% at 50% 0%,
-    rgba(201, 168, 106, 0.16) 0%,
+    rgba(47, 172, 236, 0.16) 0%,
     transparent 70%
   );
 
@@ -185,84 +214,92 @@
   --shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.58);
   --shadow-xl: 0 50px 120px rgba(0, 0, 0, 0.64);
   --shadow-image: 0 40px 90px rgba(0, 0, 0, 0.58);
-  --glow-accent: 0 0 0 1px rgba(201, 168, 106, 0.22),
-    0 18px 60px rgba(201, 168, 106, 0.18);
-  --glow-soft: 0 0 90px rgba(201, 168, 106, 0.12);
+  --glow-accent: 0 0 0 1px rgba(47, 172, 236, 0.22),
+    0 18px 60px rgba(47, 172, 236, 0.18);
+  --glow-soft: 0 0 90px rgba(47, 172, 236, 0.12);
 
-  --scrim: rgba(4, 5, 7, 0.62);
+  --scrim: rgba(6, 9, 14, 0.62);
   --overlay-img: linear-gradient(
     180deg,
-    rgba(5, 6, 8, 0.1) 0%,
-    rgba(5, 6, 8, 0.55) 55%,
-    rgba(5, 6, 8, 0.92) 100%
+    rgba(8, 11, 16, 0.1) 0%,
+    rgba(8, 11, 16, 0.55) 55%,
+    rgba(8, 11, 16, 0.92) 100%
   );
 }
 
 /* =============================================================================
-   LIGHT THEME — clean editorial, same champagne-gold / electric-blue accents
+   LIGHT THEME — clean editorial; deep azure primary + signal-red accent
    ========================================================================== */
 [data-theme="light"] {
   color-scheme: light;
 
   --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f3;
-  --bg-tertiary: #eeeeea;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #e6edf3;
   --bg-elevated: #ffffff;
 
   --surface: #ffffff;
-  --surface-2: #f4f4f1;
-  --surface-3: #ebebe6;
-  --surface-hover: #f0f0ec;
+  --surface-2: #f1f5f9;
+  --surface-3: #e3eaf1;
+  --surface-hover: #eef3f8;
   --surface-glass: rgba(255, 255, 255, 0.72);
   --surface-glass-strong: rgba(255, 255, 255, 0.85);
 
-  --border: rgba(5, 6, 8, 0.1);
-  --border-strong: rgba(5, 6, 8, 0.18);
-  --border-accent: rgba(169, 134, 63, 0.4);
-  --hairline: rgba(5, 6, 8, 0.07);
+  --border: rgba(11, 16, 23, 0.1);
+  --border-strong: rgba(11, 16, 23, 0.18);
+  --border-accent: rgba(10, 106, 156, 0.4);
+  --hairline: rgba(11, 16, 23, 0.07);
 
-  --accent: #a9863f;
-  --accent-hover: #c9a86a;
-  --accent-2: #1f5be0;
-  --accent-soft: rgba(169, 134, 63, 0.1);
+  --accent: #0a6a9c;
+  --accent-hover: #075a85;
+  --accent-2: #c4161c;
+  --accent-soft: rgba(16, 155, 221, 0.1);
   --accent-contrast: #ffffff;
 
-  --text-primary: #0b0c0e;
-  --text-secondary: #494b50;
-  --text-muted: #6c6e74;
-  --text-faint: #9a9ca2;
-  --text-on-accent: #0a0a0c;
+  --text-primary: #0b1017;
+  --text-secondary: #45505c;
+  --text-muted: #6a7581;
+  --text-faint: #9aa4af;
+  --text-on-accent: #ffffff;
 
-  --grad-accent: linear-gradient(118deg, #c9a86a 0%, #a9863f 100%);
+  /* Semantic status (deepened for AA on white; distinct from brand red) */
+  --success: #0f8a56;
+  --warning: #b45309;
+  --error: #dc2626;
+  --success-soft: rgba(15, 138, 86, 0.1);
+  --warning-soft: rgba(180, 83, 9, 0.1);
+  --error-soft: rgba(220, 38, 38, 0.1);
+
+  --grad-accent: linear-gradient(118deg, #109bdd 0%, #0a6a9c 100%);
   --grad-accent-soft: linear-gradient(
     118deg,
-    rgba(201, 168, 106, 0.14),
-    rgba(47, 107, 255, 0.1)
+    rgba(16, 155, 221, 0.14),
+    rgba(225, 31, 38, 0.1)
   );
-  --grad-surface: linear-gradient(180deg, #ffffff, #f5f5f3);
-  --grad-text: linear-gradient(118deg, #0b0c0e 30%, #8a6e2f 100%);
-  --grad-gold-blue: linear-gradient(120deg, #a9863f, #1f5be0);
+  --grad-surface: linear-gradient(180deg, #ffffff, #f1f5f9);
+  --grad-text: linear-gradient(118deg, #0b1017 30%, #0a6a9c 100%);
+  --grad-gold-blue: linear-gradient(120deg, #0a6a9c, #c4161c);
   --grad-fade-b: linear-gradient(180deg, transparent, var(--bg-primary));
   --grad-radial-accent: radial-gradient(
     60% 60% at 50% 0%,
-    rgba(201, 168, 106, 0.12) 0%,
+    rgba(16, 155, 221, 0.12) 0%,
     transparent 70%
   );
 
-  --shadow-sm: 0 2px 8px rgba(5, 6, 8, 0.06);
-  --shadow-md: 0 14px 34px rgba(5, 6, 8, 0.09);
-  --shadow-lg: 0 30px 60px rgba(5, 6, 8, 0.12);
-  --shadow-xl: 0 44px 100px rgba(5, 6, 8, 0.16);
-  --shadow-image: 0 40px 80px rgba(5, 6, 8, 0.18);
-  --glow-accent: 0 0 0 1px rgba(169, 134, 63, 0.18),
-    0 18px 50px rgba(169, 134, 63, 0.16);
-  --glow-soft: 0 0 80px rgba(201, 168, 106, 0.1);
+  --shadow-sm: 0 2px 8px rgba(11, 16, 23, 0.06);
+  --shadow-md: 0 14px 34px rgba(11, 16, 23, 0.09);
+  --shadow-lg: 0 30px 60px rgba(11, 16, 23, 0.12);
+  --shadow-xl: 0 44px 100px rgba(11, 16, 23, 0.16);
+  --shadow-image: 0 40px 80px rgba(11, 16, 23, 0.18);
+  --glow-accent: 0 0 0 1px rgba(10, 106, 156, 0.18),
+    0 18px 50px rgba(10, 106, 156, 0.16);
+  --glow-soft: 0 0 80px rgba(16, 155, 221, 0.1);
 
-  --scrim: rgba(5, 6, 8, 0.5);
+  --scrim: rgba(11, 16, 23, 0.5);
   --overlay-img: linear-gradient(
     180deg,
-    rgba(5, 6, 8, 0.05) 0%,
-    rgba(5, 6, 8, 0.35) 60%,
-    rgba(5, 6, 8, 0.78) 100%
+    rgba(11, 16, 23, 0.05) 0%,
+    rgba(11, 16, 23, 0.35) 60%,
+    rgba(11, 16, 23, 0.78) 100%
   );
 }

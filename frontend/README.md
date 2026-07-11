@@ -1,10 +1,14 @@
-# VERTIQ — Premium Vertical-Mobility Website
+# Philbrick — Elevator Components Website
 
-A flagship, cinematic marketing website for **VERTIQ**, a premium elevator &
-vertical-transportation manufacturer. The homepage opens with a real-time
-Three.js elevator experience and flows into the brand's products, lifecycle
-support, projects and industries — designed to feel like a premium
-architectural product, not a traditional corporate template.
+A flagship, cinematic marketing website for **Philbrick Technologies India Pvt.
+Ltd.**, an Ahmedabad-based elevator-component manufacturer, exporter and supplier
+(founded 1992). The homepage opens with a real-time Three.js elevator experience
+and flows into the brand's product range, capabilities and applications —
+designed to feel like a premium engineered product, not a corporate template.
+
+It also ships an **environment-based page-release system** so pages can be
+released to the client one at a time in production (all pages stay open in
+development). See the STRICT RULE in [`CLAUDE.md`](CLAUDE.md).
 
 > **Note on Next.js:** this project runs a newer Next.js than most references
 > assume. Read the relevant guide in `node_modules/next/dist/docs/` before
@@ -14,11 +18,11 @@ architectural product, not a traditional corporate template.
 
 ## Project overview (business purpose)
 
-The site exists to **generate qualified leads and quotation requests** for a
-premium elevator brand, while communicating engineering excellence, safety and
-innovation. Primary audiences: architects, builders, developers, consultants,
-and commercial / industrial property owners. The experience is the pitch — it
-should make a multi-million-dollar vertical-transport system feel desirable.
+The site exists to **generate qualified leads and product enquiries** for an
+elevator-component manufacturer, while communicating in-house engineering,
+quality and safety. Primary audiences: elevator installers, OEMs, modernisers,
+builders and consultants specifying elevator components. The experience is the
+pitch — it should make dependable elevator components feel considered and premium.
 
 See [`CLAUDE.md`](CLAUDE.md) for the full vision, brand positioning and standards.
 
@@ -47,24 +51,27 @@ frontend/
 │   ├── layout.tsx   #   global chrome: ThemeProvider, Lenis SmoothScroll,
 │   │                #   Navbar, <main>, Footer, RevealObserver + site metadata
 │   ├── page.tsx     #   HOMEPAGE — elevator hero + full content flow
-│   ├── about/  products/  products/[slug]/  contact/
-│   ├── sitemap.ts  robots.ts  not-found.tsx
+│   ├── about/ vision-mission/ milestone/ infrastructure/ network/ news-events/
+│   ├── products/  products/[category]/  products/[category]/[product]/  contact/
+│   ├── icon.png  apple-icon.png  sitemap.ts  robots.ts  not-found.tsx
 ├── components/      # Reusable, presentational building blocks
-│   ├── layout/      #   Navbar, Footer, MegaMenu, MobileNav
+│   ├── layout/      #   Navbar, Footer, MegaMenu, NavDropdown, MobileNav
 │   ├── ui/          #   Button, Logo, SectionHeader, Counter, Reveal, …
-│   ├── cards/       #   ProductCard, ServiceCard, IndustryCard, …
+│   ├── cards/       #   ProductCard, ServiceCard, IndustryCard, TeamCard, …
 │   ├── forms/       #   ContactForm
+│   ├── release/     #   ReleaseGate + ComingSoon (page-release gating)
 │   └── providers/   #   ThemeProvider, SmoothScroll (Lenis), RevealObserver
 ├── sections/        # Page-level composed sections (the "blocks" of a page)
 │   ├── home/        #   AboutPreview, ProductsShowcase, ServiceEcosystem
-│   │                #   (lifecycle support), IndustriesShowcase
+│   │                #   (what we offer), IndustriesShowcase (applications)
 │   ├── experience/  #   ElevatorScene (Three.js hero), ScrollStory (CSS
-│   │                #   fallback), Projects  +  THREEJS-IMPLEMENTATION.md
+│   │                #   fallback)  +  THREEJS-IMPLEMENTATION.md
 │   └── shared/      #   PageHero, StatsBand, FeatureGrid, TechShowcase, CTASection, …
-├── data/            # Content as typed data (products, services, company,
-│                    # stats, images, model — services feeds the home section)
-├── constants/       # site.ts (brand/contact), navigation.ts (nav + footer)
-├── lib/             # fonts.ts (next/font), icons.ts (icon registry)
+├── config/          # pageReleases.ts (route → release map, single source of truth)
+├── data/            # Content as typed data (products = the tree, company,
+│                    # services, stats, faqs, images, elevatorComponents)
+├── constants/       # site.ts (real brand/contact), navigation.ts (nav + footer)
+├── lib/             # fonts.ts, icons.ts, schema.ts, release.ts (gating logic)
 ├── styles/          # tokens.css (design tokens — single source of truth),
 │                    # animations.css, globals.css
 ├── types/           # Shared TypeScript domain models
@@ -83,7 +90,7 @@ frontend/
 
 ## Design principles
 
-- **Premium** — champagne gold + electric blue on deep black; generous space; editorial type.
+- **Premium** — Philbrick azure blue + signal red on navy-black / clean white; generous space; editorial type.
 - **Architectural** — restraint, alignment, real materials and light, museum-quality layout.
 - **Engineering-focused** — the elevator's precision is the story; details earn trust.
 - **Conversion-oriented** — every section leads toward a quote/consultation CTA.
@@ -111,10 +118,20 @@ frontend/
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # static export → frontend/out/ (output: "export")
+npm run dev      # http://localhost:3000  (development → every page accessible)
+npm run build    # static export → frontend/out/ (production → release flags enforced)
 npm run lint     # eslint
 ```
+
+### Page releases & environments
+
+Copy `.env.example` → `.env.local` to control the release mode via
+`NEXT_PUBLIC_APP_ENV` (`development` = all pages open; `production` = only routes
+flagged `true` in [`config/pageReleases.ts`](config/pageReleases.ts) show real
+content, the rest render the animated Coming Soon screen). Unset, it follows
+`NODE_ENV` — `next dev` is development, `next build` is production. To release a
+page to the client, flip its flag in `config/pageReleases.ts` (static route) or
+its node's `released` in `data/products.ts` (product route), then rebuild.
 
 **Deployment:** the app is fully prerendered and exports to plain HTML/CSS/JS
 in `out/`. `next start` does not apply in export mode — serve `out/` statically.

@@ -11,43 +11,123 @@
   box-shadow: var(--shadow-lg);
 }
 
-.grid {
+.inner {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: clamp(2rem, 4vw, 4rem);
-  padding-block: 2.5rem 3rem;
+  grid-template-columns: 264px minmax(0, 1fr) 296px;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-block: 2rem 2.5rem;
+  max-height: calc(100vh - var(--nav-h) - 1rem);
+  overflow-y: auto;
 }
 
-.columns {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1.5rem, 4vw, 3.5rem);
+/* ----- Left rail — grouped categories --------------------------------- */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  border-right: 1px solid var(--hairline);
+  padding-right: clamp(0.75rem, 1.5vw, 1.5rem);
 }
-
-.colTitle {
+.railGroup ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.railTitle {
+  font-family: var(--font-mono);
   font-size: var(--fs-eyebrow);
   text-transform: uppercase;
   letter-spacing: var(--ls-eyebrow);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-medium);
   color: var(--text-muted);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.5rem;
 }
-.colLinks {
+.railLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  margin-inline: -0.35rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  transition: background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+.railLink:hover,
+.railLinkActive {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+.railChev {
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.railLinkActive .railChev {
+  opacity: 1;
+  transform: translateX(2px);
+  color: var(--accent);
+}
+
+/* ----- Detail pane ---------------------------------------------------- */
+.detail {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+}
+.detailHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+.detailTitle {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.detailDesc {
+  margin-top: 0.25rem;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  max-width: 52ch;
+}
+.viewAll {
+  display: inline-flex;
+  align-items: center;
   gap: 0.35rem;
+  flex-shrink: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--accent);
 }
-.link {
+.viewAll:hover {
+  color: var(--accent-hover);
+}
+
+.children {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem 1.5rem;
+}
+.childLink {
   display: block;
-  padding: 0.7rem 0.85rem;
-  margin-inline: -0.85rem;
+  padding: 0.6rem 0.75rem;
+  margin-inline: -0.75rem;
   border-radius: var(--radius-sm);
-  transition: background var(--dur) var(--ease-out);
+  transition: background var(--dur-fast) var(--ease-out);
 }
-.link:hover {
+.childLink:hover {
   background: var(--surface-2);
 }
-.linkLabel {
+.childLabel {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -55,30 +135,61 @@
   font-weight: var(--fw-semibold);
   color: var(--text-primary);
 }
-.linkArrow {
+.childArrow {
   opacity: 0;
   transform: translate(-4px, 2px);
-  transition: opacity var(--dur) var(--ease-out),
-    transform var(--dur) var(--ease-out);
+  transition: opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
   color: var(--accent);
 }
-.link:hover .linkArrow {
+.childLink:hover .childArrow {
   opacity: 1;
   transform: translate(0, 0);
 }
-.linkDesc {
+.childDesc {
   display: block;
-  margin-top: 0.15rem;
-  font-size: var(--fs-sm);
+  margin-top: 0.1rem;
+  font-size: var(--fs-xs);
   color: var(--text-muted);
+  line-height: var(--lh-snug);
 }
 
-/* ----- Feature card ----- */
+/* Standalone category (no children) — image CTA */
+.leaf {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 220px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  isolation: isolate;
+}
+.leafImg {
+  object-fit: cover;
+  z-index: -2;
+}
+.leaf::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--overlay-img);
+}
+.leafCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.25rem;
+  font-weight: var(--fw-semibold);
+  color: #fff;
+}
+
+/* ----- Feature card --------------------------------------------------- */
 .feature {
   position: relative;
   display: flex;
   align-items: flex-end;
-  min-height: 280px;
+  min-height: 300px;
   border-radius: var(--radius-md);
   overflow: hidden;
   isolation: isolate;
@@ -110,16 +221,16 @@
   text-transform: uppercase;
   letter-spacing: var(--ls-eyebrow);
   font-weight: var(--fw-semibold);
-  color: var(--brand-cyan);
+  color: var(--blue-300);
 }
 .featureTitle {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: var(--fw-semibold);
 }
 .featureDesc {
   font-size: var(--fs-sm);
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.8);
   line-height: var(--lh-snug);
 }
 .featureCta {
@@ -132,11 +243,17 @@
   color: #fff;
 }
 
-@media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: 1fr;
+/* Hide the flagship feature on smaller laptops to avoid overflow. */
+@media (max-width: 1180px) {
+  .inner {
+    grid-template-columns: 240px minmax(0, 1fr);
   }
   .feature {
     display: none;
+  }
+}
+@media (max-width: 900px) {
+  .children {
+    grid-template-columns: 1fr;
   }
 }

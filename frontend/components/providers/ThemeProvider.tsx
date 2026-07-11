@@ -15,7 +15,7 @@ interface ThemeContextValue {
   setTheme: (t: ThemeMode) => void;
 }
 
-const STORAGE_KEY = "vertiq-theme";
+const STORAGE_KEY = "philbrick-theme";
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 /** Inline script — runs before paint to set [data-theme] and avoid FOUC. */

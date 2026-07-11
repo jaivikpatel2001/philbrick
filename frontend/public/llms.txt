@@ -1,38 +1,41 @@
-# VERTIQ
+# Philbrick
 
-> VERTIQ (Vertiq Vertical Mobility Pvt. Ltd.) designs, manufactures and
-> maintains elevators, escalators and vertical-mobility systems in India.
-> Founded 1968. Headquarters: Vertiq House, G Block, Bandra Kurla Complex,
-> Mumbai 400 051, Maharashtra, India. Sales: +91 22 6789 1968 ·
-> sales@vertiq.in · 24/7 emergency line: 1800 209 1968.
+> Philbrick Technologies India Pvt. Ltd. is a manufacturer, exporter and
+> supplier of elevator components, based in Ahmedabad, Gujarat, India.
+> Founded 1992. Address: Plot No. 69, Road No. 6, G.I.D.C. Kathwada, Odhav,
+> Ahmedabad 382430, Gujarat, India. Phone: +91 80478 52949.
+> GST 24AAHCP6212D1ZU · CIN U31501GJ2014PTC078837 · IEC 0814002951.
 
-VERTIQ manufactures twelve product families: passenger elevators, home
-elevators, high-speed elevators (6–12+ m/s), machine-room-less (MRL)
-elevators, panoramic elevators, capsule elevators, hospital bed/stretcher
-elevators, freight elevators (up to 10,000 kg, including vehicle/car
-elevators), dumbwaiters and service lifts, escalators, moving walkways, and
-elevator components (gearless machines, regenerative drives, Pulse™
-controllers, fixtures, safety gear). Systems are engineered to IS 14665 and
-EN 81-20/50. Lifecycle services cover installation, preventive and
-predictive maintenance, modernization and annual maintenance contracts.
+Philbrick manufactures the components that make an elevator work: elevator
+control panels (automatic-door, manual-door and hydraulic), integrated control
+panels (parallel, serial CAN-bus and machine-room-less), the Automatic Rescue
+Device (ARD), Elevator IoT connectivity, the Lift Master door-operator
+controller, Synergy automatic door mechanisms (centre-opening and telescopic),
+elevator doors and cabins, displays (LED segment, dot-matrix, LCD and TFT),
+COP/LOP and touch COP/LOP fixtures, voice announcing systems, elevator kits and
+accessories, and STEP products. Everything is engineered and built in-house.
+Philbrick supplies customers across India and exports to markets including
+China and Taiwan.
 
 ## Pages
 
-- [Home](https://www.vertiq.in/): interactive 3D elevator experience and company overview
-- [Products](https://www.vertiq.in/products): all twelve product families with specifications
-- [Passenger Elevators](https://www.vertiq.in/products/passenger-elevators)
-- [Home Elevators](https://www.vertiq.in/products/home-elevators)
-- [High-Speed Elevators](https://www.vertiq.in/products/high-speed-elevators)
-- [MRL Elevators](https://www.vertiq.in/products/mrl-elevators)
-- [Hospital Elevators](https://www.vertiq.in/products/hospital-elevators)
-- [Freight Elevators](https://www.vertiq.in/products/freight-elevators)
-- [About](https://www.vertiq.in/about): history since 1968, manufacturing infrastructure, leadership
-- [Contact](https://www.vertiq.in/contact): consultations, quotations, service enquiries
+- [Home](https://www.philbricktech.com/): interactive 3D elevator experience and company overview
+- [About Us](https://www.philbricktech.com/about): history since 1992, in-house infrastructure, leadership
+- [Products](https://www.philbricktech.com/products): the full elevator-component range
+- [Elevator Control Panel](https://www.philbricktech.com/products/elevator-control-panel)
+- [Integrated Control Panel](https://www.philbricktech.com/products/integrated-control-panel)
+- [ARD — Automatic Rescue Device](https://www.philbricktech.com/products/ard)
+- [Elevator IoT](https://www.philbricktech.com/products/elevator-iot)
+- [Synergy Auto Door](https://www.philbricktech.com/products/synergy-auto-door)
+- [Elevator Display](https://www.philbricktech.com/products/elevator-display)
+- [COP / LOP](https://www.philbricktech.com/products/cop-lop)
+- [Contact](https://www.philbricktech.com/contact): product, supply and modernisation enquiries
 
 ## Facts
 
-- Legal name: Vertiq Vertical Mobility Pvt. Ltd.
-- Founded: 1968 (Pune, India)
-- Market: India (pan-India sales and service network)
-- Standards: IS 14665, EN 81-20/50
-- IoT platform: Pulse™ (connected monitoring and predictive maintenance)
+- Legal name: Philbrick Technologies India Pvt. Ltd.
+- Founded: 1992 (Ahmedabad, Gujarat, India)
+- Business: manufacturer, exporter and supplier of elevator components
+- Flagship safety product: Automatic Rescue Device (ARD)
+- Market: India, plus exports including China and Taiwan
+- GST 24AAHCP6212D1ZU · CIN U31501GJ2014PTC078837 · IEC 0814002951

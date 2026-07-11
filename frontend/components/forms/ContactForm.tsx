@@ -5,10 +5,10 @@ import { cn } from "@/utils/cn";
 import styles from "./ContactForm.module.css";
 
 const DEFAULT_INTERESTS = [
-  "New installation",
-  "Maintenance & AMC",
-  "Modernization",
-  "Become a dealer",
+  "Product enquiry",
+  "Custom / OEM supply",
+  "Modernisation & spares",
+  "Become a partner",
   "General enquiry",
 ];
 
@@ -65,8 +65,8 @@ export function ContactForm({
         </span>
         <h3>Thank you, we&apos;ll be in touch.</h3>
         <p>
-          A VERTIQ specialist will respond within one business day. For urgent
-          service, call our 24/7 line.
+          The Philbrick team will review your enquiry and get back to you
+          shortly. For anything urgent, please call us directly.
         </p>
         <button className={styles.again} onClick={() => setSent(false)}>
           Send another enquiry
@@ -122,8 +122,8 @@ export function ContactForm({
       <label className={styles.consent}>
         <input type="checkbox" name="consent" className={styles.checkbox} />
         <span>
-          I agree to VERTIQ&apos;s privacy policy and to being contacted about my
-          enquiry.
+          I agree to Philbrick&apos;s privacy policy and to being contacted
+          about my enquiry.
         </span>
       </label>
       {errors.consent && <span className={styles.error}>{errors.consent}</span>}

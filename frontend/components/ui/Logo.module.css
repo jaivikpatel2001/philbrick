@@ -1,38 +1,19 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  color: var(--text-primary);
-}
-
-.mark {
-  width: 32px;
-  height: 32px;
   flex-shrink: 0;
 }
-.markFrame {
-  fill: var(--surface-2);
-  stroke: var(--border-strong);
-  stroke-width: 1;
-}
-.shaft {
-  fill: var(--text-faint);
-}
-.car {
-  fill: var(--accent);
-}
-.carLit {
-  fill: var(--accent-hover);
-  animation: elevatorRise 2.6s var(--ease-in-out) infinite alternate;
+
+/* Full lockup — height-constrained, aspect ratio preserved. */
+.full {
+  height: var(--logo-h, 34px);
+  width: auto;
+  object-fit: contain;
 }
 
-.word {
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: 1.32rem;
-  letter-spacing: 0.04em;
-  line-height: 1;
-}
-.q {
-  color: var(--accent);
+/* Emblem mark only. */
+.mark {
+  height: var(--logo-mark-h, 34px);
+  width: auto;
+  object-fit: contain;
 }

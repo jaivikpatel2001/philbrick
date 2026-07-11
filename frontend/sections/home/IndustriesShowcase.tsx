@@ -18,9 +18,9 @@ export function IndustriesShowcase() {
     <section id="industries" className="section section--flush-bottom">
       <div className="container--wide">
         <SectionHeader
-          eyebrow="05 — Industries"
-          title="Engineered for every kind of building."
-          description="From private residences to hospitals, transit hubs and supertall towers — VERTIQ tailors vertical mobility to the demands of each sector."
+          eyebrow="04 — Applications"
+          title="Components for every kind of building."
+          description="From homes and offices to hospitals and industrial sites, Philbrick components go into the elevators that serve every kind of building."
         />
       </div>
 

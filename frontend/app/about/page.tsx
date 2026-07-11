@@ -1,38 +1,31 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { PageHero } from "@/sections/shared/PageHero";
 import { FeatureGrid } from "@/sections/shared/FeatureGrid";
 import { CTASection } from "@/sections/shared/CTASection";
 import { StatsBand } from "@/sections/shared/StatsBand";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Stats } from "@/components/ui/Stats";
-import { Timeline } from "@/components/ui/Timeline";
 import { TeamCard } from "@/components/cards/TeamCard";
-import {
-  MISSION,
-  VISION,
-  ABOUT_STORY,
-  VALUES,
-  INFRASTRUCTURE,
-  TIMELINE,
-  LEADERSHIP,
-} from "@/data/company";
+import { ReleaseGate } from "@/components/release/ReleaseGate";
+import { ABOUT_STORY, VALUES, INFRASTRUCTURE, LEADERSHIP } from "@/data/company";
 import { TRUST_METRICS, GLOBAL_STATS } from "@/data/stats";
-import { HERO, MISC } from "@/data/images";
+import { MISC } from "@/data/images";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { aboutPageSchema, leadershipSchema, breadcrumbSchema } from "@/lib/schema";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Us",
   description:
-    "Fifty-seven years of engineering vertical mobility. Meet the people, values and milestones behind VERTIQ.",
+    "Founded in 1992 in Ahmedabad, Philbrick Technologies manufactures elevator control panels, safety devices, doors, cabins and signalling — engineered in-house.",
   alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {
   return (
-    <>
+    <ReleaseGate route="/about" label="About Us">
       <JsonLd data={aboutPageSchema()} />
       <JsonLd data={leadershipSchema()} />
       <JsonLd
@@ -41,12 +34,13 @@ export default function AboutPage() {
           { name: "About", path: "/about" },
         ])}
       />
+
       <PageHero
         eyebrow="Our story"
-        title="Moving the world upward since 1968"
-        description="From a single workshop to 1.4 million units across six continents, built on one engineering obsession that never changed."
-        image={HERO.about}
-        imageAlt="VERTIQ building atrium"
+        title="Elevator solutions, engineered in Ahmedabad since 1992"
+        description="From control panels to the Automatic Rescue Device, Philbrick has spent three decades building the systems that make elevators run — under one roof."
+        image={MISC.factory}
+        imageAlt="Philbrick engineering facility"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
         stats={TRUST_METRICS.slice(0, 3)}
       />
@@ -70,8 +64,8 @@ export default function AboutPage() {
           </div>
           <div className={styles.storyMedia} data-reveal="right">
             <Image
-              src={MISC.factory}
-              alt="VERTIQ engineering facility"
+              src={MISC.lobby}
+              alt="Philbrick elevator interior"
               fill
               sizes="(max-width: 900px) 100vw, 45vw"
               className={styles.storyImg}
@@ -80,13 +74,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Infrastructure & Manufacturing capabilities */}
+      {/* Infrastructure preview */}
       <section className="section">
         <div className="container--wide">
           <FeatureGrid
             eyebrow="Infrastructure"
             title="Manufacturing & engineering, built in-house"
-            description="From raw steel to a commissioned car, VERTIQ controls every stage of the build, so quality, safety and lead time never leave our hands."
+            description="Dedicated units for procurement, design, quality control, warehousing and packaging keep quality and lead time in our own hands."
             align="center"
             columns={3}
             features={INFRASTRUCTURE}
@@ -94,22 +88,9 @@ export default function AboutPage() {
           <div className={styles.infraStats}>
             <Stats stats={GLOBAL_STATS} columns={4} variant="bordered" />
           </div>
-        </div>
-      </section>
-
-      {/* Mission & Vision */}
-      <section className={`section ${styles.mvSection}`}>
-        <div className="container--wide">
-          <div className={styles.mv}>
-            <div className={styles.mvCard} data-reveal="up">
-              <span className="eyebrow">Mission</span>
-              <p>{MISSION}</p>
-            </div>
-            <div className={styles.mvCard} data-reveal="up">
-              <span className="eyebrow">Vision</span>
-              <p>{VISION}</p>
-            </div>
-          </div>
+          <p className={styles.infraLink}>
+            <Link href="/infrastructure">Explore our infrastructure →</Link>
+          </p>
         </div>
       </section>
 
@@ -118,8 +99,8 @@ export default function AboutPage() {
         <div className="container--wide">
           <FeatureGrid
             eyebrow="What we believe"
-            title="Six values, one standard"
-            description="The principles that guide every decision, in every country, on every project."
+            title="The values behind the work"
+            description="The principles that guide how we design, build and support elevator components."
             align="center"
             columns={3}
             features={VALUES.map((v) => ({
@@ -131,25 +112,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className={`section ${styles.mvSection}`}>
-        <div className="container--narrow">
-          <SectionHeader
-            eyebrow="The journey"
-            title="Five decades of firsts"
-            align="center"
-          />
-          <Timeline items={TIMELINE} />
-        </div>
-      </section>
-
       {/* Leadership */}
       <section className="section">
         <div className="container--wide">
           <SectionHeader
             eyebrow="Leadership"
-            title="The people moving us forward"
-            description="An engineering-led team accountable for safety, technology and service across 40 countries."
+            title="The people behind Philbrick"
+            description="Guided by our founder and led by a team focused on quality, safety and service."
           />
           <div className={styles.team}>
             {LEADERSHIP.map((member) => (
@@ -159,19 +128,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <StatsBand
-        stats={TRUST_METRICS}
-        columns={4}
-        variant="default"
-        surface
-      />
+      <StatsBand stats={TRUST_METRICS} columns={4} variant="default" surface />
 
       <CTASection
-        title="Build the future of mobility with us"
-        description="Whether you're specifying a project or exploring a partnership, we'd love to talk."
+        title="Build with Philbrick"
+        description="Whether you're specifying components or exploring a partnership, we'd like to talk."
         primary={{ label: "Get in touch", href: "/contact" }}
         secondary={{ label: "Our products", href: "/products" }}
       />
-    </>
+    </ReleaseGate>
   );
 }

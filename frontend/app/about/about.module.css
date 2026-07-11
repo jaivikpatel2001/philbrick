@@ -33,41 +33,23 @@
   object-fit: cover;
 }
 
-/* Mission & Vision — statement columns on hairlines */
-.mvSection {
-  background: var(--bg-secondary);
-  border-block: 1px solid var(--border);
-}
-.mv {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(2rem, 5vw, 5rem);
-}
-.mvCard {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-  padding-top: 1.6rem;
-  border-top: 1px solid var(--border-strong);
-}
-.mvCard p {
-  font-family: var(--font-display);
-  font-size: var(--fs-statement);
-  line-height: 1.24;
-  letter-spacing: var(--ls-snug);
-  color: var(--text-primary);
-  font-weight: var(--fw-medium);
-  text-wrap: balance;
-}
-
 /* Infrastructure — scale stats below the capability grid */
 .infraStats {
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
+.infraLink {
+  margin-top: 2rem;
+  text-align: center;
+  font-weight: var(--fw-semibold);
+  color: var(--accent);
+}
+.infraLink a:hover {
+  color: var(--accent-hover);
+}
 
 .team {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 340px));
   gap: 1.5rem;
 }
 
@@ -77,12 +59,6 @@
   }
   .storyMedia {
     aspect-ratio: 16 / 11;
-  }
-  .mv {
-    grid-template-columns: 1fr;
-  }
-  .team {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 560px) {
