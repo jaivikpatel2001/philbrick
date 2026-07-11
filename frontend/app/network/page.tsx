@@ -56,8 +56,8 @@ export default function NetworkPage() {
         eyebrow="Reach"
         title="From Ahmedabad, across India and beyond"
         description="Philbrick supplies elevator components from its Ahmedabad facility to customers across India and export markets, held to the same standard everywhere."
-        image={HERO.global}
-        imageAlt="Distribution reach"
+        image={HERO.network}
+        imageAlt="Modern Indian city skyline at golden hour"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Network" }]}
       />
 

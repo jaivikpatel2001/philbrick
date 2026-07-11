@@ -11,7 +11,7 @@ import { TeamCard } from "@/components/cards/TeamCard";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { ABOUT_STORY, VALUES, INFRASTRUCTURE, LEADERSHIP } from "@/data/company";
 import { TRUST_METRICS, GLOBAL_STATS } from "@/data/stats";
-import { MISC } from "@/data/images";
+import { HERO, SECTION } from "@/data/images";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { aboutPageSchema, leadershipSchema, breadcrumbSchema } from "@/lib/schema";
 import styles from "./about.module.css";
@@ -39,8 +39,8 @@ export default function AboutPage() {
         eyebrow="Our story"
         title="Elevator solutions, engineered in Ahmedabad since 1992"
         description="From control panels to the Automatic Rescue Device, Philbrick has spent three decades building the systems that make elevators run, all under one roof."
-        image={MISC.factory}
-        imageAlt="Philbrick engineering facility"
+        image={HERO.about}
+        imageAlt="Philbrick engineer inspecting an elevator control panel wiring harness"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
         stats={TRUST_METRICS.slice(0, 3)}
       />
@@ -65,8 +65,8 @@ export default function AboutPage() {
             </div>
             <div className={styles.storyMedia} data-reveal="right">
               <Image
-                src={MISC.lobby}
-                alt="Philbrick elevator interior"
+                src={SECTION.aboutStory}
+                alt="Interior of a premium Philbrick elevator cabin with brushed steel walls"
                 fill
                 sizes="(max-width: 900px) 100vw, 45vw"
                 className={styles.storyImg}

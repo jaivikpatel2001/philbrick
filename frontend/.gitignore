@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# full-resolution image originals (archived by scripts/optimizeImages.mjs).
+# The web-sized PNG + WebP variants under public/images/ are the shipped assets;
+# these multi-hundred-MB source PNGs are kept locally, not committed.
+/image-sources/
+
+# local performance capture (Pingdom HAR export)
+/har.json

@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "philbrick-static",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/serve.mjs", "3000"],
+      "port": 3000
     }
   ]
 }

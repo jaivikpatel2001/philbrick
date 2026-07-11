@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import { MISC } from "@/data/images";
+import { CTA_BAND } from "@/data/images";
 import { cn } from "@/utils/cn";
 import styles from "./CTASection.module.css";
 
@@ -21,7 +21,7 @@ export function CTASection({
   description,
   primary = { label: "Request a consultation", href: "/contact" },
   secondary,
-  image = MISC.ctaTower,
+  image = CTA_BAND,
   variant = "image",
   className,
 }: CTASectionProps) {

@@ -31,8 +31,8 @@ export default function NewsEventsPage() {
         eyebrow="Newsroom"
         title="News & Events"
         description="Product launches, exhibitions and company updates from Philbrick Technologies."
-        image={HERO.blog}
-        imageAlt="Philbrick news"
+        image={HERO.newsEvents}
+        imageAlt="Elevator technology exhibition hall with visitors"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "News & Events" }]}
       />
 

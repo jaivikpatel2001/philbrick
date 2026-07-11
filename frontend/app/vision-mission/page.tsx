@@ -31,8 +31,8 @@ export default function VisionMissionPage() {
         eyebrow="About"
         title="Vision & Mission"
         description="What we set out to do, and where we're heading: the thinking behind every panel, door and safety device we build."
-        image={HERO.about}
-        imageAlt="Philbrick engineering"
+        image={HERO.visionMission}
+        imageAlt="Panoramic glass elevator rising through a bright modern atrium"
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "About", href: "/about" },

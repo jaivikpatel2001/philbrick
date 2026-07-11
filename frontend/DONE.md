@@ -6,6 +6,189 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-11 17:48 IST (2 remaining images supplied + PNG clarification)
+
+### Integrate the last 2 images; consolidate flat duplicates; keep source PNGs
+
+**Status:** Completed (production build green, 60/60 images, 0 broken paths)
+
+**Changes:**
+- The user dropped the full flat set of 60 PNGs back into `public/images/` root,
+  including the two previously missing: `application-hospitality.png` and
+  `category-synergy-auto-door.png`. Re-ran `node scripts/optimizeImages.mjs` →
+  **60/60 processed, 0 missing**; the 60 flat root files were consolidated into the
+  `image-sources/` archive (0 loose PNGs remain in the root) and regenerated
+  page-wise as PNG + WebP variants + manifest (now 60 entries).
+- **Hospitality** re-enabled: added `INDUSTRY_IMG.hospitality`, restored the card in
+  `IndustriesShowcase.tsx` (7 sectors again) and the ScrollStory fallback tile.
+- **Synergy Auto Door** switched from the interim child photo to its real cover:
+  `CATEGORY_IMG["synergy-auto-door"]` → `synergy-auto-door.png`; removed
+  `SYNERGY_COVER_INTERIM` in `data/products.ts` (now `cover("synergy-auto-door")`).
+- **Clarified the PNG question (user asked to remove them if unneeded):** the source
+  `.png` files are **required and were kept** — each is the `og:image` (social share
+  card) and the Product/Article JSON-LD (SEO) image for its page (verified in `out/`:
+  `og:image … /images/products/…png`, `lib/schema.ts` `image: product.image`).
+  Crawlers/scrapers fetch the raw `.png` directly (the WebP loader never runs for
+  them); visitors only download the small WebP. Only the redundant flat duplicates
+  were removed. Documented in `CLAUDE.md` + `imagegeneration.md §9`.
+
+**Affected Areas:** `data/images.ts`, `data/products.ts`,
+`sections/home/IndustriesShowcase.tsx`, `sections/experience/ScrollStory.tsx`,
+`public/images/**` (60 PNG + 274 WebP), `lib/imageManifest.json`,
+`imagegeneration.md`, `CLAUDE.md`.
+
+**Verification:** `next build` green (TS clean, 58 routes); served `out/` → all 7
+application sectors present, Synergy uses `synergy-auto-door.png` (home thumb +
+og:image), **314 image refs / 0 broken / 0 Unsplash**.
+
+**Follow-up:** None — all 60 images live. Apply the `render.yaml` cache headers on Render.
+
+---
+
+## 2026-07-11 17:38 IST (requirements 22 + 23: image integration + Pingdom performance)
+
+### Integrate all generated images + optimise per the HAR performance report
+
+**Status:** Completed (production build green, static output verified, docs updated)
+
+**22 — Image audit, organisation & integration:**
+- **Audit vs `imagegeneration.md`:** 58 of 60 required images were supplied. The
+  two missing were identified exactly (reported to the user with full prompts):
+  **IMG-015 Hospitality** (`home/application-hospitality.png`, §3.4) and **IMG-024
+  Synergy Auto Door cover** (`products/synergy-auto-door/synergy-auto-door.png`,
+  §4.6). No duplicates, no unused, no mis-named files. (The supplied files were
+  actually JPEG-encoded despite the `.png` extension, 94-475 KB, 1536-2752 px.)
+- **Reorganised** the 58 flat PNGs into page-wise folders under `public/images/`
+  (`home/ about/ vision-mission/ milestone/ infrastructure/ network/ news-events/
+  products/<category>/ contact/ shared/`) with descriptive kebab names; full-res
+  originals archived to `image-sources/` (git-ignored).
+- **Optimisation pipeline** ([`scripts/optimizeImages.mjs`](scripts/optimizeImages.mjs)):
+  keeps the verbatim PNG source of record + generates responsive **WebP** width
+  variants (role-based ladders) and [`lib/imageManifest.json`](lib/imageManifest.json).
+  266 WebP variants, ~17 MB total (~58 KB avg); the browser fetches one right-sized
+  WebP per slot (7-330 KB).
+- **Loader** ([`lib/imageLoader.ts`](lib/imageLoader.ts)) rewritten: maps each local
+  `/images/**.png` + width to the nearest pre-generated WebP variant via the
+  manifest, so next/image keeps full `srcset` behaviour with **no server** (static
+  export). Non-manifest assets (logo, OG, icons) pass through.
+- **Removed every Unsplash/external image:** rewrote `data/images.ts` to local
+  paths (dropped `img()`/`ID`/Unsplash); `data/products.ts` wires per-node category
+  + product images; `data/news.ts` uses `NEWS_IMG`. Verified **0 Unsplash** in
+  `out/` and **0 broken paths** across 306 referenced image files in all HTML.
+- **Accessibility:** descriptive, context-specific `alt` on every meaningful image
+  (heroes, section media, applications, news); decorative images keep empty alt.
+- **Missing-image handling (no unrelated substitutes):** the Hospitality card is
+  omitted from `IndustriesShowcase` until supplied; the Synergy category cover uses
+  a documented interim (its own `2-panel-centre-opening` photo).
+
+**23 — Pingdom HAR analysis & performance fixes** (evidence: `har.json`, Render):
+- **Findings (prioritised):** *Critical* — third-party Unsplash (953 KB / 15 reqs,
+  TTFB up to ~1 s) + risk of shipping unoptimised source images. *High* — one
+  294.7 KB (brotli) JS chunk = three.js loaded eagerly; `Cache-Control: max-age=0`
+  on immutable `/_next/static/*` (Render default). *Medium/Low* — fonts already 2
+  woff2 via next/font (fine); CSS/HTML/JS already brotli.
+- **Images:** all now self-hosted, right-sized, WebP → removes the third-party host
+  + its TTFB, and delivers per-device sizes. Below-the-fold images lazy-load;
+  heroes keep `priority`.
+- **JS:** the Three.js hero is now **dynamically imported** (`next/dynamic`,
+  `ssr:false`) via [`sections/experience/ElevatorHero.tsx`](sections/experience/ElevatorHero.tsx)
+  with a reserved-height night-shell fallback. The 901 KB (raw) three.js chunk is
+  split off the critical path (confirmed absent from the initial `index.html`
+  chunk graph); initial JS dropped ~1745 KB → ~960 KB raw. The experience is
+  unchanged. Removed dead `sections/experience/Projects.tsx` (+ CSS).
+- **Caching (deployment-level):** added [`render.yaml`](../render.yaml) with
+  immutable long-cache for `/_next/static/*` + `/fonts/*` and 30-day for
+  `/images/*` + `/brand/*`. Apache/cPanel already correct via `public/.htaccess`.
+  Documented that Render dashboard-managed services must set the same headers in
+  Settings → Headers (a static export cannot set its own response headers).
+
+**Affected Areas:**
+- New: `scripts/optimizeImages.mjs`, `lib/imageManifest.json`,
+  `sections/experience/ElevatorHero.tsx`, `render.yaml`, `public/images/<page>/…`
+  (58 PNG + 266 WebP), `image-sources/` (archive, git-ignored).
+- Changed: `lib/imageLoader.ts`, `data/{images,products,news}.ts`,
+  `app/{about,infrastructure,vision-mission,milestone,network,news-events,products,contact}/page.tsx`,
+  `app/page.tsx`, `sections/home/{AboutPreview,IndustriesShowcase}.tsx`,
+  `sections/shared/CTASection.tsx`, `sections/experience/{ScrollStory.tsx,ElevatorScene.module.css}`,
+  `imagegeneration.md`, `CLAUDE.md`, `.gitignore`, `.claude/launch.json`.
+- Removed: `sections/experience/Projects.{tsx,module.css}`.
+
+**Technical Decisions:**
+- Static export has no runtime optimiser, so WebP delivery is **pre-generated** at
+  build time + committed (host needs no sharp). This is the "clear technical
+  reason" to convert; the PNG source of record is kept per the brief.
+- Kept the PNG source **verbatim** (not re-encoded to palette PNG) since the loader
+  always serves WebP and palette PNG would only add banding.
+- Dynamic hero uses `ssr:false` (WebGL can't SSR) behind the existing elevator
+  preloader, so there is no perceived regression.
+
+**Known Limitations:**
+- 2 images still MISSING (IMG-015, IMG-024) — tracked in `imagegeneration.md §9`;
+  interim handling in place until supplied.
+- Render `max-age=0` on hashed assets is deployment-level; the code/`render.yaml`
+  fix only applies once adopted in Render (Blueprint or dashboard headers).
+- WebP covers ~97% of browsers; the ~3% without it fall back to the PNG source.
+- The 3D hero's live WebGL render was validated via HTTP/asset checks + the
+  server-rendered fallback shell (the preview pane can freeze on the hero's rAF).
+
+**Follow-up:** When the 2 missing images arrive, drop them at their §9 paths, run
+`node scripts/optimizeImages.mjs`, re-enable the Hospitality card, and repoint the
+Synergy cover to `synergy-auto-door.png`. Apply the `render.yaml` headers on Render.
+
+---
+
+## 2026-07-11 14:42 IST (image generation catalog)
+
+### Create imagegeneration.md — full brief for custom, India focused imagery
+
+**Status:** Completed (brief only — no images or code changed yet)
+
+**Changes:**
+- Audited every image the site actually renders (traced from `data/images.ts`
+  through each consuming page/section) and wrote **`imagegeneration.md`** at the
+  frontend root: a complete, page by page catalog of **60 images** to generate as
+  custom replacements for the current Unsplash placeholders.
+- Each entry lists **Image Title, suggested File Name, Page, Section, exact Aspect
+  Ratio, and a detailed AI generation prompt** — with the aspect ratio stated both
+  in the details and inside every prompt (as required).
+- Aspect ratios were taken from the real component CSS, not guessed: page heroes
+  16:9 (`PageHero`, full bleed), section media 4:5 (`AboutPreview`/about story/
+  infra intro), applications 3:4 (`IndustriesShowcase` 340×440 cards), product
+  card 4:3 (`ProductCard`) reused for category/product heroes + 4:5 overview
+  (`TechShowcase`), news 16:9 (`NewsCard` 16:10 card + detail hero), CTA band 21:9.
+- Groups: 8 page heroes · 3 section media · 7 applications · 14 product categories ·
+  21 individual (nested) products · 6 mock news · 1 CTA band. Product prompts are
+  written **per exact product name and category** (control panels, ARD, door
+  operators, displays by model, COP/LOP, voice modules, etc.), technically
+  accurate, not generic.
+- Added a **global brand + photography style guide** at the top so all 60 read as
+  one consistent Indian brand shoot (premium/cinematic/ultra realistic, cool clean
+  grade with restrained azure + red accents, Indian context and people, explicit
+  "no text/logos/AI artifacts" guardrails).
+
+**Affected Areas:**
+- `imagegeneration.md` (new, frontend root). No source, data or image files changed.
+
+**Technical Decisions:**
+- Excluded assets that need no photo: the homepage hero (procedural Three.js scene)
+  and the already custom logo/favicon/app icons/OG (`public/brand/`).
+- One image per category serves card (4:3) + hero (16:9) + overview (4:5), so
+  prompts instruct centred subjects with margin for clean `object-fit: cover` crops.
+- Named `§1–§4 + §6 + §7 (42 images)` as the minimum set to remove all Unsplash;
+  `§5` (21 per product images) as the recommended follow on for product accurate
+  detail pages.
+
+**Known Limitations:**
+- News imagery (`§6`) is for the currently **mock** newsroom; regenerate with real
+  event photography when real news is published.
+
+**Follow-up:** When the user returns the generated image folder, place the files
+under `public/` and rewire `data/images.ts` (drop the `img()` helper + Unsplash
+`ID` map), plus per leaf `image` in `data/products.ts` and `data/news.ts`, so no
+external stock images remain.
+
+---
+
 ## 2026-07-11 14:13 IST (logo transparency fix)
 
 ### Fix white-haze transparency in logo.png

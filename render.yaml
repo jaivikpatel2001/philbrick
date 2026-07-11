@@ -1,0 +1,42 @@
+# =============================================================================
+# Render Blueprint — Philbrick static site (philbrick.onrender.com)
+#
+# WHY THIS EXISTS: Render's default static-site response is
+#   Cache-Control: public, max-age=0, s-maxage=300
+# for EVERY asset — including the content-hashed, immutable files under
+# /_next/static/*. That forces the browser to revalidate build assets on every
+# repeat visit (the Pingdom/HAR capture showed max-age=0 on all JS/CSS/fonts).
+# A static export can't set its own response headers, so caching is fixed here.
+#
+# HOW TO APPLY:
+#   - Blueprint deploys: this file is picked up automatically.
+#   - Existing dashboard-managed service: add the same rules under
+#     Settings → Headers (Render ignores this file unless the service is a
+#     Blueprint). The path + Cache-Control values below are the exact config.
+# =============================================================================
+services:
+  - type: web
+    name: philbrick
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: out
+    # Content-hashed build output + self-hosted fonts never change for a given
+    # URL → cache for a year, immutable.
+    headers:
+      - path: /_next/static/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /fonts/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Brand photography (WebP variants + PNG sources) has stable names but can
+      # change on redeploy → a month is a safe balance.
+      - path: /images/*
+        name: Cache-Control
+        value: public, max-age=2592000
+      - path: /brand/*
+        name: Cache-Control
+        value: public, max-age=2592000
+    # HTML revalidates so content/release-flag changes appear immediately
+    # (Render already sends short-lived caching for .html; left as default).

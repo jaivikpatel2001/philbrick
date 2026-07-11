@@ -14,7 +14,7 @@ import {
   FiArrowDown,
 } from "react-icons/fi";
 import { Button } from "@/components/ui/Button";
-import { PROJECT_IMG } from "@/data/images";
+import { INDUSTRY_IMG } from "@/data/images";
 import styles from "./ScrollStory.module.css";
 
 /* ---- Exploded-view component callouts (scene 3) -------------------------- */
@@ -42,10 +42,10 @@ const TECH = [
 
 /* ---- Project tiles (scene 5) -------------------------------------------- */
 const TILES = [
-  { img: PROJECT_IMG.seven, name: "Residential" },
-  { img: PROJECT_IMG.five, name: "Commercial" },
-  { img: PROJECT_IMG.four, name: "Healthcare" },
-  { img: PROJECT_IMG.three, name: "Hospitality" },
+  { img: INDUSTRY_IMG.residential, name: "Residential" },
+  { img: INDUSTRY_IMG.commercial, name: "Commercial" },
+  { img: INDUSTRY_IMG.healthcare, name: "Healthcare" },
+  { img: INDUSTRY_IMG.hospitality, name: "Hospitality" },
 ];
 
 const SCENES = ["Arrival", "Future", "Architecture", "Anatomy", "Intelligence", "Proof", "Reveal"];

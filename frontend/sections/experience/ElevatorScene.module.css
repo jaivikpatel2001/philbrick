@@ -9,6 +9,13 @@
   position: relative;
   /* height set inline from SCROLL_VH */
 }
+/* Reserved-height shell shown by ElevatorHero while the scene chunk loads
+   (dynamic import). Matches the night stage background so there is no flash or
+   layout shift when the WebGL hero mounts. */
+.heroLoading {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #060608 0%, #050505 55%, #070708 100%);
+}
 .stage {
   position: sticky;
   top: 0;

@@ -1,33 +1,35 @@
 /* =============================================================================
    CUSTOM next/image LOADER (static export)
-   A static host has no server-side optimizer, but every image on this site is
-   served by Unsplash's image CDN — so we map Next's responsive width requests
-   onto Unsplash's own `w`/`q`/`auto=format` parameters. next/image gets full
-   srcset/sizes behavior (right-sized files per device, AVIF/WebP) with zero
-   server. Non-Unsplash (local /public) sources pass through untouched.
+
+   A static export (`output: "export"`) has no server-side optimizer, so the
+   responsive pipeline is pre-generated at build time by scripts/optimizeImages.mjs:
+   every local brand photo (`/images/<page>/<name>.png`) has a ladder of WebP
+   width variants (`<name>-<w>.webp`) recorded in lib/imageManifest.json.
+
+   This loader maps next/image's per-device width requests onto the nearest
+   available WebP variant, so next/image keeps full srcset/sizes behaviour (a
+   right-sized, modern-format file per device) with zero server. Anything not in
+   the manifest (logo, OG card, icons, inline SVG) passes through untouched.
    ========================================================================== */
+
+import manifest from "./imageManifest.json";
+
+const VARIANT_WIDTHS = manifest as Record<string, number[]>;
 
 export default function imageLoader({
   src,
   width,
-  quality,
 }: {
   src: string;
   width: number;
   quality?: number;
 }): string {
-  if (src.startsWith("https://images.unsplash.com/")) {
-    const url = new URL(src);
-    // Preserve the original crop ratio when a fixed height was requested.
-    const w0 = Number(url.searchParams.get("w"));
-    const h0 = Number(url.searchParams.get("h"));
-    if (w0 > 0 && h0 > 0) {
-      url.searchParams.set("h", String(Math.round((h0 / w0) * width)));
-    }
-    url.searchParams.set("w", String(width));
-    url.searchParams.set("q", String(quality ?? 75));
-    url.searchParams.set("auto", "format");
-    return url.toString();
+  const clean = src.split("?")[0];
+  const widths = VARIANT_WIDTHS[clean];
+  if (widths && widths.length > 0 && clean.endsWith(".png")) {
+    // Smallest generated width that still covers the request (cap at the largest).
+    const chosen = widths.find((w) => w >= width) ?? widths[widths.length - 1];
+    return `${clean.slice(0, -".png".length)}-${chosen}.webp`;
   }
   return src;
 }
