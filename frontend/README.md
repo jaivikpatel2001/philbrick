@@ -120,8 +120,16 @@ frontend/
 npm install
 npm run dev      # http://localhost:3000  (development → every page accessible)
 npm run build    # static export → frontend/out/ (production → release flags enforced)
+npm run start    # serve the built out/ at http://localhost:3000 (preview production)
 npm run lint     # eslint
 ```
+
+> **`next start` is not used** — `output: "export"` produces static files, so
+> `npm run start` (and `npm run preview`) serve the `out/` folder with a tiny
+> dependency-free static server (`scripts/serve.mjs`, clean URLs + 404). Run
+> `npm run build` first. `npm run start` shows the **production** experience
+> (only released routes; everything else Coming Soon); use `npm run dev` to work
+> on any page.
 
 ### Page releases & environments
 

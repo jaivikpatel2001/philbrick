@@ -40,6 +40,44 @@ The site uses an **environment-based page-release system** (static-export safe):
 
 ---
 
+## STRICT RULE — Text formatting (no unnecessary dashes)
+
+Do **not** use unnecessary hyphens, en dashes (`–`) or em dashes (`—`) between
+normal words in **user-facing website content**. Use a single normal space (or a
+grammatical comma/colon) between words.
+
+Dashes may only be used when: grammatically required, technically required, part
+of an official product/model name (e.g. `XN-1000`, `XLCD-01`, `FA-50`,
+`XTFT-043`), a compound modifier that is standard English (`in-house`,
+`machine-room-less`, `chip-based`, `dot-matrix`), a route slug, URL, file name,
+package name, code syntax, or another intentional identifier. Never touch
+JS/TS syntax, negative numbers, math, CSS, CLI commands, or slugs.
+
+Also keep copy clean of **double spaces, leading spaces and trailing spaces**.
+Whenever website content is created or updated, verify text formatting before
+completing the task.
+
+---
+
+## STRICT RULE — DONE.md implementation log
+
+[`DONE.md`](DONE.md) records completed implementation history and prior technical
+decisions. It and this file are **linked context documents**: `CLAUDE.md` defines
+permanent rules, `DONE.md` records what was done.
+
+**Before starting a development task:** read `DONE.md`, review related previous
+changes, understand existing technical decisions, avoid reimplementing completed
+work, and preserve earlier architectural decisions unless the new requirement
+explicitly changes them.
+
+**After completing any implementation task:** update `DONE.md` — add the current
+date + timestamp, document the changes, list the major files/areas affected,
+record important technical decisions, note known limitations, and add any
+follow-up work. Use the real current date/time; never invent historical entries.
+**A task is not complete until `DONE.md` is updated.**
+
+---
+
 ## Project vision
 
 **Philbrick** (Philbrick Technologies India Pvt. Ltd.) is an Ahmedabad-based

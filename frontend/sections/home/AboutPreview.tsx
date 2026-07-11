@@ -9,7 +9,7 @@ export function AboutPreview() {
     <section className="section">
       <div className="container--wide">
         <span className="eyebrow" data-reveal="up">
-          01 — Who we are
+          01 Who we are
         </span>
         <h2 className={styles.statement} data-reveal="up">
           Engineering elevator
@@ -21,7 +21,7 @@ export function AboutPreview() {
           <div className={styles.content}>
             <p className={styles.text} data-reveal="up">
               Philbrick Technologies began in Ahmedabad with a focus on the
-              systems that make an elevator work — control, safety, doors and
+              systems that make an elevator work: control, safety, doors and
               signalling. Three decades on, we manufacture a complete range of
               elevator components in-house and supply them across India and
               export markets.

@@ -35,7 +35,7 @@ export function Logo({ className, compact = false, priority = false }: LogoProps
       ) : (
         <Image
           src="/brand/philbrick-logo.png"
-          alt="Philbrick — Providing Elevator Solutions"
+          alt="Philbrick, Providing Elevator Solutions"
           width={424}
           height={96}
           className={styles.full}

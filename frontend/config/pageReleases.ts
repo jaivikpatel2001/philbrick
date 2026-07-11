@@ -8,11 +8,22 @@
    In DEVELOPMENT the flags are ignored and every route is accessible.
 
    ─────────────────────────────────────────────────────────────────────────
+   SECURE DEFAULT-DENY STRATEGY
+   Production routes are DISABLED unless explicitly enabled here. A route only
+   shows real content in production when its flag is `true` (static) or its path
+   is listed in RELEASED_PRODUCT_ROUTES (product). Any route that is not listed
+   — including any future/unlisted product route — is treated as DISABLED in
+   production (see lib/release.ts `isReleased`). This prevents a new product
+   route from accidentally leaking to production.
+
+   INITIAL PRODUCTION RELEASE (2026-07-11): only "/" (Home) is live. Every other
+   page shows the branded Coming Soon screen. To release a page, flip its flag
+   below (static) or add its path to RELEASED_PRODUCT_ROUTES (product).
+
+   ─────────────────────────────────────────────────────────────────────────
    ⚠  SYNC RULE (also in CLAUDE.md):
    Whenever a route is ADDED / REMOVED / RENAMED / MOVED, update this file in
-   the SAME change. Static routes live in STATIC_ROUTE_RELEASES below; product
-   routes are derived from the product tree (data/products.ts) and each node's
-   `released` flag. Run `validateReleaseConfig()` (lib/release.ts) before
+   the SAME change. Run `validateReleaseConfig()` (lib/release.ts) before
    finishing any route task — it fails on missing, duplicate or invalid routes.
    ========================================================================== */
 import { productRoutes } from "@/data/products";
@@ -26,14 +37,22 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/infrastructure": false,
   "/network": false,
   "/news-events": false,
-  "/products": true,
-  "/contact": true,
+  "/products": false,
+  "/contact": false,
 };
 
-/* Product routes (/products/<category> and /products/<category>/<product>)
-   with their per-node release flags, composed from the product tree. */
+/**
+ * Explicit allow-list of product routes that are LIVE in production.
+ * Default: empty — ALL product routes (categories + nested products) are
+ * disabled. Add a full path (e.g. "/products/ard") to release a single page.
+ */
+export const RELEASED_PRODUCT_ROUTES: string[] = [];
+
+/* Every product route (/products/<category> and /products/<category>/<product>)
+   is enumerated from the product tree so the config is exhaustive; each is only
+   released if it appears in RELEASED_PRODUCT_ROUTES (default-deny). */
 const PRODUCT_ROUTE_RELEASES: Record<string, boolean> = Object.fromEntries(
-  productRoutes().map((r) => [r.path, r.released])
+  productRoutes().map((r) => [r.path, RELEASED_PRODUCT_ROUTES.includes(r.path)])
 );
 
 /** The complete route → release map. */

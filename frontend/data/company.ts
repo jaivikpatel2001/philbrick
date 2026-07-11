@@ -7,14 +7,14 @@ import type { TimelineItem, Value, TeamMember, Feature } from "@/types";
    ========================================================================== */
 
 export const MISSION =
-  "To engineer dependable elevator control, safety and signalling systems — built in-house to a consistent standard — so that every ride is safe, smooth and reliable.";
+  "To engineer dependable elevator control, safety and signalling systems, built in-house to a consistent standard, so that every ride is safe, smooth and reliable.";
 
 export const VISION =
   "To be a trusted partner to elevator makers and modernisers in India and beyond, known for quality components, honest engineering and long-term support.";
 
 export const ABOUT_STORY = [
   "Philbrick Technologies began in 1992 in Ahmedabad, Gujarat, with a focus on the systems that make an elevator work: control panels, safety devices, doors and signalling.",
-  "Guided by founder and mentor Mr. Vasant Patel and led today by Mr. Saransh Patel, the company has grown into a manufacturer, exporter and supplier of a broad range of elevator components — from control and integrated panels to the Automatic Rescue Device, door operators, cabins, displays and passenger fixtures.",
+  "Guided by founder and mentor Mr. Vasant Patel and led today by Mr. Saransh Patel, the company has grown into a manufacturer, exporter and supplier of a broad range of elevator components, from control and integrated panels to the Automatic Rescue Device, door operators, cabins, displays and passenger fixtures.",
   "Everything is engineered and built under one roof, across dedicated units for procurement, design, quality control, warehousing and packaging. That in-house control is what lets Philbrick keep quality consistent, support both new installations and modernisation, and supply customers across India and export markets including China and Taiwan.",
 ];
 
@@ -29,7 +29,7 @@ export const VALUES: Value[] = [
     iconName: "FiCpu",
     title: "Engineer in-house",
     description:
-      "We design and build our control, door and signalling systems ourselves — so we understand them completely and can stand behind them.",
+      "We design and build our control, door and signalling systems ourselves, so we understand them completely and can stand behind them.",
   },
   {
     iconName: "FiCheckCircle",
@@ -53,7 +53,7 @@ export const VALUES: Value[] = [
     iconName: "FiGlobe",
     title: "Reach beyond India",
     description:
-      "Alongside customers across India, we supply export markets including China and Taiwan — held to the same standard everywhere.",
+      "Alongside customers across India, we supply export markets including China and Taiwan, held to the same standard everywhere.",
   },
 ];
 

@@ -15,7 +15,7 @@ import styles from "@/app/about/about.module.css";
 export const metadata: Metadata = {
   title: "Infrastructure",
   description:
-    "Philbrick's in-house infrastructure — manufacturing, design & R&D, quality control, procurement and warehousing at our Ahmedabad facility.",
+    "Philbrick's in-house infrastructure: manufacturing, design & R&D, quality control, procurement and warehousing at our Ahmedabad facility.",
   alternates: { canonical: "/infrastructure" },
 };
 
@@ -32,7 +32,7 @@ export default function InfrastructurePage() {
       <PageHero
         eyebrow="Capability"
         title="Built in-house, end to end"
-        description="From procurement and design to manufacturing, quality control and dispatch — Philbrick controls every stage of the build at its Ahmedabad facility."
+        description="From procurement and design to manufacturing, quality control and dispatch, Philbrick controls every stage of the build at its Ahmedabad facility."
         image={HERO.services}
         imageAlt="Philbrick manufacturing facility"
         breadcrumb={[
@@ -54,8 +54,8 @@ export default function InfrastructurePage() {
             <p className={styles.para} data-reveal="up">
               Philbrick&apos;s Ahmedabad facility brings together dedicated units
               for procurement, design and R&amp;D, manufacturing, quality control,
-              warehousing and packaging. Controlling each stage — rather than
-              outsourcing it — is what lets us hold fit, finish and function to a
+              warehousing and packaging. Controlling each stage, rather than
+              outsourcing it, is what lets us hold fit, finish and function to a
               consistent standard, support both new installations and
               modernisation, and keep lead times in our own hands.
             </p>
@@ -92,7 +92,7 @@ export default function InfrastructurePage() {
         stats={GLOBAL_STATS}
         columns={4}
         variant="bordered"
-        align="left"
+        align="center"
         surface
       />
 

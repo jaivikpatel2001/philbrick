@@ -3,13 +3,16 @@
   top: calc(100% + 0.4rem);
   left: 0;
   min-width: 250px;
+  max-height: calc(100vh - var(--nav-h) - 1rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 0.5rem;
-  background: var(--surface-glass-strong);
-  backdrop-filter: saturate(180%) blur(22px);
-  -webkit-backdrop-filter: saturate(180%) blur(22px);
-  border: 1px solid var(--border);
+  background: var(--surface-menu);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-xl);
   z-index: var(--z-mega);
 }
 .panel ul {

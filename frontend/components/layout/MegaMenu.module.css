@@ -3,12 +3,12 @@
   top: 100%;
   left: 0;
   width: 100%;
-  background: var(--surface-glass-strong);
-  backdrop-filter: saturate(180%) blur(22px);
-  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  background: var(--surface-menu);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
   border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
+  border-bottom: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-xl);
 }
 
 .inner {
@@ -18,6 +18,8 @@
   padding-block: 2rem 2.5rem;
   max-height: calc(100vh - var(--nav-h) - 1rem);
   overflow-y: auto;
+  /* Scroll the menu, never chain to the page behind it. */
+  overscroll-behavior: contain;
 }
 
 /* ----- Left rail — grouped categories --------------------------------- */

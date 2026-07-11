@@ -41,7 +41,7 @@ export const SITE = {
   geo: { lat: 23.03676, lng: 72.68678 },
   mapUrl: "https://www.google.com/maps?q=23.03676000,72.68678000",
 
-  hours: "Mon–Sat 09:30–18:30",
+  hours: "Mon to Sat, 09:30 to 18:30",
 
   /* Statutory identifiers (publicly displayed). */
   gst: "24AAHCP6212D1ZU",

@@ -35,7 +35,7 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="The range"
         title="Complete elevator components, engineered in-house"
-        description="From control panels and the Automatic Rescue Device to doors, cabins, displays and signalling — everything needed to build, upgrade and maintain a lift, from one source."
+        description="From control panels and the Automatic Rescue Device to doors, cabins, displays and signalling: everything needed to build, upgrade and maintain a lift, from one source."
         image={HERO.products}
         imageAlt="Elevator control components"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Products" }]}

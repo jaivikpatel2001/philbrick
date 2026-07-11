@@ -13,7 +13,7 @@ import styles from "@/app/company.module.css";
 export const metadata: Metadata = {
   title: "Milestone & Awards",
   description:
-    "Key milestones in Philbrick Technologies' journey since 1992 — from founding in Ahmedabad to a complete elevator-component range.",
+    "Key milestones in Philbrick Technologies' journey since 1992: from founding in Ahmedabad to a complete elevator-component range.",
   alternates: { canonical: "/milestone" },
 };
 
@@ -31,7 +31,7 @@ export default function MilestonePage() {
       <PageHero
         eyebrow="About"
         title="Milestone & Awards"
-        description="The moments that shaped Philbrick Technologies — from a founding conviction in 1992 to a full elevator-component range."
+        description="The moments that shaped Philbrick Technologies, from a founding conviction in 1992 to a full elevator-component range."
         image={HERO.quality}
         imageAlt="Philbrick manufacturing"
         breadcrumb={[
@@ -51,7 +51,7 @@ export default function MilestonePage() {
           <Timeline items={TIMELINE} />
           <p className={styles.note}>
             Recognitions and certifications will be published here as they are
-            formally documented — we prefer to show verified achievements rather
+            formally documented. We prefer to show verified achievements rather
             than placeholders.
           </p>
         </div>

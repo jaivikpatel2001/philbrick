@@ -27,9 +27,9 @@ export function ProductsShowcase() {
     <section className={`section ${styles.section}`}>
       <div className="container--wide">
         <SectionHeader
-          eyebrow="02 — The range"
+          eyebrow="02 The range"
           title="Everything an elevator needs."
-          description="Control, safety, doors, cabins and signalling — Philbrick engineers and builds the components that make a lift run, all under one roof."
+          description="Control, safety, doors, cabins and signalling: Philbrick engineers and builds the components that make a lift run, all under one roof."
           action={
             <Button href="/products" variant="ghost" withArrow>
               All products

@@ -76,7 +76,7 @@ export function ComingSoon({ route, label }: ComingSoonProps) {
         </h1>
         <p className={styles.text}>
           We&apos;re putting the finishing touches on this section. It will be
-          available here shortly — in the meantime, explore our products or get
+          available here shortly. In the meantime, explore our products or get
           in touch with the Philbrick team.
         </p>
 

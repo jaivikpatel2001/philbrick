@@ -19,7 +19,7 @@ import styles from "./about.module.css";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Founded in 1992 in Ahmedabad, Philbrick Technologies manufactures elevator control panels, safety devices, doors, cabins and signalling — engineered in-house.",
+    "Founded in 1992 in Ahmedabad, Philbrick Technologies manufactures elevator control panels, safety devices, doors, cabins and signalling, engineered in-house.",
   alternates: { canonical: "/about" },
 };
 
@@ -38,7 +38,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="Our story"
         title="Elevator solutions, engineered in Ahmedabad since 1992"
-        description="From control panels to the Automatic Rescue Device, Philbrick has spent three decades building the systems that make elevators run — under one roof."
+        description="From control panels to the Automatic Rescue Device, Philbrick has spent three decades building the systems that make elevators run, all under one roof."
         image={MISC.factory}
         imageAlt="Philbrick engineering facility"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
@@ -119,6 +119,7 @@ export default function AboutPage() {
             eyebrow="Leadership"
             title="The people behind Philbrick"
             description="Guided by our founder and led by a team focused on quality, safety and service."
+            align="center"
           />
           <div className={styles.team}>
             {LEADERSHIP.map((member) => (

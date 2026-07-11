@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { FiCalendar } from "react-icons/fi";
 import { PageHero } from "@/sections/shared/PageHero";
 import { CTASection } from "@/sections/shared/CTASection";
-import { Button } from "@/components/ui/Button";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { NewsCard } from "@/components/cards/NewsCard";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
+import { NEWS_ITEMS } from "@/data/news";
 import { HERO } from "@/data/images";
 import styles from "@/app/company.module.css";
 
@@ -37,19 +38,16 @@ export default function NewsEventsPage() {
 
       <section className="section">
         <div className="container--wide">
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon}>
-              <FiCalendar />
-            </span>
-            <h2 className={styles.emptyTitle}>Nothing to report just yet</h2>
-            <p className={styles.emptyText}>
-              We&apos;re preparing our first updates. Product news, exhibition
-              appearances and company announcements will appear here — we&apos;ll
-              only publish real events, never filler.
-            </p>
-            <Button href="/contact" withArrow>
-              Get updates from our team
-            </Button>
+          <SectionHeader
+            eyebrow="Latest"
+            title="What's happening at Philbrick"
+            description="Product news, exhibition appearances, training and company updates."
+            align="center"
+          />
+          <div className={styles.newsGrid}>
+            {NEWS_ITEMS.map((item) => (
+              <NewsCard key={item.title} item={item} />
+            ))}
           </div>
         </div>
       </section>

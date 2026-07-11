@@ -97,7 +97,7 @@ export default async function CategoryPage({ params }: Props) {
             <SectionHeader
               eyebrow="The range"
               title={`Explore ${cat.name}`}
-              description={`Choose the ${cat.name.toLowerCase()} variant that fits your project — the Philbrick team will help you specify the rest.`}
+              description={`Choose the ${cat.name.toLowerCase()} variant that fits your project. The Philbrick team will help you specify the rest.`}
             />
             <div className={styles.rangeGrid}>
               {cat.children.map((child) => (

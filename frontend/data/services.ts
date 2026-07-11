@@ -13,7 +13,7 @@ export const SERVICES: Service[] = [
     shortName: "Manufacturing",
     tagline: "Elevator components, built under one roof.",
     description:
-      "We design and manufacture control panels, doors, cabins, fixtures and signalling in-house — keeping quality and lead time in our own hands.",
+      "We design and manufacture control panels, doors, cabins, fixtures and signalling in-house, keeping quality and lead time in our own hands.",
     heroImage: SERVICE_IMG.installation,
     iconName: "FiTool",
     benefits: [

@@ -107,6 +107,37 @@ a.method:hover {
   color: var(--accent);
 }
 
+/* ----- Embedded map --------------------------------------------------- */
+.mapSection {
+  background: var(--bg-secondary);
+  border-block: 1px solid var(--border);
+}
+.mapWrap {
+  position: relative;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: var(--surface-2);
+  /* subtle brand frame that surrounds (not covers) the interactive map */
+  outline: 1px solid var(--border-accent);
+  outline-offset: -1px;
+}
+.map {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 42vw, 460px);
+  border: 0;
+}
+.mapActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
