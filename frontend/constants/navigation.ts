@@ -54,9 +54,9 @@ export const MAIN_NAV: NavItem[] = [
       groups: megaGroups,
       feature: {
         eyebrow: "Flagship safety product",
-        title: "ARD — Automatic Rescue Device",
+        title: "Automatic Rescue Device (ARD)",
         description:
-          "On power failure, it moves the car to the nearest floor and opens the doors — nobody stays trapped.",
+          "On power failure, it moves the car to the nearest floor and opens the doors, so nobody stays trapped.",
         href: categoryHref("ard"),
         image: CATEGORY_IMG["ard"],
       },

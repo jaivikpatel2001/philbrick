@@ -23,6 +23,7 @@ export function NavDropdown({ links, onEnter, onLeave }: NavDropdownProps) {
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       role="menu"
+      data-lenis-prevent
     >
       <ul>
         {links.map((link) => (

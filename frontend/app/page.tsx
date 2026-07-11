@@ -34,13 +34,12 @@ export default function HomePage() {
 
       {/* By the numbers */}
       <StatsBand
-        eyebrow="05 — By the numbers"
+        eyebrow="05 By the numbers"
         title="A component maker you can measure"
         description="Three decades of in-house engineering and a complete elevator-component range, from control panels to signalling."
         stats={COMPANY_STATS}
         columns={4}
         variant="bordered"
-        align="left"
       />
 
       {/* Contact / CTA */}

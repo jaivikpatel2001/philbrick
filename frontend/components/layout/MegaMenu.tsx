@@ -37,6 +37,7 @@ export function MegaMenu({ item, onEnter, onLeave }: MegaMenuProps) {
       transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
+      data-lenis-prevent
     >
       <div className={`container--wide ${styles.inner}`}>
         {/* Left rail — grouped categories */}

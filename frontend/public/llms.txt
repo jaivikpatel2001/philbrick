@@ -24,7 +24,7 @@ China and Taiwan.
 - [Products](https://www.philbricktech.com/products): the full elevator-component range
 - [Elevator Control Panel](https://www.philbricktech.com/products/elevator-control-panel)
 - [Integrated Control Panel](https://www.philbricktech.com/products/integrated-control-panel)
-- [ARD — Automatic Rescue Device](https://www.philbricktech.com/products/ard)
+- [Automatic Rescue Device (ARD)](https://www.philbricktech.com/products/ard)
 - [Elevator IoT](https://www.philbricktech.com/products/elevator-iot)
 - [Synergy Auto Door](https://www.philbricktech.com/products/synergy-auto-door)
 - [Elevator Display](https://www.philbricktech.com/products/elevator-display)

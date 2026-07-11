@@ -106,7 +106,7 @@ export default async function ProductPage({ params }: Props) {
               <SectionHeader
                 eyebrow="Technical"
                 title="Specifications"
-                description="Indicative figures — final specifications are confirmed during engineering."
+                description="Indicative figures. Final specifications are confirmed during engineering."
               />
               <dl className={styles.specs}>
                 {p.specs.map((spec) => (

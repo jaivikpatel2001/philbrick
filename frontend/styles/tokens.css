@@ -157,12 +157,18 @@
   --bg-tertiary: #141b24;
   --bg-elevated: #0c1219;
 
+  /* Alternating section backgrounds (subtle, theme-aware). */
+  --section-bg-a: #0a0e14;
+  --section-bg-b: #121824;
+
   --surface: rgba(255, 255, 255, 0.04);
   --surface-2: rgba(255, 255, 255, 0.06);
   --surface-3: rgba(255, 255, 255, 0.09);
   --surface-hover: rgba(255, 255, 255, 0.08);
   --surface-glass: rgba(12, 16, 22, 0.62);
   --surface-glass-strong: rgba(8, 11, 16, 0.82);
+  /* Near-solid surface for open menus/dropdowns — never bleeds background. */
+  --surface-menu: rgba(13, 18, 26, 0.98);
 
   --border: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.2);
@@ -238,12 +244,19 @@
   --bg-tertiary: #e6edf3;
   --bg-elevated: #ffffff;
 
+  /* Alternating section backgrounds (subtle, theme-aware). Both are a touch
+     off-white so pure-white cards (--surface) stay clearly visible on either. */
+  --section-bg-a: #f7f9fc;
+  --section-bg-b: #e9eef5;
+
   --surface: #ffffff;
   --surface-2: #f1f5f9;
   --surface-3: #e3eaf1;
   --surface-hover: #eef3f8;
   --surface-glass: rgba(255, 255, 255, 0.72);
   --surface-glass-strong: rgba(255, 255, 255, 0.85);
+  /* Near-solid surface for open menus/dropdowns — never bleeds background. */
+  --surface-menu: rgba(255, 255, 255, 0.985);
 
   --border: rgba(11, 16, 23, 0.1);
   --border-strong: rgba(11, 16, 23, 0.18);

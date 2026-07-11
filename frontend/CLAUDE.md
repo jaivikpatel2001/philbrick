@@ -40,6 +40,44 @@ The site uses an **environment-based page-release system** (static-export safe):
 
 ---
 
+## STRICT RULE — Text formatting (no unnecessary dashes)
+
+Do **not** use unnecessary hyphens, en dashes (`–`) or em dashes (`—`) between
+normal words in **user-facing website content**. Use a single normal space (or a
+grammatical comma/colon) between words.
+
+Dashes may only be used when: grammatically required, technically required, part
+of an official product/model name (e.g. `XN-1000`, `XLCD-01`, `FA-50`,
+`XTFT-043`), a compound modifier that is standard English (`in-house`,
+`machine-room-less`, `chip-based`, `dot-matrix`), a route slug, URL, file name,
+package name, code syntax, or another intentional identifier. Never touch
+JS/TS syntax, negative numbers, math, CSS, CLI commands, or slugs.
+
+Also keep copy clean of **double spaces, leading spaces and trailing spaces**.
+Whenever website content is created or updated, verify text formatting before
+completing the task.
+
+---
+
+## STRICT RULE — DONE.md implementation log
+
+[`DONE.md`](DONE.md) records completed implementation history and prior technical
+decisions. It and this file are **linked context documents**: `CLAUDE.md` defines
+permanent rules, `DONE.md` records what was done.
+
+**Before starting a development task:** read `DONE.md`, review related previous
+changes, understand existing technical decisions, avoid reimplementing completed
+work, and preserve earlier architectural decisions unless the new requirement
+explicitly changes them.
+
+**After completing any implementation task:** update `DONE.md` — add the current
+date + timestamp, document the changes, list the major files/areas affected,
+record important technical decisions, note known limitations, and add any
+follow-up work. Use the real current date/time; never invent historical entries.
+**A task is not complete until `DONE.md` is updated.**
+
+---
+
 ## Project vision
 
 **Philbrick** (Philbrick Technologies India Pvt. Ltd.) is an Ahmedabad-based
@@ -104,8 +142,15 @@ All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, 
   (display-1 tops at ~8rem) vs small mono technical labels; content sits on
   **hairline rules with index numerals**, not icon-box cards; radii are sharp
   (`--radius-*` 3–22px; pills only on buttons/controls); one full-bleed moment
-  per page (`.bleed`); asymmetric, left-aligned compositions over centered
-  blocks. Don't reintroduce icon-badge card grids or pill badges.
+  per page (`.bleed`). Don't reintroduce icon-badge card grids or pill badges.
+- **Section headers are CENTERED (2026-07-11):** all section-level eyebrows +
+  headings use `SectionHeader`/`FeatureGrid` default `align="center"` (custom
+  section intros centered too). Page **heroes keep their dedicated left-aligned
+  styling**. Don't centre card/metadata/breadcrumb/nav labels.
+- **Alternating section backgrounds (2026-07-11):** top-level page sections
+  (`main > section`) alternate `--section-bg-a`/`--section-bg-b` via a positional
+  `nth-of-type` rule in `globals.css` (hero = section 1, keeps its media bg).
+  Both light values are a touch off-white so white `--surface` cards stay visible.
 - **Spacing & layout:** the spacing scale + `--section-y`; containers
   (`.container--wide/--narrow/--prose`); one max-width system; consistent section padding.
 - **Motion:** smooth, premium, intentional. Eases `--ease-out`/`--ease-in-out`;

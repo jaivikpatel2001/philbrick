@@ -22,7 +22,7 @@ export function FeatureGrid({
   features,
   columns = 3,
   variant = "default",
-  align = "left",
+  align = "center",
   className,
 }: FeatureGridProps) {
   return (

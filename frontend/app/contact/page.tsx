@@ -3,6 +3,8 @@ import { FiPhone, FiMail, FiMapPin, FiClock, FiUser } from "react-icons/fi";
 import { PageHero } from "@/sections/shared/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { FAQSection } from "@/sections/shared/FAQSection";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Button } from "@/components/ui/Button";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { contactPageSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
@@ -120,6 +122,46 @@ export default function ContactPage() {
               Fields marked <span className={styles.req}>*</span> are required.
             </p>
             <ContactForm />
+          </div>
+        </div>
+      </section>
+
+      {/* Embedded map (verified Ahmedabad location) */}
+      <section className={`section ${styles.mapSection}`}>
+        <div className="container--wide">
+          <SectionHeader
+            eyebrow="Find us"
+            title="Visit our Ahmedabad facility"
+            description={`${SITE.address.line1}, ${SITE.address.line2}`}
+            align="center"
+          />
+          <div className={styles.mapWrap}>
+            <iframe
+              title="Philbrick Technologies location on Google Maps"
+              className={styles.map}
+              src={`https://maps.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=15&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
+          <div className={styles.mapActions}>
+            <Button
+              href={`https://www.google.com/maps/dir/?api=1&destination=${SITE.geo.lat},${SITE.geo.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              withArrow
+            >
+              Get directions
+            </Button>
+            <Button
+              href={SITE.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="secondary"
+            >
+              Open in Google Maps
+            </Button>
           </div>
         </div>
       </section>

@@ -11,7 +11,7 @@ import { HERO } from "@/data/images";
 export const metadata: Metadata = {
   title: "Network",
   description:
-    "Philbrick's reach — based in Ahmedabad, supplying elevator components across India and exporting to markets including China and Taiwan.",
+    "Philbrick's reach: based in Ahmedabad, supplying elevator components across India and exporting to markets including China and Taiwan.",
   alternates: { canonical: "/network" },
 };
 
@@ -55,7 +55,7 @@ export default function NetworkPage() {
       <PageHero
         eyebrow="Reach"
         title="From Ahmedabad, across India and beyond"
-        description="Philbrick supplies elevator components from its Ahmedabad facility to customers across India and export markets — held to the same standard everywhere."
+        description="Philbrick supplies elevator components from its Ahmedabad facility to customers across India and export markets, held to the same standard everywhere."
         image={HERO.global}
         imageAlt="Distribution reach"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Network" }]}

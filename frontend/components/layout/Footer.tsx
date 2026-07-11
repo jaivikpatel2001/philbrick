@@ -28,7 +28,7 @@ export function Footer() {
           <div className={styles.brand}>
             <Logo />
             <p className={styles.tagline}>
-              Providing elevator solutions since {SITE.founded} — control
+              Providing elevator solutions since {SITE.founded}: control
               panels, safety devices, doors, cabins and signalling, engineered
               in-house in Ahmedabad, India.
             </p>

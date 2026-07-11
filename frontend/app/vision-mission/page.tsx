@@ -12,7 +12,7 @@ import styles from "@/app/company.module.css";
 export const metadata: Metadata = {
   title: "Vision & Mission",
   description:
-    "The mission and vision behind Philbrick Technologies — dependable elevator control, safety and signalling systems, engineered in-house.",
+    "The mission and vision behind Philbrick Technologies: dependable elevator control, safety and signalling systems, engineered in-house.",
   alternates: { canonical: "/vision-mission" },
 };
 
@@ -30,7 +30,7 @@ export default function VisionMissionPage() {
       <PageHero
         eyebrow="About"
         title="Vision & Mission"
-        description="What we set out to do, and where we're heading — the thinking behind every panel, door and safety device we build."
+        description="What we set out to do, and where we're heading: the thinking behind every panel, door and safety device we build."
         image={HERO.about}
         imageAlt="Philbrick engineering"
         breadcrumb={[

@@ -14,6 +14,9 @@ import type { Faq } from "@/data/faqs";
 export const ORG_ID = `${SITE.url}/#organization`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
 
+/** Absolute URL for the branded OG image (JSON-LD should not use root-relative). */
+const OG_IMAGE_ABS = OG_IMAGE.startsWith("http") ? OG_IMAGE : `${SITE.url}${OG_IMAGE}`;
+
 /** The company as a single, unambiguous business entity. */
 export function organizationSchema() {
   return {
@@ -26,7 +29,7 @@ export function organizationSchema() {
     description: SITE.description,
     foundingDate: String(SITE.founded),
     slogan: SITE.tagline,
-    image: OG_IMAGE,
+    image: OG_IMAGE_ABS,
     email: SITE.email,
     telephone: SITE.phone,
     taxID: SITE.gst,

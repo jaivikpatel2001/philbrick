@@ -16,7 +16,7 @@ export const PRODUCT_FAQS: Faq[] = [
   {
     question: "What does Philbrick manufacture?",
     answer:
-      "Philbrick makes the components that make an elevator work: control panels and integrated controllers, the Automatic Rescue Device (ARD), the Lift Master door-operator controller, Synergy automatic door mechanisms, elevator doors and cabins, displays, COP/LOP fixtures and voice announcing systems — all engineered and built in-house.",
+      "Philbrick makes the components that make an elevator work: control panels and integrated controllers, the Automatic Rescue Device (ARD), the Lift Master door-operator controller, Synergy automatic door mechanisms, elevator doors and cabins, displays, COP/LOP fixtures and voice announcing systems, all engineered and built in-house.",
   },
   {
     question: "What is an Automatic Rescue Device (ARD)?",
@@ -26,7 +26,7 @@ export const PRODUCT_FAQS: Faq[] = [
   {
     question: "What is the difference between a control panel and an integrated control panel?",
     answer:
-      "A control panel houses the controller that manages the elevator's motion, safety and signalling. An integrated control panel combines the drive, controller and signalling in a single, space-saving cabinet — available in parallel-wired, serial CAN-bus and machine-room-less (MRL) configurations to cut wiring and installation time.",
+      "A control panel houses the controller that manages the elevator's motion, safety and signalling. An integrated control panel combines the drive, controller and signalling in a single, space-saving cabinet, available in parallel-wired, serial CAN-bus and machine-room-less (MRL) configurations to cut wiring and installation time.",
   },
   {
     question: "Which automatic door mechanism should I choose?",
@@ -41,7 +41,7 @@ export const PRODUCT_FAQS: Faq[] = [
   {
     question: "Can Philbrick components be used to modernise an existing lift?",
     answer:
-      "Yes. Older elevators can be upgraded in stages — replacing a legacy controller with a modern integrated panel, adding an ARD for safer power-failure behaviour, fitting new door operators, or refreshing COP/LOP fixtures and displays — without replacing the whole installation.",
+      "Yes. Older elevators can be upgraded in stages: replacing a legacy controller with a modern integrated panel, adding an ARD for safer power-failure behaviour, fitting new door operators, or refreshing COP/LOP fixtures and displays, without replacing the whole installation.",
   },
 ];
 
@@ -49,7 +49,7 @@ export const PRODUCT_FAQS: Faq[] = [
 export const CONTACT_FAQS: Faq[] = [
   {
     question: "How do I request a quotation?",
-    answer: `Send the enquiry form on this page or call us on ${SITE.phone}. Tell us what you need — a specific product, a component set, or advice — and the Philbrick team will get back to you.`,
+    answer: `Send the enquiry form on this page or call us on ${SITE.phone}. Tell us what you need, whether a specific product, a component set, or advice, and the Philbrick team will get back to you.`,
   },
   {
     question: "What details help you prepare an accurate quote?",
@@ -59,7 +59,7 @@ export const CONTACT_FAQS: Faq[] = [
   {
     question: "Does Philbrick supply for new installations and modernisation?",
     answer:
-      "Yes. Philbrick supplies components for new elevator installations and for modernising existing ones — from a single controller or display to a complete set of panels, doors, cabins and fixtures from one source.",
+      "Yes. Philbrick supplies components for new elevator installations and for modernising existing ones, from a single controller or display to a complete set of panels, doors, cabins and fixtures from one source.",
   },
   {
     question: "Where is Philbrick based and where do you supply?",

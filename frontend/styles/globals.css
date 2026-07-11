@@ -160,6 +160,21 @@ p {
 .section--sm {
   padding-block: var(--section-y-sm);
 }
+
+/* -----------------------------------------------------------------------------
+   ALTERNATING SECTION BACKGROUNDS
+   Top-level page sections (direct children of <main>) alternate between two
+   theme-aware backgrounds for clear visual separation. Counting is positional,
+   so it works on every page: the hero is section 1 (keeps its own media/gradient
+   background), then content sections alternate A, B, A, B… Cards use --surface
+   and hairline borders, so they stay visible on both A and B.
+   -------------------------------------------------------------------------- */
+main > section {
+  background-color: var(--section-bg-b);
+}
+main > section:nth-of-type(even) {
+  background-color: var(--section-bg-a);
+}
 .section--flush-top {
   padding-top: 0;
 }

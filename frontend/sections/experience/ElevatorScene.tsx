@@ -449,6 +449,99 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     street.position.y = FY - 0.03;
     exterior.add(street);
 
+    /* ----- Ground composition: entrance path, planted beds, sidewalk, curb,
+       road with lane markings. Flat planes + thin kerb boxes over the base
+       plane — a believable urban frontage for a handful of draw calls. ----- */
+    /* Adaptive detail: smaller textures, fewer stars, no rooftop plant on
+       small/low-powered viewports. */
+    const compact = Math.min(window.innerWidth, window.innerHeight) < 760;
+    const texSize = compact ? 64 : 128;
+    const makeGroundTex = (draw: (g: CanvasRenderingContext2D, s: number) => void, repeatX = 1, repeatY = 1) => {
+      const c = document.createElement("canvas");
+      c.width = c.height = texSize;
+      const g = c.getContext("2d")!;
+      draw(g, texSize);
+      const t = track(new THREE.CanvasTexture(c));
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(repeatX, repeatY);
+      return t;
+    };
+    // paving: light concrete with grout joints (two repeat scales — the long
+    // sidewalk band and the short entrance path can't share one repeat)
+    const paveDraw = (g: CanvasRenderingContext2D, s: number) => {
+      g.fillStyle = "#9aa0a8";
+      g.fillRect(0, 0, s, s);
+      for (let i = 0; i < s * 3; i++) {
+        g.fillStyle = `rgba(${120 + Math.random() * 60},${125 + Math.random() * 60},${135 + Math.random() * 55},0.16)`;
+        g.fillRect(Math.random() * s, Math.random() * s, 2, 2);
+      }
+      g.strokeStyle = "rgba(60,66,74,0.55)";
+      g.lineWidth = Math.max(1, s / 64);
+      const step = s / 4;
+      for (let v = 0; v <= s; v += step) {
+        g.beginPath(); g.moveTo(v, 0); g.lineTo(v, s); g.stroke();
+        g.beginPath(); g.moveTo(0, v); g.lineTo(s, v); g.stroke();
+      }
+    };
+    const paveTex = makeGroundTex(paveDraw, 90, 2);
+    const pathTex = makeGroundTex(paveDraw, 4, 3.6);
+    // asphalt with a dashed centre line + subtle aggregate
+    const roadTex = makeGroundTex((g, s) => {
+      g.fillStyle = "#23262b";
+      g.fillRect(0, 0, s, s);
+      for (let i = 0; i < s * 4; i++) {
+        const v = 30 + Math.random() * 40;
+        g.fillStyle = `rgba(${v},${v},${v + 4},0.25)`;
+        g.fillRect(Math.random() * s, Math.random() * s, 1.6, 1.6);
+      }
+      g.fillStyle = "rgba(214,214,206,0.8)";
+      const dashW = s * 0.34;
+      g.fillRect((s - dashW) / 2, s / 2 - Math.max(1.5, s / 52), dashW, Math.max(3, s / 26));
+    }, 34, 1);
+    // lawn: layered greens
+    const grassTex = makeGroundTex((g, s) => {
+      g.fillStyle = "#2c4a2e";
+      g.fillRect(0, 0, s, s);
+      for (let i = 0; i < s * 5; i++) {
+        const shade = Math.random();
+        g.fillStyle = shade > 0.6 ? "rgba(66,110,64,0.5)" : "rgba(26,52,30,0.45)";
+        g.fillRect(Math.random() * s, Math.random() * s, 2, 2 + Math.random() * 2);
+      }
+    }, 8, 3);
+
+    const pathMat = new THREE.MeshStandardMaterial({ map: pathTex, color: STEEL.clone().lerp(GRAPHITE, 0.35), metalness: 0.05, roughness: 0.85 });
+    const paveMat = new THREE.MeshStandardMaterial({ map: paveTex, color: STEEL.clone().lerp(GRAPHITE, 0.45), metalness: 0.05, roughness: 0.9 });
+    const roadMat = new THREE.MeshStandardMaterial({ map: roadTex, color: new THREE.Color("#a5a8ad"), metalness: 0.1, roughness: 0.85 });
+    const grassMat = new THREE.MeshStandardMaterial({ map: grassTex, color: new THREE.Color("#5c6f58"), metalness: 0, roughness: 1 });
+    const kerbMat = new THREE.MeshStandardMaterial({ color: STEEL.clone().lerp(GRAPHITE, 0.25), metalness: 0.05, roughness: 0.8 });
+    const groundPlane = (w: number, d: number, x: number, z: number, y: number, mat: THREE.Material) => {
+      const geo = new THREE.PlaneGeometry(w, d);
+      disposables.push(geo);
+      const m = new THREE.Mesh(geo, mat);
+      m.rotation.x = -Math.PI / 2;
+      m.position.set(x, y, z);
+      exterior.add(m);
+      return m;
+    };
+    // entrance path from the doors to the sidewalk
+    groundPlane(8, 7.2, 0, FRONT_Z + 3.6, FY - 0.008, pathMat);
+    // planted beds flanking the path, with low kerbs
+    groundPlane(10.5, 6, -10.4, FRONT_Z + 3.5, FY - 0.014, grassMat);
+    groundPlane(10.5, 6, 10.4, FRONT_Z + 3.5, FY - 0.014, grassMat);
+    for (const gx of [-10.4, 10.4]) {
+      exBox(10.9, 0.16, 0.18, gx, FY + 0.02, FRONT_Z + 0.6, kerbMat);
+      exBox(10.9, 0.16, 0.18, gx, FY + 0.02, FRONT_Z + 6.4, kerbMat);
+      exBox(0.18, 0.16, 6, gx - 5.35, FY + 0.02, FRONT_Z + 3.5, kerbMat);
+      exBox(0.18, 0.16, 6, gx + 5.35, FY + 0.02, FRONT_Z + 3.5, kerbMat);
+    }
+    // sidewalk band along the frontage, then the curb drop to the road
+    groundPlane(420, 4.6, 0, FRONT_Z + 9.4, FY - 0.018, paveMat);
+    exBox(420, 0.14, 0.3, 0, FY - 0.01, FRONT_Z + 11.8, kerbMat);
+    // the road itself + a far sidewalk to close the composition
+    groundPlane(420, 11, 0, FRONT_Z + 17.5, FY - 0.024, roadMat);
+    groundPlane(420, 3.4, 0, FRONT_Z + 24.9, FY - 0.02, paveMat);
+
     const skyCanvas = document.createElement("canvas");
     skyCanvas.width = 2;
     skyCanvas.height = 512;
@@ -496,41 +589,265 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     const daySkyMat = new THREE.MeshBasicMaterial({ map: daySkyTex, side: THREE.BackSide, fog: false, depthWrite: false, transparent: true, opacity: 0 });
     const daySky = new THREE.Mesh(daySkyGeo, daySkyMat);
     daySky.position.y = 20;
+    daySky.renderOrder = 2;
     exterior.add(daySky);
 
-    const ctxCanvas = document.createElement("canvas");
-    ctxCanvas.width = ctxCanvas.height = 64;
-    const cctx = ctxCanvas.getContext("2d")!;
-    cctx.fillStyle = "#000";
-    cctx.fillRect(0, 0, 64, 64);
-    for (let y = 4; y < 60; y += 8)
-      for (let x = 4; x < 60; x += 8)
-        if (Math.random() < 0.16) {
-          cctx.fillStyle = `rgba(255,255,255,${0.35 + Math.random() * 0.6})`;
-          cctx.fillRect(x, y, 3, 4);
+    /* Sunset sky — a third dome whose opacity peaks mid-transition, so a
+       theme switch reads Day → Sunset → Night instead of a straight crossfade.
+       Baked once; opacity-only at runtime. */
+    const sunsetCanvas = document.createElement("canvas");
+    sunsetCanvas.width = 2;
+    sunsetCanvas.height = 512;
+    const ssCtx = sunsetCanvas.getContext("2d")!;
+    const ssGrad = ssCtx.createLinearGradient(0, 0, 0, 512);
+    ssGrad.addColorStop(0, "#151a33"); // deep indigo zenith
+    ssGrad.addColorStop(0.34, "#3a3357");
+    ssGrad.addColorStop(0.44, "#8a4a3e");
+    ssGrad.addColorStop(0.5, "#e08a4a"); // amber band at the horizon
+    ssGrad.addColorStop(0.55, "#5a3a35");
+    ssGrad.addColorStop(1, "#171522");
+    ssCtx.fillStyle = ssGrad;
+    ssCtx.fillRect(0, 0, 2, 512);
+    const sunsetTex = track(new THREE.CanvasTexture(sunsetCanvas));
+    sunsetTex.colorSpace = THREE.SRGBColorSpace;
+    const sunsetGeo = new THREE.SphereGeometry(378, 24, 16);
+    disposables.push(sunsetGeo);
+    const sunsetMat = new THREE.MeshBasicMaterial({ map: sunsetTex, side: THREE.BackSide, fog: false, depthWrite: false, transparent: true, opacity: 0 });
+    const sunsetSky = new THREE.Mesh(sunsetGeo, sunsetMat);
+    sunsetSky.position.y = 20;
+    sunsetSky.renderOrder = 1;
+    exterior.add(sunsetSky);
+
+    /* Sun + moon — glow-textured discs riding arcs behind the skyline (sun on
+       the left of the tower, moon on the right, per the hero composition).
+       Positions/opacity animate in the pose loop; buildings depth-occlude
+       them, so they genuinely rise and set behind the city. */
+    const glowTexture = (stops: [number, string][], size = 256) => {
+      const c = document.createElement("canvas");
+      c.width = c.height = size;
+      const g = c.getContext("2d")!;
+      const grad = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      stops.forEach(([o, col]) => grad.addColorStop(o, col));
+      g.fillStyle = grad;
+      g.fillRect(0, 0, size, size);
+      const t = track(new THREE.CanvasTexture(c));
+      t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    };
+    const skyDisc = (tex: THREE.Texture, size: number, order: number) => {
+      const geo = new THREE.PlaneGeometry(size, size);
+      disposables.push(geo);
+      const mat = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        opacity: 0,
+        fog: false,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.renderOrder = order;
+      exterior.add(mesh);
+      return { mesh, mat };
+    };
+    const sun = skyDisc(
+      glowTexture([
+        [0, "rgba(255,246,225,1)"],
+        [0.16, "rgba(255,232,180,0.98)"],
+        [0.3, "rgba(255,190,110,0.5)"],
+        [0.6, "rgba(255,150,70,0.14)"],
+        [1, "rgba(255,140,60,0)"],
+      ]),
+      64,
+      3
+    );
+    /* The moon is a shaded disc (limb darkening + a few maria blotches) with
+       a soft halo — not a flat icon. */
+    const moonTexCanvas = document.createElement("canvas");
+    moonTexCanvas.width = moonTexCanvas.height = 256;
+    const mg = moonTexCanvas.getContext("2d")!;
+    const moonHalo = mg.createRadialGradient(128, 128, 0, 128, 128, 128);
+    moonHalo.addColorStop(0, "rgba(226,234,244,1)");
+    moonHalo.addColorStop(0.34, "rgba(226,234,244,1)");
+    moonHalo.addColorStop(0.4, "rgba(200,214,230,0.55)");
+    moonHalo.addColorStop(0.62, "rgba(170,190,214,0.12)");
+    moonHalo.addColorStop(1, "rgba(170,190,214,0)");
+    mg.fillStyle = moonHalo;
+    mg.fillRect(0, 0, 256, 256);
+    // limb shading (lower-left slightly darker) + maria
+    const limb = mg.createRadialGradient(150, 108, 20, 128, 128, 92);
+    limb.addColorStop(0, "rgba(255,255,255,0)");
+    limb.addColorStop(1, "rgba(96,112,134,0.5)");
+    mg.save();
+    mg.beginPath();
+    mg.arc(128, 128, 88, 0, Math.PI * 2);
+    mg.clip();
+    mg.fillStyle = limb;
+    mg.fillRect(0, 0, 256, 256);
+    mg.fillStyle = "rgba(148,164,186,0.4)";
+    for (const [bx, by, br] of [[104, 106, 17], [142, 140, 13], [116, 152, 10], [152, 102, 8]] as const) {
+      mg.beginPath();
+      mg.arc(bx, by, br, 0, Math.PI * 2);
+      mg.fill();
+    }
+    mg.restore();
+    const moonTex = track(new THREE.CanvasTexture(moonTexCanvas));
+    moonTex.colorSpace = THREE.SRGBColorSpace;
+    const moonDisc = skyDisc(moonTex, 34, 3);
+
+    /* Stars — one Points cloud on the upper sky shell. Static geometry, no
+       per-frame updates; opacity follows the night blend. Fewer on small
+       screens. */
+    const STAR_COUNT = compact ? 200 : 420;
+    const starPos = new Float32Array(STAR_COUNT * 3);
+    const starCol = new Float32Array(STAR_COUNT * 3);
+    for (let i = 0; i < STAR_COUNT; i++) {
+      // upper hemisphere shell, biased away from the horizon
+      const az = Math.random() * Math.PI * 2;
+      const el = 0.18 + Math.random() * 1.25; // radians above horizon
+      const r = 344;
+      starPos[i * 3] = Math.cos(az) * Math.cos(el) * r;
+      starPos[i * 3 + 1] = 20 + Math.sin(el) * r;
+      starPos[i * 3 + 2] = Math.sin(az) * Math.cos(el) * r;
+      const b = 0.35 + Math.random() * 0.65; // varied brightness
+      const warm = Math.random() < 0.18 ? 0.92 : 1; // a few warm stars
+      starCol[i * 3] = b;
+      starCol[i * 3 + 1] = b * (warm === 1 ? 1 : 0.94);
+      starCol[i * 3 + 2] = b * warm;
+    }
+    const starGeo = new THREE.BufferGeometry();
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+    starGeo.setAttribute("color", new THREE.BufferAttribute(starCol, 3));
+    disposables.push(starGeo);
+    const starSprite = glowTexture(
+      [
+        [0, "rgba(255,255,255,1)"],
+        [0.4, "rgba(255,255,255,0.7)"],
+        [1, "rgba(255,255,255,0)"],
+      ],
+      32
+    );
+    const starMat = track(
+      new THREE.PointsMaterial({
+        size: compact ? 1.7 : 2.1,
+        sizeAttenuation: false,
+        map: starSprite,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      })
+    );
+    (starMat as THREE.PointsMaterial & { fog: boolean }).fog = false;
+    const stars = new THREE.Points(starGeo, starMat);
+    stars.renderOrder = 3;
+    exterior.add(stars);
+
+    /* Context buildings — three façade variants (window grids with mullion
+       lines and varied lit density) instead of one noise texture, plus
+       parapet caps and rooftop plant. Three instanced draws for the towers,
+       one each for parapets and roof structures. */
+    const facadeTexture = (litChance: number, warmth: number) => {
+      const c = document.createElement("canvas");
+      c.width = c.height = 128;
+      const g = c.getContext("2d")!;
+      g.fillStyle = "#000";
+      g.fillRect(0, 0, 128, 128);
+      // faint mullion grid so unlit façades still read as architecture
+      g.strokeStyle = "rgba(255,255,255,0.05)";
+      g.lineWidth = 1;
+      for (let v = 4; v < 128; v += 10) {
+        g.beginPath();
+        g.moveTo(v, 0);
+        g.lineTo(v, 128);
+        g.stroke();
+      }
+      for (let hLine = 6; hLine < 128; hLine += 12) {
+        g.beginPath();
+        g.moveTo(0, hLine);
+        g.lineTo(128, hLine);
+        g.stroke();
+      }
+      // window cells: mostly dark, some lit with varied warmth/brightness
+      for (let y = 8; y < 120; y += 12)
+        for (let x = 6; x < 120; x += 10) {
+          if (Math.random() < litChance) {
+            const a = 0.4 + Math.random() * 0.6;
+            const cool = Math.random() > warmth;
+            g.fillStyle = cool
+              ? `rgba(210,228,255,${a * 0.8})`
+              : `rgba(255,220,160,${a})`;
+            g.fillRect(x, y, 6, 8);
+          } else if (Math.random() < 0.3) {
+            g.fillStyle = "rgba(255,255,255,0.03)"; // glass sheen on dark cells
+            g.fillRect(x, y, 6, 8);
+          }
         }
-    const ctxTex = track(new THREE.CanvasTexture(ctxCanvas));
-    ctxTex.colorSpace = THREE.NoColorSpace;
-    const ctxMat = new THREE.MeshStandardMaterial({ color: GRAPHITE.clone().lerp(BLACK, 0.5), metalness: 0, roughness: 0.95, emissive: WARM_WINDOW, emissiveIntensity: 0.3, emissiveMap: ctxTex });
+      const t = track(new THREE.CanvasTexture(c));
+      t.colorSpace = THREE.NoColorSpace;
+      return t;
+    };
     const ctxGeo = new THREE.BoxGeometry(1, 1, 1);
     disposables.push(ctxGeo);
-    const CTX: [number, number, number, number, number][] = [
-      [-34, -34, 14, 30, 14], [-58, -12, 12, 22, 12], [30, -44, 16, 36, 16],
-      [54, -20, 12, 26, 14], [-28, -68, 18, 42, 18], [42, -66, 14, 24, 14],
-      [68, -44, 12, 32, 12], [-52, 12, 10, 18, 12], [58, 6, 12, 20, 12],
+    /* x, z, w, h, d, rotY, variant */
+    const CTX: [number, number, number, number, number, number, number][] = [
+      [-34, -34, 14, 30, 14, 0.05, 0], [-58, -12, 12, 22, 12, -0.04, 1], [30, -44, 16, 36, 16, 0.03, 2],
+      [54, -20, 12, 26, 14, -0.06, 0], [-28, -68, 18, 42, 18, 0.02, 1], [42, -66, 14, 24, 14, 0.06, 2],
+      [68, -44, 12, 32, 12, -0.03, 1], [-52, 12, 10, 18, 12, 0.05, 2], [58, 6, 12, 20, 12, -0.05, 0],
     ];
-    const ctxMesh = new THREE.InstancedMesh(ctxGeo, ctxMat, CTX.length);
-    CTX.forEach(([cx, cz, cw, ch, cd], i) => {
+    const ctxMats = [
+      new THREE.MeshStandardMaterial({ color: GRAPHITE.clone().lerp(BLACK, 0.42), metalness: 0.1, roughness: 0.9, emissive: WARM_WINDOW, emissiveIntensity: 0.3, emissiveMap: facadeTexture(0.16, 0.72) }),
+      new THREE.MeshStandardMaterial({ color: GRAPHITE.clone().lerp(BLACK, 0.55), metalness: 0.05, roughness: 0.95, emissive: WARM_WINDOW, emissiveIntensity: 0.3, emissiveMap: facadeTexture(0.1, 0.6) }),
+      new THREE.MeshStandardMaterial({ color: GRAPHITE.clone().lerp(STEEL, 0.06), metalness: 0.15, roughness: 0.85, emissive: WARM_WINDOW, emissiveIntensity: 0.3, emissiveMap: facadeTexture(0.22, 0.8) }),
+    ];
+    const ctxByVariant: THREE.Matrix4[][] = [[], [], []];
+    const parapetMatrices: THREE.Matrix4[] = [];
+    const roofMatrices: THREE.Matrix4[] = [];
+    CTX.forEach(([cx, cz, cw, ch, cd, ry, variant]) => {
       inst.position.set(cx, FY + ch / 2, cz);
-      inst.rotation.set(0, 0, 0);
+      inst.rotation.set(0, ry, 0);
       inst.scale.set(cw, ch, cd);
       inst.updateMatrix();
-      ctxMesh.setMatrixAt(i, inst.matrix);
+      ctxByVariant[variant].push(inst.matrix.clone());
+      // parapet: a slightly proud, shallow cap that crisps the roofline
+      inst.position.set(cx, FY + ch + 0.28, cz);
+      inst.scale.set(cw + 0.5, 0.55, cd + 0.5);
+      inst.updateMatrix();
+      parapetMatrices.push(inst.matrix.clone());
+      // rooftop plant (lift-machine room / AC deck) on most towers
+      if (!compact && roofMatrices.length < 6) {
+        inst.position.set(cx - cw * 0.18, FY + ch + 1.1, cz + cd * 0.12);
+        inst.rotation.set(0, ry, 0);
+        inst.scale.set(cw * 0.3, 1.9, cd * 0.28);
+        inst.updateMatrix();
+        roofMatrices.push(inst.matrix.clone());
+      }
+      inst.rotation.set(0, 0, 0);
     });
     inst.scale.set(1, 1, 1);
-    ctxMesh.instanceMatrix.needsUpdate = true;
-    exterior.add(ctxMesh);
-    disposables.push(ctxMesh);
+    const ctxMeshes = ctxMats.map((mat, vi) => {
+      const m = new THREE.InstancedMesh(ctxGeo, mat, ctxByVariant[vi].length);
+      ctxByVariant[vi].forEach((mtx, i) => m.setMatrixAt(i, mtx));
+      m.instanceMatrix.needsUpdate = true;
+      exterior.add(m);
+      disposables.push(m);
+      return m;
+    });
+    void ctxMeshes;
+    const parapetMat = new THREE.MeshStandardMaterial({ color: GRAPHITE.clone().lerp(BLACK, 0.25), metalness: 0.1, roughness: 0.85 });
+    const parapets = new THREE.InstancedMesh(ctxGeo, parapetMat, parapetMatrices.length);
+    parapetMatrices.forEach((mtx, i) => parapets.setMatrixAt(i, mtx));
+    parapets.instanceMatrix.needsUpdate = true;
+    exterior.add(parapets);
+    disposables.push(parapets);
+    if (roofMatrices.length > 0) {
+      const roofUnits = new THREE.InstancedMesh(ctxGeo, parapetMat, roofMatrices.length);
+      roofMatrices.forEach((mtx, i) => roofUnits.setMatrixAt(i, mtx));
+      roofUnits.instanceMatrix.needsUpdate = true;
+      exterior.add(roofUnits);
+      disposables.push(roofUnits);
+    }
 
     /* Exterior lighting: a moon/sun key that sculpts the facade, and a warm
        pool spilling from the entrance onto the plaza.
@@ -804,7 +1121,9 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       }
     };
 
-    /* Day/night palettes, lerped by the theme blend each frame. Uniform-only. */
+    /* Day/night palettes, lerped by the theme blend each frame. Uniform-only.
+       A third SUNSET stop makes theme switches travel Day → Sunset → Night
+       (and back through sunrise) instead of a straight crossfade. */
     const NIGHT = {
       fog: BLACK.clone().lerp(GRAPHITE, 0.5),
       moonColor: STEEL.clone().lerp(BLUE, 0.25),
@@ -818,15 +1137,29 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       street: BLACK.clone().lerp(GRAPHITE, 0.55),
       mass: GRAPHITE.clone().lerp(BLACK, 0.15),
       win: GRAPHITE.clone().lerp(BLUE, 0.12),
-      ctx: GRAPHITE.clone().lerp(BLACK, 0.5),
       ctxEmissive: 0.3,
       exposure: 1.2,
+      road: new THREE.Color("#3f434c"),
+      pave: GRAPHITE.clone().lerp(STEEL, 0.22),
+      grass: new THREE.Color("#26312a"),
+      kerb: GRAPHITE.clone().lerp(STEEL, 0.15),
+    };
+    /* Golden hour between the two: warm sky light, deep shadows, sun at the
+       horizon. Only sky/light/exposure route through it — materials stay on a
+       simple two-way blend so nothing overshoots. */
+    const SUNSET = {
+      fog: new THREE.Color("#54424a"),
+      sunColor: new THREE.Color("#ff9a4d"),
+      hemiSky: new THREE.Color("#c98a5e"),
+      hemiGround: new THREE.Color("#2a2430"),
+      hemiI: 0.6,
+      exposure: 1.13,
     };
     /* Balanced daylight: one clear sun, restrained ambient/env/exposure so
        surfaces keep their material read — bright, never washed out. */
     const DAY = {
       fog: STEEL.clone().lerp(WHITE, 0.26),
-      moonColor: new THREE.Color("#fff3e0"), // the moon becomes the sun
+      moonColor: new THREE.Color("#fff3e0"), // the key light becomes the sun
       moonI: 1.55,
       hemiSky: BLUE.clone().lerp(WHITE, 0.48),
       hemiGround: STEEL.clone().lerp(GRAPHITE, 0.5),
@@ -837,10 +1170,24 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       street: STEEL.clone().lerp(GRAPHITE, 0.38),
       mass: GRAPHITE.clone().lerp(STEEL, 0.2),
       win: BLUE.clone().lerp(STEEL, 0.18),
-      ctx: GRAPHITE.clone().lerp(STEEL, 0.32),
       ctxEmissive: 0.04,
       exposure: 1.08,
+      road: new THREE.Color("#a5a8ad"),
+      pave: STEEL.clone().lerp(GRAPHITE, 0.4),
+      grass: new THREE.Color("#66815e"),
+      kerb: STEEL.clone().lerp(GRAPHITE, 0.22),
     };
+    /* Per-variant night/day colours for the context towers (keeps their
+       material variation through the blend). */
+    const ctxNight = ctxMats.map((m) => m.color.clone());
+    const ctxDay = ctxNight.map((c) => c.clone().lerp(STEEL, 0.42));
+    /* Piecewise three-stop mixers */
+    const mixColor3 = (target: THREE.Color, a: THREE.Color, mid: THREE.Color, b: THREE.Color, t: number) => {
+      if (t < 0.5) target.lerpColors(a, mid, t * 2);
+      else target.lerpColors(mid, b, (t - 0.5) * 2);
+    };
+    const mix3n = (a: number, mid: number, b: number, t: number) =>
+      t < 0.5 ? lerp(a, mid, t * 2) : lerp(mid, b, (t - 0.5) * 2);
 
     const startT = performance.now();
     let lastT = startT;
@@ -851,29 +1198,52 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       const insideT = smoothstep(APPROACH_END, INSIDE_P, p);
 
       // ease toward the current theme (light = daylight, dark = night).
-      // Delta-time based so the ~1s transition is identical at any frame rate.
+      // Delta-time based; slow enough that the sunset/sunrise phase reads.
       const nowT = performance.now();
       const dt = Math.min(0.06, (nowT - lastT) / 1000);
       lastT = nowT;
-      dayBlend += (dayTarget - dayBlend) * Math.min(1, dt * 4.5);
+      dayBlend += (dayTarget - dayBlend) * Math.min(1, dt * 2.3);
       if (Math.abs(dayTarget - dayBlend) < 0.002) dayBlend = dayTarget;
       const day = dayBlend;
-      (scene.fog as THREE.Fog).color.lerpColors(NIGHT.fog, DAY.fog, day);
-      moon.color.lerpColors(NIGHT.moonColor, DAY.moonColor, day);
-      hemi.color.lerpColors(NIGHT.hemiSky, DAY.hemiSky, day);
-      hemi.groundColor.lerpColors(NIGHT.hemiGround, DAY.hemiGround, day);
+      const dusk = day * (1 - day) * 4; // 0 at both ends, 1 mid-transition
+      mixColor3((scene.fog as THREE.Fog).color, NIGHT.fog, SUNSET.fog, DAY.fog, day);
+      mixColor3(moon.color, NIGHT.moonColor, SUNSET.sunColor, DAY.moonColor, day);
+      mixColor3(hemi.color, NIGHT.hemiSky, SUNSET.hemiSky, DAY.hemiSky, day);
+      mixColor3(hemi.groundColor, NIGHT.hemiGround, SUNSET.hemiGround, DAY.hemiGround, day);
       // daylight lifts the ambient outside; ease back so the interior keeps
       // its studio look in both themes
-      hemi.intensity = lerp(NIGHT.hemiI, lerp(DAY.hemiI, 0.65, insideT), day);
+      const hemiOut = mix3n(NIGHT.hemiI, SUNSET.hemiI, DAY.hemiI, day);
+      hemi.intensity = lerp(hemiOut, lerp(hemiOut, 0.65, day), insideT);
       winLitMat.emissiveIntensity = lerp(NIGHT.litWin, DAY.litWin, day);
       streetMat.color.lerpColors(NIGHT.street, DAY.street, day);
       massMat.color.lerpColors(NIGHT.mass, DAY.mass, day);
       winMat.color.lerpColors(NIGHT.win, DAY.win, day);
-      ctxMat.color.lerpColors(NIGHT.ctx, DAY.ctx, day);
-      ctxMat.emissiveIntensity = lerp(NIGHT.ctxEmissive, DAY.ctxEmissive, day);
-      renderer.toneMappingExposure = lerp(NIGHT.exposure, DAY.exposure, day);
-      daySkyMat.opacity = day;
-      daySky.visible = day > 0.002;
+      roadMat.color.lerpColors(NIGHT.road, DAY.road, day);
+      paveMat.color.lerpColors(NIGHT.pave, DAY.pave, day);
+      pathMat.color.lerpColors(NIGHT.pave, DAY.pave, day);
+      grassMat.color.lerpColors(NIGHT.grass, DAY.grass, day);
+      kerbMat.color.lerpColors(NIGHT.kerb, DAY.kerb, day);
+      for (let ci = 0; ci < ctxMats.length; ci++) {
+        ctxMats[ci].color.lerpColors(ctxNight[ci], ctxDay[ci], day);
+        // windows glow brightest through dusk, then die off in daylight
+        ctxMats[ci].emissiveIntensity = lerp(NIGHT.ctxEmissive, DAY.ctxEmissive, day) + dusk * 0.12;
+      }
+      renderer.toneMappingExposure = mix3n(NIGHT.exposure, SUNSET.exposure, DAY.exposure, day);
+      // sky: night dome is the base; sunset peaks mid-blend; day fades in last
+      sunsetMat.opacity = dusk * 0.95;
+      sunsetSky.visible = dusk > 0.01;
+      daySkyMat.opacity = smoothstep(0.45, 1, day);
+      daySky.visible = daySkyMat.opacity > 0.002;
+      // celestial arcs: the sun climbs from behind the left skyline as day
+      // rises; the moon sets behind the right skyline. Buildings depth-occlude
+      // both, so rise/set genuinely happens behind the city.
+      sun.mesh.position.set(-115, lerp(-38, 88, day), -150);
+      sun.mesh.scale.setScalar(1 + dusk * 0.3); // horizon magnification
+      sun.mat.opacity = smoothstep(0.14, 0.52, day);
+      moonDisc.mesh.position.set(185, lerp(108, -30, day), -130);
+      moonDisc.mat.opacity = 1 - smoothstep(0.32, 0.72, day);
+      starMat.opacity = (1 - smoothstep(0.2, 0.55, day)) * (1 - dusk * 0.4);
+      stars.visible = starMat.opacity > 0.01;
 
       // night/day outside → the studio reflections bloom back up as we step inside
       scene.environmentIntensity = lerp(lerp(NIGHT.envExterior, DAY.envExterior, day), ENV.intensity, insideT);

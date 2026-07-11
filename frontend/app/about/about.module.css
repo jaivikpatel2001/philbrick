@@ -1,3 +1,9 @@
+/* Centered section eyebrow above an asymmetric 2-col block. */
+.sectionEyebrow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
 .story {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -51,6 +57,8 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 340px));
   gap: 1.5rem;
+  justify-content: center;
+  margin-top: clamp(2rem, 4vw, 3rem);
 }
 
 @media (max-width: 900px) {

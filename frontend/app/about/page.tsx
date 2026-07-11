@@ -19,7 +19,7 @@ import styles from "./about.module.css";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Founded in 1992 in Ahmedabad, Philbrick Technologies manufactures elevator control panels, safety devices, doors, cabins and signalling — engineered in-house.",
+    "Founded in 1992 in Ahmedabad, Philbrick Technologies manufactures elevator control panels, safety devices, doors, cabins and signalling, engineered in-house.",
   alternates: { canonical: "/about" },
 };
 
@@ -38,7 +38,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="Our story"
         title="Elevator solutions, engineered in Ahmedabad since 1992"
-        description="From control panels to the Automatic Rescue Device, Philbrick has spent three decades building the systems that make elevators run — under one roof."
+        description="From control panels to the Automatic Rescue Device, Philbrick has spent three decades building the systems that make elevators run, all under one roof."
         image={MISC.factory}
         imageAlt="Philbrick engineering facility"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
@@ -47,29 +47,31 @@ export default function AboutPage() {
 
       {/* Story */}
       <section className="section">
-        <div className={`container--wide ${styles.story}`}>
-          <div className={styles.storyText}>
-            <span className="eyebrow" data-reveal="up">
-              Who we are
-            </span>
-            {ABOUT_STORY.map((p, i) => (
-              <p
-                key={i}
-                className={i === 0 ? styles.lede : styles.para}
-                data-reveal="up"
-              >
-                {p}
-              </p>
-            ))}
-          </div>
-          <div className={styles.storyMedia} data-reveal="right">
-            <Image
-              src={MISC.lobby}
-              alt="Philbrick elevator interior"
-              fill
-              sizes="(max-width: 900px) 100vw, 45vw"
-              className={styles.storyImg}
-            />
+        <div className="container--wide">
+          <span className={`eyebrow ${styles.sectionEyebrow}`} data-reveal="up">
+            Who we are
+          </span>
+          <div className={styles.story}>
+            <div className={styles.storyText}>
+              {ABOUT_STORY.map((p, i) => (
+                <p
+                  key={i}
+                  className={i === 0 ? styles.lede : styles.para}
+                  data-reveal="up"
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
+            <div className={styles.storyMedia} data-reveal="right">
+              <Image
+                src={MISC.lobby}
+                alt="Philbrick elevator interior"
+                fill
+                sizes="(max-width: 900px) 100vw, 45vw"
+                className={styles.storyImg}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -119,6 +121,7 @@ export default function AboutPage() {
             eyebrow="Leadership"
             title="The people behind Philbrick"
             description="Guided by our founder and led by a team focused on quality, safety and service."
+            align="center"
           />
           <div className={styles.team}>
             {LEADERSHIP.map((member) => (

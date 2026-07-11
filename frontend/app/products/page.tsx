@@ -35,7 +35,7 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="The range"
         title="Complete elevator components, engineered in-house"
-        description="From control panels and the Automatic Rescue Device to doors, cabins, displays and signalling — everything needed to build, upgrade and maintain a lift, from one source."
+        description="From control panels and the Automatic Rescue Device to doors, cabins, displays and signalling: everything needed to build, upgrade and maintain a lift, from one source."
         image={HERO.products}
         imageAlt="Elevator control components"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Products" }]}
@@ -45,16 +45,9 @@ export default function ProductsPage() {
       {PRODUCT_GROUPS.map((group, gi) => {
         const items = group.slugs.map((slug) => getCategory(slug)!).filter(Boolean);
         return (
-          <section
-            key={group.title}
-            className={`section ${gi % 2 === 1 ? styles.alt : ""}`}
-          >
+          <section key={group.title} className="section">
             <div className="container--wide">
-              <SectionHeader
-                eyebrow={`0${gi + 1}`}
-                title={group.title}
-                align="left"
-              />
+              <SectionHeader eyebrow={`0${gi + 1}`} title={group.title} />
               <div className={styles.grid}>
                 {items.map((cat) => (
                   <ProductCard

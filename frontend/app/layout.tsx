@@ -8,6 +8,7 @@ import {
   themeInitScript,
 } from "@/components/providers/ThemeProvider";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { Preloader } from "@/components/providers/Preloader";
 import { RevealObserver } from "@/components/providers/RevealObserver";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -85,6 +86,7 @@ export default function RootLayout({
         </a>
         <ThemeProvider>
           <SmoothScroll>
+            <Preloader />
             <Navbar />
             <main id="main">{children}</main>
             <Footer />

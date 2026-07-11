@@ -109,13 +109,15 @@ export const CATEGORY_IMG: Record<string, string> = {
   "step-products": img(ID.controlRoom, { w: 1400 }),
 };
 
-/* ----- Industries ------------------------------------------------------ */
+/* ----- Industries / Applications --------------------------------------- */
 export const INDUSTRY_IMG = {
   residential: img(ID.residentialTower, { w: 1400 }),
   commercial: img(ID.glassFacade, { w: 1400 }),
   healthcare: img(ID.hospitalCorridor, { w: 1400 }),
   hospitality: img(ID.hotelLobby, { w: 1400 }),
   industrial: img(ID.warehouse, { w: 1400 }),
+  institutional: img(ID.whiteArch, { w: 1400 }),
+  transit: img(ID.escalatorMetro, { w: 1400 }),
 };
 
 /* ----- Projects -------------------------------------------------------- */
@@ -177,4 +179,5 @@ export const BLOG_IMG = [
   img(ID.skylineDusk, { w: 1200 }),
 ];
 
-export const OG_IMAGE = img(ID.towerUpward, { w: 1200, h: 630 });
+/* Branded Open Graph / social share image (Philbrick logo on navy). */
+export const OG_IMAGE = "/brand/philbrick-og.png";

@@ -1,12 +1,18 @@
-/* Statement-led editorial composition: oversized headline, then an
-   asymmetric text/media pairing with the media offset downward. */
+/* Centered section intro (eyebrow + statement), then an asymmetric
+   text/media pairing with the media offset downward. */
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 .statement {
   font-size: var(--fs-display-2);
   font-weight: var(--fw-semibold);
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
   margin-top: 1.4rem;
-  max-width: 22ch;
+  max-width: 24ch;
 }
 .statement em {
   font-style: normal;

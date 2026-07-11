@@ -36,6 +36,23 @@
   line-height: var(--lh-relaxed);
 }
 
+/* ----- News & Events grid --------------------------------------------- */
+.newsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+@media (max-width: 1000px) {
+  .newsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  .newsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ----- Empty state (News & Events) ------------------------------------ */
 .empty {
   max-width: 56ch;
