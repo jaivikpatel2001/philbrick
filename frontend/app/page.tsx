@@ -1,4 +1,4 @@
-import { ElevatorScene } from "@/sections/experience/ElevatorScene";
+import { ElevatorHero } from "@/sections/experience/ElevatorHero";
 import { AboutPreview } from "@/sections/home/AboutPreview";
 import { ProductsShowcase } from "@/sections/home/ProductsShowcase";
 import { ServiceEcosystem } from "@/sections/home/ServiceEcosystem";
@@ -18,7 +18,7 @@ export default function HomePage() {
     <ReleaseGate route="/" label="Home">
       {/* Cinematic elevator hero (Three.js) — night arrival → dolly-zoom through
           the facade → lobby → component-by-component reveal */}
-      <ElevatorScene />
+      <ElevatorHero />
 
       {/* About the company */}
       <AboutPreview />

@@ -37,7 +37,7 @@ export default function ProductsPage() {
         title="Complete elevator components, engineered in-house"
         description="From control panels and the Automatic Rescue Device to doors, cabins, displays and signalling: everything needed to build, upgrade and maintain a lift, from one source."
         image={HERO.products}
-        imageAlt="Elevator control components"
+        imageAlt="Finished Philbrick elevator control cabinets on the assembly line"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Products" }]}
         stats={TRUST_METRICS.slice(0, 3)}
       />

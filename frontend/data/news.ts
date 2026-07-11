@@ -6,7 +6,7 @@
    contracts, revenue figures or export achievements. Replace with real, dated
    announcements before this page is released to production.
    ========================================================================== */
-import { TECH_IMG, HERO, SERVICE_IMG, MISC } from "./images";
+import { NEWS_IMG } from "./images";
 
 export interface NewsBlock {
   type: "p" | "h2" | "list";
@@ -41,8 +41,8 @@ export const NEWS_ITEMS: NewsItem[] = [
     date: "2026-06-18",
     excerpt:
       "Our serial CAN bus integrated control panel moves to full in-house production, cutting wiring and installation time for mid-rise elevators.",
-    image: TECH_IMG.iot,
-    imageAlt: "Elevator control electronics",
+    image: NEWS_IMG.serialCanBus,
+    imageAlt: "Serial CAN bus elevator control board with two-wire bus cabling on an assembly bench",
     author: "Philbrick Team",
     featured: true,
     content: [
@@ -64,8 +64,8 @@ export const NEWS_ITEMS: NewsItem[] = [
     location: "Ahmedabad, Gujarat",
     excerpt:
       "Meet the team and see our control panels, ARD and Synergy auto doors on display at an upcoming vertical-transport exhibition.",
-    image: HERO.industries,
-    imageAlt: "Exhibition hall",
+    image: NEWS_IMG.expo,
+    imageAlt: "Philbrick elevator equipment on display at an industry exhibition stand",
     author: "Philbrick Team",
     content: [
       { type: "p", content: "Philbrick will exhibit its elevator-component range at an upcoming vertical-transport technology exhibition. Visitors can see live demonstrations and talk to the engineering team about specification and supply." },
@@ -85,8 +85,8 @@ export const NEWS_ITEMS: NewsItem[] = [
     location: "Ahmedabad, Gujarat",
     excerpt:
       "A hands-on session for installer partners covering panel commissioning, ARD setup and door-operator tuning.",
-    image: SERVICE_IMG.maintenance,
-    imageAlt: "Technician working on elevator equipment",
+    image: NEWS_IMG.training,
+    imageAlt: "Trainer demonstrating elevator control panel commissioning to installer technicians",
     author: "Philbrick Team",
     content: [
       { type: "p", content: "Philbrick is running a hands-on training session for installer partners. The program walks through commissioning control panels, setting up the Automatic Rescue Device and tuning door-operator motion profiles." },
@@ -104,8 +104,8 @@ export const NEWS_ITEMS: NewsItem[] = [
     date: "2026-04-22",
     excerpt:
       "An upgrade to our Synergy auto door assembly line improves consistency and throughput at the Ahmedabad facility.",
-    image: MISC.factory,
-    imageAlt: "Manufacturing facility",
+    image: NEWS_IMG.facilityUpgrade,
+    imageAlt: "Automated assembly line for elevator door mechanisms in the Philbrick factory",
     author: "Philbrick Team",
     content: [
       { type: "p", content: "Philbrick has upgraded the assembly line for its Synergy automatic door mechanisms. The change improves build consistency and throughput while keeping quality control in-house." },
@@ -121,8 +121,8 @@ export const NEWS_ITEMS: NewsItem[] = [
     date: "2026-04-05",
     excerpt:
       "A short explainer on how the ARD safely brings a car to the nearest floor during a power failure, and why it matters.",
-    image: TECH_IMG.drive,
-    imageAlt: "Elevator machine room",
+    image: NEWS_IMG.ardSafety,
+    imageAlt: "Automatic Rescue Device with backup battery beside an elevator control cabinet",
     author: "Philbrick Team",
     content: [
       { type: "p", content: "When mains power fails, passengers can be left stranded between floors until power returns. The Automatic Rescue Device (ARD) removes that risk." },
@@ -140,8 +140,8 @@ export const NEWS_ITEMS: NewsItem[] = [
     date: "2026-03-19",
     excerpt:
       "We continue to expand how we reach installers and OEMs across India and our export markets with single-source component supply.",
-    image: HERO.dealer,
-    imageAlt: "Business handshake",
+    image: NEWS_IMG.network,
+    imageAlt: "Two business professionals shaking hands over elevator components in a modern office",
     author: "Philbrick Team",
     content: [
       { type: "p", content: "Philbrick continues to grow how it reaches installers, OEMs and modernisers across India and its export markets. Supplying panels, doors, cabins, fixtures and displays from a single source keeps procurement simple for partners." },

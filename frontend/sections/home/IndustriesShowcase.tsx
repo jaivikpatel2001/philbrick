@@ -10,13 +10,13 @@ import styles from "./IndustriesShowcase.module.css";
 
 /* Application sectors elevators (and Philbrick components) serve. */
 const INDUSTRIES = [
-  { name: "Residential", tagline: "Homes, villas & residential towers", img: INDUSTRY_IMG.residential },
-  { name: "Commercial", tagline: "Offices, retail & mixed use", img: INDUSTRY_IMG.commercial },
-  { name: "Healthcare", tagline: "Hospitals, clinics & critical care", img: INDUSTRY_IMG.healthcare },
-  { name: "Hospitality", tagline: "Hotels, resorts & leisure", img: INDUSTRY_IMG.hospitality },
-  { name: "Industrial", tagline: "Warehouses, plants & logistics", img: INDUSTRY_IMG.industrial },
-  { name: "Institutional", tagline: "Schools, campuses & public buildings", img: INDUSTRY_IMG.institutional },
-  { name: "Transit", tagline: "Stations, metros & transport hubs", img: INDUSTRY_IMG.transit },
+  { name: "Residential", tagline: "Homes, villas & residential towers", img: INDUSTRY_IMG.residential, alt: "Modern Indian residential high-rise apartment tower" },
+  { name: "Commercial", tagline: "Offices, retail & mixed use", img: INDUSTRY_IMG.commercial, alt: "Sleek glass and steel commercial office tower" },
+  { name: "Healthcare", tagline: "Hospitals, clinics & critical care", img: INDUSTRY_IMG.healthcare, alt: "Bright modern hospital corridor with a wide elevator lobby" },
+  { name: "Hospitality", tagline: "Hotels, resorts & leisure", img: INDUSTRY_IMG.hospitality, alt: "Elegant modern Indian hotel lobby with a premium elevator entrance" },
+  { name: "Industrial", tagline: "Warehouses, plants & logistics", img: INDUSTRY_IMG.industrial, alt: "Warehouse with a heavy-duty goods elevator and pallet racking" },
+  { name: "Institutional", tagline: "Schools, campuses & public buildings", img: INDUSTRY_IMG.institutional, alt: "Modern institutional building with an accessible elevator lobby" },
+  { name: "Transit", tagline: "Stations, metros & transport hubs", img: INDUSTRY_IMG.transit, alt: "Metro station concourse with escalators and a public elevator" },
 ];
 
 export function IndustriesShowcase() {
@@ -100,7 +100,7 @@ export function IndustriesShowcase() {
             <Link href="/products" className={styles.link}>
               <Image
                 src={it.img}
-                alt={it.name}
+                alt={it.alt}
                 fill
                 sizes="(max-width: 640px) 78vw, 340px"
                 className={styles.img}

@@ -32,8 +32,8 @@ export default function MilestonePage() {
         eyebrow="About"
         title="Milestone & Awards"
         description="The moments that shaped Philbrick Technologies, from a founding conviction in 1992 to a full elevator-component range."
-        image={HERO.quality}
-        imageAlt="Philbrick manufacturing"
+        image={HERO.milestone}
+        imageAlt="Elevator control panel under test on a calibration rig"
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "About", href: "/about" },

@@ -12,9 +12,14 @@
    accessible regardless.
    ========================================================================== */
 import type { ProductNode } from "@/types";
-import { CATEGORY_IMG } from "./images";
 
-const img = (slug: string) => CATEGORY_IMG[slug];
+/* Local brand photography (see imagegeneration.md + scripts/optimizeImages.mjs).
+   Category cover:      /images/products/<slug>/<slug>.png
+   Individual product:  /images/products/<category>/<product>.png
+   Delivered as responsive WebP by lib/imageLoader.ts. */
+const cover = (slug: string) => `/images/products/${slug}/${slug}.png`;
+const leaf = (categorySlug: string, productSlug: string) =>
+  `/images/products/${categorySlug}/${productSlug}.png`;
 
 export const PRODUCT_TREE: ProductNode[] = [
   {
@@ -32,7 +37,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Integrated safety and signalling logic",
       "Suited to new builds and modernisation",
     ],
-    image: img("elevator-control-panel"),
+    image: cover("elevator-control-panel"),
     released: true,
     children: [
       {
@@ -41,7 +46,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Control Panel",
         description:
           "A control panel tuned for elevators with automatic power doors, coordinating car and landing door operation, levelling and safety interlocks for effortless, hands-free entry and exit.",
-        image: img("elevator-control-panel"),
+        image: leaf("elevator-control-panel", "automatic-door-controller"),
         released: true,
       },
       {
@@ -50,7 +55,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Control Panel",
         description:
           "A dependable controller for elevators with manual swing or collapsible doors, managing drive, levelling and safety circuits while the doors are operated by hand.",
-        image: img("elevator-control-panel"),
+        image: leaf("elevator-control-panel", "manual-door-controller"),
         released: true,
       },
       {
@@ -59,7 +64,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Control Panel",
         description:
           "Purpose-built control for hydraulic elevators: smooth valve-controlled acceleration and levelling with the safety and signalling logic Philbrick panels are known for.",
-        image: img("elevator-control-panel"),
+        image: leaf("elevator-control-panel", "hydraulic-controller"),
         released: true,
       },
     ],
@@ -79,7 +84,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Machine-room-less (MRL) ready",
       "Faster to wire and commission",
     ],
-    image: img("integrated-control-panel"),
+    image: cover("integrated-control-panel"),
     released: true,
     children: [
       {
@@ -88,7 +93,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Integrated Control Panel",
         description:
           "A parallel-wired integrated panel where each signal runs on its own line: simple to commission and service, ideal for low- and mid-rise installations.",
-        image: img("integrated-control-panel"),
+        image: leaf("integrated-control-panel", "parallel-type-controller"),
         released: true,
       },
       {
@@ -97,7 +102,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Integrated Control Panel",
         description:
           "A serial CAN-bus integrated panel that replaces bundled travelling cables with a two-wire data bus: cleaner wiring, faster installation and robust noise immunity.",
-        image: img("integrated-control-panel"),
+        image: leaf("integrated-control-panel", "serial-can-bus-type-controller"),
         released: true,
       },
       {
@@ -106,7 +111,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Integrated Control Panel",
         description:
           "A compact controller engineered for machine-room-less (MRL) elevators: the complete control system fits within the shaft, freeing the rooftop machine room.",
-        image: img("integrated-control-panel"),
+        image: leaf("integrated-control-panel", "mrl-control-panel"),
         released: true,
       },
     ],
@@ -126,7 +131,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Usage insight for smarter maintenance",
       "Works with Philbrick controllers",
     ],
-    image: img("elevator-iot"),
+    image: cover("elevator-iot"),
     released: true,
   },
   {
@@ -144,7 +149,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Opens doors to free passengers",
       "Flagship Philbrick safety device",
     ],
-    image: img("ard"),
+    image: cover("ard"),
     released: true,
   },
   {
@@ -162,7 +167,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Accurate open and close positioning",
       "Built for high-cycle duty",
     ],
-    image: img("lift-master"),
+    image: cover("lift-master"),
     released: true,
   },
   {
@@ -180,7 +185,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Two- and four-panel configurations",
       "For car and landing entrances",
     ],
-    image: img("synergy-auto-door"),
+    image: cover("synergy-auto-door"),
     released: true,
     children: [
       {
@@ -189,7 +194,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Synergy Auto Door",
         description:
           "Two panels that part symmetrically from the centre: fast, balanced operation for standard passenger openings.",
-        image: img("synergy-auto-door"),
+        image: leaf("synergy-auto-door", "2-panel-centre-opening"),
         released: true,
       },
       {
@@ -198,7 +203,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Synergy Auto Door",
         description:
           "Two panels that telescope to one side, maximising clear opening width where wall space beside the entrance is limited.",
-        image: img("synergy-auto-door"),
+        image: leaf("synergy-auto-door", "2-panel-telescopic-side-opening"),
         released: true,
       },
       {
@@ -207,7 +212,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Synergy Auto Door",
         description:
           "Four telescoping panels opening from the centre: the widest clear entrance for hospital beds, freight and high-traffic lobbies.",
-        image: img("synergy-auto-door"),
+        image: leaf("synergy-auto-door", "4-panel-centre-opening"),
         released: true,
       },
     ],
@@ -227,7 +232,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Range of sizes and finishes",
       "Robust, well-aligned construction",
     ],
-    image: img("elevator-doors"),
+    image: cover("elevator-doors"),
     released: true,
   },
   {
@@ -245,7 +250,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Residential and commercial ranges",
       "Durable, serviceable construction",
     ],
-    image: img("elevator-cabin"),
+    image: cover("elevator-cabin"),
     released: true,
   },
   {
@@ -263,7 +268,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Clear floor, direction and info display",
       "The XN / XLCD / XTFT range",
     ],
-    image: img("elevator-display"),
+    image: cover("elevator-display"),
     released: true,
     children: [
       {
@@ -272,7 +277,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A bright seven-segment LED position indicator with high-contrast floor and direction display for cars and landings.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xn-1000-led-segment-display"),
         released: false,
       },
       {
@@ -281,7 +286,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A dot-matrix indicator showing floor, direction and scrolling information with smooth graphics.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xn-2000-dot-matrix-display"),
         released: false,
       },
       {
@@ -290,7 +295,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A dot-matrix position indicator in the XN-2000 family, sized for a different fascia format.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xn-2100-dot-matrix-display"),
         released: false,
       },
       {
@@ -299,7 +304,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A larger dot-matrix display for clear, long-range legibility in lobbies and landings.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xn-3000-dot-matrix-display"),
         released: false,
       },
       {
@@ -308,7 +313,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A dot-matrix display that adds date, time and temperature to floor and direction signalling.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xn-4000-date-time-temperature-display"),
         released: false,
       },
       {
@@ -317,7 +322,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A monochrome LCD position indicator for crisp graphical floor and direction display.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xlcd-01-monochrome-lcd-display"),
         released: false,
       },
       {
@@ -326,7 +331,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A monochrome LCD indicator in the XLCD family, offered in an alternative size or layout.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xlcd-02-monochrome-lcd-display"),
         released: false,
       },
       {
@@ -335,7 +340,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Elevator Display",
         description:
           "A 4.3-inch full-colour TFT display for rich floor, direction and multimedia signalling.",
-        image: img("elevator-display"),
+        image: leaf("elevator-display", "xtft-043-tft-display"),
         released: false,
       },
     ],
@@ -355,7 +360,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Tactile buttons, clear indication",
       "Configurable layouts",
     ],
-    image: img("cop-lop"),
+    image: cover("cop-lop"),
     released: true,
   },
   {
@@ -373,7 +378,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Easy to clean, low wear",
       "Car and landing versions",
     ],
-    image: img("touch-cop-lop"),
+    image: cover("touch-cop-lop"),
     released: true,
   },
   {
@@ -391,7 +396,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "Improves accessibility",
       "Chip-based and MP3 options",
     ],
-    image: img("voice-announcing-systems"),
+    image: cover("voice-announcing-systems"),
     released: true,
     children: [
       {
@@ -400,7 +405,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Voice Announcing Systems",
         description:
           "A compact chip-based voice announcer delivering clear, pre-recorded floor and direction messages.",
-        image: img("voice-announcing-systems"),
+        image: leaf("voice-announcing-systems", "fa-50-chip-based"),
         released: false,
       },
       {
@@ -409,7 +414,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Voice Announcing Systems",
         description:
           "An MP3-based announcer for higher-quality audio and easily customised announcement content.",
-        image: img("voice-announcing-systems"),
+        image: leaf("voice-announcing-systems", "fa-250-mp3"),
         released: false,
       },
       {
@@ -418,7 +423,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Voice Announcing Systems",
         description:
           "An audible alert that warns passengers as the doors are about to close.",
-        image: img("voice-announcing-systems"),
+        image: leaf("voice-announcing-systems", "close-door-announcer"),
         released: false,
       },
       {
@@ -427,7 +432,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         category: "Voice Announcing Systems",
         description:
           "An arrival gong that chimes as the car reaches a landing, signalling arrival and direction.",
-        image: img("voice-announcing-systems"),
+        image: leaf("voice-announcing-systems", "elevator-gong"),
         released: false,
       },
     ],
@@ -447,7 +452,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "For new builds and modernisation",
       "Single-source supply",
     ],
-    image: img("elevator-kit-accessories"),
+    image: cover("elevator-kit-accessories"),
     released: true,
   },
   {
@@ -465,7 +470,7 @@ export const PRODUCT_TREE: ProductNode[] = [
       "For new builds and modernisation",
       "Pairs with Philbrick systems",
     ],
-    image: img("step-products"),
+    image: cover("step-products"),
     released: true,
   },
 ];

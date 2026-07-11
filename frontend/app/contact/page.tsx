@@ -54,7 +54,7 @@ export default function ContactPage() {
         title="Let's talk elevators"
         description="Tell us about your requirement and the Philbrick team will get back to you. We're based in Ahmedabad and supply across India and export markets."
         image={HERO.contact}
-        imageAlt="Philbrick facility"
+        imageAlt="Philbrick headquarters building facade at dusk"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Contact" }]}
       />
 

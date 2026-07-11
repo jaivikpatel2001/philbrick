@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Counter } from "@/components/ui/Counter";
-import { MISC } from "@/data/images";
+import { SECTION } from "@/data/images";
 import styles from "./AboutPreview.module.css";
 
 export function AboutPreview() {
@@ -59,8 +59,8 @@ export function AboutPreview() {
 
           <figure className={styles.media} data-reveal="right">
             <Image
-              src={MISC.factory}
-              alt="Philbrick engineering facility"
+              src={SECTION.whoWeAre}
+              alt="Philbrick engineer assembling a stainless steel car operating panel"
               fill
               sizes="(max-width: 900px) 100vw, 44vw"
               className={styles.img}

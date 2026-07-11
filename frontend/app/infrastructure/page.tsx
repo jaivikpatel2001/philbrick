@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 import { INFRASTRUCTURE } from "@/data/company";
 import { GLOBAL_STATS } from "@/data/stats";
-import { HERO, MISC } from "@/data/images";
+import { HERO, SECTION } from "@/data/images";
 import styles from "@/app/about/about.module.css";
 
 export const metadata: Metadata = {
@@ -33,8 +33,8 @@ export default function InfrastructurePage() {
         eyebrow="Capability"
         title="Built in-house, end to end"
         description="From procurement and design to manufacturing, quality control and dispatch, Philbrick controls every stage of the build at its Ahmedabad facility."
-        image={HERO.services}
-        imageAlt="Philbrick manufacturing facility"
+        image={HERO.infrastructure}
+        imageAlt="Elevator cabin panels and door frames in production on the Philbrick factory floor"
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "Infrastructure" },
@@ -63,8 +63,8 @@ export default function InfrastructurePage() {
           </div>
           <div className={styles.storyMedia} data-reveal="right">
             <Image
-              src={MISC.factory}
-              alt="Philbrick engineering facility"
+              src={SECTION.infrastructureIntro}
+              alt="Technician testing a Philbrick elevator control cabinet with a multimeter"
               fill
               sizes="(max-width: 900px) 100vw, 45vw"
               className={styles.storyImg}

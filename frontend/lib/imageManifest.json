@@ -1,0 +1,397 @@
+{
+  "/images/about/about-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/about/about-story.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/contact/contact-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/home/application-commercial.png": [
+    320,
+    560,
+    900,
+    1200
+  ],
+  "/images/home/application-healthcare.png": [
+    320,
+    560,
+    900,
+    1200
+  ],
+  "/images/home/application-hospitality.png": [
+    320,
+    560,
+    900,
+    1200
+  ],
+  "/images/home/application-industrial.png": [
+    320,
+    560,
+    900,
+    1200
+  ],
+  "/images/home/application-institutional.png": [
+    320,
+    560,
+    900,
+    1200
+  ],
+  "/images/home/application-residential.png": [
+    320,
+    560,
+    900,
+    1200
+  ],
+  "/images/home/application-transit.png": [
+    320,
+    560,
+    900,
+    1200
+  ],
+  "/images/home/who-we-are.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/infrastructure/infrastructure-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/infrastructure/infrastructure-intro.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/milestone/milestone-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/network/network-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/news-events/news-ard-safety.png": [
+    384,
+    768,
+    1200,
+    1600
+  ],
+  "/images/news-events/news-events-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/news-events/news-expo.png": [
+    384,
+    768,
+    1200,
+    1600
+  ],
+  "/images/news-events/news-facility-upgrade.png": [
+    384,
+    768,
+    1200,
+    1600
+  ],
+  "/images/news-events/news-network.png": [
+    384,
+    768,
+    1200,
+    1600
+  ],
+  "/images/news-events/news-serial-can-bus.png": [
+    384,
+    768,
+    1200,
+    1600
+  ],
+  "/images/news-events/news-training.png": [
+    384,
+    768,
+    1200,
+    1600
+  ],
+  "/images/products/ard/ard.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/cop-lop/cop-lop.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-cabin/elevator-cabin.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-control-panel/automatic-door-controller.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-control-panel/elevator-control-panel.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-control-panel/hydraulic-controller.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-control-panel/manual-door-controller.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/elevator-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xlcd-01-monochrome-lcd-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xlcd-02-monochrome-lcd-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xn-1000-led-segment-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xn-2000-dot-matrix-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xn-2100-dot-matrix-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xn-3000-dot-matrix-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xn-4000-date-time-temperature-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-display/xtft-043-tft-display.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-doors/elevator-doors.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-iot/elevator-iot.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/elevator-kit-accessories/elevator-kit-accessories.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/integrated-control-panel/integrated-control-panel.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/integrated-control-panel/mrl-control-panel.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/integrated-control-panel/parallel-type-controller.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/integrated-control-panel/serial-can-bus-type-controller.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/lift-master/lift-master.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/products-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/step-products/step-products.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/synergy-auto-door/2-panel-centre-opening.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/synergy-auto-door/2-panel-telescopic-side-opening.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/synergy-auto-door/4-panel-centre-opening.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/synergy-auto-door/synergy-auto-door.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/touch-cop-lop/touch-cop-lop.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/voice-announcing-systems/close-door-announcer.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/voice-announcing-systems/elevator-gong.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/voice-announcing-systems/fa-250-mp3.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/voice-announcing-systems/fa-50-chip-based.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/products/voice-announcing-systems/voice-announcing-systems.png": [
+    384,
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/shared/cta-band.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ],
+  "/images/vision-mission/vision-mission-hero.png": [
+    640,
+    1080,
+    1600,
+    2048
+  ]
+}
