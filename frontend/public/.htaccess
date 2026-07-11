@@ -1,5 +1,5 @@
 # =============================================================================
-# VERTIQ static site — Apache/cPanel configuration
+# PHILBRICK static site — Apache/cPanel configuration
 # Ships inside the export (out/) so uploading to public_html "just works".
 # Render/CDN hosts ignore this file. Requires mod_rewrite (standard on cPanel).
 # =============================================================================

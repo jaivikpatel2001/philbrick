@@ -3,20 +3,19 @@ import { AboutPreview } from "@/sections/home/AboutPreview";
 import { ProductsShowcase } from "@/sections/home/ProductsShowcase";
 import { ServiceEcosystem } from "@/sections/home/ServiceEcosystem";
 import { IndustriesShowcase } from "@/sections/home/IndustriesShowcase";
-import { Projects } from "@/sections/experience/Projects";
 import { StatsBand } from "@/sections/shared/StatsBand";
 import { CTASection } from "@/sections/shared/CTASection";
+import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { COMPANY_STATS } from "@/data/stats";
 
 /**
  * Homepage = the flagship storytelling experience.
- * The cinematic Three.js elevator hero hands off into the brand's content flow:
- * who we are → what we make → how we support it → proof → industries → numbers →
- * a conversion CTA, then the global footer.
+ * The cinematic Three.js elevator hero hands off into Philbrick's content flow:
+ * who we are → what we make → what we offer → applications → numbers → CTA.
  */
 export default function HomePage() {
   return (
-    <>
+    <ReleaseGate route="/" label="Home">
       {/* Cinematic elevator hero (Three.js) — night arrival → dolly-zoom through
           the facade → lobby → component-by-component reveal */}
       <ElevatorScene />
@@ -24,23 +23,20 @@ export default function HomePage() {
       {/* About the company */}
       <AboutPreview />
 
-      {/* Products — the elevator portfolio */}
+      {/* Products — the component range */}
       <ProductsShowcase />
 
-      {/* Installation · maintenance · modernization · AMC */}
+      {/* What we offer — manufacturing · custom/OEM · modernisation · support */}
       <ServiceEcosystem />
 
-      {/* Projects */}
-      <Projects />
-
-      {/* Industries */}
+      {/* Applications */}
       <IndustriesShowcase />
 
       {/* By the numbers */}
       <StatsBand
-        eyebrow="06 — By the numbers"
-        title="Performance you can measure"
-        description="The intelligence inside every VERTIQ system shows up where it counts: in energy, in uptime and in time saved."
+        eyebrow="05 — By the numbers"
+        title="A component maker you can measure"
+        description="Three decades of in-house engineering and a complete elevator-component range, from control panels to signalling."
         stats={COMPANY_STATS}
         columns={4}
         variant="bordered"
@@ -49,12 +45,12 @@ export default function HomePage() {
 
       {/* Contact / CTA */}
       <CTASection
-        eyebrow="Let's build upward"
-        title="Ready to move your building into the future?"
-        description="Tell us about your project and a VERTIQ specialist will design the right vertical mobility solution with you."
-        primary={{ label: "Request a consultation", href: "/contact" }}
+        eyebrow="Let's build"
+        title="Ready to specify your next elevator?"
+        description="Tell us about your project and the Philbrick team will help you choose the right control, safety and signalling components."
+        primary={{ label: "Request a quote", href: "/contact" }}
         secondary={{ label: "Explore products", href: "/products" }}
       />
-    </>
+    </ReleaseGate>
   );
 }

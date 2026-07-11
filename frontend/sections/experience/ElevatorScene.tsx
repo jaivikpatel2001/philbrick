@@ -45,8 +45,8 @@ const BEATS = [
     eyebrow: "01 Arrival",
     lead: "Engineered for",
     em: "movement.",
-    sub: "Night falls on the VERTIQ tower. Every journey begins at the street.",
-    subDay: "Daylight on the VERTIQ tower. Every journey begins at the street.",
+    sub: "Night falls on a Philbrick-equipped tower. Every journey begins at the street.",
+    subDay: "Daylight on a Philbrick-equipped tower. Every journey begins at the street.",
   },
   {
     eyebrow: "02 The Approach",
@@ -165,10 +165,13 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
       return v || fallback;
     };
-    const GOLD = new THREE.Color(cssVar("--gold", "#c9a86a"));
-    const BLACK = new THREE.Color(cssVar("--black", "#050506"));
-    const GRAPHITE = new THREE.Color(cssVar("--graphite", "#0f1115"));
-    const BLUE = new THREE.Color(cssVar("--blue", "#2f6bff"));
+    /* WARM is the architectural warmth of window/interior lighting — kept a
+       realistic amber, independent of the brand palette. BLUE is Philbrick's
+       azure brand accent (from --blue), used for the sign glow and screens. */
+    const GOLD = new THREE.Color("#e3b277");
+    const BLACK = new THREE.Color(cssVar("--black", "#070a0f"));
+    const GRAPHITE = new THREE.Color(cssVar("--graphite", "#0f141c"));
+    const BLUE = new THREE.Color(cssVar("--blue", "#109bdd"));
     const STEEL = new THREE.Color(cssVar("--silver", "#c7cdd5"));
     const WARM_WINDOW = GOLD.clone().lerp(new THREE.Color("#ffffff"), 0.35);
     const WHITE = new THREE.Color("#ffffff");
@@ -281,7 +284,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     const wallMat = new THREE.MeshStandardMaterial({ map: wallMarble, color: 0x3a3e46, metalness: 0.05, roughness: 0.55, envMapIntensity: 0.55 });
     const coveMat = new THREE.MeshStandardMaterial({ color: 0xffe9c8, emissive: 0xffe1b4, emissiveIntensity: 1.1 });
     const ledMat = new THREE.MeshStandardMaterial({ color: 0xfff4d6, emissive: 0xffe6b0, emissiveIntensity: 1.6 });
-    const screenMat = new THREE.MeshStandardMaterial({ color: 0x06102a, emissive: 0x2f6bff, emissiveIntensity: 1.4 });
+    const screenMat = new THREE.MeshStandardMaterial({ color: 0x041019, emissive: 0x2facec, emissiveIntensity: 1.4 });
     const redMat = new THREE.MeshStandardMaterial({ color: 0xd23a2c, emissive: 0x6e150c, emissiveIntensity: 0.7, metalness: 0.2, roughness: 0.5 });
 
     /* ---------- Helpers ---------- */
@@ -424,9 +427,9 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     sctx.font = `600 110px ${cssVar("--font-display", "'Space Grotesk', sans-serif").split(",")[0] || "sans-serif"}, sans-serif`;
     sctx.textAlign = "center";
     sctx.textBaseline = "middle";
-    sctx.shadowColor = cssVar("--gold", "#c9a86a");
-    sctx.shadowBlur = 26;
-    sctx.fillStyle = cssVar("--gold-soft", "#dcc089");
+    sctx.shadowColor = cssVar("--accent", "#2facec");
+    sctx.shadowBlur = 30;
+    sctx.fillStyle = "#eaf6fd";
     sctx.fillText(SITE.name.toUpperCase(), 512, 100);
     const signTex = track(new THREE.CanvasTexture(signCanvas));
     signTex.colorSpace = THREE.SRGBColorSpace;
@@ -1017,7 +1020,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
   );
 
   return (
-    <section ref={root} className={styles.section} style={{ height: `${SCROLL_VH}vh` }} aria-label="Arrival at the VERTIQ tower and interactive elevator, explore the components">
+    <section ref={root} className={styles.section} style={{ height: `${SCROLL_VH}vh` }} aria-label="Arrival at a Philbrick-equipped tower and interactive elevator, explore the components">
       <div className={styles.stage}>
         <div ref={mount} className={styles.mount} aria-hidden />
         <div className={styles.vignette} aria-hidden />

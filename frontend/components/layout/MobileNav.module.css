@@ -3,7 +3,7 @@
   inset: 0;
   z-index: var(--z-drawer);
 }
-@media (min-width: 993px) {
+@media (min-width: 1080px) {
   .root {
     display: none;
   }
@@ -102,6 +102,40 @@
 .subLink:hover {
   color: var(--accent);
   border-color: var(--accent);
+}
+
+/* Level-2 nesting (product category → sub-products) */
+.subGroup {
+  border-left: 2px solid var(--border);
+}
+.subGroupBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.6rem 0 0.6rem 1rem;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  text-align: left;
+}
+.subGroupBtn:hover {
+  color: var(--accent);
+}
+.subGroup .chev {
+  font-size: 1rem;
+}
+.subSub {
+  overflow: hidden;
+}
+.subSubLink {
+  display: block;
+  padding: 0.5rem 0 0.5rem 1.85rem;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+.subSubLink:hover {
+  color: var(--accent);
 }
 
 .foot {

@@ -1,463 +1,552 @@
-import type { Product } from "@/types";
-import { PRODUCT_IMG, HERO, MISC, PROJECT_IMG, TECH_IMG } from "./images";
+/* =============================================================================
+   PHILBRICK — PRODUCT CATALOGUE (single source of truth)
 
-export const PRODUCTS: Product[] = [
+   Philbrick's real product hierarchy, modelled as a two-level tree:
+     Category  (/products/<category>)
+       └─ Product (/products/<category>/<product>)
+
+   Content is drawn from Philbrick's public product range. Descriptions are
+   honest and qualitative — NO fabricated specifications, capacities or numbers.
+   `released` is the production page-release flag consumed by config/pageReleases.ts:
+   categories and functionally-described products are live; specific model SKUs
+   (display models, voice modules) ship as "Coming Soon" until real specs/photos
+   are supplied. In development every route is accessible regardless.
+   ========================================================================== */
+import type { ProductNode } from "@/types";
+import { CATEGORY_IMG } from "./images";
+
+const img = (slug: string) => CATEGORY_IMG[slug];
+
+export const PRODUCT_TREE: ProductNode[] = [
   {
-    slug: "passenger-elevators",
-    name: "Passenger Elevators",
-    category: "Vertical Transport",
-    tagline: "Effortless mobility for towers that never sleep.",
+    slug: "elevator-control-panel",
+    name: "Elevator Control Panel",
+    category: "Control & Drives",
+    tagline: "The brain of every ride.",
     description:
-      "Gearless, machine room less elevators engineered for high rise and mid rise buildings. Quiet, efficient and intelligent.",
+      "Control panels that manage motion, safety, signalling and door operation for a smooth, reliable elevator — engineered and built in-house.",
     longDescription:
-      "The VERTIQ Helix™ passenger platform pairs a permanent magnet gearless drive with destination dispatch control to move more people, faster, using up to 40% less energy. Regenerative drives feed braking energy back into the building grid, while a carbon fibre belt system replaces traditional steel ropes to enable travel heights beyond 600 metres.",
-    heroImage: HERO.products,
-    cardImage: PRODUCT_IMG.passenger,
-    gallery: [PRODUCT_IMG.passenger, MISC.lobby, PROJECT_IMG.three, TECH_IMG.cabin],
-    capacityRange: "630–2500 kg",
-    speedRange: "1.0–10.0 m/s",
+      "The elevator control panel is the intelligence behind the ride: it drives the machine, levels the car, sequences the doors and supervises every safety circuit. Philbrick builds control panels in-house and configures them for automatic-door, manual-door and hydraulic elevators so the same dependable core suits new installations and modernisation alike.",
     highlights: [
-      "Permanent magnet gearless drive",
-      "Destination dispatch as standard",
-      "Regenerative power recovery",
-      "Carbon fibre belt suspension",
+      "In-house designed and manufactured",
+      "Automatic, manual and hydraulic variants",
+      "Integrated safety and signalling logic",
+      "Suited to new builds and modernisation",
     ],
-    subcategories: [
-      { name: "Gearless MRL", description: "Machine room less gearless traction for new builds." },
-      { name: "Geared Traction", description: "Cost efficient mid rise systems up to 1.75 m/s." },
-      { name: "Compact Roomless", description: "Space saving drive housed inside the shaft." },
-      { name: "High Rise Group", description: "Destination dispatched groups for supertall towers." },
-    ],
-    specs: [
-      { label: "Capacity", value: "630 – 2,500 kg (8–33 persons)" },
-      { label: "Speed", value: "1.0 – 10.0 m/s" },
-      { label: "Max travel", value: "Up to 600 m" },
-      { label: "Drive", value: "Gearless PM synchronous, MRL" },
-      { label: "Energy class", value: "VDI 4707 Class A" },
-      { label: "Control", value: "VERTIQ Destination Dispatch" },
-    ],
-    features: [
-      { iconName: "FiZap", title: "Regenerative drive", description: "Recovers braking energy and returns it to the building, cutting power draw by up to 40%." },
-      { iconName: "FiCpu", title: "Destination dispatch", description: "Groups passengers by floor before they board, reducing wait and travel time by up to 30%." },
-      { iconName: "FiActivity", title: "Ride quality control", description: "Active roller guides and closed loop control deliver a vibration free ride at every speed." },
-      { iconName: "FiWifi", title: "Connected by Pulse™", description: "Every unit streams 200+ data points to the cloud for predictive, condition based service." },
+    image: img("elevator-control-panel"),
+    released: true,
+    children: [
+      {
+        slug: "automatic-door-controller",
+        name: "Automatic Door Controller",
+        category: "Elevator Control Panel",
+        description:
+          "A control panel tuned for elevators with automatic power doors — coordinating car and landing door operation, levelling and safety interlocks for effortless, hands-free entry and exit.",
+        image: img("elevator-control-panel"),
+        released: true,
+      },
+      {
+        slug: "manual-door-controller",
+        name: "Manual Door Controller",
+        category: "Elevator Control Panel",
+        description:
+          "A dependable controller for elevators with manual swing or collapsible doors — managing drive, levelling and safety circuits while the doors are operated by hand.",
+        image: img("elevator-control-panel"),
+        released: true,
+      },
+      {
+        slug: "hydraulic-controller",
+        name: "Hydraulic Controller",
+        category: "Elevator Control Panel",
+        description:
+          "Purpose-built control for hydraulic elevators — smooth valve-controlled acceleration and levelling with the safety and signalling logic Philbrick panels are known for.",
+        image: img("elevator-control-panel"),
+        released: true,
+      },
     ],
   },
   {
-    slug: "home-elevators",
-    name: "Home Elevators",
-    category: "Residential",
-    tagline: "A private landmark inside your home.",
+    slug: "integrated-control-panel",
+    name: "Integrated Control Panel",
+    category: "Control & Drives",
+    tagline: "Drive and control, in one cabinet.",
     description:
-      "Bespoke residential lifts that combine compact engineering with couture finishes, from glass shaftless designs to fully enclosed cabins.",
+      "All-in-one elevator control that integrates the drive, controller and signalling into a single, space-saving cabinet — in parallel, serial CAN-bus and MRL configurations.",
     longDescription:
-      "VERTIQ Aura™ home elevators install in as little as a 900 × 900 mm footprint with no machine room and no pit on select models. A self supporting aluminium structure means minimal building works, while a palette of veneers, stone, leather and glass lets each cabin be tailored to its residence.",
-    heroImage: PRODUCT_IMG.home,
-    cardImage: PRODUCT_IMG.home,
-    gallery: [PRODUCT_IMG.home, MISC.lobby, MISC.spiral],
-    capacityRange: "250–500 kg",
-    speedRange: "0.15–1.0 m/s",
+      "Philbrick's integrated control panels bring the drive, controller and signalling together in one compact cabinet, cutting wiring, footprint and commissioning time. The range spans traditional parallel wiring, modern serial CAN-bus communication and dedicated machine-room-less control so the right architecture is available for every building.",
     highlights: [
-      "Footprint from 900 × 900 mm",
-      "Pit less & shaftless options",
-      "Couture cabin finishes",
-      "Whisper quiet < 45 dB",
+      "Drive, controller and signalling combined",
+      "Parallel and serial CAN-bus options",
+      "Machine-room-less (MRL) ready",
+      "Faster to wire and commission",
     ],
-    subcategories: [
-      { name: "Hydraulic Home Lift", description: "Smooth, pit friendly drive for low rise homes." },
-      { name: "Gearless Traction", description: "Energy efficient, compact and quiet." },
-      { name: "Vacuum (Pneumatic)", description: "Self supporting glass tube, no shaft, no pit." },
-      { name: "Shaftless Platform", description: "Open plan lift for two to three stops." },
-    ],
-    specs: [
-      { label: "Capacity", value: "250 – 500 kg (3–6 persons)" },
-      { label: "Speed", value: "0.15 – 1.0 m/s" },
-      { label: "Travel", value: "Up to 18 m / 6 stops" },
-      { label: "Drive", value: "Gearless, hydraulic or screw" },
-      { label: "Pit / headroom", value: "From 0 mm pit" },
-      { label: "Noise", value: "< 45 dB(A)" },
-    ],
-    features: [
-      { iconName: "FiHome", title: "Fits where others can't", description: "A self supporting structure slips into stairwells, corners and new builds with minimal works." },
-      { iconName: "FiFeather", title: "Couture finishes", description: "Veneer, stone, brushed metal, leather and panoramic glass, configured to your interior." },
-      { iconName: "FiShield", title: "Safe by design", description: "Battery home landing, light curtains and gentle soft start protect every member of the family." },
+    image: img("integrated-control-panel"),
+    released: true,
+    children: [
+      {
+        slug: "parallel-type-controller",
+        name: "Parallel Type Controller",
+        category: "Integrated Control Panel",
+        description:
+          "A parallel-wired integrated panel where each signal runs on its own line — simple to commission and service, ideal for low- and mid-rise installations.",
+        image: img("integrated-control-panel"),
+        released: true,
+      },
+      {
+        slug: "serial-can-bus-type-controller",
+        name: "Serial CAN Bus Type Controller",
+        category: "Integrated Control Panel",
+        description:
+          "A serial CAN-bus integrated panel that replaces bundled travelling cables with a two-wire data bus — cleaner wiring, faster installation and robust noise immunity.",
+        image: img("integrated-control-panel"),
+        released: true,
+      },
+      {
+        slug: "mrl-control-panel",
+        name: "MRL Control Panel",
+        category: "Integrated Control Panel",
+        description:
+          "A compact controller engineered for machine-room-less (MRL) elevators — the complete control system fits within the shaft, freeing the rooftop machine room.",
+        image: img("integrated-control-panel"),
+        released: true,
+      },
     ],
   },
   {
-    slug: "freight-elevators",
-    name: "Freight Elevators",
-    category: "Heavy Duty",
-    tagline: "Built to carry the weight of industry.",
+    slug: "elevator-iot",
+    name: "Elevator IoT",
+    category: "Safety & Intelligence",
+    tagline: "Every lift, connected.",
     description:
-      "Heavy duty goods and freight elevators engineered for warehouses, factories and logistics hubs that move serious loads.",
+      "A connectivity module that streams live status, fault and usage data from the elevator controller to the cloud for remote monitoring and faster response.",
     longDescription:
-      "VERTIQ Forge™ freight elevators handle from 1,000 kg to 10,000 kg with reinforced platforms, bumper grade cabins and drive systems rated for thousands of daily cycles. Wide opening bi parting doors, forklift rated sills and abrasion resistant interiors keep goods and operators moving safely.",
-    heroImage: PRODUCT_IMG.freight,
-    cardImage: PRODUCT_IMG.freight,
-    gallery: [PRODUCT_IMG.freight, MISC.factory, TECH_IMG.drive],
-    capacityRange: "1000–10000 kg",
-    speedRange: "0.25–2.0 m/s",
+      "Philbrick's Elevator IoT links the controller to the cloud, turning each lift into a connected asset. Building and maintenance teams can watch live status, receive fault alerts and review usage remotely — shortening downtime and supporting condition-based, rather than purely scheduled, maintenance.",
     highlights: [
-      "Loads up to 10,000 kg",
-      "Forklift rated platform",
-      "Bi parting heavy doors",
-      "High cycle duty rating",
+      "Live status and fault alerts",
+      "Remote monitoring from anywhere",
+      "Usage insight for smarter maintenance",
+      "Works with Philbrick controllers",
     ],
-    subcategories: [
-      { name: "Industrial Freight", description: "Reinforced cars for factory and plant duty." },
-      { name: "Goods-only Lift", description: "Compact goods transport between levels." },
-      { name: "Vehicle / Car Elevator", description: "Move cars between basement and showroom floors." },
-      { name: "Heavy Platform", description: "Custom platforms for oversized loads." },
+    image: img("elevator-iot"),
+    released: true,
+  },
+  {
+    slug: "ard",
+    name: "ARD — Automatic Rescue Device",
+    category: "Safety & Intelligence",
+    tagline: "Nobody stays trapped.",
+    description:
+      "On a power failure the Automatic Rescue Device moves the car to the nearest floor and opens the doors, releasing passengers safely — a core Philbrick safety product.",
+    longDescription:
+      "The Automatic Rescue Device (ARD) is a life-safety essential. When mains power fails, it automatically brings the elevator to the nearest landing on backup power and opens the doors so passengers are never left stranded between floors. It is one of Philbrick's flagship safety products, engineered for reliable operation exactly when it is needed most.",
+    highlights: [
+      "Automatic rescue on power failure",
+      "Moves the car to the nearest floor",
+      "Opens doors to free passengers",
+      "Flagship Philbrick safety device",
     ],
-    specs: [
-      { label: "Capacity", value: "1,000 – 10,000 kg" },
-      { label: "Speed", value: "0.25 – 2.0 m/s" },
-      { label: "Door type", value: "Bi parting / vertical rising" },
-      { label: "Platform", value: "Forklift rated steel chequer" },
-      { label: "Duty", value: "Up to 300 starts / hour" },
-      { label: "Drive", value: "Geared traction or hydraulic" },
+    image: img("ard"),
+    released: true,
+  },
+  {
+    slug: "lift-master",
+    name: "Lift Master — Door Operator Controller",
+    category: "Doors & Mechanism",
+    tagline: "Precise doors, every cycle.",
+    description:
+      "Philbrick's dedicated door-operator controller — driving the car-door mechanism with smooth, precisely-profiled opening and closing and reliable obstruction handling.",
+    longDescription:
+      "Lift Master is Philbrick's dedicated door-operator controller. It drives the car-door mechanism with a smooth, tuned motion profile, holds accurate open/close positions and handles obstructions gracefully — the difference between a door that feels effortless and one that feels abrupt across millions of cycles.",
+    highlights: [
+      "Smooth, profiled door motion",
+      "Reliable obstruction handling",
+      "Accurate open/close positioning",
+      "Built for high-cycle duty",
     ],
-    features: [
-      { iconName: "FiTruck", title: "Industrial capacity", description: "Reinforced car frames and platforms rated to 10 tonnes, with custom sizing on request." },
-      { iconName: "FiSettings", title: "High-cycle endurance", description: "Duty-rated drives and doors built for thousands of demanding cycles every day." },
-      { iconName: "FiShield", title: "Operator safety", description: "Robust interlocks, overload sensing and anti crush door edges protect crews on every floor." },
+    image: img("lift-master"),
+    released: true,
+  },
+  {
+    slug: "synergy-auto-door",
+    name: "Synergy Auto Door — Door Mechanism",
+    category: "Doors & Mechanism",
+    tagline: "Quiet, precise automatic doors.",
+    description:
+      "Philbrick's automatic door mechanism for car and landing entrances — quiet and precise, in centre-opening and telescopic/side-opening panel configurations.",
+    longDescription:
+      "Synergy is Philbrick's automatic door mechanism for elevator car and landing entrances. Engineered for quiet, precise and repeatable operation, it is available in two- and four-panel centre-opening and telescopic/side-opening layouts to suit everything from compact residential lifts to wide hospital and freight openings.",
+    highlights: [
+      "Quiet, precise automatic operation",
+      "Centre-opening and telescopic layouts",
+      "Two- and four-panel configurations",
+      "For car and landing entrances",
+    ],
+    image: img("synergy-auto-door"),
+    released: true,
+    children: [
+      {
+        slug: "2-panel-centre-opening",
+        name: "2-Panel Centre Opening",
+        category: "Synergy Auto Door",
+        description:
+          "Two panels that part symmetrically from the centre — fast, balanced operation for standard passenger openings.",
+        image: img("synergy-auto-door"),
+        released: true,
+      },
+      {
+        slug: "2-panel-telescopic-side-opening",
+        name: "2-Panel Telescopic / Side Opening",
+        category: "Synergy Auto Door",
+        description:
+          "Two panels that telescope to one side — maximising clear opening width where wall space beside the entrance is limited.",
+        image: img("synergy-auto-door"),
+        released: true,
+      },
+      {
+        slug: "4-panel-centre-opening",
+        name: "4-Panel Centre Opening",
+        category: "Synergy Auto Door",
+        description:
+          "Four telescoping panels opening from the centre — the widest clear entrance for hospital beds, freight and high-traffic lobbies.",
+        image: img("synergy-auto-door"),
+        released: true,
+      },
     ],
   },
   {
-    slug: "hospital-elevators",
-    name: "Hospital Elevators",
-    category: "Healthcare",
-    tagline: "Calm, clinical transport when seconds matter.",
+    slug: "elevator-doors",
+    name: "Elevator Doors",
+    category: "Doors & Mechanism",
+    tagline: "Built to align, made to last.",
     description:
-      "Bed and stretcher elevators with hygienic surfaces, ultra smooth ride and priority control for critical care environments.",
+      "Landing and car door sets engineered and finished in-house — robust and well-aligned, in a range of sizes and finishes to match the cabin and building.",
     longDescription:
-      "VERTIQ Care™ hospital elevators move beds, equipment and people with hospital grade calm. Deep cars accommodate stretchers and crash teams, antimicrobial surfaces resist infection, and a medical priority mode summons a car instantly for emergencies, all with a levelling accuracy of ±3 mm for safe trolley transfer.",
-    heroImage: PRODUCT_IMG.hospital,
-    cardImage: PRODUCT_IMG.hospital,
-    gallery: [PRODUCT_IMG.hospital, HERO.quality, MISC.lobby],
-    capacityRange: "1600–2500 kg",
-    speedRange: "1.0–2.5 m/s",
-    highlights: ["Stretcher depth cars", "Antimicrobial surfaces", "Medical priority mode", "±3 mm levelling"],
-    subcategories: [
-      { name: "Bed Elevator", description: "Deep cars sized for hospital beds and teams." },
-      { name: "Stretcher Elevator", description: "Rapid, smooth transfer for emergency transport." },
-      { name: "Service / Utility", description: "Back-of-house movement of supplies and waste." },
-      { name: "Emergency Evacuation", description: "Backup-powered cars for resilient egress." },
+      "Philbrick manufactures landing and car doors as complete, well-aligned sets. Sturdy construction and a choice of sizes and finishes let each door integrate cleanly with the cabin, the shaft and the building's interior — supplied as part of a full elevator package or on their own.",
+    highlights: [
+      "Landing and car door sets",
+      "In-house fabrication and finishing",
+      "Range of sizes and finishes",
+      "Robust, well-aligned construction",
     ],
-    specs: [
-      { label: "Capacity", value: "1,600 – 2,500 kg (21–33 persons)" },
-      { label: "Speed", value: "1.0 – 2.5 m/s" },
-      { label: "Car depth", value: "Up to 2,700 mm" },
-      { label: "Levelling", value: "±3 mm" },
-      { label: "Hygiene", value: "Antimicrobial coatings" },
-      { label: "Modes", value: "Medical priority / firefighter" },
+    image: img("elevator-doors"),
+    released: true,
+  },
+  {
+    slug: "elevator-cabin",
+    name: "Elevator Cabin",
+    category: "Cabin & Fixtures",
+    tagline: "Where the journey is felt.",
+    description:
+      "Passenger cabins built to order — durable construction with a choice of finishes, lighting, flooring and fixtures for residential and commercial elevators.",
+    longDescription:
+      "The cabin is the part of the elevator passengers actually experience. Philbrick builds cabins to order with durable construction and a wide choice of wall finishes, ceilings, lighting, flooring and fixtures, so the interior can be plain and hard-wearing or a refined feature of the building.",
+    highlights: [
+      "Built to order",
+      "Wide choice of finishes and lighting",
+      "Residential and commercial ranges",
+      "Durable, serviceable construction",
     ],
-    features: [
-      { iconName: "FiHeart", title: "Medical priority", description: "A single call commandeers the nearest car for emergency transfers, bypassing normal traffic." },
-      { iconName: "FiShield", title: "Infection control", description: "Antimicrobial stainless surfaces and sealed joints support rigorous hygiene protocols." },
-      { iconName: "FiActivity", title: "Stretcher smooth ride", description: "Precision levelling and jerk limited motion keep patients stable from floor to floor." },
+    image: img("elevator-cabin"),
+    released: true,
+  },
+  {
+    slug: "elevator-display",
+    name: "Elevator Display",
+    category: "Signalling",
+    tagline: "Clear signals, floor to floor.",
+    description:
+      "Car and landing position indicators — the XN, XLCD and XTFT range spans LED segment, dot-matrix, monochrome LCD and colour TFT displays.",
+    longDescription:
+      "Philbrick's display range covers every signalling need in the car and at the landings, from simple LED segment indicators to multi-line dot-matrix, crisp monochrome LCD and full-colour TFT screens. All show floor position, direction and travel information clearly, and can carry additional messaging where required.",
+    highlights: [
+      "LED segment, dot-matrix, LCD and TFT",
+      "Car and landing indicators",
+      "Clear floor, direction and info display",
+      "The XN / XLCD / XTFT range",
+    ],
+    image: img("elevator-display"),
+    released: true,
+    children: [
+      {
+        slug: "xn-1000-led-segment-display",
+        name: "XN-1000 — LED Segment Display",
+        category: "Elevator Display",
+        description:
+          "A bright seven-segment LED position indicator — high-contrast floor and direction display for cars and landings.",
+        image: img("elevator-display"),
+        released: false,
+      },
+      {
+        slug: "xn-2000-dot-matrix-display",
+        name: "XN-2000 — Dot Matrix Display",
+        category: "Elevator Display",
+        description:
+          "A dot-matrix indicator showing floor, direction and scrolling information with smooth graphics.",
+        image: img("elevator-display"),
+        released: false,
+      },
+      {
+        slug: "xn-2100-dot-matrix-display",
+        name: "XN-2100 — Dot Matrix Display",
+        category: "Elevator Display",
+        description:
+          "A dot-matrix position indicator in the XN-2000 family, sized for a different fascia format.",
+        image: img("elevator-display"),
+        released: false,
+      },
+      {
+        slug: "xn-3000-dot-matrix-display",
+        name: "XN-3000 — Dot Matrix Display",
+        category: "Elevator Display",
+        description:
+          "A larger dot-matrix display for clear, long-range legibility in lobbies and landings.",
+        image: img("elevator-display"),
+        released: false,
+      },
+      {
+        slug: "xn-4000-date-time-temperature-display",
+        name: "XN-4000 — Date / Time / Temperature Display",
+        category: "Elevator Display",
+        description:
+          "A dot-matrix display that adds date, time and temperature to floor and direction signalling.",
+        image: img("elevator-display"),
+        released: false,
+      },
+      {
+        slug: "xlcd-01-monochrome-lcd-display",
+        name: "XLCD-01 — Monochrome LCD Display",
+        category: "Elevator Display",
+        description:
+          "A monochrome LCD position indicator for crisp graphical floor and direction display.",
+        image: img("elevator-display"),
+        released: false,
+      },
+      {
+        slug: "xlcd-02-monochrome-lcd-display",
+        name: "XLCD-02 — Monochrome LCD Display",
+        category: "Elevator Display",
+        description:
+          "A monochrome LCD indicator in the XLCD family, offered in an alternative size or layout.",
+        image: img("elevator-display"),
+        released: false,
+      },
+      {
+        slug: "xtft-043-tft-display",
+        name: "XTFT-043 — TFT Display",
+        category: "Elevator Display",
+        description:
+          "A 4.3-inch full-colour TFT display for rich floor, direction and multimedia signalling.",
+        image: img("elevator-display"),
+        released: false,
+      },
     ],
   },
   {
-    slug: "escalators",
-    name: "Escalators",
-    category: "Mobility Systems",
-    tagline: "Moving crowds, beautifully.",
+    slug: "cop-lop",
+    name: "COP / LOP",
+    category: "Cabin & Fixtures",
+    tagline: "The passenger interface.",
     description:
-      "Commercial and heavy duty escalators for transit hubs, malls and airports. Safe, efficient and built to last.",
+      "Car Operating Panels and Landing Operating Panels — the buttons and indicators passengers use to call and command the lift, in durable finishes with clear signalling.",
     longDescription:
-      "VERTIQ Flow™ escalators are engineered for relentless public duty. Eco drive standby slows or stops the unit when no one is near, cutting energy use by up to 50%, while a sealed truss, LED skirt lighting and anti slip combs deliver a safe, premium passenger experience for decades.",
-    heroImage: HERO.industries,
-    cardImage: PRODUCT_IMG.escalators,
-    gallery: [PRODUCT_IMG.escalators, HERO.global, MISC.aerial],
-    capacityRange: "6000–13500 persons/h",
-    speedRange: "0.5–0.75 m/s",
-    highlights: ["Eco drive standby", "Up to 13,500 persons/hour", "Sealed weatherproof truss", "LED safety lighting"],
-    subcategories: [
-      { name: "Commercial Escalator", description: "Malls, offices and public buildings." },
-      { name: "Heavy Duty Transit", description: "Airports, metros and stadiums, 24/7 duty." },
-      { name: "Crystal / Glass", description: "Glass balustrade for signature interiors." },
-      { name: "Spiral Escalator", description: "Curved escalators for landmark architecture." },
+      "The Car Operating Panel (COP) and Landing Operating Panel (LOP) are how passengers interact with the elevator. Philbrick builds them in hard-wearing finishes with tactile buttons and clear indication, so calling and commanding the lift is intuitive at the landing and inside the car.",
+    highlights: [
+      "Car and landing operating panels",
+      "Durable, hard-wearing finishes",
+      "Tactile buttons, clear indication",
+      "Configurable layouts",
     ],
-    specs: [
-      { label: "Throughput", value: "Up to 13,500 persons/hour" },
-      { label: "Speed", value: "0.5 – 0.75 m/s" },
-      { label: "Incline", value: "30° / 35°" },
-      { label: "Rise", value: "Up to 12 m (single rise)" },
-      { label: "Standby", value: "Eco drive auto slow/stop" },
-      { label: "Use", value: "Public / heavy duty transit" },
+    image: img("cop-lop"),
+    released: true,
+  },
+  {
+    slug: "touch-cop-lop",
+    name: "Touch COP / LOP",
+    category: "Cabin & Fixtures",
+    tagline: "A premium touch interface.",
+    description:
+      "Touch-based car and landing panels — capacitive touch buttons and glass fascias for a premium, easy-to-clean passenger interface.",
+    longDescription:
+      "Philbrick's Touch COP/LOP replaces mechanical buttons with capacitive touch controls behind a smooth glass fascia. The result is a premium, modern interface that is easy to clean and hard to wear out — a natural fit for showcase lobbies and contemporary interiors.",
+    highlights: [
+      "Capacitive touch controls",
+      "Glass fascia, premium look",
+      "Easy to clean, low wear",
+      "Car and landing versions",
     ],
-    features: [
-      { iconName: "FiZap", title: "Eco drive", description: "Sensors slow or pause the unit when idle, saving up to 50% of running energy." },
-      { iconName: "FiTrendingUp", title: "Transit grade", description: "Sealed trusses and heavy duty steps rated for airports, metros and stadiums." },
-      { iconName: "FiSun", title: "Safety lighting", description: "Comb, skirt and balustrade LEDs guide passengers and highlight every step edge." },
+    image: img("touch-cop-lop"),
+    released: true,
+  },
+  {
+    slug: "voice-announcing-systems",
+    name: "Voice Announcing Systems",
+    category: "Signalling",
+    tagline: "The lift that speaks.",
+    description:
+      "Voice and audible signalling — floor and direction announcements, arrival gongs and door alerts that improve accessibility and the ride experience.",
+    longDescription:
+      "Philbrick's voice announcing systems add clear audible signalling to the elevator: spoken floor and direction announcements, arrival gongs and door alerts. Beyond a more comfortable ride, they support accessibility for passengers with visual impairment. The range spans chip-based and MP3 announcers, close-door alerts and gongs.",
+    highlights: [
+      "Spoken floor / direction announcements",
+      "Arrival gong and door alerts",
+      "Improves accessibility",
+      "Chip-based and MP3 options",
+    ],
+    image: img("voice-announcing-systems"),
+    released: true,
+    children: [
+      {
+        slug: "fa-50-chip-based",
+        name: "FA-50 — Chip-Based Voice Announcement System",
+        category: "Voice Announcing Systems",
+        description:
+          "A compact chip-based voice announcer delivering clear, pre-recorded floor and direction messages.",
+        image: img("voice-announcing-systems"),
+        released: false,
+      },
+      {
+        slug: "fa-250-mp3",
+        name: "FA-250 — MP3 Voice Announcement System",
+        category: "Voice Announcing Systems",
+        description:
+          "An MP3-based announcer for higher-quality audio and easily customised announcement content.",
+        image: img("voice-announcing-systems"),
+        released: false,
+      },
+      {
+        slug: "close-door-announcer",
+        name: "Close Door Announcer",
+        category: "Voice Announcing Systems",
+        description:
+          "An audible alert that warns passengers as the doors are about to close.",
+        image: img("voice-announcing-systems"),
+        released: false,
+      },
+      {
+        slug: "elevator-gong",
+        name: "Elevator Gong",
+        category: "Voice Announcing Systems",
+        description:
+          "An arrival gong that chimes as the car reaches a landing, signalling arrival and direction.",
+        image: img("voice-announcing-systems"),
+        released: false,
+      },
     ],
   },
   {
-    slug: "moving-walkways",
-    name: "Moving Walkways",
-    category: "Mobility Systems",
-    tagline: "Covering distance, effortlessly.",
+    slug: "elevator-kit-accessories",
+    name: "Elevator KIT & Accessories",
+    category: "Cabin & Fixtures",
+    tagline: "Everything, from one source.",
     description:
-      "Horizontal and inclined moving walkways that carry people and trolleys across airports, transit hubs and large retail floors.",
+      "Complete elevator kits and accessories — the parts, fixtures and spares needed to build, upgrade or maintain a lift, supplied together.",
     longDescription:
-      "VERTIQ Glide™ autowalks move passengers smoothly across long horizontal spans and gentle inclines. Trolley friendly pallets, eco drive standby and modular truss construction make them ideal for airports, exhibition centres and big box retail.",
-    heroImage: HERO.global,
-    cardImage: PRODUCT_IMG.walkways,
-    gallery: [PRODUCT_IMG.walkways, HERO.global, MISC.aerial],
-    capacityRange: "Up to 9000 persons/h",
-    speedRange: "0.5–0.75 m/s",
-    highlights: ["Trolley friendly pallets", "Horizontal & inclined", "Eco drive standby", "Modular long spans"],
-    subcategories: [
-      { name: "Horizontal Autowalk", description: "Flat travelators for long concourses." },
-      { name: "Inclined Travelator", description: "Gentle inclines for multi level retail." },
+      "Philbrick supplies complete elevator kits and the accessories that go with them — the assortment of parts, fixtures and spares needed to build a new lift, modernise an old one or keep an existing installation running. Sourcing them together simplifies procurement and keeps a project moving.",
+    highlights: [
+      "Complete elevator kits",
+      "Fixtures, parts and spares",
+      "For new builds and modernisation",
+      "Single-source supply",
     ],
-    specs: [
-      { label: "Throughput", value: "Up to 9,000 persons/hour" },
-      { label: "Speed", value: "0.5 – 0.75 m/s" },
-      { label: "Incline", value: "0° – 12°" },
-      { label: "Pallet width", value: "1,000 / 1,200 / 1,400 mm" },
-      { label: "Standby", value: "Eco drive auto slow/stop" },
-      { label: "Use", value: "Airports, transit, retail" },
-    ],
-    features: [
-      { iconName: "FiNavigation", title: "Long span ready", description: "Modular trusses bridge the longest concourses without intermediate supports." },
-      { iconName: "FiTruck", title: "Trolley friendly", description: "Magnetised pallets keep luggage and shopping trolleys safely in place." },
-      { iconName: "FiZap", title: "Eco drive", description: "Idle detection slows the walkway when no one is travelling." },
-    ],
+    image: img("elevator-kit-accessories"),
+    released: true,
   },
   {
-    slug: "panoramic-elevators",
-    name: "Panoramic Elevators",
-    category: "Scenic",
-    tagline: "Turn the journey into the view.",
+    slug: "step-products",
+    name: "STEP Products",
+    category: "Control & Drives",
+    tagline: "Proven drives and controls.",
     description:
-      "Glass walled observation elevators that become an architectural feature in atriums, hotels and retail landmarks.",
+      "Elevator products from the STEP range — drives, controllers and integrated components for new installations and modernisation.",
     longDescription:
-      "VERTIQ Vista™ panoramic elevators frame the journey in glass. Round, square or wall climbing configurations rise through atriums and façades, pairing scenic transparency with the same gearless efficiency and Pulse™ intelligence as our passenger range.",
-    heroImage: HERO.about,
-    cardImage: PRODUCT_IMG.panoramic,
-    gallery: [PRODUCT_IMG.panoramic, MISC.lobby, HERO.about],
-    capacityRange: "630–1600 kg",
-    speedRange: "1.0–4.0 m/s",
-    highlights: ["Full height glass cabins", "Round, square & wall climbing", "Atrium & façade mounting", "Gearless & quiet"],
-    subcategories: [
-      { name: "Round / Capsule Glass", description: "Curved glass capsules for dramatic atriums." },
-      { name: "Square Panoramic", description: "Three side glass cabins for clean lines." },
-      { name: "Wall Climbing", description: "Façade mounted scenic lifts with a view." },
+      "Philbrick supplies elevator products from the STEP range, including drives, controllers and integrated control components. They give installers and modernisers a proven, widely-supported option that pairs cleanly with Philbrick's own panels, doors and fixtures.",
+    highlights: [
+      "STEP drives and controllers",
+      "Integrated control components",
+      "For new builds and modernisation",
+      "Pairs with Philbrick systems",
     ],
-    specs: [
-      { label: "Capacity", value: "630 – 1,600 kg" },
-      { label: "Speed", value: "1.0 – 4.0 m/s" },
-      { label: "Glazing", value: "Laminated safety glass" },
-      { label: "Shapes", value: "Round / square / panoramic" },
-      { label: "Drive", value: "Gearless MRL" },
-      { label: "Mounting", value: "Atrium or external façade" },
-    ],
-    features: [
-      { iconName: "FiEye", title: "A moving vantage", description: "Full height laminated glass turns every trip into a panorama of the space." },
-      { iconName: "FiFeather", title: "Architectural feature", description: "Round, square and wall climbing forms become the centrepiece of an atrium." },
-      { iconName: "FiZap", title: "Efficient & quiet", description: "Gearless drives keep scenic cabins smooth, silent and energy light." },
-    ],
-  },
-  {
-    slug: "high-speed-elevators",
-    name: "High Speed Elevators",
-    category: "Supertall",
-    tagline: "The express route to the sky.",
-    description:
-      "Ultra high speed and double deck elevators engineered for supertall towers and observation decks.",
-    longDescription:
-      "VERTIQ Apex™ high speed elevators reach speeds beyond 10 m/s with aerodynamic cars, active vibration control and pressure management for ear comfort. Double deck and shuttle configurations move the largest populations through the tallest buildings on earth.",
-    heroImage: HERO.projects,
-    cardImage: PRODUCT_IMG.highspeed,
-    gallery: [PRODUCT_IMG.highspeed, PROJECT_IMG.two, HERO.projects],
-    capacityRange: "1200–2500 kg",
-    speedRange: "6.0–12.0+ m/s",
-    highlights: ["Speeds beyond 10 m/s", "Double deck option", "Active vibration control", "Cabin pressure management"],
-    subcategories: [
-      { name: "Express Shuttle", description: "Non stop runs to sky lobbies." },
-      { name: "Double Deck", description: "Two cabins per shaft for peak capacity." },
-      { name: "Observation Express", description: "Rapid, smooth ascent to viewing decks." },
-    ],
-    specs: [
-      { label: "Capacity", value: "1,200 – 2,500 kg" },
-      { label: "Speed", value: "6.0 – 12.0+ m/s" },
-      { label: "Travel", value: "Up to 600 m single rise" },
-      { label: "Comfort", value: "Cabin pressure control" },
-      { label: "Suspension", value: "Carbon fibre belt" },
-      { label: "Control", value: "Active vibration damping" },
-    ],
-    features: [
-      { iconName: "FiTrendingUp", title: "Express ascent", description: "Aerodynamic cars carry passengers to sky lobbies in seconds, not minutes." },
-      { iconName: "FiActivity", title: "Comfort at speed", description: "Active dampers and pressure control keep the ride smooth and ears comfortable." },
-      { iconName: "FiLayers", title: "Double deck capacity", description: "Two stacked cabins serve adjacent floors, doubling shaft throughput." },
-    ],
-  },
-  {
-    slug: "mrl-elevators",
-    name: "Machine Room Less Elevators",
-    category: "Space Saving",
-    tagline: "All the engineering. None of the machine room.",
-    description:
-      "Compact MRL elevators that house the gearless drive inside the shaft, freeing rooftop space and simplifying design.",
-    longDescription:
-      "VERTIQ Slim™ MRL elevators place a compact permanent magnet machine inside the hoistway, removing the rooftop machine room entirely. The result is lower build cost, more usable roof area and a clean architectural envelope, with full gearless efficiency.",
-    heroImage: HERO.technology,
-    cardImage: PRODUCT_IMG.mrl,
-    gallery: [PRODUCT_IMG.mrl, TECH_IMG.drive, MISC.lobby],
-    capacityRange: "450–1600 kg",
-    speedRange: "1.0–2.5 m/s",
-    highlights: ["No machine room", "Frees rooftop space", "Lower build cost", "Gearless efficiency"],
-    subcategories: [
-      { name: "Compact MRL", description: "Tight footprint systems for low rise." },
-      { name: "Mid Rise MRL", description: "Up to 2.5 m/s for offices and residences." },
-      { name: "Eco MRL", description: "Regenerative drive and standby for greenest duty." },
-    ],
-    specs: [
-      { label: "Capacity", value: "450 – 1,600 kg" },
-      { label: "Speed", value: "1.0 – 2.5 m/s" },
-      { label: "Machine room", value: "None, in shaft drive" },
-      { label: "Travel", value: "Up to 75 m" },
-      { label: "Energy class", value: "VDI 4707 Class A" },
-      { label: "Drive", value: "Gearless PM, regenerative" },
-    ],
-    features: [
-      { iconName: "FiGrid", title: "Reclaim the roof", description: "No machine room means more usable space and a cleaner building envelope." },
-      { iconName: "FiZap", title: "Gearless & green", description: "Regenerative permanent magnet drives keep energy use to a minimum." },
-      { iconName: "FiSettings", title: "Simpler to build", description: "Fewer structural demands lower cost and speed up construction." },
-    ],
-  },
-  {
-    slug: "dumbwaiter-elevators",
-    name: "Dumbwaiter & Service Lifts",
-    category: "Service",
-    tagline: "Small lifts that do the heavy lifting.",
-    description:
-      "Compact service elevators and dumbwaiters for kitchens, libraries, hospitals and retail back of house.",
-    longDescription:
-      "VERTIQ Porter™ dumbwaiters and service lifts move food, documents, linen and supplies quietly between floors. Stainless interiors, floor level or counter height loading and compact drives make them ideal for restaurants, hotels, hospitals and homes.",
-    heroImage: HERO.services,
-    cardImage: PRODUCT_IMG.dumbwaiter,
-    gallery: [PRODUCT_IMG.dumbwaiter, MISC.lobby, MISC.factory],
-    capacityRange: "50–300 kg",
-    speedRange: "0.3–0.6 m/s",
-    highlights: ["Compact footprint", "Stainless hygienic interior", "Counter or floor loading", "Quiet operation"],
-    subcategories: [
-      { name: "Kitchen Dumbwaiter", description: "Counter height food transport for restaurants." },
-      { name: "Document / Service Lift", description: "Move files and supplies in offices and libraries." },
-      { name: "Floor Level Service", description: "Trolley loaded lifts for hospitals and hotels." },
-    ],
-    specs: [
-      { label: "Capacity", value: "50 – 300 kg" },
-      { label: "Speed", value: "0.3 – 0.6 m/s" },
-      { label: "Loading", value: "Floor or counter height" },
-      { label: "Interior", value: "Stainless steel" },
-      { label: "Stops", value: "Up to 8" },
-      { label: "Use", value: "Kitchens, offices, hospitals" },
-    ],
-    features: [
-      { iconName: "FiBox", title: "Compact & quiet", description: "Slips into tight risers and runs quietly behind the scenes." },
-      { iconName: "FiShield", title: "Hygienic", description: "Stainless interiors wipe clean for food and clinical environments." },
-      { iconName: "FiClock", title: "Saves steps", description: "Moves supplies between floors so your team doesn't have to." },
-    ],
-  },
-  {
-    slug: "capsule-elevators",
-    name: "Capsule Elevators",
-    category: "Scenic",
-    tagline: "A jewel of glass and light.",
-    description:
-      "Sculptural capsule elevators, indoor or wall mounted, that add a touch of theatre to homes, hotels and showrooms.",
-    longDescription:
-      "VERTIQ Lumen™ capsule elevators wrap a panoramic glass cabin in a slender frame of steel and light. Perfect for villas, boutique hotels and showrooms, they combine scenic glamour with compact, low impact installation.",
-    heroImage: HERO.about,
-    cardImage: PRODUCT_IMG.capsule,
-    gallery: [PRODUCT_IMG.capsule, MISC.spiral, HERO.about],
-    capacityRange: "250–1000 kg",
-    speedRange: "0.3–1.75 m/s",
-    highlights: ["Panoramic glass capsule", "Indoor or wall mounted", "Slender lit frame", "Low impact install"],
-    subcategories: [
-      { name: "Indoor Capsule", description: "Free standing glass capsule for atriums and villas." },
-      { name: "Outdoor Wall Mounted", description: "Façade fixed capsules with weather sealing." },
-      { name: "Pneumatic Capsule", description: "Vacuum driven capsule, no pit, no machine room." },
-    ],
-    specs: [
-      { label: "Capacity", value: "250 – 1,000 kg" },
-      { label: "Speed", value: "0.3 – 1.75 m/s" },
-      { label: "Glazing", value: "Curved laminated glass" },
-      { label: "Mounting", value: "Indoor or façade" },
-      { label: "Drive", value: "Gearless or pneumatic" },
-      { label: "Lighting", value: "Integrated LED frame" },
-    ],
-    features: [
-      { iconName: "FiEye", title: "Scenic by design", description: "A panoramic glass capsule turns the lift into a centrepiece." },
-      { iconName: "FiSun", title: "Lit to impress", description: "Integrated LED framing makes the cabin glow day and night." },
-      { iconName: "FiFeather", title: "Light footprint", description: "Compact, self supporting designs install with minimal building works." },
-    ],
-  },
-  {
-    slug: "components",
-    name: "Components & Controllers",
-    category: "Systems",
-    tagline: "The intelligence behind every rise.",
-    description:
-      "Drives, controllers, fixtures and safety gear. VERTIQ engineering available as modular components for OEMs and modernization.",
-    longDescription:
-      "Behind every VERTIQ elevator is a portfolio of in house components: permanent magnet machines, regenerative VFD drives, the VERTIQ Pulse™ controller, COP/LOP fixtures and certified safety gear. Available individually for modernization projects and OEM partners, each part carries the same engineering and certification as our complete systems.",
-    heroImage: HERO.technology,
-    cardImage: PRODUCT_IMG.components,
-    gallery: [PRODUCT_IMG.components, TECH_IMG.drive, TECH_IMG.iot],
-    highlights: ["PM gearless machines", "Regenerative VFD drives", "Pulse™ controllers", "Certified safety gear"],
-    subcategories: [
-      { name: "Gearless Machines", description: "PM synchronous machines, 320–2500 kg." },
-      { name: "Regenerative Drives", description: "IGBT VFD drives with energy recovery." },
-      { name: "Pulse™ Controllers", description: "Connected control with on board diagnostics." },
-      { name: "COP / LOP Fixtures", description: "Car and landing fixtures in bespoke finishes." },
-      { name: "Safety Gear", description: "Governors, buffers and safety circuits." },
-      { name: "Landing Doors", description: "Certified door operators and panels." },
-    ],
-    specs: [
-      { label: "Machines", value: "PM gearless, 320–2500 kg" },
-      { label: "Drives", value: "Regenerative VFD, IGBT" },
-      { label: "Controllers", value: "VERTIQ Pulse™ platform" },
-      { label: "Fixtures", value: "COP / LOP, custom finishes" },
-      { label: "Safety", value: "Overspeed governors, buffers" },
-      { label: "Certification", value: "EN 81-20/50, A17.1" },
-    ],
-    features: [
-      { iconName: "FiCpu", title: "Pulse™ controller", description: "An open, connected control platform with on board diagnostics and OTA updates." },
-      { iconName: "FiZap", title: "Regenerative drives", description: "IGBT VFD drives with clean power and energy recovery for any traction application." },
-      { iconName: "FiLayers", title: "Modular fixtures", description: "COP and LOP fixtures in bespoke finishes, ready for new builds or modernization." },
-    ],
+    image: img("step-products"),
+    released: true,
   },
 ];
 
-export const getProduct = (slug: string) =>
-  PRODUCTS.find((p) => p.slug === slug);
-
-/** Grouped for the mega menu / products index. */
+/* --------------------------------------------------------------------------
+   Logical groups (used by the products index + mega menu left rail).
+   Every category slug appears in exactly one group.
+   -------------------------------------------------------------------------- */
 export const PRODUCT_GROUPS: { title: string; slugs: string[] }[] = [
   {
-    title: "Elevators",
+    title: "Control & Drives",
     slugs: [
-      "passenger-elevators",
-      "home-elevators",
-      "high-speed-elevators",
-      "mrl-elevators",
-      "panoramic-elevators",
-      "capsule-elevators",
+      "elevator-control-panel",
+      "integrated-control-panel",
+      "lift-master",
+      "step-products",
     ],
   },
   {
-    title: "Specialised & Mobility",
+    title: "Safety & Intelligence",
+    slugs: ["ard", "elevator-iot"],
+  },
+  {
+    title: "Doors & Mechanism",
+    slugs: ["synergy-auto-door", "elevator-doors"],
+  },
+  {
+    title: "Cabin & Fixtures",
     slugs: [
-      "hospital-elevators",
-      "freight-elevators",
-      "dumbwaiter-elevators",
-      "escalators",
-      "moving-walkways",
-      "components",
+      "elevator-cabin",
+      "cop-lop",
+      "touch-cop-lop",
+      "elevator-kit-accessories",
     ],
   },
+  {
+    title: "Signalling",
+    slugs: ["elevator-display", "voice-announcing-systems"],
+  },
 ];
+
+/* --------------------------------------------------------------------------
+   Lookups + route helpers (used by nav, footer, pages, release config,
+   generateStaticParams and sitemap).
+   -------------------------------------------------------------------------- */
+export const categoryHref = (categorySlug: string) => `/products/${categorySlug}`;
+export const productHref = (categorySlug: string, productSlug: string) =>
+  `/products/${categorySlug}/${productSlug}`;
+
+export const getCategory = (categorySlug: string) =>
+  PRODUCT_TREE.find((c) => c.slug === categorySlug);
+
+export const getProduct = (categorySlug: string, productSlug: string) =>
+  getCategory(categorySlug)?.children?.find((p) => p.slug === productSlug);
+
+/** Every product route (categories + nested products) with its release flag. */
+export interface ProductRoute {
+  path: string;
+  released: boolean;
+}
+export function productRoutes(): ProductRoute[] {
+  const routes: ProductRoute[] = [];
+  for (const category of PRODUCT_TREE) {
+    routes.push({ path: categoryHref(category.slug), released: category.released });
+    for (const child of category.children ?? []) {
+      routes.push({
+        path: productHref(category.slug, child.slug),
+        released: child.released,
+      });
+    }
+  }
+  return routes;
+}
+
+/** Params for app/products/[category]. */
+export const categoryParams = () =>
+  PRODUCT_TREE.map((c) => ({ category: c.slug }));
+
+/** Params for app/products/[category]/[product]. */
+export const productParams = () =>
+  PRODUCT_TREE.flatMap((c) =>
+    (c.children ?? []).map((p) => ({ category: c.slug, product: p.slug }))
+  );

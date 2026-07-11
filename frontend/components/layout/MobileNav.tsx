@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FiX, FiChevronDown } from "react-icons/fi";
 import { MAIN_NAV } from "@/constants/navigation";
 import { SITE } from "@/constants/site";
+import type { MegaCategory } from "@/types";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -18,8 +19,16 @@ interface MobileNavProps {
   onClose: () => void;
 }
 
+const accordion = {
+  initial: { height: 0, opacity: 0 },
+  animate: { height: "auto" as const, opacity: 1 },
+  exit: { height: 0, opacity: 0 },
+  transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const },
+};
+
 export function MobileNav({ open, onClose }: MobileNavProps) {
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [openTop, setOpenTop] = useState<string | null>(null);
+  const [openCat, setOpenCat] = useState<string | null>(null);
   useLockBody(open);
 
   useEffect(() => {
@@ -32,6 +41,49 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  /* Nested category row: either a sub-accordion (has children) or a link. */
+  const CategoryRow = ({ cat }: { cat: MegaCategory }) => {
+    if (cat.children.length === 0) {
+      return (
+        <Link href={cat.href} className={styles.subLink} onClick={onClose}>
+          {cat.label}
+        </Link>
+      );
+    }
+    const isOpen = openCat === cat.slug;
+    return (
+      <div className={styles.subGroup}>
+        <button
+          className={styles.subGroupBtn}
+          onClick={() => setOpenCat(isOpen ? null : cat.slug)}
+          aria-expanded={isOpen}
+        >
+          {cat.label}
+          <FiChevronDown className={cn(styles.chev, isOpen && styles.chevOpen)} />
+        </button>
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div className={styles.subSub} {...accordion}>
+              <Link href={cat.href} className={styles.subSubLink} onClick={onClose}>
+                All {cat.label}
+              </Link>
+              {cat.children.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={styles.subSubLink}
+                  onClick={onClose}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
 
   return (
     <AnimatePresence>
@@ -66,7 +118,8 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 
             <nav className={styles.body} aria-label="Mobile">
               {MAIN_NAV.map((item) => {
-                if (!item.mega) {
+                /* Simple link */
+                if (!item.mega && !item.dropdown) {
                   return (
                     <Link
                       key={item.label}
@@ -78,14 +131,13 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
                     </Link>
                   );
                 }
-                const isOpen = expanded === item.label;
+
+                const isOpen = openTop === item.label;
                 return (
                   <div key={item.label} className={styles.group}>
                     <button
                       className={styles.groupBtn}
-                      onClick={() =>
-                        setExpanded(isOpen ? null : item.label)
-                      }
+                      onClick={() => setOpenTop(isOpen ? null : item.label)}
                       aria-expanded={isOpen}
                     >
                       {item.label}
@@ -95,25 +147,22 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
                     </button>
                     <AnimatePresence initial={false}>
                       {isOpen && (
-                        <motion.div
-                          className={styles.sub}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                        >
+                        <motion.div className={styles.sub} {...accordion}>
                           <div className={styles.subInner}>
-                            {item.mega.columns.flatMap((c) => c.links).map(
-                              (link) => (
-                                <Link
-                                  key={link.href}
-                                  href={link.href}
-                                  className={styles.subLink}
-                                  onClick={onClose}
-                                >
-                                  {link.label}
-                                </Link>
-                              )
+                            {/* Flat dropdown (About) */}
+                            {item.dropdown?.map((link) => (
+                              <Link
+                                key={link.href}
+                                href={link.href}
+                                className={styles.subLink}
+                                onClick={onClose}
+                              >
+                                {link.label}
+                              </Link>
+                            ))}
+                            {/* Nested product categories */}
+                            {item.mega?.groups.flatMap((g) => g.categories).map(
+                              (cat) => <CategoryRow key={cat.slug} cat={cat} />
                             )}
                           </div>
                         </motion.div>

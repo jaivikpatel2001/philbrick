@@ -1,0 +1,167 @@
+/* =============================================================================
+   COMING SOON — full-page release-gate screen
+   Premium, themed via tokens, responsive, reduced-motion aware.
+   ========================================================================== */
+.wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding-block: calc(var(--nav-h) + var(--space-6)) var(--space-7);
+  overflow: clip;
+  background: var(--bg-primary);
+  isolation: isolate;
+}
+
+/* Drifting azure/red aurora blobs */
+.aurora {
+  position: absolute;
+  inset: -20% -10%;
+  z-index: -2;
+  background:
+    radial-gradient(38% 44% at 22% 28%, rgba(47, 172, 236, 0.22), transparent 70%),
+    radial-gradient(34% 40% at 82% 30%, rgba(225, 31, 38, 0.12), transparent 70%),
+    radial-gradient(46% 50% at 60% 88%, rgba(16, 155, 221, 0.16), transparent 72%);
+  filter: blur(8px);
+  animation: cs-drift 18s var(--ease-in-out) infinite alternate;
+}
+
+/* Faint blueprint grid, fading out toward the edges */
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--hairline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hairline) 1px, transparent 1px);
+  background-size: 54px 54px;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 78%);
+  opacity: 0.7;
+}
+
+.panel {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  margin-bottom: var(--space-4);
+}
+
+/* ----- Elevator floor-indicator motif --------------------------------- */
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.1rem;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  background: var(--surface-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--glow-accent);
+}
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-bottom: 0.7rem solid var(--accent);
+  animation: cs-blink 1.6s var(--ease-in-out) infinite;
+}
+.reelMask {
+  position: relative;
+  height: 2.4rem;
+  width: 1.7rem;
+  overflow: hidden;
+}
+.reel {
+  display: flex;
+  flex-direction: column;
+  animation: cs-travel 7s var(--ease-in-out) infinite alternate;
+}
+.digit {
+  height: 2.4rem;
+  line-height: 2.4rem;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: var(--fw-semibold);
+  color: var(--accent);
+  text-align: center;
+  font-feature-settings: "tnum";
+}
+
+/* ----- Copy ----------------------------------------------------------- */
+.eyebrow {
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-2);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: var(--space-3);
+  text-wrap: balance;
+}
+.text {
+  max-width: 46ch;
+  margin: 0 auto var(--space-5);
+  color: var(--text-secondary);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-snug);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+/* ----- Keyframes ------------------------------------------------------ */
+@keyframes cs-travel {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-21.6rem); /* 9 rows × 2.4rem — rises then descends */
+  }
+}
+@keyframes cs-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes cs-drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.08);
+  }
+}
+
+@media (max-width: 640px) {
+  .text {
+    font-size: var(--fs-body);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora,
+  .reel,
+  .arrow {
+    animation: none;
+  }
+  .reel {
+    transform: translateY(-2.4rem); /* rest on floor "1" */
+  }
+}

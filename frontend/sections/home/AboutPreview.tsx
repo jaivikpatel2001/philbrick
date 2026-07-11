@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Counter } from "@/components/ui/Counter";
-import { HERO } from "@/data/images";
+import { MISC } from "@/data/images";
 import styles from "./AboutPreview.module.css";
 
 export function AboutPreview() {
@@ -12,38 +12,39 @@ export function AboutPreview() {
           01 — Who we are
         </span>
         <h2 className={styles.statement} data-reveal="up">
-          Fifty-seven years of moving
+          Engineering elevator
           <br />
-          the world <em>upward.</em>
+          <em>solutions</em> since 1992.
         </h2>
 
         <div className={styles.grid}>
           <div className={styles.content}>
             <p className={styles.text} data-reveal="up">
-              VERTIQ began with one conviction: that the elevator, the most
-              used vehicle on earth, deserved to be engineered like the most
-              advanced one. Today our systems carry millions of people every
-              day, from family homes to the country&apos;s tallest towers.
+              Philbrick Technologies began in Ahmedabad with a focus on the
+              systems that make an elevator work — control, safety, doors and
+              signalling. Three decades on, we manufacture a complete range of
+              elevator components in-house and supply them across India and
+              export markets.
             </p>
 
             <div className={styles.stats} data-reveal="up">
               <div className={styles.stat}>
                 <span className={styles.statValue}>
-                  <Counter value={1.4} decimals={1} suffix="M" />
+                  <Counter value={30} suffix="+" />
                 </span>
-                <span className={styles.statLabel}>Units in service</span>
+                <span className={styles.statLabel}>Years of engineering</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue}>
-                  <Counter value={40} suffix="+" />
+                  <Counter value={14} />
                 </span>
-                <span className={styles.statLabel}>Countries</span>
+                <span className={styles.statLabel}>Product categories</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue}>
-                  <Counter value={1200} suffix="+" />
+                  <Counter value={5} />
                 </span>
-                <span className={styles.statLabel}>Engineers</span>
+                <span className={styles.statLabel}>In-house units</span>
               </div>
             </div>
 
@@ -56,14 +57,14 @@ export function AboutPreview() {
 
           <figure className={styles.media} data-reveal="right">
             <Image
-              src={HERO.about}
-              alt="VERTIQ engineering, a luminous building atrium"
+              src={MISC.factory}
+              alt="Philbrick engineering facility"
               fill
               sizes="(max-width: 900px) 100vw, 44vw"
               className={styles.img}
             />
             <figcaption className={styles.caption}>
-              VERTIQ works · engineering since 1968
+              Philbrick · engineering since 1992
             </figcaption>
           </figure>
         </div>

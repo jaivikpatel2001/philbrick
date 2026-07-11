@@ -1,57 +1,46 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/utils/cn";
 import styles from "./Logo.module.css";
 
 interface LogoProps {
   className?: string;
+  /** Show only the emblem mark (no wordmark) — for tight spaces. */
   compact?: boolean;
+  /** Prioritise loading (use in the navbar). */
+  priority?: boolean;
 }
 
-/** VERTIQ wordmark with an elevator-shaft mark. Inherits currentColor. */
-export function Logo({ className, compact = false }: LogoProps) {
+/**
+ * Philbrick brand lockup. Uses the official logo (transparent PNG) so the
+ * blue wordmark + red emblem read correctly on both light and dark themes.
+ * `compact` renders just the emblem mark.
+ */
+export function Logo({ className, compact = false, priority = false }: LogoProps) {
   return (
     <Link
       href="/"
       className={cn(styles.logo, className)}
-      aria-label="VERTIQ, home"
+      aria-label="Philbrick, home"
     >
-      <svg
-        className={styles.mark}
-        viewBox="0 0 32 32"
-        fill="none"
-        aria-hidden="true"
-      >
-        <rect
-          x="1"
-          y="1"
-          width="30"
-          height="30"
-          rx="9"
-          className={styles.markFrame}
+      {compact ? (
+        <Image
+          src="/brand/philbrick-mark.png"
+          alt="Philbrick"
+          width={104}
+          height={96}
+          className={styles.mark}
+          priority={priority}
         />
-        <rect x="9" y="7" width="3" height="18" rx="1.5" className={styles.shaft} />
-        <rect x="14.5" y="7" width="3" height="18" rx="1.5" className={styles.shaft} />
-        <rect
-          x="20"
-          y="7"
-          width="3"
-          height="18"
-          rx="1.5"
-          className={styles.car}
+      ) : (
+        <Image
+          src="/brand/philbrick-logo.png"
+          alt="Philbrick — Providing Elevator Solutions"
+          width={424}
+          height={96}
+          className={styles.full}
+          priority={priority}
         />
-        <rect
-          x="20"
-          y="11"
-          width="3"
-          height="6"
-          rx="1.5"
-          className={styles.carLit}
-        />
-      </svg>
-      {!compact && (
-        <span className={styles.word}>
-          VERTI<span className={styles.q}>Q</span>
-        </span>
       )}
     </Link>
   );

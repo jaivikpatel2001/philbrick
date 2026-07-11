@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { FiPhone, FiMail, FiMapPin, FiClock, FiAlertCircle } from "react-icons/fi";
+import { FiPhone, FiMail, FiMapPin, FiClock, FiUser } from "react-icons/fi";
 import { PageHero } from "@/sections/shared/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { FAQSection } from "@/sections/shared/FAQSection";
+import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { contactPageSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { CONTACT_FAQS } from "@/data/faqs";
@@ -13,17 +14,12 @@ import styles from "./contact.module.css";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Talk to a VERTIQ specialist about new installations, maintenance, modernization or partnership. 24/7 service worldwide.",
+    "Talk to Philbrick Technologies about elevator control panels, ARD, door operators, cabins, displays and components. Based in Ahmedabad, Gujarat.",
   alternates: { canonical: "/contact" },
 };
 
 const METHODS = [
-  {
-    icon: FiPhone,
-    label: "Call sales",
-    value: SITE.phone,
-    href: SITE.phoneHref,
-  },
+  { icon: FiPhone, label: "Call us", value: SITE.phone, href: SITE.phoneHref },
   {
     icon: FiMail,
     label: "Email us",
@@ -32,15 +28,16 @@ const METHODS = [
   },
   {
     icon: FiMapPin,
-    label: "Visit HQ",
+    label: "Visit us",
     value: `${SITE.address.line1}, ${SITE.address.line2}`,
+    href: SITE.mapUrl,
   },
   { icon: FiClock, label: "Hours", value: SITE.hours },
 ];
 
 export default function ContactPage() {
   return (
-    <>
+    <ReleaseGate route="/contact" label="Contact">
       <JsonLd data={contactPageSchema()} />
       <JsonLd
         data={breadcrumbSchema([
@@ -49,12 +46,13 @@ export default function ContactPage() {
         ])}
       />
       <JsonLd data={faqSchema(CONTACT_FAQS)} />
+
       <PageHero
         eyebrow="Contact"
-        title="Let's build upward, together"
-        description="Tell us about your building and a VERTIQ specialist will respond within one business day."
+        title="Let's talk elevators"
+        description="Tell us about your requirement and the Philbrick team will get back to you. We're based in Ahmedabad and supply across India and export markets."
         image={HERO.contact}
-        imageAlt="A building façade at night"
+        imageAlt="Philbrick facility"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Contact" }]}
       />
 
@@ -76,7 +74,14 @@ export default function ContactPage() {
                   </>
                 );
                 return m.href ? (
-                  <a key={m.label} href={m.href} className={styles.method}>
+                  <a
+                    key={m.label}
+                    href={m.href}
+                    className={styles.method}
+                    {...(m.href.startsWith("http")
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
                     {Inner}
                   </a>
                 ) : (
@@ -87,26 +92,30 @@ export default function ContactPage() {
               })}
             </div>
 
-            <div className={styles.emergency}>
-              <FiAlertCircle />
-              <div>
-                <p className={styles.emTitle}>24/7 emergency service</p>
-                <a href={`tel:${SITE.emergency.replace(/\s/g, "")}`}>
-                  {SITE.emergency}
-                </a>
-              </div>
+            <div className={styles.methods}>
+              {SITE.contacts.map((c) => (
+                <div key={c.name} className={styles.method}>
+                  <span className={styles.methodIcon}>
+                    <FiUser />
+                  </span>
+                  <span>
+                    <span className={styles.methodLabel}>{c.name}</span>
+                    <span className={styles.methodValue}>{c.role}</span>
+                  </span>
+                </div>
+              ))}
             </div>
 
             <p className={styles.note}>
-              Prefer to talk to a local team? VERTIQ operates in 40+ countries
-              with over 320 service branches. Your enquiry is routed to the
-              nearest office.
+              Philbrick Technologies India Pvt. Ltd. supplies elevator components
+              across India and exports to markets including China and Taiwan.
+              GST&nbsp;{SITE.gst} · CIN&nbsp;{SITE.cin}
             </p>
           </div>
 
           {/* Right: form */}
           <div className={styles.formCard}>
-            <h2 className={styles.formTitle}>Request a consultation</h2>
+            <h2 className={styles.formTitle}>Send us an enquiry</h2>
             <p className={styles.formSub}>
               Fields marked <span className={styles.req}>*</span> are required.
             </p>
@@ -119,9 +128,9 @@ export default function ContactPage() {
       <FAQSection
         eyebrow="Before you write"
         title="How working with us starts"
-        description="What to expect from first enquiry to survey, and what VERTIQ covers after handover."
+        description="What to expect from first enquiry onward, and how Philbrick supports installers and building owners."
         faqs={CONTACT_FAQS}
       />
-    </>
+    </ReleaseGate>
   );
 }

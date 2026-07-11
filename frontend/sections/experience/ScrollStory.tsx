@@ -23,29 +23,29 @@ const PARTS = [
   { n: "02", name: "Suspension Belts", tip: "Carbon fibre belts, seven times lighter than steel.", side: "left", top: "27%", left: "0%", mobileHide: true },
   { n: "03", name: "Guide Rails", tip: "Cold drawn steel rails machined to micron tolerances.", side: "left", top: "45%", left: "1%" },
   { n: "04", name: "Counterweight", tip: "Balances the car to cut motor load and energy use.", side: "left", top: "62%", left: "0%", mobileHide: true },
-  { n: "05", name: "Control Systems", tip: "Pulse™ controller with destination dispatch and OTA updates.", side: "right", top: "10%", left: "64%" },
+  { n: "05", name: "Control Systems", tip: "Control panel managing motion, safety, doors and signalling.", side: "right", top: "10%", left: "64%" },
   { n: "06", name: "Cabin", tip: "Aerospace grade car frame with active vibration damping.", side: "right", top: "28%", left: "70%", mobileHide: true },
   { n: "07", name: "Glass Doors", tip: "Silent belt operators and anti crush infrared curtains.", side: "right", top: "45%", left: "70%" },
   { n: "08", name: "Safety Brakes", tip: "Progressive safety gear arrests the car in milliseconds.", side: "right", top: "58%", left: "64%", mobileHide: true },
-  { n: "09", name: "Smart Sensors", tip: "200+ sensors stream live health data to the cloud.", side: "right", top: "72%", left: "66%" },
+  { n: "09", name: "Elevator IoT", tip: "Streams live status and fault data to the cloud for remote monitoring.", side: "right", top: "72%", left: "66%" },
 ];
 
 /* ---- Intelligence tags (scene 4) ---------------------------------------- */
 const TECH = [
-  { icon: FiCpu, label: "AI Monitoring", top: "16%", left: "2%" },
-  { icon: FiWifi, label: "IoT Sensors", top: "26%", left: "66%" },
-  { icon: FiActivity, label: "Predictive Maintenance", top: "48%", left: "0%", mobileHide: true },
-  { icon: FiNavigation, label: "Destination Control", top: "60%", left: "68%", mobileHide: true },
-  { icon: FiZap, label: "Energy Optimization", top: "74%", left: "6%" },
+  { icon: FiCpu, label: "Live Monitoring", top: "16%", left: "2%" },
+  { icon: FiWifi, label: "IoT Connectivity", top: "26%", left: "66%" },
+  { icon: FiActivity, label: "Fault Alerts", top: "48%", left: "0%", mobileHide: true },
+  { icon: FiNavigation, label: "Usage Insight", top: "60%", left: "68%", mobileHide: true },
+  { icon: FiZap, label: "Energy Efficiency", top: "74%", left: "6%" },
   { icon: FiMonitor, label: "Remote Diagnostics", top: "82%", left: "60%" },
 ];
 
 /* ---- Project tiles (scene 5) -------------------------------------------- */
 const TILES = [
-  { img: PROJECT_IMG.one, name: "Aurora Tower" },
-  { img: PROJECT_IMG.two, name: "Meridian Center" },
-  { img: PROJECT_IMG.three, name: "The Lumen Hotel" },
-  { img: PROJECT_IMG.four, name: "St. Catherine Medical" },
+  { img: PROJECT_IMG.seven, name: "Residential" },
+  { img: PROJECT_IMG.five, name: "Commercial" },
+  { img: PROJECT_IMG.four, name: "Healthcare" },
+  { img: PROJECT_IMG.three, name: "Hospitality" },
 ];
 
 const SCENES = ["Arrival", "Future", "Architecture", "Anatomy", "Intelligence", "Proof", "Reveal"];
@@ -233,7 +233,7 @@ export function ScrollStory() {
       ref={root}
       className={styles.story}
       data-reduced={reduced}
-      aria-label="The VERTIQ vertical-mobility experience"
+      aria-label="The Philbrick elevator experience"
     >
       <div className={styles.stage}>
         {/* Atmosphere */}
@@ -265,8 +265,8 @@ export function ScrollStory() {
                     Engineered for <em>movement.</em>
                   </h1>
                   <p className={styles.sceneSub}>
-                    Night falls on the VERTIQ tower. Step through the glass,
-                    your elevator is already waiting.
+                    Night falls on a Philbrick-equipped tower. Step through the
+                    glass, your elevator is already waiting.
                   </p>
                 </div>
               </div>
@@ -330,13 +330,13 @@ export function ScrollStory() {
 
               <div className={styles.scene} data-scene>
                 <div className={styles.sceneInner}>
-                  <span className={styles.eyebrow}>06 Proof</span>
+                  <span className={styles.eyebrow}>06 Applications</span>
                   <h2 className={styles.sceneTitle}>
-                    Trusted by <em>landmark developments.</em>
+                    Built into <em>every kind of building.</em>
                   </h2>
                   <p className={styles.sceneSub}>
-                    From supertall towers to hospitals and hotels, VERTIQ moves
-                    the buildings that define skylines.
+                    From homes and offices to hospitals and industrial sites,
+                    Philbrick components go into elevators everywhere.
                   </p>
                   <div className={styles.projRow}>
                     {TILES.map((t) => (

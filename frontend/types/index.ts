@@ -1,5 +1,5 @@
 /* =============================================================================
-   VERTIQ — DOMAIN TYPES
+   PHILBRICK — DOMAIN TYPES
    Shared TypeScript models for the entire application.
    ========================================================================== */
 import type { IconType } from "react-icons";
@@ -12,11 +12,6 @@ export interface NavLink {
   description?: string;
 }
 
-export interface MegaMenuColumn {
-  title: string;
-  links: NavLink[];
-}
-
 export interface MegaMenuFeature {
   eyebrow: string;
   title: string;
@@ -25,11 +20,35 @@ export interface MegaMenuFeature {
   image: string;
 }
 
+/** A product category shown in the mega menu (left rail → right detail pane). */
+export interface MegaCategory {
+  slug: string;
+  label: string;
+  href: string;
+  description: string;
+  image: string;
+  /** Sub-products (may be empty for standalone categories). */
+  children: NavLink[];
+}
+
+/** A titled group of categories in the mega-menu left rail. */
+export interface MegaGroup {
+  title: string;
+  categories: MegaCategory[];
+}
+
+/**
+ * A top-level nav entry. Three shapes:
+ *   • simple   — just label + href
+ *   • dropdown — a flat list (e.g. About)
+ *   • mega     — the two-pane Products mega menu
+ */
 export interface NavItem {
   label: string;
   href: string;
+  dropdown?: NavLink[];
   mega?: {
-    columns: MegaMenuColumn[];
+    groups: MegaGroup[];
     feature?: MegaMenuFeature;
   };
 }
@@ -77,6 +96,27 @@ export interface Product {
   capacityRange?: string;
   speedRange?: string;
   accent?: string;
+}
+
+/* -----------------------------------------------------------------------------
+   PRODUCT CATALOGUE TREE (Philbrick)
+   Two-level hierarchy: category → product. Descriptions are honest/qualitative;
+   `specs` is optional and only ever populated with verified values.
+   `released` is the production page-release flag (see config/pageReleases.ts).
+   -------------------------------------------------------------------------- */
+export interface ProductNode {
+  slug: string;
+  name: string;
+  /** Group label (top-level) or parent category name (nested), for display + schema. */
+  category: string;
+  tagline?: string;
+  description: string;
+  longDescription?: string;
+  highlights?: string[];
+  image: string;
+  specs?: ProductSpec[];
+  released: boolean;
+  children?: ProductNode[];
 }
 
 export interface Service {
@@ -152,7 +192,8 @@ export interface TeamMember {
   name: string;
   role: string;
   bio?: string;
-  image: string;
+  /** Optional — TeamCard renders an initials monogram when omitted. */
+  image?: string;
   linkedin?: string;
 }
 

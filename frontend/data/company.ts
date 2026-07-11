@@ -1,141 +1,145 @@
 import type { TimelineItem, Value, TeamMember, Feature } from "@/types";
-import { PEOPLE } from "./images";
+
+/* =============================================================================
+   PHILBRICK — COMPANY CONTENT
+   Real, publicly-verifiable content only. Mission/Vision are brand-voice
+   statements (not factual claims). No fabricated stats, awards or people.
+   ========================================================================== */
 
 export const MISSION =
-  "To move people through the buildings that shape India's cities, safely, efficiently and beautifully, while leaving the lightest possible footprint.";
+  "To engineer dependable elevator control, safety and signalling systems — built in-house to a consistent standard — so that every ride is safe, smooth and reliable.";
 
 export const VISION =
-  "A world where vertical mobility is invisible: always there, never noticed, endlessly intelligent.";
+  "To be a trusted partner to elevator makers and modernisers in India and beyond, known for quality components, honest engineering and long-term support.";
 
 export const ABOUT_STORY = [
-  "VERTIQ began in 1968 in a single Pune workshop with one conviction: that the elevator, the most used vehicle on earth, deserved to be engineered like the most advanced one.",
-  "Over five decades we grew from a regional manufacturer into one of India's leading vertical mobility companies, never losing the engineering obsession we started with. Today our systems carry millions of people every day, from family homes in tier 2 towns to the country's tallest towers.",
-  "What sets VERTIQ apart isn't only the hardware. It's the intelligence we wrap around it: the Pulse™ platform that turns every elevator into a connected, self-aware machine, and the people who keep 1.4 million of them running across India and 18 export markets.",
+  "Philbrick Technologies began in 1992 in Ahmedabad, Gujarat, with a focus on the systems that make an elevator work: control panels, safety devices, doors and signalling.",
+  "Guided by founder and mentor Mr. Vasant Patel and led today by Mr. Saransh Patel, the company has grown into a manufacturer, exporter and supplier of a broad range of elevator components — from control and integrated panels to the Automatic Rescue Device, door operators, cabins, displays and passenger fixtures.",
+  "Everything is engineered and built under one roof, across dedicated units for procurement, design, quality control, warehousing and packaging. That in-house control is what lets Philbrick keep quality consistent, support both new installations and modernisation, and supply customers across India and export markets including China and Taiwan.",
 ];
 
 export const VALUES: Value[] = [
   {
     iconName: "FiShield",
-    title: "Safety is sacred",
+    title: "Safety first",
     description:
-      "Every decision starts with the people who ride and service our equipment. We design for zero harm and accept nothing less.",
+      "Elevators carry people. Products like the Automatic Rescue Device exist because passenger safety is the first requirement, never an afterthought.",
   },
   {
     iconName: "FiCpu",
-    title: "Engineer relentlessly",
+    title: "Engineer in-house",
     description:
-      "We treat the elevator as a frontier, not a finished product. Better, quieter, greener, always.",
-  },
-  {
-    iconName: "FiHeart",
-    title: "Serve for the long term",
-    description:
-      "An elevator lasts decades. So do our relationships. We're measured by uptime over years, not sales in a quarter.",
-  },
-  {
-    iconName: "FiFeather",
-    title: "Tread lightly",
-    description:
-      "The most responsible building moves its people on the least energy. Sustainability is an engineering target, not a slogan.",
-  },
-  {
-    iconName: "FiUsers",
-    title: "One India team",
-    description:
-      "Twenty-eight states, one standard. Local hands, shared engineering, collective pride in the craft.",
-  },
-  {
-    iconName: "FiEye",
-    title: "Earn trust daily",
-    description:
-      "Transparency in performance, honesty in setbacks, clarity in cost. Trust is the contract behind the contract.",
-  },
-];
-
-/* Manufacturing & engineering infrastructure — About page.
-   Covers facility, machinery, in-house component production, QC/testing, R&D,
-   workforce, safety/compliance and logistics for an elevator manufacturer. */
-export const INFRASTRUCTURE: Feature[] = [
-  {
-    iconName: "FiGrid",
-    title: "Modern manufacturing plants",
-    description:
-      "Multi plant production of complete elevator and escalator systems, from cabin fabrication to final assembly, on precision lines built for consistent quality at scale.",
-  },
-  {
-    iconName: "FiTool",
-    title: "Advanced fabrication & assembly",
-    description:
-      "In house sheet metal fabrication, CNC machining, powder coating and cabin assembly give us end to end control of fit, finish and lead time.",
-  },
-  {
-    iconName: "FiCpu",
-    title: "In-house component production",
-    description:
-      "Gearless machines, regenerative drives, Pulse™ controllers and COP/LOP fixtures are engineered and built under our own roof, not bought in.",
+      "We design and build our control, door and signalling systems ourselves — so we understand them completely and can stand behind them.",
   },
   {
     iconName: "FiCheckCircle",
-    title: "Quality control & test towers",
+    title: "Consistent quality",
     description:
-      "Dedicated test towers and QA labs load, endurance and ride test every machine, drive and safety component against IS 14665 and EN 81-20/50 before dispatch.",
+      "Dedicated procurement, design and quality-control units keep fit, finish and function consistent from one batch to the next.",
   },
   {
-    iconName: "FiActivity",
-    title: "Engineering & R&D",
+    iconName: "FiUsers",
+    title: "Support the customer",
     description:
-      "R&D centres run design, simulation and prototyping, advancing drive efficiency, ride quality and the Pulse™ platform with a skilled technical workforce.",
+      "From specification to after-sales, our team supports installers and building owners for the long life of the equipment.",
+  },
+  {
+    iconName: "FiLayers",
+    title: "A complete range",
+    description:
+      "Panels, drives, doors, cabins, fixtures and displays from a single source make it simpler to build, upgrade and maintain a lift.",
+  },
+  {
+    iconName: "FiGlobe",
+    title: "Reach beyond India",
+    description:
+      "Alongside customers across India, we supply export markets including China and Taiwan — held to the same standard everywhere.",
+  },
+];
+
+/* Manufacturing & engineering infrastructure — Infrastructure page + About.
+   Reflects Philbrick's real in-house units (procurement, design, QC, warehousing,
+   packaging) and modern machinery. No invented plant counts or capacities. */
+export const INFRASTRUCTURE: Feature[] = [
+  {
+    iconName: "FiTool",
+    title: "In-house manufacturing",
+    description:
+      "Modern machinery and assembly lines produce control panels, doors, cabins and fixtures in-house, giving us end-to-end control of quality and lead time.",
+  },
+  {
+    iconName: "FiCpu",
+    title: "Design & R&D",
+    description:
+      "A dedicated design and R&D function develops and refines our control, door-operator, safety and display products for real-world elevator conditions.",
+  },
+  {
+    iconName: "FiCheckCircle",
+    title: "Quality control",
+    description:
+      "A dedicated quality-control unit checks components before dispatch so that what leaves the factory meets a consistent standard.",
+  },
+  {
+    iconName: "FiPackage",
+    title: "Procurement",
+    description:
+      "A structured procurement unit sources materials and parts reliably, keeping production supplied and consistent.",
+  },
+  {
+    iconName: "FiBox",
+    title: "Warehousing & packaging",
+    description:
+      "In-house warehousing and packaging units protect finished goods and keep dispatch organised for domestic and export orders.",
   },
   {
     iconName: "FiTruck",
-    title: "Warehouse & logistics",
+    title: "Domestic & export supply",
     description:
-      "Regional spares warehousing and a pan-India distribution and service network keep installation, modernization and maintenance moving.",
+      "From our Ahmedabad facility we supply customers across India and export markets including China and Taiwan.",
   },
 ];
 
+/* Factual milestones only. Undated events are described without inventing a year. */
 export const TIMELINE: TimelineItem[] = [
-  { year: "1968", title: "The first workshop", description: "VERTIQ is founded in Pune with a handful of engineers and one geared traction elevator.", milestone: true },
-
-  { year: "1981", title: "Going gearless", description: "We pioneer one of India's earliest permanent magnet gearless drives." },
-  { year: "1994", title: "Across the metros", description: "Operations expand to Mumbai, Delhi, Bengaluru, Chennai and Hyderabad." },
-  { year: "2003", title: "Machine room less", description: "The MRL platform launches, freeing architects from the rooftop machine room." },
-  { year: "2012", title: "Regeneration", description: "Regenerative drives become standard, cutting fleet energy use dramatically.", milestone: true },
-
-  { year: "2016", title: "Made in India", description: "A new Pune mega factory scales in house manufacturing of machines, drives and fixtures." },
-  { year: "2018", title: "Pulse™ goes live", description: "Our IoT platform connects the first 100,000 elevators across India to the cloud." },
-
-  { year: "2022", title: "Carbon fibre rope", description: "Carbon fibre belt technology pushes travel heights past 600 metres." },
-  { year: "2025", title: "Toward net zero", description: "1.4M units in service across India and a committed path to net zero operations by 2035.", milestone: true },
+  {
+    year: "1992",
+    title: "Founded in Ahmedabad",
+    description:
+      "Philbrick Technologies is established in Ahmedabad, Gujarat, focused on elevator control and safety systems.",
+    milestone: true,
+  },
+  {
+    year: "2014",
+    title: "Incorporated as a Private Limited company",
+    description:
+      "The business is incorporated as Philbrick Technologies India Pvt. Ltd. (CIN U31501GJ2014PTC078837).",
+  },
+  {
+    year: "2017",
+    title: "GST-registered operations",
+    description:
+      "Operations are GST-registered as the product range and customer base continue to expand.",
+  },
+  {
+    year: "Today",
+    title: "A complete elevator-component range",
+    description:
+      "From the Ahmedabad facility, Philbrick manufactures and supplies control panels, ARD, door mechanisms, cabins, displays and fixtures across India and export markets.",
+    milestone: true,
+  },
 ];
 
+/* Real, named people only — no stock portraits stand in for real individuals.
+   TeamCard renders an initials monogram when no `image` is provided. */
 export const LEADERSHIP: TeamMember[] = [
   {
-    name: "Aarti Deshpande",
+    name: "Vasant Patel",
+    role: "Founder & Mentor",
+    bio: "Founded Philbrick Technologies in 1992 and continues to guide the company with deep elevator-industry experience.",
+  },
+  {
+    name: "Saransh Patel",
     role: "Chief Executive Officer",
-    bio: "Two decades in vertical transport. Joined VERTIQ to scale intelligence across the fleet.",
-    image: PEOPLE.b,
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Rohit Khanna",
-    role: "Chief Technology Officer",
-    bio: "Led the Pulse™ platform from prototype to 1.2 million live sensors.",
-    image: PEOPLE.c,
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Neha Verma",
-    role: "Chief Operating Officer",
-    bio: "Runs delivery and service across 28 states with a zero harm obsession.",
-    image: PEOPLE.d,
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Sundar Krishnan",
-    role: "Chief Sustainability Officer",
-    bio: "Architect of VERTIQ's net zero by 2035 roadmap.",
-    image: PEOPLE.a,
-    linkedin: "https://linkedin.com",
+    bio: "Leads Philbrick Technologies today, driving its product range, quality standards and customer relationships.",
   },
 ];

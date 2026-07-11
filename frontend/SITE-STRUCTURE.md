@@ -1,231 +1,111 @@
-# VERTIQ — Site Structure & Page Breakdown
+# Philbrick — Site Structure & Page Breakdown
 
-A top-to-footer map of every page on the platform, the sections each page is
-built from, and where the content for each lives. Generated from the actual
-codebase (`app/`, `sections/`, `data/`).
-
-> **On "subcategories":** the site **does** have them. There are no extra *routes*
-> below product pages, but every one of the 12 product families carries **3–6
-> configurations** (sub-variants) shown as a dedicated section inside that
-> product's page. They're listed in full in [§4](#4-products-deep-dive--the-12-families--their-configurations).
+A top-to-footer map of every route, how navigation is organised, and how the
+environment-based page-release system gates pages in production. Generated from
+the codebase (`app/`, `config/pageReleases.ts`, `data/products.ts`,
+`constants/navigation.ts`).
 
 ---
 
 ## 1. Sitemap (all routes)
 
-```
-/                         Home — the flagship 3D experience
-├─ /about                 About Us (company story + manufacturing infrastructure)
-├─ /products              Products (index — 12 families in 2 groups)
-│  └─ /products/[slug]    Product detail  ×12  (each with 3–6 configurations)
-│     ├─ /products/passenger-elevators
-│     ├─ /products/home-elevators
-│     ├─ /products/high-speed-elevators
-│     ├─ /products/mrl-elevators
-│     ├─ /products/panoramic-elevators
-│     ├─ /products/capsule-elevators
-│     ├─ /products/hospital-elevators
-│     ├─ /products/freight-elevators
-│     ├─ /products/dumbwaiter-elevators
-│     ├─ /products/escalators
-│     ├─ /products/moving-walkways
-│     └─ /products/components
-└─ /contact               Contact Us
+Release status is the **production** flag from `config/pageReleases.ts`
+(`✓` = live, `–` = Coming Soon). **In development every route is accessible.**
 
-System routes:  /sitemap.xml   /robots.txt   /_not-found (404)
+```
+/                                          ✓  Home — flagship 3D elevator experience
+├─ /about                                  ✓  About Us
+├─ /vision-mission                         –  Vision & Mission
+├─ /milestone                              –  Milestone & Awards
+├─ /infrastructure                         –  Infrastructure
+├─ /network                                –  Network
+├─ /news-events                            –  News & Events
+├─ /products                               ✓  Products (index — 14 categories)
+│  ├─ /products/<category>                 ✓  14 category pages
+│  └─ /products/<category>/<product>       ✓/–  21 nested product pages (thin SKUs gated)
+└─ /contact                                ✓  Contact Us
+
+System routes:  /sitemap.xml   /robots.txt   /icon.png   /apple-icon.png   /_not-found (404)
 ```
 
-**16 content pages** (Home, About, Products + 12 detail, Contact) are pre-rendered
-as static HTML at build time — fast to load, SEO-friendly, no server required.
-
-> **Removed:** there is **no `/services` route** and **no `/testimonials` route**.
-> The company's lifecycle offerings (installation · maintenance · modernization ·
-> AMC) live as a section on the homepage; enquiries route through **Contact**.
+Gated routes render the animated **Coming Soon** screen in production and are
+excluded from `sitemap.xml`. Total: **11 static pages + 35 product routes**.
 
 ---
 
-## 2. Global chrome (every page)
+## 2. Environment-based page-release system
 
-Defined once in `app/layout.tsx` and wrapped around all pages:
+| Piece | File |
+|---|---|
+| Route → release map (single source of truth) | `config/pageReleases.ts` |
+| Env + gating logic (`isReleased`, `validateReleaseConfig`) | `lib/release.ts` |
+| Reusable gate + Coming Soon screen | `components/release/{ReleaseGate,ComingSoon}.tsx` |
+| Env template | `.env.example` (`NEXT_PUBLIC_APP_ENV`) |
+
+- **development** → all routes open (flags ignored). **production** → only
+  `true`-flagged routes show real content.
+- Every `page.tsx` wraps its content in `<ReleaseGate route="…">`.
+- `assertReleaseConfig()` runs at build (via `sitemap.ts`) and fails the build on
+  any missing/duplicate/invalid route. **See the STRICT RULE in `CLAUDE.md`.**
+
+---
+
+## 3. Global chrome (every page)
+
+Defined once in `app/layout.tsx`:
 
 | Element | What it is |
 |---|---|
-| **Navbar** (`components/layout/Navbar.tsx`) | Sticky top bar: logo · primary nav · theme toggle · **"Get a quote"** button · mobile hamburger. |
-| **Products mega-menu** (`MegaMenu.tsx`) | Opens on hover over "Products": two columns (Elevators / Specialised & Mobility) + a **flagship feature card** (VERTIQ Helix™). |
-| **Mobile nav** (`MobileNav.tsx`) | Full-screen slide-in menu for small screens. |
-| **Footer** (`components/layout/Footer.tsx`) | Brand + newsletter + HQ contact · 3 link columns · certifications (ISO 9001, ISO 14001, EN 81-20/50, LEED Platinum) · socials · copyright. |
-| Providers | Theme (dark/light), Lenis smooth-scroll, scroll-reveal observer, "Skip to content" link. |
+| **Navbar** (`components/layout/Navbar.tsx`) | Sticky bar: Philbrick logo · primary nav · theme toggle · **Get a quote** · mobile hamburger. |
+| **About dropdown** (`NavDropdown.tsx`) | About Us · Vision & Mission · Milestone & Awards. |
+| **Products mega menu** (`MegaMenu.tsx`) | Two-pane: grouped category rail (left) → sub-products + flagship **ARD** feature (right). |
+| **Mobile nav** (`MobileNav.tsx`) | Slide-in drawer with nested accordion (category → sub-products). |
+| **Footer** (`Footer.tsx`) | Logo · contact · 4 link groups (Company · Products · Resources · Get in touch) · GST/CIN/IEC registry · copyright. |
 
-**Primary nav order:** Home · Products (mega) · About · Contact
-**Footer columns:** Elevators · Specialised & Mobility · Company (About VERTIQ · All Products · Contact)
+**Primary nav:** Home · About ▾ · Products ▾ · Infrastructure · Network · News & Events · Contact Us
 
 ---
 
-## 3. Page-by-page breakdown (top → footer)
+## 4. Product hierarchy (`data/products.ts`)
 
-### 🏠 Home  `/`
-The flagship storytelling page. Source: `app/page.tsx`.
+Two-level tree — category → product. Slugs are SEO-friendly and consistent.
 
-| # | Section | What the visitor sees |
+| Category | Route | Sub-products |
 |---|---|---|
-| 1 | **3D Elevator Experience** (`ElevatorScene`) | Scroll-driven WebGL hero — see [§5](#5-the-3d-hero-scroll-experience). Night city → zoom to the tower → through the glass → into the lobby → components reveal one by one. |
-| 2 | **Who we are** (`AboutPreview`) | "01 — Who we are": oversized statement headline + editorial text/stat column, offset media. |
-| 3 | **Products** (`ProductsShowcase`) | "02 — The portfolio": editorial index of 6 featured families — numeral · large name · mono specs · hover image reveal; full catalogue at /products. |
-| 4 | **Lifecycle support** (`ServiceEcosystem`) | "03 — Lifecycle support": numbered hairline rows (installation · maintenance · modernization · AMC) with benefit lists; CTA to Contact. |
-| 5 | **Portfolio / Projects** (`Projects`) | "04 — Projects": alternating parallax rows — landmark projects (Lodha Marquise, Prestige Financial Hub, Taj Skyline, Apollo Medicity). |
-| 6 | **Industries** (`IndustriesShowcase`) | "05 — Industries": full-bleed slat strip (5 sectors) — panels breathe open on hover; scroll-snap on mobile. |
-| 7 | **By the numbers** (`StatsBand`) | "06 — By the numbers": oversized gold numerals on hairlines, left-aligned. |
-| 8 | **Call to action** (`CTASection`) | Full-bleed image band, left-aligned statement → Request a consultation / Explore products. |
-|  | *Footer* | Global footer — oversized ghost wordmark, link columns, mono certification registry line. |
+| Elevator Control Panel | `/products/elevator-control-panel` | Automatic / Manual / Hydraulic door controller |
+| Integrated Control Panel | `/products/integrated-control-panel` | Parallel · Serial CAN-bus · MRL |
+| Elevator IoT | `/products/elevator-iot` | — |
+| ARD (Automatic Rescue Device) | `/products/ard` | — |
+| Lift Master (Door Operator Controller) | `/products/lift-master` | — |
+| Synergy Auto Door | `/products/synergy-auto-door` | 2-Panel Centre · 2-Panel Telescopic · 4-Panel Centre |
+| Elevator Doors | `/products/elevator-doors` | — |
+| Elevator Cabin | `/products/elevator-cabin` | — |
+| Elevator Display | `/products/elevator-display` | XN-1000/2000/2100/3000/4000 · XLCD-01/02 · XTFT-043 |
+| COP / LOP | `/products/cop-lop` | — |
+| Touch COP / LOP | `/products/touch-cop-lop` | — |
+| Voice Announcing Systems | `/products/voice-announcing-systems` | FA-50 · FA-250 · Close Door Announcer · Elevator Gong |
+| Elevator KIT & Accessories | `/products/elevator-kit-accessories` | — |
+| STEP Products | `/products/step-products` | — |
 
-> **Search & AI discoverability (2026-07):** every route ships JSON-LD in the
-> initial HTML (`components/seo/JsonLd.tsx` + builders in `lib/schema.ts`, real
-> data only): Organization + WebSite site-wide; Product + BreadcrumbList on the
-> 12 product pages; ItemList + FAQPage on /products; AboutPage + Person
-> (leadership) on /about; ContactPage + FAQPage on /contact. Visible FAQ
-> sections (`sections/shared/FAQSection.tsx`, content in `data/faqs.ts`) back
-> the FAQPage schema. The hero's arrival line is the homepage **H1** (3D and
-> fallback paths). `public/llms.txt` summarises the company for AI crawlers;
-> robots.txt + sitemap.xml (16 URLs) already covered all routes.
-
-> **Design direction ("Engineered Editorial", 2026-07):** reference-grade display
-> typography (up to ~8rem, tight leading/tracking) against small mono technical
-> labels; hairline rules + numbered rows instead of icon-box cards; sharp radii;
-> one full-bleed moment per page; asymmetric compositions. Encoded in
-> `styles/tokens.css` + `.eyebrow/.statement/.bleed` helpers in `globals.css`.
-
-> **Removed from Home:** *Trusted By* (`ClientMarquee`), *Technology* (`TechnologyPreview`)
-> and *Testimonials* (`TestimonialsSection`) sections were taken out; the flow above
-> is the current, complete order.
+Categories + functional sub-products are live; specific SKU pages (display
+models, voice modules) ship as Coming Soon until real specs/photos are supplied
+(their `released` flag is `false`).
 
 ---
 
-### 🏢 About Us  `/about`
-Source: `app/about/page.tsx`.
-
-1. **Page hero** — "Moving the world upward since 1968" + breadcrumb + 3 trust stats.
-2. **Story** ("Who we are") — narrative paragraphs + facility image.
-3. **Infrastructure & Manufacturing** *(new)* — "Manufacturing & engineering, built in-house" — a 6-card capability grid (manufacturing plants · fabrication & assembly · in-house component production · quality control & test towers · engineering & R&D · warehouse & logistics) plus a scale strip (manufacturing sites, R&D centres, service branches, cities served). Data: `INFRASTRUCTURE` + `GLOBAL_STATS`.
-4. **Mission & Vision** — two statement cards.
-5. **Values** — "Six values, one standard" — 6-item value grid.
-6. **Timeline** — "Five decades of firsts" — milestone timeline.
-7. **Leadership** — team cards for the executive team.
-8. **Stats band** — full trust-metrics row.
-9. **CTA** — "Build the future of mobility with us" → Get in touch / Our products.
-10. *Footer.*
-
----
-
-### 🛗 Products (index)  `/products`
-Source: `app/products/page.tsx`.
-
-1. **Page hero** — "Vertical mobility for every building" + 3 stats (12 families, 40+ countries, 1.4M units).
-2. **Group 01 — Elevators** — product cards (6 families).
-3. **Group 02 — Specialised & Mobility** — product cards (6 families).
-4. **CTA** — "Not sure which system fits?" → Get expert advice / Why VERTIQ.
-5. *Footer.*
-
----
-
-### 🛗 Product Detail  `/products/[slug]`  *(×12)*
-Source: `app/products/[slug]/page.tsx`. Each of the 12 families renders the same structure:
-
-1. **Page hero** — product name, tagline, category, breadcrumb (Home › Products › _name_).
-2. **Overview** — tech showcase: long description + capacity badge + top features.
-3. **Highlights** — quick check-list band of headline selling points.
-4. **Configurations (subcategories)** — "Choose the right variant" — the 3–6 sub-variants for this family. **← this is the subcategory layer.**
-5. **Specifications** — technical spec table (capacity, speed, drive, etc.).
-6. **Gallery** — product image gallery (when available).
-7. **Related products** — 3 cross-links to other families.
-8. **CTA** — "Specify your _product_" → Request a quote / All products.
-9. *Footer.*
-
----
-
-### 📞 Contact Us  `/contact`
-Source: `app/contact/page.tsx`.
-
-1. **Page hero** — "Let's build upward, together."
-2. **Contact layout** (two columns):
-   - **Left** — contact methods (call, email, HQ address, hours) · **24/7 emergency** line · "routed to your nearest office" note.
-   - **Right** — **"Request a consultation"** lead form (`ContactForm`).
-3. *Footer.*
-
----
-
-## 4. Products deep-dive — the 12 families & their configurations
-
-Grouped exactly as they appear in the mega-menu, index page, and footer.
-The **Configurations** column is the subcategory layer (rendered on each product page).
-
-### Group 01 — Elevators
-
-| Product family | Route | Configurations (subcategories) |
-|---|---|---|
-| **Passenger Elevators** | `/products/passenger-elevators` | Gearless MRL · Geared Traction · Compact Roomless · High-Rise Group |
-| **Home Elevators** | `/products/home-elevators` | Hydraulic Home Lift · Gearless Traction · Vacuum (Pneumatic) · Shaftless Platform |
-| **High-Speed Elevators** | `/products/high-speed-elevators` | Express Shuttle · Double-Deck · Observation Express |
-| **Machine-Room-Less (MRL)** | `/products/mrl-elevators` | Compact MRL · Mid-Rise MRL · Eco MRL |
-| **Panoramic Elevators** | `/products/panoramic-elevators` | Round / Capsule Glass · Square Panoramic · Wall-Climbing |
-| **Capsule Elevators** | `/products/capsule-elevators` | Indoor Capsule · Outdoor Wall-Mounted · Pneumatic Capsule |
-
-### Group 02 — Specialised & Mobility
-
-| Product family | Route | Configurations (subcategories) |
-|---|---|---|
-| **Hospital Elevators** | `/products/hospital-elevators` | Bed Elevator · Stretcher Elevator · Service / Utility · Emergency Evacuation |
-| **Freight Elevators** | `/products/freight-elevators` | Industrial Freight · Goods-only Lift · Vehicle / Car (Automobile) Elevator · Heavy Platform |
-| **Dumbwaiter & Service Lifts** | `/products/dumbwaiter-elevators` | Kitchen Dumbwaiter · Document / Service Lift · Floor-Level Service |
-| **Escalators** | `/products/escalators` | Commercial · Heavy-Duty Transit · Crystal / Glass · Spiral |
-| **Moving Walkways** | `/products/moving-walkways` | Horizontal Autowalk · Inclined Travelator |
-| **Components & Controllers** | `/products/components` | Gearless Machines · Regenerative Drives · Pulse™ Controllers · COP / LOP Fixtures · Safety Gear · Landing Doors |
-
-**Totals:** 12 product families · **43 configurations**. (Automobile/car elevators are
-served as the *Vehicle / Car Elevator* configuration under Freight.)
-
----
-
-## 5. The 3D hero scroll experience (Home)
-
-The homepage hero (`sections/experience/ElevatorScene.tsx`) is a single
-scroll-driven WebGL sequence — one continuous "camera move" from the street to
-the machine. Beats, in scroll order:
-
-1. **Arrival** — wide night shot of the VERTIQ tower (lit windows, gold sign, city skyline).
-2. **The Approach** — camera pushes in toward the entrance (dolly-zoom).
-3. **Threshold** — camera passes *through* the glass doors into the lobby.
-4. **The Call** — the elevator doors part.
-5. **Explore** — the camera auto-frames **8 elevator components** one by one, each with a clickable hotspot + detail panel (operating panel, key switch, display, emergency, doors, motor, safety, interior).
-6. **Destination** — glide into the cabin; the pinned hero releases and the page scrolls on.
-
-- **Fallback:** on no-WebGL or reduced-motion devices, a lightweight CSS/GSAP
-  version (`ScrollStory.tsx`) plays the same outside→inside story.
-- Full technical doc: [`sections/experience/THREEJS-IMPLEMENTATION.md`](sections/experience/THREEJS-IMPLEMENTATION.md).
-
----
-
-## 6. Where the content lives (for editing)
-
-All copy/data is separated from the components — edit these, no layout changes needed:
+## 5. Where content lives
 
 | Content | File |
 |---|---|
-| Products + configurations + specs | `data/products.ts` |
-| Lifecycle support (installation / maintenance / modernization / AMC) — home section | `data/services.ts` |
-| Company story, mission, values, **infrastructure**, timeline, leadership | `data/company.ts` |
-| Stats / trust metrics / scale (manufacturing sites, R&D centres, service branches) | `data/stats.ts` |
-| Industries | `sections/home/IndustriesShowcase.tsx` |
-| Home projects / portfolio | `sections/experience/Projects.tsx` |
+| Real company data (name, address, phone, GST/CIN/IEC, contacts) | `constants/site.ts` |
+| Product tree + release flags | `data/products.ts` |
+| Company story, mission/vision, values, infrastructure, timeline, leadership | `data/company.ts` |
+| What we offer (home section) | `data/services.ts` |
+| Stats / FAQs | `data/stats.ts` · `data/faqs.ts` |
 | 3D hero components | `data/elevatorComponents.ts` |
-| Images (all sourced from Unsplash placeholders) | `data/images.ts` |
-| Site name, contact, socials | `constants/site.ts` |
-| Navigation + footer links | `constants/navigation.ts` |
+| Images (Unsplash placeholders — replace with brand photography) | `data/images.ts` |
+| Navigation + footer (derived from the product tree) | `constants/navigation.ts` |
+| Page-release config | `config/pageReleases.ts` |
+| Design tokens (Philbrick blue/red palette) | `styles/tokens.css` |
 
-> **Pre-launch note:** every image currently points at an Unsplash placeholder
-> (`data/images.ts`). Swap these for licensed brand photography before launch —
-> it's a one-file change, no component edits.
-
----
-
-*This document reflects the codebase as of the current branch. Regenerate it if
-routes or page sections change.*
+> Regenerate this document if routes or page sections change.

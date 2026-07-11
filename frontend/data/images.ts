@@ -1,8 +1,8 @@
 /* =============================================================================
-   VERTIQ — IMAGE CATALOG
+   PHILBRICK — IMAGE CATALOG
    Single source of truth for every image reference. Never hardcode URLs in
    components — import from here. Placeholders use Unsplash; swap the IDs for
-   production assets without touching component code.
+   licensed Philbrick product/facility photography without touching components.
    ========================================================================== */
 
 const UNSPLASH = "https://images.unsplash.com/photo-";
@@ -91,20 +91,22 @@ export const HERO = {
   faq: img(ID.whiteArch, { w: 2000 }),
 };
 
-/* ----- Products -------------------------------------------------------- */
-export const PRODUCT_IMG = {
-  passenger: img(ID.elevatorCabin, { w: 1400 }),
-  home: img(ID.modernLobby, { w: 1400 }),
-  freight: img(ID.warehouse, { w: 1400 }),
-  hospital: img(ID.hospitalCorridor, { w: 1400 }),
-  escalators: img(ID.escalatorMetro, { w: 1400 }),
-  components: img(ID.controlRoom, { w: 1400 }),
-  walkways: img(ID.escalator, { w: 1400 }),
-  panoramic: img(ID.glassFacade, { w: 1400 }),
-  highspeed: img(ID.curvedTower, { w: 1400 }),
-  mrl: img(ID.staircaseSpiral, { w: 1400 }),
-  dumbwaiter: img(ID.lobbyInterior, { w: 1400 }),
-  capsule: img(ID.atriumLight, { w: 1400 }),
+/* ----- Products (keyed by Philbrick category slug) --------------------- */
+export const CATEGORY_IMG: Record<string, string> = {
+  "elevator-control-panel": img(ID.controlRoom, { w: 1400 }),
+  "integrated-control-panel": img(ID.circuitTech, { w: 1400 }),
+  "elevator-iot": img(ID.dataServer, { w: 1400 }),
+  "ard": img(ID.engineerFactory, { w: 1400 }),
+  "lift-master": img(ID.controlRoom, { w: 1400 }),
+  "synergy-auto-door": img(ID.modernLobby, { w: 1400 }),
+  "elevator-doors": img(ID.elevatorCabin, { w: 1400 }),
+  "elevator-cabin": img(ID.lobbyInterior, { w: 1400 }),
+  "elevator-display": img(ID.abstractBlue, { w: 1400 }),
+  "cop-lop": img(ID.controlRoom, { w: 1400 }),
+  "touch-cop-lop": img(ID.circuitTech, { w: 1400 }),
+  "voice-announcing-systems": img(ID.dataServer, { w: 1400 }),
+  "elevator-kit-accessories": img(ID.blueprint, { w: 1400 }),
+  "step-products": img(ID.controlRoom, { w: 1400 }),
 };
 
 /* ----- Industries ------------------------------------------------------ */

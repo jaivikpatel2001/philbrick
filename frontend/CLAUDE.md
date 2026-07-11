@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# VERTIQ — Project Context for AI-Assisted Development
+# Philbrick — Project Context for AI-Assisted Development
 
 This is the primary context document. Read it before making changes. Keep it in
 sync when architecture, standards, or vision change.
@@ -11,19 +11,55 @@ sync when architecture, standards, or vision change.
 
 ---
 
+## ⚠ STRICT RULE — Page release configuration must stay in sync with routes
+
+The site uses an **environment-based page-release system** (static-export safe):
+
+- **Single source of truth:** [`config/pageReleases.ts`](config/pageReleases.ts).
+  Static routes are literal in `STATIC_ROUTE_RELEASES`; product routes are
+  composed from the product tree ([`data/products.ts`](data/products.ts)) where
+  each node carries a `released` flag.
+- **Logic:** [`lib/release.ts`](lib/release.ts) → `isReleased()`,
+  `releasedRoutes()`, `validateReleaseConfig()`, `assertReleaseConfig()`.
+- **Gate:** every page wraps its content in
+  [`components/release/ReleaseGate.tsx`](components/release/ReleaseGate.tsx)
+  (`<ReleaseGate route="/…">…</ReleaseGate>`), which renders the real page when
+  released (or in development) and the animated
+  [`ComingSoon`](components/release/ComingSoon.tsx) screen otherwise.
+- **Behaviour:** in **development** every route is accessible (flags ignored); in
+  **production** only routes flagged `true` show real content.
+
+**Whenever you add, remove, rename or move a route you MUST, in the same change:**
+1. Update `config/pageReleases.ts` (static route) **or** the node's `released`
+   flag in `data/products.ts` (product route).
+2. Wrap the new page in `<ReleaseGate route="…">`.
+3. Keep the config exhaustive and exact — **no missing, duplicate, outdated or
+   invalid routes**. `assertReleaseConfig()` runs at build (via `sitemap.ts`) and
+   fails the build on any mismatch; `robots.ts`/`sitemap.ts` only advertise
+   released routes. Verify before finishing any route-related task.
+
+---
+
 ## Project vision
 
-**VERTIQ** is a premium global **elevator & vertical-transportation
-manufacturer**. The website is its flagship brand experience.
+**Philbrick** (Philbrick Technologies India Pvt. Ltd.) is an Ahmedabad-based
+**elevator-component manufacturer, exporter and supplier**, founded 1992. The
+website is its flagship brand experience.
 
-**What it offers:** passenger / home / high-speed / MRL / panoramic / capsule /
-hospital / freight / dumbwaiter elevators, escalators, moving walkways,
-components & controllers, plus lifecycle **services** (installation, maintenance,
-**modernization**, AMC) and an intelligent IoT/AI platform (Pulse™).
+**What it offers:** elevator control panels (automatic/manual/hydraulic),
+integrated control panels (parallel / serial CAN-bus / MRL), the Automatic
+Rescue Device (ARD), Elevator IoT, the Lift Master door-operator controller,
+Synergy automatic door mechanisms, elevator doors & cabins, displays (LED /
+dot-matrix / LCD / TFT), COP/LOP & touch COP/LOP, voice announcing systems,
+elevator kits/accessories and STEP products. All engineered in-house.
 
-**Target audience:** architects, builders, real-estate developers, consultants,
-commercial property owners, industrial clients — technical, design-literate
-buyers making high-value decisions.
+**Target audience:** elevator installers, OEMs, modernisers, builders and
+consultants — technical buyers specifying elevator components.
+
+**Content integrity:** use only real, publicly-verifiable Philbrick data
+(constants/site.ts). **Never fabricate** phone numbers, emails, GST/CIN, awards,
+certifications, product specs, statistics or client names. If unverified, use a
+clearly-marked placeholder or gate the page behind Coming Soon.
 
 ## Business goals
 
@@ -54,9 +90,12 @@ template-driven. Restraint over decoration; real materials and light over effect
 
 All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, never raw values.**
 
-- **Color (single source of truth):** Deep Black `--bg-primary`, Graphite
-  surfaces, Brushed Steel `--silver`, Champagne Gold `--accent`/`--gold`,
-  Electric Blue `--accent-2`/`--blue`, Pure White text. No other color systems.
+- **Color (single source of truth):** Philbrick palette derived from the logo —
+  **azure blue** (primary, `--accent`/`--blue`, from the wordmark) + **signal
+  red** (accent, `--accent-2`, from the emblem), on a navy-black / cool-white
+  neutral base. Blue leads; red is a restrained accent. Values are AA-tuned per
+  theme in `styles/tokens.css`. **Use the tokens, never raw hex.** No other
+  color systems.
 - **Typography:** display = Space Grotesk (`--font-display`), body = Inter
   (`--font-body`); fluid scale (`--fs-display-1 … --fs-xs`); tight tracking on
   headings (`--ls-tight`), mono uppercase eyebrows with a machined tick
@@ -90,7 +129,9 @@ All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, 
 
 The hero (`sections/experience/ElevatorScene.tsx`) is the brand centerpiece.
 - **Realistic, physically-based materials** (metalness/roughness, anisotropy on
-  brushed steel, real transmission glass, champagne gold — never glowing yellow).
+  brushed steel, real transmission glass). Window/interior lighting stays a
+  realistic **warm amber** (architectural, not brand); the Philbrick **azure**
+  brand accent lights the building sign (`PHILBRICK`) and screens.
 - **Architectural lighting** + an environment map (IBL) doing most of the work;
   warm key / cool fill / rim / interior light.
 - **Minimal bloom** — only true emissives (LEDs, indicators) should glow.
@@ -111,12 +152,21 @@ in sync with the code so a new developer (or AI) can get productive fast.
 ## Current architecture (high level)
 
 - **Homepage `/` is the flagship experience:** `app/page.tsx` renders the Three.js
-  elevator hero, then About → Products → Lifecycle support (installation ·
-  maintenance · modernization · AMC) → Projects → Industries → (stats) →
-  Contact/CTA. The global `app/layout.tsx` adds Navbar, Lenis smooth scroll,
-  Footer, theme + reveal providers.
+  elevator hero, then About → Products (the range) → What we offer → Applications →
+  (stats) → Contact/CTA. The global `app/layout.tsx` adds Navbar, Lenis smooth
+  scroll, Footer, theme + reveal providers.
 - There is **no standalone `/experience` route** — the experience IS the homepage.
-- Routes: `/`, `/about`, `/products`, `/products/[slug]`, `/contact` (+ `/sitemap.xml`,
-  `/robots.txt`). There is **no `/services` or `/testimonials` route** — those pages
-  were removed; the company's offerings live as the lifecycle-support section on the
-  homepage, and the About page carries an **Infrastructure & manufacturing** section.
+- **Navigation:** Home · About ▾ (About Us · Vision & Mission · Milestone) ·
+  Products ▾ (two-pane mega menu, `components/layout/MegaMenu.tsx`) ·
+  Infrastructure · Network · News & Events · Contact Us. Nav + footer are derived
+  from the product tree in `constants/navigation.ts`.
+- **Routes:** `/`, `/about`, `/vision-mission`, `/milestone`, `/infrastructure`,
+  `/network`, `/news-events`, `/products`, `/products/[category]`,
+  `/products/[category]/[product]`, `/contact` (+ `/sitemap.xml`, `/robots.txt`,
+  app icons). Product routes come from the tree in `data/products.ts`
+  (14 categories, ~21 nested products). **Every route must appear in
+  `config/pageReleases.ts` — see the STRICT RULE at the top.**
+- Real Philbrick company data lives in `constants/site.ts`; product data in
+  `data/products.ts`; company content in `data/company.ts`. Logo assets are in
+  `public/brand/` (`philbrick-logo.png` full lockup, `philbrick-mark.png` emblem)
+  with app icons at `app/icon.png` / `app/apple-icon.png`.

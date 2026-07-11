@@ -28,7 +28,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
       { label: "Material", value: "Hairline brushed 316 stainless" },
       { label: "Buttons", value: "Capacitive, halo-lit, anti-vandal" },
       { label: "Accessibility", value: "Braille + tactile, IS 14665 / EN 81-70" },
-      { label: "Finishes", value: "Steel · champagne · bronze · black" },
+      { label: "Finishes", value: "Steel · bronze · black · mirror" },
     ],
     benefits: [
       "Intuitive at a glance, no learning curve",
@@ -143,12 +143,12 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     name: "Safety System",
     tagline: "Engineered to never fail quietly.",
     description:
-      "Progressive safety gear, an overspeed governor and energy absorbing buffers arrest the car smoothly in milliseconds if anything exceeds limits, backed by continuous Pulse™ diagnostics.",
+      "Progressive safety gear, an overspeed governor and energy absorbing buffers arrest the car smoothly in milliseconds if anything exceeds limits, backed by continuous condition diagnostics.",
     specs: [
       { label: "Brake", value: "Progressive safety gear, IS 14665" },
       { label: "Governor", value: "Bi directional overspeed" },
       { label: "Buffers", value: "Polyurethane / oil energy absorbing" },
-      { label: "Monitoring", value: "Pulse™ predictive diagnostics" },
+      { label: "Monitoring", value: "Predictive condition diagnostics" },
     ],
     benefits: [
       "Multiple independent layers of protection",
@@ -163,11 +163,11 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     name: "Interior Design",
     tagline: "A room you want to ride in.",
     description:
-      "Floor to ceiling glass, hairline steel, a stone floor, a mirrored wall and a warm linear light cove. Couture finishes are configured to the architecture, the cabin becomes part of the building's design.",
+      "Floor to ceiling glass, hairline steel, a stone floor, a mirrored wall and a warm linear light cove. Finishes are configured to the architecture, so the cabin becomes part of the building's design.",
     specs: [
       { label: "Walls", value: "Glass · steel · stone · veneer · leather" },
       { label: "Lighting", value: "Hidden warm LED cove, tunable" },
-      { label: "Handrail", value: "Champagne gold, solid" },
+      { label: "Handrail", value: "Brushed stainless, solid" },
       { label: "Ceiling", value: "Backlit, custom patterns" },
     ],
     benefits: [

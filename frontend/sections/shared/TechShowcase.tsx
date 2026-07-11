@@ -71,7 +71,9 @@ export function TechShowcase({
                 </span>
                 <div>
                   <h3 className={styles.featTitle}>{f.title}</h3>
-                  <p className={styles.featDesc}>{f.description}</p>
+                  {f.description && (
+                    <p className={styles.featDesc}>{f.description}</p>
+                  )}
                 </div>
               </li>
             );

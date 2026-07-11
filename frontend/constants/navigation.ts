@@ -1,19 +1,37 @@
 /* =============================================================================
-   VERTIQ — NAVIGATION ARCHITECTURE (focused scope)
-   Home · Products (12 categories) · About · Contact
-   ========================================================================== */
-import type { NavItem } from "@/types";
-import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
-import { PRODUCT_IMG } from "@/data/images";
+   PHILBRICK — NAVIGATION ARCHITECTURE
+   Home · About ▾ · Products ▾ (mega) · Infrastructure · Network ·
+   News & Events · Contact Us
 
-const productColumns = PRODUCT_GROUPS.map((group) => ({
+   Product navigation is derived from the product tree (data/products.ts) so the
+   mega menu, mobile accordion and footer always match the real routes.
+   ========================================================================== */
+import type { NavItem, MegaGroup } from "@/types";
+import {
+  PRODUCT_TREE,
+  PRODUCT_GROUPS,
+  getCategory,
+  categoryHref,
+  productHref,
+} from "@/data/products";
+import { CATEGORY_IMG } from "@/data/images";
+
+/* Build the mega-menu groups from PRODUCT_GROUPS × PRODUCT_TREE. */
+const megaGroups: MegaGroup[] = PRODUCT_GROUPS.map((group) => ({
   title: group.title,
-  links: group.slugs.map((slug) => {
-    const product = PRODUCTS.find((p) => p.slug === slug)!;
+  categories: group.slugs.map((slug) => {
+    const cat = getCategory(slug)!;
     return {
-      label: product.name,
-      href: `/products/${slug}`,
-      description: product.category,
+      slug: cat.slug,
+      label: cat.name,
+      href: categoryHref(cat.slug),
+      description: cat.tagline ?? cat.description,
+      image: CATEGORY_IMG[cat.slug],
+      children: (cat.children ?? []).map((child) => ({
+        label: child.name,
+        href: productHref(cat.slug, child.slug),
+        description: child.description,
+      })),
     };
   }),
 }));
@@ -21,22 +39,33 @@ const productColumns = PRODUCT_GROUPS.map((group) => ({
 export const MAIN_NAV: NavItem[] = [
   { label: "Home", href: "/" },
   {
+    label: "About",
+    href: "/about",
+    dropdown: [
+      { label: "About Us", href: "/about", description: "Who we are and what we build" },
+      { label: "Vision & Mission", href: "/vision-mission", description: "What drives us" },
+      { label: "Milestone & Awards", href: "/milestone", description: "Our journey and recognition" },
+    ],
+  },
+  {
     label: "Products",
     href: "/products",
     mega: {
-      columns: productColumns,
+      groups: megaGroups,
       feature: {
-        eyebrow: "Flagship",
-        title: "VERTIQ Helix™",
+        eyebrow: "Flagship safety product",
+        title: "ARD — Automatic Rescue Device",
         description:
-          "Our gearless MRL platform, 40% more efficient, whisper quiet, destination dispatched.",
-        href: "/products/passenger-elevators",
-        image: PRODUCT_IMG.passenger,
+          "On power failure, it moves the car to the nearest floor and opens the doors — nobody stays trapped.",
+        href: categoryHref("ard"),
+        image: CATEGORY_IMG["ard"],
       },
     },
   },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Infrastructure", href: "/infrastructure" },
+  { label: "Network", href: "/network" },
+  { label: "News & Events", href: "/news-events" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 export interface FooterColumn {
@@ -44,35 +73,51 @@ export interface FooterColumn {
   links: { label: string; href: string }[];
 }
 
+/* Key product categories for the footer (not every leaf — logical grouping). */
+const footerProductLinks = [
+  "elevator-control-panel",
+  "integrated-control-panel",
+  "ard",
+  "elevator-iot",
+  "synergy-auto-door",
+  "elevator-display",
+  "cop-lop",
+].map((slug) => {
+  const cat = PRODUCT_TREE.find((c) => c.slug === slug)!;
+  return { label: cat.name, href: categoryHref(cat.slug) };
+});
+
 export const FOOTER_NAV: FooterColumn[] = [
-  {
-    title: "Elevators",
-    links: [
-      { label: "Passenger Elevators", href: "/products/passenger-elevators" },
-      { label: "Home Elevators", href: "/products/home-elevators" },
-      { label: "High Speed Elevators", href: "/products/high-speed-elevators" },
-      { label: "MRL Elevators", href: "/products/mrl-elevators" },
-      { label: "Panoramic Elevators", href: "/products/panoramic-elevators" },
-      { label: "Capsule Elevators", href: "/products/capsule-elevators" },
-    ],
-  },
-  {
-    title: "Specialised & Mobility",
-    links: [
-      { label: "Hospital Elevators", href: "/products/hospital-elevators" },
-      { label: "Freight Elevators", href: "/products/freight-elevators" },
-      { label: "Dumbwaiter & Service", href: "/products/dumbwaiter-elevators" },
-      { label: "Escalators", href: "/products/escalators" },
-      { label: "Moving Walkways", href: "/products/moving-walkways" },
-      { label: "Components", href: "/products/components" },
-    ],
-  },
   {
     title: "Company",
     links: [
-      { label: "About VERTIQ", href: "/about" },
-      { label: "All Products", href: "/products" },
+      { label: "About Us", href: "/about" },
+      { label: "Vision & Mission", href: "/vision-mission" },
+      { label: "Milestone & Awards", href: "/milestone" },
+      { label: "Infrastructure", href: "/infrastructure" },
+      { label: "Network", href: "/network" },
+    ],
+  },
+  {
+    title: "Products",
+    links: [
+      ...footerProductLinks,
+      { label: "All products", href: "/products" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "News & Events", href: "/news-events" },
+      { label: "Products", href: "/products" },
       { label: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "Get in touch",
+    links: [
+      { label: "Contact Us", href: "/contact" },
+      { label: "Request a quote", href: "/contact" },
     ],
   },
 ];
