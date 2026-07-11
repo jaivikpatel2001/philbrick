@@ -40,7 +40,6 @@ export default function HomePage() {
         stats={COMPANY_STATS}
         columns={4}
         variant="bordered"
-        align="left"
       />
 
       {/* Contact / CTA */}

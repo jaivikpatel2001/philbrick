@@ -43,11 +43,12 @@ export default function InfrastructurePage() {
 
       {/* Intro */}
       <section className="section">
-        <div className={`container--wide ${styles.story}`}>
+        <div className="container--wide">
+          <span className={`eyebrow ${styles.sectionEyebrow}`} data-reveal="up">
+            Under one roof
+          </span>
+          <div className={styles.story}>
           <div className={styles.storyText}>
-            <span className="eyebrow" data-reveal="up">
-              Under one roof
-            </span>
             <p className={styles.lede} data-reveal="up">
               Doing the work ourselves is how we keep quality consistent.
             </p>
@@ -68,6 +69,7 @@ export default function InfrastructurePage() {
               sizes="(max-width: 900px) 100vw, 45vw"
               className={styles.storyImg}
             />
+          </div>
           </div>
         </div>
       </section>

@@ -45,16 +45,9 @@ export default function ProductsPage() {
       {PRODUCT_GROUPS.map((group, gi) => {
         const items = group.slugs.map((slug) => getCategory(slug)!).filter(Boolean);
         return (
-          <section
-            key={group.title}
-            className={`section ${gi % 2 === 1 ? styles.alt : ""}`}
-          >
+          <section key={group.title} className="section">
             <div className="container--wide">
-              <SectionHeader
-                eyebrow={`0${gi + 1}`}
-                title={group.title}
-                align="left"
-              />
+              <SectionHeader eyebrow={`0${gi + 1}`} title={group.title} />
               <div className={styles.grid}>
                 {items.map((cat) => (
                   <ProductCard

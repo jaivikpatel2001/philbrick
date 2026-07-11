@@ -1,16 +1,22 @@
+import Link from "next/link";
 import Image from "next/image";
+import { FiArrowUpRight } from "react-icons/fi";
 import type { NewsItem } from "@/data/news";
 import { formatDate } from "@/utils/format";
 import styles from "./NewsCard.module.css";
 
-/** Presentational news/event card (no detail route yet — non-linking). */
+/** News/event card — links to its detail page. */
 export function NewsCard({ item }: { item: NewsItem }) {
   return (
-    <article className={styles.card} data-reveal="up">
+    <Link
+      href={`/news-events/${item.slug}`}
+      className={styles.card}
+      data-reveal="up"
+    >
       <div className={styles.media}>
         <Image
           src={item.image}
-          alt={item.title}
+          alt={item.imageAlt}
           fill
           sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
           className={styles.img}
@@ -25,7 +31,10 @@ export function NewsCard({ item }: { item: NewsItem }) {
         </div>
         <h3 className={styles.title}>{item.title}</h3>
         <p className={styles.excerpt}>{item.excerpt}</p>
+        <span className={styles.more}>
+          Read more <FiArrowUpRight aria-hidden />
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { MotionConfig } from "framer-motion";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -60,5 +61,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => window.clearTimeout(id);
   }, [pathname]);
 
-  return <>{children}</>;
+  /* Framer animations across the app respect prefers-reduced-motion (transform
+     + layout). Height-based collapses are handled explicitly via lib/motion. */
+  return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
 }

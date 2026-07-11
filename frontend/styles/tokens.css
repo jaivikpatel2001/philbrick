@@ -157,6 +157,10 @@
   --bg-tertiary: #141b24;
   --bg-elevated: #0c1219;
 
+  /* Alternating section backgrounds (subtle, theme-aware). */
+  --section-bg-a: #0a0e14;
+  --section-bg-b: #121824;
+
   --surface: rgba(255, 255, 255, 0.04);
   --surface-2: rgba(255, 255, 255, 0.06);
   --surface-3: rgba(255, 255, 255, 0.09);
@@ -239,6 +243,11 @@
   --bg-secondary: #f1f5f9;
   --bg-tertiary: #e6edf3;
   --bg-elevated: #ffffff;
+
+  /* Alternating section backgrounds (subtle, theme-aware). Both are a touch
+     off-white so pure-white cards (--surface) stay clearly visible on either. */
+  --section-bg-a: #f7f9fc;
+  --section-bg-b: #e9eef5;
 
   --surface: #ffffff;
   --surface-2: #f1f5f9;

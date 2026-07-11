@@ -47,29 +47,31 @@ export default function AboutPage() {
 
       {/* Story */}
       <section className="section">
-        <div className={`container--wide ${styles.story}`}>
-          <div className={styles.storyText}>
-            <span className="eyebrow" data-reveal="up">
-              Who we are
-            </span>
-            {ABOUT_STORY.map((p, i) => (
-              <p
-                key={i}
-                className={i === 0 ? styles.lede : styles.para}
-                data-reveal="up"
-              >
-                {p}
-              </p>
-            ))}
-          </div>
-          <div className={styles.storyMedia} data-reveal="right">
-            <Image
-              src={MISC.lobby}
-              alt="Philbrick elevator interior"
-              fill
-              sizes="(max-width: 900px) 100vw, 45vw"
-              className={styles.storyImg}
-            />
+        <div className="container--wide">
+          <span className={`eyebrow ${styles.sectionEyebrow}`} data-reveal="up">
+            Who we are
+          </span>
+          <div className={styles.story}>
+            <div className={styles.storyText}>
+              {ABOUT_STORY.map((p, i) => (
+                <p
+                  key={i}
+                  className={i === 0 ? styles.lede : styles.para}
+                  data-reveal="up"
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
+            <div className={styles.storyMedia} data-reveal="right">
+              <Image
+                src={MISC.lobby}
+                alt="Philbrick elevator interior"
+                fill
+                sizes="(max-width: 900px) 100vw, 45vw"
+                className={styles.storyImg}
+              />
+            </div>
           </div>
         </div>
       </section>

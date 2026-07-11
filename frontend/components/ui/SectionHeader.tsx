@@ -18,7 +18,7 @@ export function SectionHeader({
   eyebrow,
   title,
   description,
-  align = "left",
+  align = "center",
   titleAs: Title = "h2",
   titleClassName,
   action,

@@ -27,17 +27,17 @@ export function Logo({ className, compact = false, priority = false }: LogoProps
         <Image
           src="/brand/philbrick-mark.png"
           alt="Philbrick"
-          width={104}
-          height={96}
+          width={330}
+          height={282}
           className={styles.mark}
           priority={priority}
         />
       ) : (
         <Image
-          src="/brand/philbrick-logo.png"
+          src="/brand/logo.png"
           alt="Philbrick, Providing Elevator Solutions"
-          width={424}
-          height={96}
+          width={1277}
+          height={286}
           className={styles.full}
           priority={priority}
         />

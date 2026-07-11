@@ -142,8 +142,15 @@ All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, 
   (display-1 tops at ~8rem) vs small mono technical labels; content sits on
   **hairline rules with index numerals**, not icon-box cards; radii are sharp
   (`--radius-*` 3–22px; pills only on buttons/controls); one full-bleed moment
-  per page (`.bleed`); asymmetric, left-aligned compositions over centered
-  blocks. Don't reintroduce icon-badge card grids or pill badges.
+  per page (`.bleed`). Don't reintroduce icon-badge card grids or pill badges.
+- **Section headers are CENTERED (2026-07-11):** all section-level eyebrows +
+  headings use `SectionHeader`/`FeatureGrid` default `align="center"` (custom
+  section intros centered too). Page **heroes keep their dedicated left-aligned
+  styling**. Don't centre card/metadata/breadcrumb/nav labels.
+- **Alternating section backgrounds (2026-07-11):** top-level page sections
+  (`main > section`) alternate `--section-bg-a`/`--section-bg-b` via a positional
+  `nth-of-type` rule in `globals.css` (hero = section 1, keeps its media bg).
+  Both light values are a touch off-white so white `--surface` cards stay visible.
 - **Spacing & layout:** the spacing scale + `--section-y`; containers
   (`.container--wide/--narrow/--prose`); one max-width system; consistent section padding.
 - **Motion:** smooth, premium, intentional. Eases `--ease-out`/`--ease-in-out`;

@@ -8,14 +8,16 @@ export function AboutPreview() {
   return (
     <section className="section">
       <div className="container--wide">
-        <span className="eyebrow" data-reveal="up">
-          01 Who we are
-        </span>
-        <h2 className={styles.statement} data-reveal="up">
-          Engineering elevator
-          <br />
-          <em>solutions</em> since 1992.
-        </h2>
+        <div className={styles.intro}>
+          <span className="eyebrow" data-reveal="up">
+            01 Who we are
+          </span>
+          <h2 className={styles.statement} data-reveal="up">
+            Engineering elevator
+            <br />
+            <em>solutions</em> since 1992.
+          </h2>
+        </div>
 
         <div className={styles.grid}>
           <div className={styles.content}>

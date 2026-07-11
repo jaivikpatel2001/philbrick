@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
 import type { FAQItem } from "@/types";
 import { cn } from "@/utils/cn";
+import { collapseMotion, collapseTransition } from "@/lib/motion";
 import styles from "./FAQAccordion.module.css";
 
 export function FAQAccordion({
@@ -14,6 +15,7 @@ export function FAQAccordion({
   className?: string;
 }) {
   const [open, setOpen] = useState<number | null>(0);
+  const reduce = useReducedMotion();
 
   return (
     <div className={cn(styles.list, className)}>
@@ -33,10 +35,8 @@ export function FAQAccordion({
               {isOpen && (
                 <motion.div
                   className={styles.answerWrap}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+                  {...collapseMotion}
+                  transition={collapseTransition(reduce)}
                 >
                   <p className={styles.answer}>{item.answer}</p>
                 </motion.div>

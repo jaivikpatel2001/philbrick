@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FiX, FiChevronDown } from "react-icons/fi";
 import { MAIN_NAV } from "@/constants/navigation";
 import { SITE } from "@/constants/site";
@@ -12,6 +12,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useLockBody } from "@/hooks/useLockBody";
 import { stopLenis, startLenis } from "@/components/providers/SmoothScroll";
 import { cn } from "@/utils/cn";
+import { collapseMotion, collapseTransition } from "@/lib/motion";
 import styles from "./MobileNav.module.css";
 
 interface MobileNavProps {
@@ -19,16 +20,11 @@ interface MobileNavProps {
   onClose: () => void;
 }
 
-const accordion = {
-  initial: { height: 0, opacity: 0 },
-  animate: { height: "auto" as const, opacity: 1 },
-  exit: { height: 0, opacity: 0 },
-  transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const },
-};
-
 export function MobileNav({ open, onClose }: MobileNavProps) {
   const [openTop, setOpenTop] = useState<string | null>(null);
   const [openCat, setOpenCat] = useState<string | null>(null);
+  const reduce = useReducedMotion();
+  const accordion = { ...collapseMotion, transition: collapseTransition(reduce) };
   useLockBody(open);
 
   useEffect(() => {
