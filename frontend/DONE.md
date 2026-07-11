@@ -6,6 +6,119 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-11 18:35 IST (3D hero: brand on the elevator + mobile performance)
+
+### Move Philbrick branding to the elevator; investigate + fix mobile jitter
+
+**Status:** Completed (build green; scene renders with no runtime errors; visual +
+real-device FPS pass deferred to the user's device — see limitations)
+
+**A. Branding — building → elevator** (`sections/experience/ElevatorScene.tsx`):
+- Removed the backlit `PHILBRICK` canvas-text sign from the building podium; the
+  facade is now clean/unbranded. Removed the now-unused `SITE` import.
+- Added a Philbrick logo **decal on the elevator car's door-operator header** (a
+  real elevator brand surface): `/brand/logo.png` via `TextureLoader`, on a plane
+  at the logo's native **1277:286** aspect ratio (never stretched). Unlit
+  `MeshBasicMaterial` + `toneMapped:false` so it reads identically in day, night
+  and through the transition; `depthWrite:false` + `renderOrder` + a small
+  stand-off so it never z-fights the header. Visible in the doors/lobby beats,
+  present but not dominating the scene.
+
+**B. Mobile performance — evidence-based investigation** (raw three.js + GSAP, not
+R3F; single manual `requestAnimationFrame` loop):
+- *Root causes (code/config, not just "weak GPU"):*
+  1. **DPR capped at 2 for every device** (`setPixelRatio(min(dpr,2))`) → a
+     high-DPR phone rendered a full-screen, post-processed scene (bloom + SMAA +
+     MSAA) at up to 2× — the dominant mobile GPU cost.
+  2. **Loop rendered continuously even when the hero was off-screen / tab hidden**
+     — the 1300vh section stays mounted (static export), so a full frame kept
+     rendering while the user scrolled the content below, contending with
+     scroll compositing → jitter + battery drain.
+  3. **Redundant anti-aliasing** (`antialias:true` MSAA **and** an SMAA post pass)
+     + a **2048² shadow map**.
+- *Investigated and cleared (not the cause):*
+  - **React re-renders:** scroll → 3D is ref-driven (`progress.current`);
+    `setActive`/`setBeat` are change-guarded, so no per-frame React reconciliation.
+  - **Lenis:** configured with `syncTouch:false` → touch scrolling is already
+    native (Lenis only smooths the wheel), so it is not hijacking touch. Kept
+    Lenis; the jitter was render-cost driven, so reducing frame cost fixes it
+    without a global scroll change.
+  - **Stars/moon:** already adaptive (`compact` → 200 vs 420 stars) and cheap.
+- *Fixes (desktop path unchanged):*
+  - `lowPerf` flag = coarse pointer **or** min-viewport < 760 **or** ≤ 4 cores.
+  - **DPR cap 1.5** on `lowPerf` (vs 2 desktop) — the biggest per-frame GPU saving.
+  - **Shadow map 1024²** on `lowPerf` (vs 2048²).
+  - **Skip the SMAA pass** on `lowPerf` (MSAA already resolves edges).
+  - **Pause the render loop off-screen + when hidden** (IntersectionObserver on the
+    canvas host + `visibilitychange`; `start()` resets the day/night dt so there is
+    no jump on resume). Applies to all devices — a large, safe win.
+  - **One-way adaptive DPR watchdog** (`lowPerf`): after a 1.6s warm-up, sample 72
+    frames; if the average frame > 23 ms (~<43 fps) drop DPR one step **once** and
+    rebuild buffers. Never raises again → no oscillation / monitoring feedback loop.
+
+**Affected Areas:** `sections/experience/ElevatorScene.tsx`, `CLAUDE.md`.
+
+**Verification:** `next build` green (TS clean, 58 routes). Ran the dev server +
+in-app browser: the WebGL scene **renders** (canvas sized 1587×1000, shaders
+compiled, **no error-level console output**), and `/brand/logo.png` is fetched
+**twice** — once by the navbar and once by the elevator's `TextureLoader` —
+confirming the brand decal is live in the 3D scene. The in-app preview **cannot
+screenshot the hero** (its rAF freezes the capture) and did not expose the dev
+`__vertiqHero` hook, both known quirks of this scene in the preview harness.
+
+**Known limitations (code-level vs hardware):**
+- *Addressed at the code/config level:* DPR, redundant AA, shadow size, off-screen
+  rendering, per-frame React work.
+- *Genuine hardware floor:* a full-screen post-processed WebGL scene (bloom +
+  physical transmission/anisotropic materials) is fragment-bound; on very old /
+  low-end mobile GPUs it may still not hold a locked 60 fps even at DPR 1.5 with
+  SMAA off. The watchdog drops to a **DPR 1.0 floor**; below that, the existing
+  **CSS `ScrollStory` fallback** (already used for no-WebGL / reduced-motion) is
+  the graceful degradation. This is a real GPU/thermal limit, not a code defect.
+- *Pending on a real device (per the user's own plan):* the visual day↔night decal
+  check and measured mobile FPS — the preview harness can't validate GPU perf or
+  screenshot the animated hero.
+
+**Follow-up:** User to confirm the decal placement/legibility + mobile smoothness on
+a physical device; tune the decal size/position or the `lowPerf` thresholds if needed.
+
+---
+
+## 2026-07-11 18:11 IST (truthful Coming Soon "in the meantime" message)
+
+### Make the Coming Soon suggestion point only to genuinely live pages
+
+**Status:** Completed (verified against a production-gated build)
+
+**Problem:** the `ComingSoon` screen invited visitors to "explore our products or
+get in touch with the Philbrick team", and its CTA linked to `/contact` — but in
+production **both `/products` and `/contact` are gated**, so those links led to
+more Coming Soon screens.
+
+**Changes** (`components/release/ComingSoon.tsx`):
+- Computes the live pages from `releasedRoutes()` (the released **top-level** routes,
+  excluding the current gated route and deep product routes), so the copy only ever
+  references pages that actually resolve to real content. It expands automatically
+  as routes are flagged live in `config/pageReleases.ts`.
+- Dynamic sentence via a small `joinLabels()` helper: 1 page →
+  "In the meantime, explore our Home page."; multiple → "… our Home, About and
+  Contact pages." The action buttons are generated from the same live list
+  (Home first, "Back to home"; others secondary).
+- Added `/`, `/about`, `/contact`, `/products` to `STATIC_LABELS` for friendly names.
+
+**Verification:** production-gated build (`NEXT_PUBLIC_APP_ENV=production`) →
+`/about`, `/products`, all gated pages render **"In the meantime, explore our Home
+page."** with a single **Back to home** CTA; `/` stays real content. Reverted
+`.env.local` to `development` and rebuilt (staging default: all pages open).
+
+**Known Limitations:** the global Navbar (mega menu) + Footer still list the full
+site (including gated routes) by design — they communicate the whole product range;
+individual pages gate. Trim later if a Home-only chrome is preferred in production.
+
+**Follow-up:** None.
+
+---
+
 ## 2026-07-11 17:48 IST (2 remaining images supplied + PNG clarification)
 
 ### Integrate the last 2 images; consolidate flat duplicates; keep source PNGs

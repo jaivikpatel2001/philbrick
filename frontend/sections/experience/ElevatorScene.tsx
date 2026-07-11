@@ -20,7 +20,6 @@ import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { MODEL } from "@/data/model";
 import { ENV } from "@/data/environment";
-import { SITE } from "@/constants/site";
 import { ELEVATOR_COMPONENTS, type ElevatorComponent } from "@/data/elevatorComponents";
 import { ScrollStory } from "./ScrollStory";
 import { ComponentModal } from "./ComponentModal";
@@ -148,7 +147,15 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       onContextFail();
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    /* Adaptive quality flag — touch / small-viewport / low-core devices get a
+       lighter renderer config (DPR, shadow map, post) so the hero stays smooth
+       on mobile without touching the desktop experience. A high-DPR phone
+       rendering a full-screen postprocessed scene at native DPR (2-3x) is the
+       single biggest mobile GPU cost, so we cap the pixel ratio lower there. */
+    const coarse = window.matchMedia?.("(pointer: coarse)").matches ?? false;
+    const smallVp = Math.min(window.innerWidth, window.innerHeight) < 760;
+    const lowPerf = coarse || smallVp || (navigator.hardwareConcurrency ?? 8) <= 4;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lowPerf ? 1.5 : 2));
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
@@ -418,27 +425,9 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     exBox(ENT_W + 1.2, 0.12, 1.7, 0, FY + ENT_H + 0.28, FRONT_Z + 0.85, darkMetal);
     exBox(ENT_W + 1.2, 0.05, 0.06, 0, FY + ENT_H + 0.25, FRONT_Z + 1.7, gold);
 
-    /* Backlit brand sign on the podium band above the canopy */
-    const signCanvas = document.createElement("canvas");
-    signCanvas.width = 1024;
-    signCanvas.height = 192;
-    const sctx = signCanvas.getContext("2d")! as CanvasRenderingContext2D & { letterSpacing?: string };
-    sctx.letterSpacing = "30px";
-    sctx.font = `600 110px ${cssVar("--font-display", "'Space Grotesk', sans-serif").split(",")[0] || "sans-serif"}, sans-serif`;
-    sctx.textAlign = "center";
-    sctx.textBaseline = "middle";
-    sctx.shadowColor = cssVar("--accent", "#2facec");
-    sctx.shadowBlur = 30;
-    sctx.fillStyle = "#eaf6fd";
-    sctx.fillText(SITE.name.toUpperCase(), 512, 100);
-    const signTex = track(new THREE.CanvasTexture(signCanvas));
-    signTex.colorSpace = THREE.SRGBColorSpace;
-    const signGeo = new THREE.PlaneGeometry(4.6, 0.86);
-    disposables.push(signGeo);
-    const signMat = new THREE.MeshBasicMaterial({ map: signTex, transparent: true });
-    const sign = new THREE.Mesh(signGeo, signMat);
-    sign.position.set(0, PODIUM_TOP - 0.62, FRONT_Z - 0.01);
-    exterior.add(sign);
+    /* The building carries NO brand name — it stays a clean, realistic facade.
+       Philbrick's mark lives on the elevator car header instead (see the brand
+       decal in the "Elevator car" section below). */
 
     /* Street/plaza + gradient night sky (baked once) + fogged context towers */
     const streetGeo = new THREE.PlaneGeometry(500, 500);
@@ -930,6 +919,32 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     box(car, [W, 0.4, 0.12], [0, H / 2 - 0.2, D / 2], darkMetal); // door operator header
     box(car, [W - 0.2, 0.06, 0.04], [0, H / 2 - 0.32, D / 2 + 0.06], steel, false); // header track
 
+    /* ===== Philbrick brand decal on the door-operator header =====
+       Moved off the building — a real elevator carries its maker's mark on the
+       car header / transom. Unlit (MeshBasic, toneMapped:false) so it reads
+       identically in day and night; the plane keeps the logo's native
+       1277:286 aspect ratio, so the mark is never stretched or distorted. */
+    const brandTex = track(
+      new THREE.TextureLoader().load("/brand/logo.png", (t) => {
+        t.colorSpace = THREE.SRGBColorSpace;
+        t.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+        t.needsUpdate = true;
+      })
+    );
+    const brandW = W * 0.62;
+    const brandGeo = new THREE.PlaneGeometry(brandW, brandW * (286 / 1277));
+    disposables.push(brandGeo);
+    const brandMat = new THREE.MeshBasicMaterial({
+      map: brandTex,
+      transparent: true,
+      depthWrite: false,
+      toneMapped: false,
+    });
+    const brandDecal = new THREE.Mesh(brandGeo, brandMat);
+    brandDecal.position.set(0, H / 2 - 0.16, D / 2 + 0.075);
+    brandDecal.renderOrder = 2;
+    car.add(brandDecal);
+
     const interiorLight = new THREE.PointLight(0xffd9a0, 0.6, 6, 2);
     interiorLight.position.set(0, 0.3, 0);
     car.add(interiorLight);
@@ -991,7 +1006,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     const key = new THREE.DirectionalLight(0xffe9cf, 2.0);
     key.position.set(4, 7, 6);
     key.castShadow = true;
-    key.shadow.mapSize.set(2048, 2048);
+    key.shadow.mapSize.set(lowPerf ? 1024 : 2048, lowPerf ? 1024 : 2048);
     key.shadow.camera.near = 1;
     key.shadow.camera.far = 30;
     key.shadow.camera.left = -8;
@@ -1295,7 +1310,9 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     );
     composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.12, 0.4, 0.9));
     composer.addPass(new OutputPass());
-    composer.addPass(new SMAAPass());
+    /* MSAA (renderer `antialias:true`) already resolves edges; SMAA is a second
+       full-screen AA pass. Skip it on low-perf devices to save that pass. */
+    if (!lowPerf) composer.addPass(new SMAAPass());
 
     const resize = () => {
       const w = host.clientWidth, h = host.clientHeight;
@@ -1313,13 +1330,74 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
        can ever hit a first-use compile stall. */
     renderer.compile(scene, camera);
 
+    /* Render only while the hero is on screen AND the tab is visible. The site
+       is a static export, so this 1300vh section stays mounted the whole time;
+       without gating, the full postprocessed WebGL frame would keep rendering
+       (and on mobile contend with content-scroll compositing) long after the
+       hero has scrolled away — a needless GPU/battery drain and a jitter source. */
     let raf = 0;
+    let running = false;
+    let inView = true;
+    const shouldRun = () => inView && !document.hidden;
+
+    /* One-way adaptive DPR: if a low-perf device sustains slow frames after a
+       warm-up grace period, drop the pixel ratio a single step. It never raises
+       it again, so there is no oscillation / monitoring feedback loop. */
+    let watchdogDone = !lowPerf;
+    let prevFrame = 0;
+    let slowAccum = 0;
+    let sampleFrames = 0;
+    const graceUntil = performance.now() + 1600;
+
     const animate = () => {
+      if (!shouldRun()) {
+        running = false;
+        return;
+      }
       raf = requestAnimationFrame(animate);
       pose(progress.current);
       composer.render();
+
+      if (!watchdogDone) {
+        const now = performance.now();
+        if (prevFrame && now > graceUntil) {
+          slowAccum += now - prevFrame;
+          sampleFrames++;
+          if (sampleFrames >= 72) {
+            if (slowAccum / sampleFrames > 23) {
+              // sustained < ~43fps → step DPR down once, then rebuild buffers
+              renderer.setPixelRatio(Math.max(1, renderer.getPixelRatio() - 0.5));
+              resize();
+            }
+            watchdogDone = true;
+          }
+        }
+        prevFrame = now;
+      }
     };
-    animate();
+
+    const start = () => {
+      if (running || !shouldRun()) return;
+      running = true;
+      lastT = performance.now(); // avoid a day/night dt jump after a pause
+      prevFrame = 0;
+      raf = requestAnimationFrame(animate);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        inView = entries[0]?.isIntersecting ?? true;
+        if (inView) start();
+      },
+      { threshold: 0 }
+    );
+    io.observe(host);
+    const onVisibility = () => {
+      if (!document.hidden) start();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    start();
 
     /* Dev-only scrub hook: backgrounded/preview tabs freeze rAF, so tests can
        drive a synchronous pose + render (plus the HUD state) at any progress. */
@@ -1348,6 +1426,8 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       themeObserver.disconnect();
       delete devWindow.__vertiqHero;
       window.removeEventListener("resize", resize);

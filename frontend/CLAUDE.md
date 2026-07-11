@@ -219,7 +219,16 @@ The hero (`sections/experience/ElevatorScene.tsx`) is the brand centerpiece.
 - **Realistic, physically-based materials** (metalness/roughness, anisotropy on
   brushed steel, real transmission glass). Window/interior lighting stays a
   realistic **warm amber** (architectural, not brand); the Philbrick **azure**
-  brand accent lights the building sign (`PHILBRICK`) and screens.
+  brand accent lights the screens. The **building facade carries no brand name**
+  (it stays a clean, realistic tower); the Philbrick logo is a decal on the
+  **elevator car's door-operator header** (`/brand/logo.png`, unlit MeshBasic,
+  native aspect ratio — never stretched), so it reads the same in day and night.
+- **Adaptive mobile quality:** touch / small-viewport / low-core devices
+  (`lowPerf`) get a capped DPR (1.5 vs 2), a smaller shadow map (1024 vs 2048)
+  and skip the SMAA pass; the render loop **pauses when the hero is off-screen or
+  the tab is hidden** (IntersectionObserver + visibilitychange), and a one-way
+  DPR watchdog steps down once on sustained slow frames. Do not raise mobile DPR
+  or run the loop unconditionally — keep the desktop path (DPR 2, full post) intact.
 - **Architectural lighting** + an environment map (IBL) doing most of the work;
   warm key / cool fill / rim / interior light.
 - **Minimal bloom** — only true emissives (LEDs, indicators) should glow.
