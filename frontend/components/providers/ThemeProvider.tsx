@@ -18,8 +18,11 @@ interface ThemeContextValue {
 const STORAGE_KEY = "philbrick-theme";
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-/** Inline script — runs before paint to set [data-theme] and avoid FOUC. */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem('${STORAGE_KEY}');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');})();`;
+/** Inline script — runs before paint to set [data-theme] and avoid FOUC.
+ *  Brand default is DARK for every first-time visitor (the OS colour-scheme is
+ *  deliberately ignored); a theme the visitor picked via the toggle is saved in
+ *  localStorage and wins on every return visit. */
+export const themeInitScript = `(function(){var t='dark';try{var s=localStorage.getItem('${STORAGE_KEY}');if(s==='light'||s==='dark'){t=s;}}catch(e){}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content',t==='dark'?'#0A0E14':'#FFFFFF');}document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');})();`;
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>("dark");
@@ -35,6 +38,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const apply = useCallback((t: ThemeMode) => {
     document.documentElement.setAttribute("data-theme", t);
+    // keep the browser-chrome tint in step with the chosen theme
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", t === "dark" ? "#0A0E14" : "#FFFFFF");
     try {
       localStorage.setItem(STORAGE_KEY, t);
     } catch {

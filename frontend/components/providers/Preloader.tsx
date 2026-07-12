@@ -12,18 +12,24 @@ import styles from "./Preloader.module.css";
    the DOM entirely once the exit finishes.
 
    Timing contract:
-   - Opens at max(minimum sequence, window load) — fast connections still see
-     one complete, short sequence; slow ones aren't blocked past the hard cap.
-   - Reduced motion: static logo, no door/indicator travel, quick fade.
+   - Phase sequence: boot (countdown) → arrive (countdown done — the blue seam
+     line draws in) → open (doors part) → done. The seam line is hidden for the
+     whole countdown and is revealed by the SAME state that ends it, so the
+     sequence can never desynchronise on slow or fast devices.
+   - "arrive" begins at max(minimum sequence, window load) — fast connections
+     still see one complete, short sequence; slow ones aren't blocked past the
+     hard cap.
+   - Reduced motion: static logo, no door/indicator/line travel, quick fade.
    ========================================================================== */
 
 const FLOORS = ["G", "1", "2", "3"] as const;
 const STEP_MS = 420; // one indicator step
 const MIN_MS = STEP_MS * FLOORS.length + 260; // one full ride minimum
 const HARD_CAP_MS = 4200; // never block longer than this
+const LINE_MS = 460; // seam-line reveal before the doors move (matches CSS)
 const DOORS_MS = 980; // door travel (matches CSS)
 
-type Phase = "boot" | "open" | "done";
+type Phase = "boot" | "arrive" | "open" | "done";
 
 export function Preloader() {
   const [phase, setPhase] = useState<Phase>("boot");
@@ -43,12 +49,17 @@ export function Preloader() {
     const open = () => {
       if (opened) return;
       opened = true;
-      setPhase("open");
+      if (reduced.current) {
+        // Reduced motion: no line travel, straight to the quick fade.
+        setPhase("open");
+        timers.push(window.setTimeout(() => setPhase("done"), 320));
+        return;
+      }
+      // Countdown is complete — reveal the seam line, then part the doors.
+      setPhase("arrive");
+      timers.push(window.setTimeout(() => setPhase("open"), LINE_MS));
       timers.push(
-        window.setTimeout(
-          () => setPhase("done"),
-          reduced.current ? 320 : DOORS_MS + 120
-        )
+        window.setTimeout(() => setPhase("done"), LINE_MS + DOORS_MS + 120)
       );
     };
 

@@ -1,0 +1,430 @@
+/* =============================================================================
+   CINEMATIC INDIA NETWORK MAP
+   All motion is CSS. Entrance animations run once, keyed by [data-phase="in"],
+   and only when [data-armed] was set by JS with motion allowed — no-JS and
+   reduced-motion visitors always see the finished map. Ambient loops (arc
+   pulses, HQ ring, halo) run only under prefers-reduced-motion: no-preference.
+   ========================================================================== */
+
+.wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
+  gap: clamp(2rem, 4.5vw, 4rem);
+  align-items: center;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* ---- Stage ------------------------------------------------------------ */
+.stage {
+  position: relative;
+  margin: 0;
+  min-width: 0;
+}
+/* faint engineering grid behind the map, fading out radially */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: -4%;
+  background:
+    repeating-linear-gradient(0deg, var(--border) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, var(--border) 0 1px, transparent 1px 44px);
+  opacity: 0.16;
+  -webkit-mask-image: radial-gradient(75% 75% at 50% 48%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(75% 75% at 50% 48%, #000 30%, transparent 78%);
+  pointer-events: none;
+}
+/* soft radial light behind India */
+.halo {
+  position: absolute;
+  inset: 4% 6%;
+  background: radial-gradient(
+    52% 46% at 48% 46%,
+    var(--accent-soft) 0%,
+    transparent 72%
+  );
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--accent); /* feeds the dot pattern via currentColor */
+}
+
+/* dot-matrix interior (one pattern-masked rect) */
+.dotFill {
+  opacity: 0.34;
+}
+:global([data-theme="light"]) .dotFill {
+  opacity: 0.5;
+}
+
+/* national outline */
+.outline {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px var(--accent-soft));
+}
+
+/* decorative supply arcs (travelling light pulses from the HQ) */
+.arc {
+  fill: none;
+  stroke: url(#nm-arc);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.09 0.91;
+  opacity: 0.55;
+}
+:global([data-theme="light"]) .arc {
+  opacity: 0.7;
+}
+
+/* ---- Permanent city labels (SVG text, scales with the map) -------------- */
+.cityLabel {
+  font-family: var(--font-mono);
+  font-size: 11.5px; /* viewBox units — scales with the map like the artwork */
+  letter-spacing: 0.04em;
+  fill: var(--text-secondary);
+  /* halo so labels stay readable over dots, arcs and the outline */
+  stroke: var(--bg-primary);
+  stroke-width: 3px;
+  paint-order: stroke;
+  stroke-linejoin: round;
+  user-select: none;
+}
+.cityLabelHq {
+  font-weight: var(--fw-semibold);
+  fill: var(--text-primary);
+}
+:global([data-theme="light"]) .cityLabel {
+  stroke: var(--bg-secondary);
+}
+
+/* ---- City nodes -------------------------------------------------------- */
+.node {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border-radius: var(--radius-circle);
+}
+.node:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* larger touch targets on coarse pointers (the visible dot stays small) */
+@media (pointer: coarse) {
+  .node {
+    width: 36px;
+    height: 36px;
+  }
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-circle);
+  background: var(--accent);
+  box-shadow:
+    0 0 8px 1px color-mix(in srgb, var(--accent) 65%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+  transition:
+    transform var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out);
+}
+.node:hover .dot {
+  transform: scale(1.35);
+}
+.nodeActive .dot {
+  transform: scale(1.4);
+  box-shadow:
+    0 0 12px 2px color-mix(in srgb, var(--accent) 80%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
+/* HQ: signal-red node (the emphasised point on the client's map) */
+.nodeHq .dot {
+  width: 12px;
+  height: 12px;
+  background: var(--accent-2);
+  box-shadow:
+    0 0 12px 2px color-mix(in srgb, var(--accent-2) 62%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--accent-2) 16%, transparent);
+}
+.nodeHq.nodeActive .dot {
+  box-shadow:
+    0 0 16px 3px color-mix(in srgb, var(--accent-2) 78%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--accent-2) 26%, transparent);
+}
+.ring {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-circle);
+  border: 1.5px solid var(--accent-2);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- Labels / tooltips -------------------------------------------------- */
+.tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% - 2px);
+  transform: translateX(-50%);
+  padding: 0.24rem 0.55rem;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs, 4px);
+  opacity: 0;
+  translate: 0 3px;
+  transition:
+    opacity var(--dur) var(--ease-out),
+    translate var(--dur) var(--ease-out);
+  pointer-events: none;
+  z-index: 2;
+}
+.tip[data-pos="below"] {
+  bottom: auto;
+  top: calc(100% - 2px);
+}
+.nodeHq .tip {
+  bottom: calc(100% + 3px);
+}
+.node:hover .tip,
+.node:focus-visible .tip,
+.nodeActive .tip {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---- Info panel --------------------------------------------------------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.panelKicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.panelCity {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  letter-spacing: var(--ls-tight);
+  color: var(--text-primary);
+}
+.panelState {
+  margin-top: -0.35rem;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+.panelBody {
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  line-height: var(--lh-relaxed);
+}
+.panelAddress {
+  padding: 0.7rem 0.9rem;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.panel > a {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+}
+
+/* verified footprint stats — hairline index rows */
+.stats {
+  margin-top: 1rem;
+  border-top: 1px solid var(--hairline);
+}
+.stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.statValue {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+/* ---- Responsive --------------------------------------------------------- */
+@media (max-width: 1020px) {
+  .wrap {
+    grid-template-columns: 1fr;
+  }
+  .stage {
+    max-width: 620px;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .panel {
+    max-width: 620px;
+    margin-inline: auto;
+    width: 100%;
+  }
+}
+@media (max-width: 480px) {
+  .tip {
+    font-size: 0.56rem;
+  }
+}
+
+/* =============================================================================
+   MOTION — entrance runs once ([data-phase="in"]), ambient loops are gated to
+   no-preference. Pre-reveal hiding applies ONLY when JS armed the stage.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  /* pre-reveal states (armed by JS, not yet in view) */
+  .wrap[data-armed="1"][data-phase="idle"] .outline {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .wrap[data-armed="1"][data-phase="idle"] .dotFill,
+  .wrap[data-armed="1"][data-phase="idle"] .arc,
+  .wrap[data-armed="1"][data-phase="idle"] .labels {
+    opacity: 0;
+  }
+  .wrap[data-armed="1"][data-phase="idle"] .node {
+    opacity: 0;
+    scale: 0.4;
+  }
+
+  /* entrance */
+  .wrap[data-phase="in"] .outline {
+    stroke-dasharray: 1;
+    animation: nmDraw 1.6s var(--ease-out) forwards;
+  }
+  .wrap[data-phase="in"] .dotFill {
+    animation: nmFadeDots 0.9s var(--ease-out) 1s backwards;
+  }
+  .wrap[data-phase="in"] .node {
+    animation: nmNode 0.5s var(--ease-out) backwards;
+    animation-delay: calc(1.15s + var(--node-i) * 42ms);
+  }
+  .wrap[data-phase="in"] .labels {
+    animation: nmArcIn 0.9s var(--ease-out) 1.9s backwards;
+  }
+  .wrap[data-phase="in"] .arc {
+    animation:
+      nmArcIn 0.8s var(--ease-out) backwards,
+      nmTravel 4.6s linear infinite;
+    animation-delay: calc(2s + var(--arc-i) * 160ms), 0s;
+  }
+
+  /* ambient loops */
+  .wrap[data-phase="in"] .ring {
+    animation: nmRing 2.8s var(--ease-out) 2.4s infinite;
+  }
+  .halo {
+    animation: nmHalo 9s var(--ease-in-out) infinite;
+  }
+}
+
+/* reduced motion: static arcs read as faint connection lines */
+@media (prefers-reduced-motion: reduce) {
+  .arc {
+    stroke-dasharray: none;
+    opacity: 0.16;
+  }
+}
+
+@keyframes nmDraw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes nmFadeDots {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes nmNode {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes nmArcIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes nmTravel {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes nmRing {
+  0% {
+    opacity: 0.85;
+    scale: 1;
+  }
+  70% {
+    opacity: 0;
+    scale: 3.1;
+  }
+  100% {
+    opacity: 0;
+    scale: 3.1;
+  }
+}
+@keyframes nmHalo {
+  0%,
+  100% {
+    opacity: 0.65;
+    scale: 1;
+  }
+  50% {
+    opacity: 0.95;
+    scale: 1.04;
+  }
+}

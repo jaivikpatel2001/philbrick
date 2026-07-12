@@ -65,10 +65,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0A0E14" },
-    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
-  ],
+  /* Single dark value to match the brand default (site theme deliberately does
+     NOT follow the OS colour scheme); themeInitScript + ThemeProvider update
+     this meta at runtime when the visitor picks light. */
+  themeColor: "#0A0E14",
 };
 
 export default function RootLayout({

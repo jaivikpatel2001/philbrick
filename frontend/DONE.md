@@ -6,6 +6,297 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-12 08:09 IST (default theme: dark for first-time visitors)
+
+### Dark is the brand default; a visitor's chosen theme persists
+
+**Status:** Completed (full cycle verified on the production build)
+
+**Change:** the pre-paint `themeInitScript` (ThemeProvider) previously fell back
+to the OS `prefers-color-scheme` for first-time visitors — a light-mode OS got
+the light site. It now defaults to **dark unconditionally**; only a theme the
+visitor picked with the toggle (saved in `localStorage["philbrick-theme"]`)
+overrides it on return visits. Persistence on toggle already existed.
+
+**Also:**
+- `viewport.themeColor` no longer follows the OS (was a light/dark media pair,
+  contradicting the dark default): single `#0A0E14`, updated at runtime by the
+  init script + `ThemeProvider.apply()` (`#FFFFFF` when light is chosen) so the
+  mobile browser chrome always matches the actual page theme.
+- No-JS fallback already dark (`:root` carries the dark tokens in tokens.css).
+
+**Verification (production build, real browser):** shipped HTML contains **zero**
+`prefers-color-scheme` references (OS never consulted). First visit (storage
+cleared) → `data-theme="dark"`, meta `#0A0E14`, nothing stored. Navbar toggle →
+light + `localStorage=light` + meta `#FFFFFF`. Fresh load on another route →
+**still light** (persisted, applied pre-paint by the inline script — no flash).
+
+**Affected Areas:** `components/providers/ThemeProvider.tsx`, `app/layout.tsx`.
+
+**Follow-up:** None.
+
+---
+
+## 2026-07-12 08:01 IST (network map: marker accuracy + all-city labels)
+
+### Fix markers drifting off the coastline; label every city
+
+**Status:** Completed (0 label collisions, all 31 markers verified inside the landmass)
+
+**Problems (user-reported, confirmed):** some coastal dots sat on or outside the
+outline, and only 8 cities had permanent labels while the client's reference
+artwork names all of them.
+
+**Root causes + fixes:**
+1. **Coordinate-space bug:** the HTML marker buttons were positioned as
+   percentages of the UNPADDED map size while the SVG viewBox includes padding —
+   biasing every marker ~2% left/up (what pushed west-coast dots onto the sea).
+   Buttons now use the same padded space (shared `PAD` constants).
+2. **Simplified-coastline drift:** true lat/lng of coastal cities (Kandla,
+   Mumbai, Goa, Chennai, Kochi, Thiruvananthapuram) can fall outside the
+   450-point simplified polygon. Added a point-in-polygon **radial nudge** in
+   `NetworkMap.tsx`: the smallest displacement in any direction that puts a
+   marker safely inside (a centroid-directed nudge fails on the tapered east
+   coast — Chennai's centroid direction points seaward). Max real nudge: 7.5
+   map units (invisible at scale).
+3. **All 31 cities now carry permanent labels** as SVG `<text>` (scales with the
+   map like the client's print artwork) with per-city placement hand-tuned in
+   `data/network.ts` (labelDx/labelDy/labelAnchor, mirroring the reference's
+   label sides) + a background-matched halo (`paint-order: stroke`) for
+   readability over dots/arcs in both themes. Hover/selection tooltip now shows
+   the STATE (name is always visible). Labels fade in with the reveal.
+
+**QA harness:** new [`scripts/checkNetworkMap.mjs`](scripts/checkNetworkMap.mjs)
+parses `data/network.ts` + `data/indiaMap.ts`, replicates the projection/nudge,
+**asserts every marker is safely inside the landmass**, and renders a dark+light
+preview PNG for collision review. Verified: ✓ all 31 inside; in-page pairwise
+label-bbox scan → **0 overlaps** (fixed the Gujarat cluster: Kandla above its
+dot, Ahmedabad below the HQ dot, Rajkot below); no horizontal overflow.
+
+**Affected Areas:** `sections/network/NetworkMap.{tsx,module.css}`,
+`data/network.ts`, `scripts/checkNetworkMap.mjs` (new).
+
+**Follow-up:** None.
+
+---
+
+## 2026-07-12 07:44 IST (requirement 27: cinematic India network map)
+
+### Network page: interactive India service network map
+
+**Status:** Completed (build green; interaction, themes, mobile geometry and
+data integrity verified on the production build)
+
+**Data integrity (the hard requirement):**
+- City list = **exactly the 31 cities on the client's own "Our Domestic
+  Business" India map** (artwork supplied by the user, 2026-07-12) — recorded in
+  [`data/network.ts`](data/network.ts) with a source-of-truth header forbidding
+  additions. Ahmedabad is the emphasised HQ point, as on the artwork. Spellings
+  normalised (Srinagar, Bhubaneswar); states are plain geography.
+- No invented coverage: no dealer counts, no service-centre counts, no
+  "pan-India" claims. The stat rows show only verified facts: 31 network
+  cities (count of the client map), Ahmedabad factory/HQ, exports to China &
+  Taiwan (existing verified copy). Supply arcs are documented in-source as
+  **decorative composition**, not logistics routes.
+- **India outline:** generated from DataMeet's `india-composite` boundary (the
+  Survey-of-India convention — full J&K, matching the client's artwork) by the
+  committed [`scripts/generateIndiaMap.mjs`](scripts/generateIndiaMap.mjs):
+  242k points Douglas-Peucker-simplified to 450 (5 KB path) with shared
+  projection constants in [`data/indiaMap.ts`](data/indiaMap.ts). Islands
+  omitted, as in the client's reference. Outline + all 31 projected cities
+  visually verified against real geography before implementation.
+
+**Experience** ([`sections/network/NetworkMap.tsx`](sections/network/NetworkMap.tsx) + module CSS):
+- Custom SVG map — no Google Map, no mapping library: glowing national outline
+  (drop-shadow) drawn on reveal; **dot-matrix interior as ONE pattern-masked
+  rect** (not thousands of elements); faint engineering grid + radial halo;
+  8 decorative supply arcs from Ahmedabad with travelling light pulses;
+  31 city nodes (azure) + red HQ node with pulse ring.
+- Interaction: every node is a real `<button>` (hover tooltip city · state,
+  focus ring, `aria-pressed`, keyboard operable); selecting updates an
+  `aria-live` info panel (kicker "Headquarters & factory"/"Network city", city,
+  state, honest body copy, HQ address, contextual contact CTA, verified stat
+  rows). Default selection = Ahmedabad. Touch: 36px hit targets on coarse
+  pointers; hover never required.
+- Reveal-once via IntersectionObserver (+4s fallback so the map can never stay
+  hidden); staggered node pops; arcs draw last. **Reduced motion:** complete map
+  immediately, arcs become faint static lines, no loops — enforced by wrapping
+  every animation in `prefers-reduced-motion: no-preference` and arming
+  pre-reveal hiding only via JS (no-JS visitors also get the finished map).
+- Performance: all motion is CSS; React state = selected city + one reveal flag;
+  no rAF loops; ~31 buttons + 8 paths + 3 masked shapes total.
+- Layout: SectionHeader (centered eyebrow rule) + map ~62% / panel ~38% on
+  desktop, stacked under 1020px; alternating section backgrounds untouched
+  (new section slots into the global nth-of-type system).
+
+**State boundaries decision:** national outline + dot-matrix interior instead of
+internal state borders — accurate state polygons need heavy geodata conflicting
+with the performance requirement, and the client's own reference artwork also
+shows no state boundaries. Documented per "where technically practical".
+
+**Verification (production build):** desktop 1280px — 31 nodes, 8 arcs, default
+HQ panel, click Chennai → panel + `aria-pressed` update, no horizontal overflow.
+Mobile 375px — stacked layout, tap Mumbai → panel updates, no overflow. Themes —
+static cascade verified (dark arc/dots .55/.34 vs light .7/.5; nodes 28px,
+opacity 1). IO fallback fired where IO was unavailable. (The preview pane's
+frozen renderer cannot play CSS animations — entrance/pulse tweens are standard
+CSS; a real visible browser runs them.)
+
+**Affected Areas:** `data/{network,indiaMap}.ts`, `scripts/generateIndiaMap.mjs`,
+`sections/network/NetworkMap.{tsx,module.css}`, `app/network/page.tsx`.
+
+**Known Limitations:**
+- The 31-city list is client artwork; confirm it stays current with the client
+  before major releases (single edit point: `data/network.ts`).
+- Permanent labels show for 8 anchor metros only (all cities label on
+  hover/focus/selection) to avoid label collisions at small sizes.
+
+**Follow-up:** None.
+
+---
+
+## 2026-07-12 07:20 IST (mobile nav drawer scroll fix)
+
+### Make the mobile menu scrollable when the product accordion overflows
+
+**Status:** Completed (geometry-verified at 375×812 on the production build)
+
+**Problem:** with Products (and a category) expanded, the drawer's nav list grew
+taller than the viewport and could not be scrolled — items below the fold were
+unreachable.
+
+**Root causes (two, both fixed):**
+1. `.body` had `flex: 1; overflow-y: auto` but **no `min-height: 0`** — a column
+   flex item never shrinks below its content by default, so the list grew past
+   the panel and `overflow-y` never engaged.
+2. The drawer stops Lenis while open, and a **stopped Lenis preventDefaults
+   touch/wheel globally** — the same root cause as the earlier mega-menu scroll
+   bug. The panel lacked the `data-lenis-prevent` exemption.
+
+**Changes** (`components/layout/MobileNav.module.css`, `MobileNav.tsx`):
+- `.body`: `min-height: 0` + `overscroll-behavior: contain` +
+  `-webkit-overflow-scrolling: touch`.
+- `.head` / `.foot`: `flex-shrink: 0` (header + Theme/CTA/phone stay pinned
+  while only the nav list scrolls).
+- `data-lenis-prevent` on the drawer `aside`.
+
+**Verification:** production build served at 375×812; drawer opened, Products +
+a category expanded → nav list `scrollHeight 1282` vs `clientHeight 551` with
+`overflow-y: auto`, programmatic scroll 0→400 works, footer pinned,
+`data-lenis-prevent` present. (Touch gestures themselves can't be simulated in
+the preview pane; both root causes are fixed and the scroll region is proven.)
+
+**Follow-up:** None.
+
+---
+
+## 2026-07-12 07:14 IST (requirements 24 + 25 + 26: logo spelling, preloader line, contact form email)
+
+### Fix "phibrick" → "philbrick" in the logo artwork; sequence the preloader seam line; real contact form delivery
+
+**Status:** Completed (build green; delivery to the configured inbox confirmed by
+FormSubmit `success:true` after the user activated the endpoint)
+
+**24 — Logo spelling (root cause + repair):**
+- The user was right: the elevator branding was missing its "l" — but the defect
+  was in the **supplied artwork itself**. Both `public/brand/logo.png` AND the
+  pre-cleanup `logo-source.png` read **"phibrick"** (8 glyph runs, verified by
+  pixel column analysis and visual inspection), while the client's original
+  low-res `logo.jpg` and the older generated `philbrick-logo.png` read
+  "philbrick". The earlier transparency fix did NOT cause it.
+- **Repair (image surgery on `logo.png`):** measured every glyph box, shifted
+  "phi" left 14px and "brick"+® right 35px (® stays well inside the canvas),
+  and inserted a new "l" cloned from the **b's own left ascender stem**
+  (x718–750, a pure vertical bar y31–192) — so weight, height, terminals and
+  colour match the typeface by construction. Result: 9 glyph runs, verified
+  visually. Canvas stays 1277×286, so no component dimensions changed.
+- Regenerated `philbrick-og.png` from the repaired logo (1200×630, navy
+  `#0A0E14`); dark tagline/® recoloured to light steel **in the OG only** so the
+  full lockup reads on navy. Favicons/mark derive from the emblem — unaffected.
+- The 3D elevator decal, navbar, preloader and Coming Soon all load this same
+  file, so every surface now shows "philbrick". Decal legibility verified by
+  simulating the texture at 120/240/420px on the dark header (the "l" is clearly
+  visible at all sizes); day/night identical by construction (unlit material).
+  Light theme verified on white. Code sweep for text misspellings: none found.
+- CLAUDE.md architecture note fixed (`philbrick-logo.png` → `logo.png`).
+
+**25 — Preloader: seam line only after the countdown:**
+- New phase between countdown and doors in `Preloader.tsx`:
+  `boot → arrive → open → done` (was boot → open). The **same promise chain that
+  ends the countdown** (min sequence ∧ page load, or the hard cap) now triggers
+  `arrive`; `open` follows after `LINE_MS` (460ms). No arbitrary CSS delays, so
+  the sequence cannot desynchronise on fast/slow devices.
+- `Preloader.module.css`: `.doorEdge` is now fully hidden during boot
+  (`opacity: 0; transform: scaleY(0)`) and draws in top→bottom on
+  `[data-phase="arrive"]` (0.42s ease-out scaleY + 0.18s fade), staying lit
+  through `open` so it rides the door edges apart. Reduced motion: no line
+  travel (transition removed; straight to the quick fade as before).
+- **Verified with a live timeline probe** on the built site: `boot` (line
+  computed opacity 0 for the whole countdown, t≈316–2106ms) → `arrive` (2106ms)
+  → `open` (2601ms ≈ arrive + LINE_MS) → removed (3709ms). Steady-state cascade
+  checks confirm hidden-in-boot / visible-in-arrive+open. (The in-app preview's
+  frozen renderer cannot tween transitions, which initially masked the reveal —
+  the state and cascade are proven; the tween is standard CSS.)
+
+**26 — Premium contact form + email delivery (no backend):**
+- `ContactForm.tsx` rewritten: the old form **simulated** success with a
+  setTimeout and delivered nothing. It now POSTs JSON via `fetch` to
+  **FormSubmit.co's AJAX endpoint** — works on the static export with no
+  backend, no Next API route/Server Action, no nodemailer, no `mailto:`, and the
+  visitor never leaves the page.
+- Recipient configured via **`NEXT_PUBLIC_CONTACT_FORM_TO_EMAIL`** (placeholder
+  in `.env.example` with full setup notes; real inbox only in git-ignored
+  `.env.local`). Documented that `NEXT_PUBLIC_*` is browser-visible — acceptable
+  for a delivery address (FormSubmit needs no API key; no secrets involved), and
+  the FormSubmit random alias can replace the raw address post-activation.
+- Fields: Full name*, Work email*, Phone, Company, Inquiry type (Product /
+  Technical Support / Dealer or Network / Business / General), Message*,
+  consent*. Honeypot `_honey` (visually hidden, tabIndex −1) + FormSubmit
+  server-side filtering; `_captcha` disabled (cannot render in the AJAX flow).
+- Email is readable (`_template: "table"`, labelled fields, IST "Submitted At"
+  timestamp, subject "Philbrick website enquiry: <type>").
+- UX: inline validation with `aria-invalid`/`aria-describedby`, disabled button
+  + spinner while sending (duplicate-submission guard), success panel that
+  clears the form **only after confirmed success**, failure banner
+  (`role="alert"`) that preserves every entered value for retry.
+- Styling extends the existing token system (new `.banner`, `.spinner`, `.hp`);
+  light/dark and responsive behaviour inherit the proven form styles.
+- **Verified end to end:** empty submit → all 4 inline errors; filled submit
+  through the real React form → FormSubmit accepted and the success panel
+  rendered; final confirmation POST returned `{"success":"true"}` — the
+  endpoint is **activated** (user clicked FormSubmit's activation link) and
+  test submissions are delivering to the configured inbox.
+
+**Affected Areas:** `public/brand/{logo.png,philbrick-og.png}`,
+`components/providers/{Preloader.tsx,Preloader.module.css}`,
+`components/forms/{ContactForm.tsx,ContactForm.module.css}`,
+`.env.example`, `.env.local` (git-ignored), `CLAUDE.md`.
+
+**Technical Decisions:**
+- Repair the supplied wordmark via same-file glyph cloning rather than re-setting
+  text in a lookalike font — the inserted "l" is pixel-identical in style.
+- FormSubmit.co over Web3Forms/Formspree: no account or API key, the endpoint is
+  derived from the env-configured address, and activation is a single inbox
+  click — the only workable secretless flow for a fully static export.
+- Preloader phases over CSS delays so countdown completion is the single source
+  of truth for the line reveal.
+
+**Known Limitations:**
+- `logo-source.png` (haze original) still shows "phibrick"; kept verbatim as the
+  as-supplied archive. Ask the client for corrected master artwork if they have it.
+- FormSubmit free tier marks very high volumes as spam-filtered; if volume grows,
+  swap the env var to a FormSubmit random alias (also hides the raw address) or
+  upgrade — no code change needed.
+- The in-app preview cannot render transitions/screenshots (frozen renderer);
+  final visual polish of the line draw + form themes is worth one glance on a
+  real browser.
+
+**Follow-up:** Optionally replace `NEXT_PUBLIC_CONTACT_FORM_TO_EMAIL` with the
+FormSubmit random alias (Settings on formsubmit.co) to keep the raw inbox out of
+the page source, then rebuild.
+
+---
+
 ## 2026-07-11 18:35 IST (3D hero: brand on the elevator + mobile performance)
 
 ### Move Philbrick branding to the elevator; investigate + fix mobile jitter

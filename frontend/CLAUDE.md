@@ -265,5 +265,11 @@ in sync with the code so a new developer (or AI) can get productive fast.
   `config/pageReleases.ts` — see the STRICT RULE at the top.**
 - Real Philbrick company data lives in `constants/site.ts`; product data in
   `data/products.ts`; company content in `data/company.ts`. Logo assets are in
-  `public/brand/` (`philbrick-logo.png` full lockup, `philbrick-mark.png` emblem)
+  `public/brand/` (`logo.png` full lockup, `philbrick-mark.png` emblem)
   with app icons at `app/icon.png` / `app/apple-icon.png`.
+- **Contact form delivery:** `components/forms/ContactForm.tsx` POSTs to
+  FormSubmit.co's AJAX endpoint (static-export safe — no backend, no API route,
+  no nodemailer, no `mailto:`). The recipient comes from
+  `NEXT_PUBLIC_CONTACT_FORM_TO_EMAIL` (see `.env.example`; inlined at build).
+  Spam protection = honeypot `_honey` + FormSubmit filtering. Never hardcode the
+  address in components and never put secret API keys in `NEXT_PUBLIC_*` vars.
