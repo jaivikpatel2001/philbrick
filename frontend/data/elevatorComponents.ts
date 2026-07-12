@@ -1,8 +1,12 @@
 /* =============================================================================
    ELEVATOR COMPONENTS — content for the interactive hero explorer.
    Each component is focused by the scroll camera and exposes a clickable
-   hotspot that opens a detail panel. 3D anchors / camera framing live in
+   hotspot that opens a detail modal. 3D anchors / camera framing live in
    sections/experience/ElevatorScene.tsx, keyed by `key`.
+
+   `image` is a realistic render of the part (public/images/3D_Elevetor),
+   shown in the hotspot modal. Served as responsive WebP via lib/imageLoader
+   (see scripts/optimize3DElevator.mjs); the .png stays as the raw fallback.
    ========================================================================== */
 
 export interface ElevatorComponent {
@@ -11,10 +15,13 @@ export interface ElevatorComponent {
   name: string;
   tagline: string;
   description: string;
+  image: string;
   specs: { label: string; value: string }[];
   benefits: string[];
   iconName: string;
 }
+
+const IMG = "/images/3D_Elevetor";
 
 export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
   {
@@ -24,6 +31,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "Command, beautifully simple.",
     description:
       "A full height brushed stainless car operating panel with flush capacitive call buttons, tactile braille, and a soft touch feel. Every control is reachable, legible and accessible, engineered to ADA / EN 81-70 standards.",
+    image: `${IMG}/component-car-operating-panel.png`,
     specs: [
       { label: "Material", value: "Hairline brushed 316 stainless" },
       { label: "Buttons", value: "Capacitive, halo-lit, anti-vandal" },
@@ -44,6 +52,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "Access on your terms.",
     description:
       "A keyed security switch enables independent service, firefighter mode, and floor lockout. Integrated with access control and the building management system for secure, role based operation.",
+    image: `${IMG}/component-security-key-switch.png`,
     specs: [
       { label: "Modes", value: "Independent · Firefighter · Lockout" },
       { label: "Integration", value: "Access control / BMS ready" },
@@ -64,6 +73,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "Information, in motion.",
     description:
       "A high resolution TFT display shows position, direction, destination dispatch assignments and live building media. Crisp typography and smooth transitions keep passengers informed and at ease.",
+    image: `${IMG}/component-display-screen.png`,
     specs: [
       { label: "Panel", value: '10.4" TFT, 1080p, IPS' },
       { label: "Shows", value: "Position · direction · messages · media" },
@@ -84,6 +94,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "Help, always one press away.",
     description:
       "A clearly marked alarm and two way emergency intercom with battery backup and automatic light. Connects directly to a 24/7 monitoring centre, with hands free audio and visual confirmation.",
+    image: `${IMG}/component-emergency-call.png`,
     specs: [
       { label: "Comms", value: "Two way hands free intercom" },
       { label: "Backup", value: "Battery backed alarm + light" },
@@ -104,6 +115,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "Silent, sensing, sure.",
     description:
       "A belt driven, VVVF controlled door operator opens and closes with whisper quiet precision. A full height infrared light curtain and anti crush sensing keep passengers safe at the threshold.",
+    image: `${IMG}/component-door-mechanism.png`,
     specs: [
       { label: "Operator", value: "VVVF belt driven, closed loop" },
       { label: "Safety", value: "Full height IR light curtain" },
@@ -124,6 +136,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "The heart of the rise.",
     description:
       "A gearless permanent magnet traction machine drives the car with exceptional efficiency and a vibration free ride. A regenerative VVVF drive feeds braking energy back into the building grid.",
+    image: `${IMG}/component-traction-machine.png`,
     specs: [
       { label: "Type", value: "Gearless permanent magnet, MRL" },
       { label: "Drive", value: "Regenerative VVVF, IGBT" },
@@ -144,6 +157,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "Engineered to never fail quietly.",
     description:
       "Progressive safety gear, an overspeed governor and energy absorbing buffers arrest the car smoothly in milliseconds if anything exceeds limits, backed by continuous condition diagnostics.",
+    image: `${IMG}/component-safety-system.png`,
     specs: [
       { label: "Brake", value: "Progressive safety gear, IS 14665" },
       { label: "Governor", value: "Bi directional overspeed" },
@@ -164,6 +178,7 @@ export const ELEVATOR_COMPONENTS: ElevatorComponent[] = [
     tagline: "A room you want to ride in.",
     description:
       "Floor to ceiling glass, hairline steel, a stone floor, a mirrored wall and a warm linear light cove. Finishes are configured to the architecture, so the cabin becomes part of the building's design.",
+    image: `${IMG}/component-interior-design.png`,
     specs: [
       { label: "Walls", value: "Glass · steel · stone · veneer · leather" },
       { label: "Lighting", value: "Hidden warm LED cove, tunable" },

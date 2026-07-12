@@ -1,4 +1,44 @@
 {
+  "/images/3D_Elevetor/component-car-operating-panel.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/3D_Elevetor/component-display-screen.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/3D_Elevetor/component-door-mechanism.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/3D_Elevetor/component-emergency-call.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/3D_Elevetor/component-interior-design.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/3D_Elevetor/component-safety-system.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/3D_Elevetor/component-security-key-switch.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/3D_Elevetor/component-traction-machine.png": [
+    384,
+    640,
+    960
+  ],
   "/images/about/about-hero.png": [
     640,
     1080,
