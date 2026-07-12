@@ -176,6 +176,46 @@ image planes were added to the 3D scene.
 
 ---
 
+## 2026-07-12 18:24 IST (cinematic hero video prompt suite)
+
+### Add the video-generation prompt suite for a photoreal scroll-scrubbed hero
+
+**Status:** Completed (documentation only — no code changed; generation pending)
+
+**Changes:**
+- New **§10 "Cinematic Hero Video"** in [`imagegeneration.md`](imagegeneration.md):
+  a complete, production-ready video-generation prompt suite for replacing the
+  procedural Three.js hero with a photoreal continuous shot — night city →
+  forward push to the main tower → through the glass lobby → into the elevator →
+  in-cabin component reveals (wall finish/handrail, COP, doors + azure floor
+  display + door-operator header) → doors part on a night sky-lobby.
+- **Multi-clip strategy** (the honest call): no current model holds one
+  identical building/elevator/cabin across ~50 s in a single generation, so the
+  sequence is **6 chained ~8 s clips** (VID-001…VID-006) with: a **MASTER
+  CONSISTENCY BLOCK** pasted verbatim into every prompt (fixed tower, elevator,
+  cabin, palette #109BDD azure + warm amber, night environment, camera grammar,
+  strict negative list), **last-frame → first-frame conditioning** between
+  clips, and explicit per-clip START/END STATE descriptions so each clip begins
+  exactly where the previous ends. A §10.9 **single-prompt variant** covers
+  future ≥50 s tools.
+- **Camera grammar codified:** exactly two motions in the whole film, each in
+  one unwavering direction — a single straight-forward dolly (clips 1–5), then,
+  only after translation stops, a single clockwise pan for the component
+  reveals (clip 6). 35 mm spherical, 24 fps, eye height locked at 1.60 m,
+  documented rationale in §10.8.
+- **Brand-safety:** all prompts forbid readable text/logos; the Philbrick
+  wordmark is composited in post from `public/brand/logo.png` (§10.10), same
+  reasoning as the site's 3D decal.
+- Header note in the doc now points to §10 as the planned hero upgrade.
+
+**Affected Areas:** `imagegeneration.md` only.
+
+**Follow-up:** user generates the 6 clips (chained, per §10.0), delivers to
+`public/videos/hero/`; the scroll-scrubbed playback integration replacing
+`ElevatorScene` is a separate implementation task raised on approval.
+
+---
+
 ## 2026-07-12 08:09 IST (default theme: dark for first-time visitors)
 
 ### Dark is the brand default; a visitor's chosen theme persists
