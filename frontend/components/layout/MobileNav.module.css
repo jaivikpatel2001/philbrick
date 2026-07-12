@@ -34,6 +34,7 @@
   justify-content: space-between;
   padding: 1.1rem 1.5rem;
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 .close {
   display: grid;
@@ -52,7 +53,13 @@
 
 .body {
   flex: 1;
+  /* A column flex item won't shrink below its content without this, so the
+     accordion could grow past the viewport and overflow-y never engaged. */
+  min-height: 0;
   overflow-y: auto;
+  /* Keep the drawer's scroll from chaining to the (locked) page behind it. */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 1rem 1.5rem;
 }
 
@@ -144,6 +151,7 @@
   gap: 1rem;
   padding: 1.5rem;
   border-top: 1px solid var(--border);
+  flex-shrink: 0;
 }
 .footRow {
   display: flex;

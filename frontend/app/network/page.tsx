@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/sections/shared/PageHero";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { NetworkMap } from "@/sections/network/NetworkMap";
 import { FeatureGrid } from "@/sections/shared/FeatureGrid";
 import { CTASection } from "@/sections/shared/CTASection";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
@@ -60,6 +62,19 @@ export default function NetworkPage() {
         imageAlt="Modern Indian city skyline at golden hour"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Network" }]}
       />
+
+      {/* Cinematic India network map — cities from the client's own
+          "Our Domestic Business" artwork (see data/network.ts) */}
+      <section className="section">
+        <div className="container--wide">
+          <SectionHeader
+            eyebrow="Domestic network"
+            title="One factory, 31 cities."
+            description="Every point on this map is a city on Philbrick's domestic business network, supplied from our Ahmedabad factory. Select a city to see how we reach it."
+          />
+          <NetworkMap />
+        </div>
+      </section>
 
       <section className="section">
         <div className="container--wide">

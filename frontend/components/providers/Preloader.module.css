@@ -42,7 +42,10 @@
 .doorRight {
   right: 0;
 }
-/* Lit seam where the leaves meet — light escaping from the lobby behind */
+/* Lit seam where the leaves meet — light escaping from the lobby behind.
+   Hidden for the whole countdown (data-phase="boot"); revealed by the "arrive"
+   phase (countdown complete), drawing top→bottom like light spilling down the
+   seam as the car settles, then it rides the door edges apart on "open". */
 .doorEdge {
   position: absolute;
   top: 0;
@@ -50,7 +53,18 @@
   width: 2px;
   background: var(--accent);
   box-shadow: 0 0 18px 2px color-mix(in srgb, var(--accent) 55%, transparent);
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition:
+    transform 0.42s var(--ease-out),
+    opacity 0.18s linear;
+  will-change: transform;
+}
+.wrap[data-phase="arrive"] .doorEdge,
+.wrap[data-phase="open"] .doorEdge {
   opacity: 0.85;
+  transform: scaleY(1);
 }
 .doorLeft .doorEdge {
   right: 0;
@@ -154,6 +168,10 @@
   .arrow,
   .floor {
     animation: none;
+  }
+  .doorEdge {
+    /* no draw animation — the line simply exists once the fade begins */
+    transition: none;
   }
   .wrap[data-phase="open"] .stack {
     transition-duration: 0.2s;

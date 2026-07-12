@@ -3,6 +3,55 @@
   flex-direction: column;
   gap: 1.5rem;
 }
+
+/* Failure banner — shown above the fields; entered data is preserved. */
+.banner {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid color-mix(in srgb, #f87171 45%, var(--border));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #f87171 9%, var(--surface));
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+.bannerIcon {
+  flex-shrink: 0;
+  margin-top: 0.14em;
+  color: #f87171;
+}
+
+/* Honeypot — off-screen for humans, present for naive bots. */
+.hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Button spinner while a submission is in flight */
+.spinner {
+  width: 1em;
+  height: 1em;
+  border-radius: var(--radius-circle);
+  border: 2px solid color-mix(in srgb, var(--accent-contrast) 35%, transparent);
+  border-top-color: var(--accent-contrast);
+  animation: formSpin 0.7s linear infinite;
+}
+@keyframes formSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1.6s;
+  }
+}
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -100,6 +100,10 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-label="Menu"
+            /* A stopped Lenis still preventDefaults touch/wheel globally —
+               exempt the drawer so its nav list scrolls natively (same fix as
+               the mega menu). */
+            data-lenis-prevent
           >
             <div className={styles.head}>
               <Logo />
