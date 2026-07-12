@@ -12,23 +12,50 @@
 }
 
 .inner {
+  /* Usable panel height, shared with the scrollable columns below so they can
+     bound themselves against the viewport. A % max-height on the columns won't
+     resolve here (the grid row is content-sized under align-items: start), so
+     they reference this value directly. */
+  --menu-max-h: calc(100vh - var(--nav-h) - 1rem);
   display: grid;
   grid-template-columns: 264px minmax(0, 1fr) 296px;
   gap: clamp(1.5rem, 3vw, 3rem);
   padding-block: 2rem 2.5rem;
-  max-height: calc(100vh - var(--nav-h) - 1rem);
-  overflow-y: auto;
-  /* Scroll the menu, never chain to the page behind it. */
-  overscroll-behavior: contain;
+  /* Bound the panel height, but DON'T scroll the whole grid — each inner
+     column scrolls independently (below), so the header/category nav stay put
+     and only the column that overflows moves. */
+  max-height: var(--menu-max-h);
+  overflow: hidden;
+  align-items: start;
 }
 
 /* ----- Left rail — grouped categories --------------------------------- */
 .rail {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1.6rem;
   border-right: 1px solid var(--hairline);
   padding-right: clamp(0.75rem, 1.5vw, 1.5rem);
+  /* Scroll ONLY the category rail if it outgrows the panel. Bound to the panel's
+     usable height (minus its 4.5rem block padding) so it actually scrolls — a
+     % max-height won't resolve against the content-sized grid row. */
+  max-height: calc(var(--menu-max-h) - 4.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.rail::-webkit-scrollbar {
+  width: 6px;
+}
+.rail::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: var(--radius-pill);
+}
+/* Product-group separation: a rule + accent tick above each group after the
+   first, so the "GROUP → categories" hierarchy reads at a glance. */
+.railGroup:not(:first-child) {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
 }
 .railGroup ul {
   display: flex;
@@ -36,13 +63,24 @@
   gap: 0.1rem;
 }
 .railTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   font-family: var(--font-mono);
   font-size: var(--fs-eyebrow);
   text-transform: uppercase;
   letter-spacing: var(--ls-eyebrow);
-  font-weight: var(--fw-medium);
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  margin-bottom: 0.65rem;
+}
+.railTitle::before {
+  content: "";
+  width: 0.9rem;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 .railLink {
   display: flex;
@@ -63,15 +101,23 @@
   background: var(--surface-2);
   color: var(--text-primary);
 }
+/* Subcategory indicator — only rendered for categories that have children.
+   Bolder + clearer than before so the "has more" affordance is obvious. */
 .railChev {
   flex-shrink: 0;
-  opacity: 0.5;
-  transition: transform var(--dur-fast) var(--ease-out);
+  width: 1.1rem;
+  height: 1.1rem;
+  stroke-width: 2.6;
+  color: var(--text-muted);
+  opacity: 0.85;
+  transition: transform var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
 }
+.railLink:hover .railChev,
 .railLinkActive .railChev {
-  opacity: 1;
-  transform: translateX(2px);
   color: var(--accent);
+  opacity: 1;
+  transform: translateX(3px);
 }
 
 /* ----- Detail pane ---------------------------------------------------- */
@@ -79,12 +125,16 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  /* Header stays put; only the product list (.children) scrolls if it's tall. */
+  max-height: calc(var(--menu-max-h) - 4.5rem);
+  min-height: 0;
 }
 .detailHead {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  flex-shrink: 0;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
   border-bottom: 1px solid var(--hairline);
@@ -118,6 +168,20 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.25rem 1.5rem;
+  align-content: start;
+  /* Scroll only this product list when it overflows the pane. */
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 0.4rem;
+  scrollbar-width: thin;
+}
+.children::-webkit-scrollbar {
+  width: 6px;
+}
+.children::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: var(--radius-pill);
 }
 .childLink {
   display: block;

@@ -1,4 +1,121 @@
-.rows {
+/* ===== Partnership journey — a linear continuum (desktop) ===============
+   Four steps along a drawn progress line, numbered nodes on the line, copy
+   below. Distinct from section 02's radial orbit. */
+.journey {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+/* the horizontal spine, aligned to the node centres, drawn on reveal */
+.line {
+  position: absolute;
+  top: 22px; /* half the node height */
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--border-strong));
+  transform-origin: left center;
+}
+
+.step {
+  position: relative;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
+
+.node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--accent);
+  box-shadow: 0 0 0 5px var(--bg-primary);
+}
+.nodeNum {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: var(--fw-semibold);
+  color: var(--accent);
+}
+.step:hover .node {
+  background: var(--accent);
+}
+.step:hover .nodeNum {
+  color: var(--accent-contrast);
+}
+
+.stepBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.verb {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.stepTitle {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+.stepDesc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+  max-width: 34ch;
+}
+
+/* ===== Tablet — two per row ============================================= */
+@media (max-width: 900px) and (min-width: 641px) {
+  .journey {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 2rem;
+  }
+  /* the single horizontal line doesn't map to a 2x2 grid — drop it */
+  .line {
+    display: none;
+  }
+}
+
+/* ===== Mobile — vertical spine ========================================== */
+@media (max-width: 640px) {
+  .journey {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding-left: 0.5rem;
+  }
+  .line {
+    top: 0;
+    bottom: 0;
+    left: 21px;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--accent), var(--border-strong));
+    transform-origin: top center;
+  }
+  .step {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.1rem;
+  }
+  .stepDesc {
+    max-width: none;
+  }
+}
+/* The line-draw itself is handled by the global [data-reveal="line"] utility
+   (scaleX 0 → none on reveal); .is-visible must win, so no override here. */

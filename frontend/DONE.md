@@ -6,6 +6,176 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-12 20:05 IST
+
+### Follow-ups: mega-menu rail scroll + rotating product orbit
+
+**Status:** Completed
+
+**Mega menu — left rail now scrolls.** The category rail could overflow the panel
+on short viewports but wouldn't scroll: `.rail`/`.detail` used `max-height: 100%`,
+which can't resolve because `.inner` is a grid with `align-items: start` and no
+*definite* height (the row is content-sized, so `100%` = the tall content height →
+no constraint). Fix: `.inner` now exposes its usable height as a custom property
+`--menu-max-h: calc(100vh - var(--nav-h) - 1rem)`, and the scrollable columns bound
+themselves to `calc(var(--menu-max-h) - 4.5rem)` (minus the panel's block padding).
+Verified at 1440x700: rail `max-height` resolves to 536px, `overflow-y: auto`,
+`scrollHeight 917 > clientHeight 536`, scrolls 381px; detail/feature stay put.
+
+**Section 02 orbit — the ring now revolves, cards stay upright.** Per request, the
+six category nodes now orbit "The Philbrick system" core continuously, while each
+card stays horizontal ("straight"). Technique: `.orbit` spins `orbitSpin` 0→360°;
+each node gets a new counter-rotating wrapper `.nodeSpin` running `orbitCounter`
+0→-360° at the identical 40s/linear rate, so the ring's rotation is cancelled at
+the card and text never tilts. The wrapper is separate from `.node` so it doesn't
+collide with the hover lift or the entrance `data-reveal` (both use transform on
+`.node`). Motion is gated behind `@media (prefers-reduced-motion: no-preference)
+and (min-width: 821px)` — reduced-motion users and mobile keep the static ring /
+spine. It pauses ONLY while a clickable card is hovered (`.stage:has(.node:hover)`)
+or focused (`:focus-within`) — not over empty stage space or the core — so the ring
+keeps turning until you actually target a node. Verified: hovering the core/empty
+area leaves it `running`, hovering a card flips both `.orbit` and `.nodeSpin` to
+`paused`, moving away resumes. Verified: `.orbit` animation `orbitSpin` 40s, `.nodeSpin` `orbitCounter`
+40s (6 wrappers); a node swept 91° around the core while its AABB height held at
+~80px (a co-rotating card would balloon to ~199px), proving it stays upright.
+
+**Section 02 core — centered + round.** The "The Philbrick system" hub sat
+off-axis (down-right by half its size): it centered itself with `transform:
+translate(-50%, -50%)`, but it also carries `data-reveal="scale"`, and the reveal
+utility ends on `transform: none` (globals.css) — which overrode the centering
+transform once revealed (a single element can't hold both transforms). Fix: a new
+`.coreWrap` owns the centering transform (no `data-reveal`), so the reveal's
+transform lives on the inner `.core` and can't move it. The core is now a circle
+(`aspect-ratio: 1; border-radius: 50%`, ~220px) instead of a rounded square; on
+mobile it reverts to the rounded-rectangle row for the vertical spine. Verified:
+core center == node centroid (Δ 0,0), 220.8x220.8 with border-radius 50%, mobile
+spine intact (~0 overflow), light + dark.
+
+**Affected Areas:** `components/layout/MegaMenu.module.css` (`.inner`/`.rail`/
+`.detail` height model), `sections/home/ProductsShowcase.tsx` (`.nodeSpin` +
+`.coreWrap` wrappers), `sections/home/ProductsShowcase.module.css` (spin/
+counter-spin keyframes + motion-safe media query, circular centered core).
+
+**Technical Decisions:**
+- Shared the panel height via a CSS custom property instead of hard-coding a vh
+  calc on each column, so the padding math lives in one place.
+- Counter-rotation on a dedicated wrapper (not `.node`) keeps three independent
+  transforms from fighting: positioning (`.nodeItem`), spin-cancel (`.nodeSpin`),
+  hover/reveal (`.node`).
+- 40s/revolution + hover/focus pause keeps the motion calm and the links usable,
+  in line with the "premium, intentional, reduced-motion-safe" motion rules.
+
+**Known Limitations:**
+- The orbit only animates >=821px (below that it's the static vertical spine, which
+  has no ring to rotate).
+
+---
+
+## 2026-07-12 19:51 IST
+
+### Requirements 28–30: interior lighting, part-image hotspot modals, mega-menu UX, Home 02/03 redesign
+
+**Status:** Completed
+
+**28 — Interior lighting rebalance (interior-only, exterior untouched):**
+- The lobby/cabin was overexposed. Fixed by dialling interior-dominant lighting,
+  not global brightness: `soft1` 3.2→1.7, `soft2` 1.8→0.95 (RectArea softboxes);
+  the warm `key` DirectionalLight now eases 2.0→1.0 by `insideT`; interior IBL
+  target eased to `INTERIOR_ENV` 0.9→0.72 (was `ENV.intensity` 1.25); tone-mapping
+  exposure ×0.76 once inside; lobby marble `floorMat` roughened (0.14→0.34) and
+  darkened so it stops blowing to white; chrome tamed (`steel`/`panelMat`/`mirror`
+  envMapIntensity + roughness); emissive pulses (COP screen, ceiling LED) lowered.
+  All gated by `insideT` (0 during exterior beats) so the tower/sky/moon/stars and
+  day/night arc are unaffected. Verified day + night, both interior beats.
+
+**28 — 8 realistic part images + redesigned hotspot modal:**
+- Audited all 8 renders in `public/images/3D_Elevetor` (2400×1792). Clean 1:1
+  mapping to the hero components (image → key): car-operating-panel→control-panel,
+  security-key-switch→key-switch, display-screen→display, emergency-call→emergency,
+  door-mechanism→doors, traction-machine→motor, safety-system→safety,
+  interior-design→interior. No image ambiguous; none reused.
+- `data/elevatorComponents.ts` gained an `image` field. `ComponentModal` rebuilt
+  into a premium **image + info split** (image left / scrollable info right on
+  desktop, stacked on mobile): Next.js Image, responsive, aspect-preserved, alt
+  text; background scroll locked (Lenis stop + overflow, restored on close);
+  Escape + Tab-trap + focus restore to the trigger; theme-aware via tokens; a
+  "Explore Philbrick products" link to the real /products route.
+- `scripts/optimize3DElevator.mjs` generates 384/640/960 WebP variants (≈9–55 KB
+  vs 1.5 MB PNG) and merges them into `lib/imageManifest.json`, so `imageLoader`
+  serves modal images as WebP — mobile-safe, lazy (loads only when a hotspot is
+  opened). Source PNGs kept.
+
+**28 — deliberate decision (documented):** the 8 images are **complete composed
+renders with backgrounds**, not surface/cutout textures. Mapping them onto the
+procedural elevator's small meshes would show their backgrounds and look wrong,
+and loading eight 2400px textures would risk the mobile jitter the earlier passes
+fixed. Per the spec's own guidance ("prioritize the hotspot modal image
+experience"), the correct integration point is the redesigned modal. No floating
+image planes were added to the 3D scene.
+
+**29 — Products mega menu:**
+- Scroll is now **scoped**: `.inner` is `overflow: hidden` (the whole panel no
+  longer scrolls); the category **rail** and the **product list** each scroll
+  independently only when they overflow; the detail header stays fixed. Kept the
+  previous Lenis fix (`data-lenis-prevent` + `overscroll-behavior: contain`).
+- Subcategory chevrons are bolder/clearer (size + weight + colour), rendered
+  **only** for categories that actually have children.
+- Product-group headings (Control & Drives, Safety & Intelligence, Doors &
+  Mechanism, Cabin & Fixtures) now read as a clear hierarchy: an accent tick
+  before each title + a hairline rule between groups. Verified light + dark.
+
+**30 — Home sections 02 & 03 fully redesigned (distinct concepts):**
+- **02 The Range → "Product Orbit"** (`ProductsShowcase`): six categories orbit a
+  central "Philbrick system" core on concentric rings (CSS orbit via per-node
+  angle); collapses to a connected vertical **system spine** on mobile. Nodes link
+  to their categories.
+- **03 What We Offer → "Partnership Journey"** (`ServiceEcosystem`): the four real
+  offerings (Manufacture · Configure · Modernise · Support) as a linear continuum
+  along a drawn progress line with numbered nodes; vertical spine on mobile.
+- Radial (02) vs linear (03) read as clearly different but share tokens, the
+  numbered-eyebrow system, typography and motion. Line-draw + node reveals use the
+  existing `[data-reveal]` utilities (reduced-motion safe). Both themes, mobile
+  recomposed, ~0 horizontal overflow.
+
+**Affected Areas:**
+- `sections/experience/ElevatorScene.tsx` (interior lighting), `ComponentModal.tsx`
+  + `.module.css`, `data/elevatorComponents.ts`, `scripts/optimize3DElevator.mjs`,
+  `lib/imageManifest.json`, `public/images/3D_Elevetor/*` (WebP),
+  `components/layout/MegaMenu.module.css`, `sections/home/ProductsShowcase.*`,
+  `sections/home/ServiceEcosystem.*`.
+
+**Technical Decisions:**
+- Interior lighting driven entirely by `insideT` so it can't touch the exterior;
+  chrome/floor material tweaks are global but only visible inside.
+- Modal images through the existing WebP pipeline (new dedicated script) rather
+  than serving raw PNGs — keeps the mobile-perf guarantee.
+- Mega-menu scoped scroll via per-column `overflow` + `max-height: 100%` against a
+  bounded, non-scrolling `.inner` — no new scroll-lock machinery.
+- Section concepts are pure CSS/SVG-free layout + existing reveal utilities (no
+  new Three.js scene, no new deps).
+
+**Verification (dev server + Puppeteer + `__vertiqHero` scrub hook):**
+- Interior day + night at the lobby and explore beats (rebalanced, floor reads,
+  components still clearly visible). Modal: opens from a hotspot, image served as
+  `...-640.webp`, scroll locked, Escape closes + restores scroll, has the products
+  CTA — dark, light, mobile. Mega menu: `.inner overflow=hidden`, `.rail
+  overflow-y=auto`, 5 chevrons (only sub-cat categories), 5 group headings.
+  Sections 02/03: desktop dark + light + mobile, ~0 overflow. `npm run build`
+  green (58/58 pages). Zero page errors; zero failed image responses.
+
+**Known Limitations:**
+- Component explore close-ups still read fairly bright where the camera sits right
+  under the cabin LED cove; pushing darker would fight the "components must be
+  clearly visible" requirement, so the balance favours visibility.
+- `components/cards/ServiceCard.*` is now unused (section 03 no longer renders it);
+  left in place (not imported, not bundled) to avoid churn — safe to delete later.
+
+**Follow-up:**
+- If the client wants an in-3D-scene image beyond the modal, commission cutout
+  (transparent-background) part renders that can texture a plane cleanly.
+
+---
+
 ## 2026-07-12 08:09 IST (default theme: dark for first-time visitors)
 
 ### Dark is the brand default; a visitor's chosen theme persists

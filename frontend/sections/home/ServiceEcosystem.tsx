@@ -1,8 +1,17 @@
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
-import { ServiceCard } from "@/components/cards/ServiceCard";
 import { SERVICES } from "@/data/services";
 import styles from "./ServiceEcosystem.module.css";
+
+/* A partnership continuum: the four real Philbrick offerings presented as a
+   relationship that runs the length of an elevator's life, not four cards.
+   Distinct from section 02's ecosystem orbit (linear vs radial). */
+const STEP_VERB: Record<string, string> = {
+  manufacturing: "Manufacture",
+  "custom-oem": "Configure",
+  modernisation: "Modernise",
+  "support-spares": "Support",
+};
 
 export function ServiceEcosystem() {
   return (
@@ -18,11 +27,29 @@ export function ServiceEcosystem() {
             </Button>
           }
         />
-        <div className={styles.rows}>
+
+        <ol className={styles.journey} role="list">
+          {/* progress line drawn on reveal (behind the steps) */}
+          <span className={styles.line} data-reveal="line" aria-hidden />
+
           {SERVICES.map((service, i) => (
-            <ServiceCard key={service.slug} service={service} index={i} />
+            <li
+              key={service.slug}
+              className={styles.step}
+              data-reveal="up"
+              style={{ "--reveal-delay": `${0.12 + i * 0.12}s` } as React.CSSProperties}
+            >
+              <span className={styles.node} aria-hidden>
+                <span className={styles.nodeNum}>{String(i + 1).padStart(2, "0")}</span>
+              </span>
+              <div className={styles.stepBody}>
+                <span className={styles.verb}>{STEP_VERB[service.slug] ?? service.shortName}</span>
+                <h3 className={styles.stepTitle}>{service.name}</h3>
+                <p className={styles.stepDesc}>{service.description}</p>
+              </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

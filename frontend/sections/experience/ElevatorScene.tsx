@@ -281,13 +281,13 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     const wallMarble = makeMarble(3, false);
 
     /* ---------- Materials ---------- */
-    const steel = new THREE.MeshPhysicalMaterial({ color: 0xb9bdc4, metalness: 1, roughness: 0.26, roughnessMap: brushed, anisotropy: 0.4, anisotropyRotation: Math.PI / 2, envMapIntensity: 1.7, clearcoat: 0.15, clearcoatRoughness: 0.35 });
+    const steel = new THREE.MeshPhysicalMaterial({ color: 0xb9bdc4, metalness: 1, roughness: 0.32, roughnessMap: brushed, anisotropy: 0.4, anisotropyRotation: Math.PI / 2, envMapIntensity: 1.3, clearcoat: 0.15, clearcoatRoughness: 0.35 });
     const darkMetal = new THREE.MeshPhysicalMaterial({ color: 0x171a20, metalness: 0.92, roughness: 0.42, roughnessMap: brushed, envMapIntensity: 1.0 });
     const gold = new THREE.MeshPhysicalMaterial({ color: 0xc7a96a, metalness: 1, roughness: 0.32, anisotropy: 0.4, envMapIntensity: 1.35, clearcoat: 0.3, clearcoatRoughness: 0.2 });
-    const panelMat = new THREE.MeshPhysicalMaterial({ color: 0x8e97a5, metalness: 1, roughness: 0.3, roughnessMap: brushed, anisotropy: 0.5, envMapIntensity: 1.25, transparent: true, opacity: 1 });
-    const mirror = new THREE.MeshPhysicalMaterial({ color: 0x232b34, metalness: 1, roughness: 0.06, envMapIntensity: 1.6 });
+    const panelMat = new THREE.MeshPhysicalMaterial({ color: 0x8e97a5, metalness: 1, roughness: 0.34, roughnessMap: brushed, anisotropy: 0.5, envMapIntensity: 1.05, transparent: true, opacity: 1 });
+    const mirror = new THREE.MeshPhysicalMaterial({ color: 0x232b34, metalness: 1, roughness: 0.08, envMapIntensity: 1.3 });
     const stone = new THREE.MeshStandardMaterial({ map: floorMarble, color: 0x6b6b72, metalness: 0.1, roughness: 0.4, envMapIntensity: 0.7 });
-    const floorMat = new THREE.MeshStandardMaterial({ map: floorMarble, color: 0xb7b2a8, metalness: 0.1, roughness: 0.14, envMapIntensity: 1.0 });
+    const floorMat = new THREE.MeshStandardMaterial({ map: floorMarble, color: 0x9a968d, metalness: 0.1, roughness: 0.34, envMapIntensity: 0.7 });
     const wallMat = new THREE.MeshStandardMaterial({ map: wallMarble, color: 0x3a3e46, metalness: 0.05, roughness: 0.55, envMapIntensity: 0.55 });
     const coveMat = new THREE.MeshStandardMaterial({ color: 0xffe9c8, emissive: 0xffe1b4, emissiveIntensity: 1.1 });
     const ledMat = new THREE.MeshStandardMaterial({ color: 0xfff4d6, emissive: 0xffe6b0, emissiveIntensity: 1.6 });
@@ -1025,14 +1025,20 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     scene.add(hemi);
     // Soft area lights = even, photographic illumination on the metal (softboxes).
     RectAreaLightUniformsLib.init();
-    const soft1 = new THREE.RectAreaLight(0xfff2e4, 3.2, 7, 4.5);
+    // Softbox fill for the cabin. Toned down (was 3.2 / 1.8) so the interior
+    // reads cinematic and contrasted rather than overexposed; these mostly
+    // affect the inside beats (aimed at the elevator), leaving the tower alone.
+    const soft1 = new THREE.RectAreaLight(0xfff2e4, 1.7, 7, 4.5);
     soft1.position.set(0, 3.6, 6.5);
     soft1.lookAt(0, 0, 0);
     scene.add(soft1);
-    const soft2 = new THREE.RectAreaLight(0xdfe8ff, 1.8, 5, 4);
+    const soft2 = new THREE.RectAreaLight(0xdfe8ff, 0.95, 5, 4);
     soft2.position.set(-5, 2.6, 3.5);
     soft2.lookAt(0, 0, 0);
     scene.add(soft2);
+    /* Restrained interior IBL level — the target scene.environmentIntensity
+       eases to once the camera is inside (see the pose loop). */
+    const INTERIOR_ENV = 0.9;
 
     /* ===== Optional GLTF ===== */
     const gltfGroup = new THREE.Group();
@@ -1243,7 +1249,15 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
         // windows glow brightest through dusk, then die off in daylight
         ctxMats[ci].emissiveIntensity = lerp(NIGHT.ctxEmissive, DAY.ctxEmissive, day) + dusk * 0.12;
       }
-      renderer.toneMappingExposure = mix3n(NIGHT.exposure, SUNSET.exposure, DAY.exposure, day);
+      // Exposure follows day/night outside, then dips once we're inside the
+      // cabin so the bright metal/glass interior keeps material definition
+      // instead of clipping to white. insideT is 0 during the exterior beats,
+      // so this never touches the tower/sky/moon.
+      renderer.toneMappingExposure =
+        mix3n(NIGHT.exposure, SUNSET.exposure, DAY.exposure, day) * lerp(1, 0.76, insideT);
+      // The warm key is strong for the exterior tower but over-lights the pale
+      // lobby marble once we're inside — ease it down with insideT (0 outside).
+      key.intensity = 2.0 * lerp(1, 0.5, insideT);
       // sky: night dome is the base; sunset peaks mid-blend; day fades in last
       sunsetMat.opacity = dusk * 0.95;
       sunsetSky.visible = dusk > 0.01;
@@ -1260,8 +1274,10 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       starMat.opacity = (1 - smoothstep(0.2, 0.55, day)) * (1 - dusk * 0.4);
       stars.visible = starMat.opacity > 0.01;
 
-      // night/day outside → the studio reflections bloom back up as we step inside
-      scene.environmentIntensity = lerp(lerp(NIGHT.envExterior, DAY.envExterior, day), ENV.intensity, insideT);
+      // night/day outside → studio reflections come up as we step inside, but
+      // eased to a restrained interior level (was ENV.intensity 1.25, which
+      // over-lit the chrome/glass) so surfaces read with depth, not glare.
+      scene.environmentIntensity = lerp(lerp(NIGHT.envExterior, DAY.envExterior, day), INTERIOR_ENV, insideT);
       // the exterior key light hands over to the interior rig at the threshold
       moon.intensity = lerp(NIGHT.moonI, DAY.moonI, day) * (1 - smoothstep(0.3, INSIDE_P + 0.03, p));
       // the entrance glass dissolves just before the camera passes through it,
@@ -1276,10 +1292,11 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       // safety x-ray: fade side panels when the safety component is active
       const tgt = activeRef.current === safetyIdx ? 0.12 : 1;
       panelMat.opacity += (tgt - panelMat.opacity) * 0.12;
-      // emissive pulses
+      // emissive pulses (dialled down so the ceiling LED + COP screen glow
+      // read as light sources, not blown highlights, in the rebalanced interior)
       const t = (performance.now() - startT) / 1000;
-      screenMat.emissiveIntensity = 1.1 + Math.sin(t * 3) * 0.3;
-      ledMat.emissiveIntensity = 1.5 + Math.sin(t * 1.4) * 0.2;
+      screenMat.emissiveIntensity = 0.95 + Math.sin(t * 3) * 0.22;
+      ledMat.emissiveIntensity = 1.05 + Math.sin(t * 1.4) * 0.14;
       updateHotspots();
     };
 

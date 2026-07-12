@@ -1,118 +1,278 @@
 .section {
   background: var(--bg-secondary);
   border-block: 1px solid var(--border);
+  overflow: hidden;
 }
 
-/* ----- Editorial product index: numeral · name · specs · hover image ----- */
-.index {
+/* ===== Product ecosystem — orbit (desktop) ===============================
+   A central "system" core with category nodes on a ring, plus two decorative
+   concentric orbit rings. Communicates breadth as a connected whole. */
+.stage {
+  --r: clamp(150px, 30vw, 250px); /* orbit radius */
+  position: relative;
+  width: 100%;
+  height: calc(var(--r) * 2 + 120px);
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+/* concentric orbit rings */
+.stage::before,
+.stage::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px dashed var(--border-strong);
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.stage::before {
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+}
+.stage::after {
+  width: calc(var(--r) * 1.2);
+  height: calc(var(--r) * 1.2);
+  border-style: solid;
+  opacity: 0.28;
+}
+
+/* Centering wrapper — keeps the core on the exact orbit axis regardless of the
+   reveal transform that runs on .core. */
+.coreWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.core {
   display: flex;
   flex-direction: column;
-}
-
-.row {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(3rem, 7rem) 1fr auto 2.5rem;
   align-items: center;
-  gap: clamp(1rem, 2.5vw, 2.5rem);
-  padding-block: clamp(1.4rem, 2.6vw, 2.2rem);
-  border-top: 1px solid var(--border);
-  transition: border-color var(--dur) var(--ease-out);
+  justify-content: center;
+  text-align: center;
+  gap: 0.3rem;
+  width: clamp(190px, 22vw, 230px);
+  aspect-ratio: 1;
+  padding: clamp(1rem, 2.4vw, 1.6rem);
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-accent);
+  box-shadow: var(--shadow-lg), 0 0 60px -12px var(--accent-soft);
 }
-.row:last-child {
-  border-bottom: 1px solid var(--border);
+.coreIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 1.3rem;
 }
-.row:hover {
-  border-top-color: var(--border-accent);
-}
-
-.num {
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
-  color: var(--text-faint);
-  letter-spacing: 0.08em;
-  transition: color var(--dur) var(--ease-out);
-}
-.row:hover .num {
-  color: var(--accent);
-}
-
-.name {
+.coreLabel {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 1rem + 2.2vw, 2.9rem);
-  font-weight: var(--fw-medium);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-snug);
-  line-height: 1.05;
+  line-height: 1.1;
   color: var(--text-primary);
-  transition: transform var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
 }
-.row:hover .name {
-  transform: translateX(10px);
-  color: var(--accent);
-}
-
-.meta {
-  display: flex;
-  gap: 1.75rem;
+.coreSub {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.06em;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--text-muted);
-  white-space: nowrap;
 }
 
-.arrow {
-  justify-self: end;
-  font-size: 1.4rem;
-  color: var(--text-faint);
+.orbit {
+  position: absolute;
+  inset: 0;
+}
+.nodeItem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* place on the ring: rotate to the slot angle, push out, keep content upright */
+  transform: translate(-50%, -50%)
+    rotate(calc(var(--i) * (360deg / var(--count))))
+    translateY(calc(-1 * var(--r)))
+    rotate(calc(var(--i) * (-360deg / var(--count))));
+}
+/* Counter-rotation layer: cancels the ring's spin so each card reads upright
+   ("straight") the whole way around. Kept separate from .node so it doesn't
+   collide with the hover lift or the entrance reveal, both of which use
+   transform on .node. */
+.nodeSpin {
+  display: block;
+}
+.node {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: clamp(150px, 15vw, 190px);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+.node:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-accent);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-md);
+}
+.nodeGroup {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.nodeName {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  justify-content: space-between;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+.nodeArrow {
+  flex-shrink: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
   transition: transform var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
 }
-.row:hover .arrow {
+.node:hover .nodeArrow {
   color: var(--accent);
-  transform: translate(4px, -4px);
+  transform: translate(2px, -2px);
 }
 
-/* Image slides up over the meta column on hover — quiet until asked for. */
-.thumb {
-  position: absolute;
-  right: clamp(4rem, 12vw, 12rem);
-  top: 50%;
-  width: clamp(180px, 18vw, 260px);
-  aspect-ratio: 3 / 2;
-  transform: translateY(-46%) rotate(-2deg) scale(0.96);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2;
-  box-shadow: var(--shadow-image);
-  transition: opacity 0.35s var(--ease-out), transform 0.45s var(--ease-out);
+/* ===== Continuous orbit rotation (desktop, motion-safe) ==================
+   The ring (.orbit) revolves; each node's wrapper (.nodeSpin) counter-rotates
+   at the identical rate, so the cards stay upright while they travel around the
+   core. Both animations start together and share duration/easing, so they cancel
+   exactly. The ring keeps turning over empty space and the core — it pauses ONLY
+   while the cursor is on a clickable card (or a card is focused), so a node you
+   want to read/click holds still. Reduced motion users keep the static ring. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 821px) {
+  .orbit {
+    animation: orbitSpin 40s linear infinite;
+    transform-origin: center;
+    will-change: transform;
+  }
+  .nodeSpin {
+    animation: orbitCounter 40s linear infinite;
+    transform-origin: center;
+    will-change: transform;
+  }
+  .stage:has(.node:hover) .orbit,
+  .stage:has(.node:hover) .nodeSpin,
+  .stage:focus-within .orbit,
+  .stage:focus-within .nodeSpin {
+    animation-play-state: paused;
+  }
 }
-.row:hover .thumb {
-  opacity: 1;
-  transform: translateY(-50%) rotate(0deg) scale(1);
+@keyframes orbitSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
-.thumbImg {
-  object-fit: cover;
+@keyframes orbitCounter {
+  to {
+    transform: rotate(-360deg);
+  }
 }
 
-@media (max-width: 1100px) {
-  .thumb {
+/* ===== Mobile — collapse the orbit into a connected system spine ========= */
+@media (max-width: 820px) {
+  .stage {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-left: 1.5rem;
+  }
+  .stage::before,
+  .stage::after {
+    /* repurpose one pseudo as the vertical spine line */
+    top: 1.5rem;
+    bottom: 1.5rem;
+    left: 0.4rem;
+    width: 2px;
+    height: auto;
+    border: none;
+    background: var(--border-strong);
+    border-radius: 0;
+    transform: none;
+    opacity: 1;
+  }
+  .stage::after {
     display: none;
   }
-}
-@media (max-width: 760px) {
-  .row {
-    grid-template-columns: 2.6rem 1fr 2rem;
-  }
-  .meta {
-    grid-column: 2;
-    grid-row: 2;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.25rem;
-    margin-top: 0.4rem;
-  }
-  .row:hover .name {
+  .coreWrap {
+    position: static;
     transform: none;
+  }
+  .core {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    width: auto;
+    aspect-ratio: auto;
+    border-radius: var(--radius-lg);
+    gap: 0.9rem;
+    margin-left: -1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .core .coreSub {
+    display: none;
+  }
+  .orbit {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .nodeItem {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+  /* node connector dot on the spine */
+  .nodeItem::before {
+    content: "";
+    position: absolute;
+    left: -1.1rem;
+    top: 1.4rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--bg-secondary);
+  }
+  .node {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .node:hover {
+    transform: none;
+  }
+  .nodeName {
+    flex: 1;
+    justify-content: flex-start;
   }
 }
