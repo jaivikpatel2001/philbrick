@@ -11,6 +11,10 @@ and the images will be wired into `data/images.ts` / product data by file name.
 > OG card are already custom (`public/brand/`). The `/news-events` photos are for
 > the **currently mock** newsroom — regenerate with real event photography when
 > real news is published.
+>
+> **Planned hero upgrade:** §10 is the complete **video-generation prompt suite**
+> for replacing the procedural hero with a photoreal, scroll-scrubbed cinematic
+> elevator sequence (city → building → lobby → cabin → component reveals).
 
 ---
 
@@ -486,3 +490,256 @@ image-asset rule in `CLAUDE.md`.
 (social share card) and the Product/Article JSON-LD (SEO) image for its page:
 crawlers fetch the raw `.png` URL directly, without the WebP loader. Normal
 visitors only ever download the small WebP variants.
+
+---
+
+## 10. Cinematic Hero Video — scroll sequence (video-generation prompt suite)
+
+**Status: prompts ready · generation pending.** One continuous cinematic shot
+that replaces the procedural Three.js hero: a night city establishes the world,
+the camera pushes forward in a single unbroken move toward the main tower,
+through its glass lobby, into the waiting elevator, and — once inside — reveals
+the elevator's components one by one. Stitched together, the clips become a
+**scroll-scrubbed video hero**: page scroll drives the playhead, so the story
+beats land exactly where the current 3D hero's beats land (arrival → approach →
+threshold → the call → inside → components).
+
+### 10.0 Production strategy (read before generating)
+
+- **Why multiple prompts:** no current video model reliably holds one identical
+  building, elevator, cabin and light rig across ~50 seconds of complex motion
+  in a single generation. The sequence is therefore **6 chained clips of ~8 s**
+  (48 s total at 24 fps). If your tool generates ≥ 50 s continuous shots with
+  start-frame conditioning, use the single-prompt variant in §10.9 instead.
+- **The chaining rule (this is what makes it seamless):** generate the clips in
+  order. After each clip, **export its final frame as a PNG** and supply it as
+  the **start frame / image-conditioning input** of the next clip, together
+  with that clip's prompt. Every clip's prompt below begins with the same
+  **MASTER CONSISTENCY BLOCK (§10.1) pasted verbatim** — the start frame pins
+  the geometry; the master block pins the style; the per-clip "START STATE"
+  and "END STATE" lines pin the motion continuity. If the tool has an "extend
+  video" mode, prefer extending over fresh generations.
+- **Fixed camera grammar (identical in every clip):** ONE continuous move, no
+  cuts. Translation is always straight forward along the same axis (due
+  "north" into the scene). Eye height locks at 1.60 m once the camera reaches
+  the ground. Speed is slow and constant within each beat — no speed ramps, no
+  shake, no rack-focus tricks. Lens: 35 mm spherical (no anamorphic ovals),
+  f/4 exterior, f/2.8 interior, 24 fps, 180° shutter. Inside the cabin,
+  forward translation decays to zero and the ONLY remaining motion is one
+  slow, continuous **clockwise** pan — a single rotational direction, never
+  reversing (§10.7–10.8).
+- **Deliverables:** 16:9, 3840×2160, 24 fps, highest bitrate offered. Keep the
+  tower/elevator centred so a 9:16 centre crop survives for mobile. Name the
+  files `hero-clip-01.mp4 … hero-clip-06.mp4`; final stitch
+  `philbrick-hero-full.mp4` → they will live in `public/videos/hero/`.
+- **Post:** stitch at 24 fps; one shared LUT/grade across all clips; a 2–3
+  frame cross-blend at each joint hides residual seam drift. Do not colour
+  grade clips individually.
+- **Branding:** every prompt forbids readable text and logos. The Philbrick
+  wordmark on the elevator header is **composited in post** from
+  `public/brand/logo.png` (AI-generated lettering would drift between clips —
+  the same reason the site's 3D decal uses the real file).
+
+### 10.1 MASTER CONSISTENCY BLOCK — paste verbatim at the top of EVERY prompt
+
+> Ultra-realistic cinematic architectural film, physically-based materials,
+> filmic contrast, deep clean blacks, restrained highlights. Cool, clean colour
+> grade with two fixed accents: azure-blue #109BDD for all indicator lights,
+> displays and cool practicals; warm amber (approx #FFC57A) for interior
+> architectural lighting and lit windows. Clear, dry night; no fog, no rain, no
+> wind debris; a full moon fixed high in the upper-right sky; the scene is
+> deserted — no people, no animals, no moving vehicles.
+>
+> THE MAIN TOWER (identical in every shot): a slender 34-storey rectangular
+> tower, graphite-aluminium mullions and vertical fins, floor-to-ceiling glass
+> with warm amber light glowing from scattered occupied floors, a dark stone
+> podium, a double-height ground-floor lobby in clear glass, and one thin steel
+> entrance canopy. No signage, lettering or flags anywhere. It is flanked by
+> shorter, cooler-lit background towers left and right that never change.
+>
+> THE ELEVATOR (identical in every shot): a single elevator centred on the
+> lobby's far wall. Brushed stainless-steel two-panel CENTRE-OPENING doors with
+> fine vertical brush grain, a graphite door frame, and above the doors a slim
+> azure dot-matrix floor-position display showing only a numeral and an up
+> arrow. A soft warm downlight washes the doors.
+>
+> THE CABIN (identical in every shot): interior about 2.0 m wide and 2.6 m
+> high. Brushed stainless side walls; a full-width MIRROR back wall with one
+> slim brushed handrail at 0.9 m; a dark stone floor; a warm LED ceiling light
+> cove around a central panel. On the front-right return pillar beside the
+> doors: a brushed-steel car-operating panel (COP) with one vertical column of
+> round tactile buttons with soft white halo rings and a small azure display at
+> its top. Inside, above the doors, a matching azure floor indicator. All metal
+> shows realistic anisotropic brushing and true reflections.
+>
+> CAMERA GRAMMAR: one continuous unbroken shot, 35 mm spherical lens, 24 fps,
+> eye height 1.60 m at ground level, slow constant speed, translation ONLY
+> straight forward along one axis; no cuts, no shake, no speed ramps, no zooms.
+>
+> NEGATIVE — strictly avoid: cuts, scene changes, fades, camera direction
+> reversal, teleporting; people, faces, animals, birds, moving vehicles;
+> readable text, words, logos, signage, flags (the ONLY glyphs allowed are the
+> floor display's single numeral and arrow); rain, fog, lightning, or any
+> time-of-day change; lens flare bloom, fisheye or anamorphic distortion;
+> warped, melting or morphing architecture; flickering lights; changes to the
+> tower's height, facade, canopy, lobby, elevator doors, display, cabin
+> materials, colours or layout between frames; cartoon, CGI-toy or video-game
+> look.
+
+### 10.2 VID-001 · Clip 1 "The City" — 8 s
+- **File:** `hero-clip-01.mp4` · 16:9 · 24 fps
+- **START STATE:** camera hovering 12 m above a broad, empty granite boulevard,
+  90 m from the main tower, looking straight down the boulevard's axis; the
+  tower dead-centre ahead, flanking towers framing it like a canyon; moon upper
+  right.
+- **CAMERA:** begin a slow, perfectly straight forward dolly (~1.5 m/s) while
+  descending on a smooth linear ramp from 12 m toward 6 m; no pan, no tilt
+  beyond the gentle downward-settling horizon; f/4, focus at infinity.
+- **BEATS:** 0–3 s the skyline breathes (windows glow warm amber, azure
+  aviation beacons blink on distant roofs); 3–8 s the main tower slowly grows
+  to dominate the frame; its lit double-height lobby becomes visible at street
+  level as a warm band under the canopy.
+- **END STATE (freeze for clip 2):** camera 55 m from the entrance at 6 m
+  height, still centred on the axis; the full tower fills the upper frame, the
+  glowing lobby band centred low; boulevard leading lines converge on the
+  entrance.
+
+### 10.3 VID-002 · Clip 2 "The Approach" — 8 s
+- **File:** `hero-clip-02.mp4` · start frame = final frame of clip 1
+- **START STATE:** exactly the clip-1 end state above.
+- **CAMERA:** continue the identical forward dolly (~1.2 m/s), descending
+  smoothly from 6 m to lock at eye height 1.60 m by 6 s; f/4 easing focus from
+  infinity to the entrance glass.
+- **BEATS:** 0–4 s the canopy edge slides overhead into the top of frame; the
+  lobby interior resolves through the glass — stone floor, warm cove lighting,
+  and far ahead, small but already visible, the brushed-steel elevator doors
+  with their azure display; 4–8 s the entrance's clear-glass double doors part
+  silently outward as the camera nears (an automatic entrance), never breaking
+  stride.
+- **END STATE (freeze for clip 3):** camera 18 m from the elevator wall, at
+  1.60 m, exactly on axis, half a metre outside the entrance plane; open glass
+  doors framing the shot left and right; the elevator centred ahead with its
+  azure display reading a single numeral "G" with no arrow.
+
+### 10.4 VID-003 · Clip 3 "The Threshold" — 8 s
+- **File:** `hero-clip-03.mp4` · start frame = final frame of clip 2
+- **START STATE:** exactly the clip-2 end state above.
+- **CAMERA:** same forward dolly, slowing to ~0.9 m/s as the space compresses;
+  aperture opens to f/2.8 as interior light takes over; eye height constant.
+- **BEATS:** 0–2 s the camera crosses the entrance plane — exterior night
+  sounds fall away visually: reflections of the boulevard slide off the glass
+  as warm interior light wraps the frame; 2–8 s the lobby reveals itself while
+  passing through: dark stone floor with soft mirror-like sheen, a hairline of
+  azure cove light along the ceiling, two plain graphite columns passing left
+  and right at 4 s and 6 s; the elevator doors grow steadily, their brushed
+  grain and the warm downlight wash now clearly readable.
+- **END STATE (freeze for clip 4):** camera 10 m from the elevator, centred;
+  the doors occupy the middle third of frame; display reads "G"; everything
+  else calm and symmetrical.
+
+### 10.5 VID-004 · Clip 4 "The Call" — 8 s
+- **File:** `hero-clip-04.mp4` · start frame = final frame of clip 3
+- **START STATE:** exactly the clip-3 end state above.
+- **CAMERA:** the same forward glide, decelerating gently from 0.9 m/s to
+  0.5 m/s; f/2.8; focus locked on the door seam.
+- **BEATS:** 0–2 s the azure display's up arrow illuminates beside the "G"
+  (the car answering the call); 2–5 s at ~4 m out, the two stainless panels
+  part from the centre in one smooth, mechanically believable motion — fine
+  brush grain catching the downlight, the dark seam widening symmetrically;
+  the warm cabin interior and its mirror back wall are revealed, reflecting
+  the approaching lobby; 5–8 s the camera glides through the fully open doors
+  to the cabin threshold without touching either panel.
+- **END STATE (freeze for clip 5):** camera exactly in the door plane at
+  1.60 m; the cabin interior fills the frame: mirror back wall with handrail,
+  stainless side walls, stone floor, warm ceiling cove; in the mirror, the
+  camera-side lobby glows behind; the COP column of halo-lit buttons visible
+  on the front-right return pillar at the frame's right edge.
+
+### 10.6 VID-005 · Clip 5 "Inside" — 8 s
+- **File:** `hero-clip-05.mp4` · start frame = final frame of clip 4
+- **START STATE:** exactly the clip-4 end state above.
+- **CAMERA:** forward drift decays smoothly from 0.4 m/s to a full stop at the
+  cabin's centre by 3 s — the LAST forward translation of the sequence; after
+  the stop the camera is perfectly still; f/2.8, focus on the mirror wall.
+- **BEATS:** 0–3 s entering: the ceiling cove's warm light slides over the
+  frame's top edge; the stone floor's reflection passes below; 3–6 s in the
+  MIRROR the two door panels glide shut behind the camera in one clean motion,
+  sealing the warm cabin; 6–8 s the reflected azure indicator above the doors
+  ticks from "G ▲" to "1 ▲" and a barely perceptible downward light-sweep
+  over the brushed walls sells the ascent beginning — the cabin itself never
+  shakes.
+- **END STATE (freeze for clip 6):** camera static at cabin centre facing the
+  mirror; doors closed (seen in reflection); indicator reflected as "2 ▲";
+  composition calm, symmetrical, softly lit.
+
+### 10.7 VID-006 · Clip 6 "The Machine, Revealed" — 8 s
+- **File:** `hero-clip-06.mp4` · start frame = final frame of clip 5
+- **START STATE:** exactly the clip-5 end state above.
+- **CAMERA:** zero translation. One slow, perfectly continuous **clockwise
+  pan** (yaw only, ~45°/s peak, easing at both ends) — the single rotational
+  move of the whole film, never reversing; f/2.8.
+- **BEATS — the component reveals, one per arc:**
+  - 0–2 s (0°→90°): panning off the mirror across the RIGHT stainless side
+    wall — anisotropic brushing and the handrail's end catch the cove light
+    (reveal: cabin wall finish + handrail).
+  - 2–4.5 s (90°→170°): the front-right return pillar enters frame — the
+    brushed-steel COP in close view: the vertical column of round tactile
+    buttons with soft white halos, its small azure display glowing at top; one
+    button's halo brightens as if just pressed (reveal: COP).
+  - 4.5–6.5 s (170°→180°, settling): the closed doors dead-centre; above them
+    the azure dot-matrix indicator counting "6 ▲ … 7 ▲"; beneath the ceiling
+    line, the slim graphite door-operator header reads as precise machinery
+    (reveal: doors, display, door-operator header).
+  - 6.5–8 s (locked at 180°): the indicator settles on "8" and the arrow
+    blinks off — arrival; the two panels begin to part from the centre,
+    revealing a dim, elegant sky-lobby and a wall of night-city lights beyond
+    glass (the end frame invites the page content below).
+- **END STATE (final frame of the film):** doors one-third open on the glowing
+  night skyline, camera still, cabin's warm light spilling forward — a
+  composition that dissolves cleanly into the page content.
+
+### 10.8 Why the cabin pan does not break the "one direction" rule
+The film has exactly two motions, each in one unwavering direction: a single
+straight-forward translation (clips 1–5) and, only after translation fully
+stops, a single clockwise rotation (clip 6). Neither ever reverses, jumps or
+mixes — this is the same "one consistent flow" the scroll hero needs, and it is
+the only practical way to show components mounted on three different cabin
+walls without cuts.
+
+### 10.9 Single-prompt variant (only for tools that hold ≥ 50 s with one shot)
+Paste the MASTER CONSISTENCY BLOCK (§10.1), then:
+
+> One continuous unbroken 50-second shot, 16:9, 24 fps. Begin 12 m above a
+> deserted granite boulevard at night, 90 m from the main tower, centred on its
+> axis. Dolly straight forward the entire film, first descending smoothly to
+> lock at 1.60 m eye height. The tower grows; its thin steel canopy passes
+> overhead; the double-height glass entrance parts automatically; continue
+> without pause through the warm stone lobby, straight toward the single
+> brushed-steel centre-opening elevator on the far wall, its azure display
+> reading "G". As the camera nears, the arrow lights, the panels part from the
+> centre, and the camera glides inside, easing to a complete stop at the cabin
+> centre facing the mirror back wall. In the mirror the doors close and the
+> azure indicator begins counting upward with a soft downward light-sweep. With
+> translation fully stopped, perform one slow continuous clockwise pan: across
+> the brushed right wall and handrail, onto the COP's halo-lit round buttons
+> and small azure display, settling on the closed doors and their counting
+> indicator with the slim door-operator header above. On "8" the arrow blinks
+> off and the doors part onto a dim sky-lobby with a wall of night-city lights.
+> End with the doors one-third open, camera still.
+
+### 10.10 After generation — QA + integration checklist
+1. Verify per clip: identical tower/facade/canopy, identical door grain and
+   frame, identical cabin materials, moon fixed upper-right, palette unchanged,
+   no text/logos anywhere, no people/vehicles, no cuts or shakes.
+2. Verify at each joint: the first frame of clip N+1 matches the last frame of
+   clip N (geometry + exposure) before stitching; a 2–3 frame blend hides
+   residual drift.
+3. Grade once (single LUT), stitch to `philbrick-hero-full.mp4` (24 fps, H.265
+   + H.264 fallback, ~12–16 Mbps), plus a 960-wide preview encode for mobile
+   data saver.
+4. Composite the Philbrick wordmark (`public/brand/logo.png`) onto the door
+   header in clips 4–6 in post, tracked to the header plane — never
+   AI-generated lettering.
+5. Deliver to `public/videos/hero/`; integration (scroll-scrubbed playback
+   replacing/augmenting `ElevatorScene`) is a separate implementation task —
+   raise it when the final video is approved.

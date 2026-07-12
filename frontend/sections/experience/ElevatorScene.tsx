@@ -287,10 +287,13 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     const panelMat = new THREE.MeshPhysicalMaterial({ color: 0x8e97a5, metalness: 1, roughness: 0.34, roughnessMap: brushed, anisotropy: 0.5, envMapIntensity: 1.05, transparent: true, opacity: 1 });
     const mirror = new THREE.MeshPhysicalMaterial({ color: 0x232b34, metalness: 1, roughness: 0.08, envMapIntensity: 1.3 });
     const stone = new THREE.MeshStandardMaterial({ map: floorMarble, color: 0x6b6b72, metalness: 0.1, roughness: 0.4, envMapIntensity: 0.7 });
-    const floorMat = new THREE.MeshStandardMaterial({ map: floorMarble, color: 0x9a968d, metalness: 0.1, roughness: 0.34, envMapIntensity: 0.7 });
-    const wallMat = new THREE.MeshStandardMaterial({ map: wallMarble, color: 0x3a3e46, metalness: 0.05, roughness: 0.55, envMapIntensity: 0.55 });
-    const coveMat = new THREE.MeshStandardMaterial({ color: 0xffe9c8, emissive: 0xffe1b4, emissiveIntensity: 1.1 });
-    const ledMat = new THREE.MeshStandardMaterial({ color: 0xfff4d6, emissive: 0xffe6b0, emissiveIntensity: 1.6 });
+    // Lobby floor + walls (threshold beat only — the cabin uses `stone`/panel
+    // materials). Kept deliberately deep and matte so the strong daylight rig
+    // can't blow the lobby out to white; env reflections dialled down to kill glare.
+    const floorMat = new THREE.MeshStandardMaterial({ map: floorMarble, color: 0x514e48, metalness: 0.1, roughness: 0.5, envMapIntensity: 0.34 });
+    const wallMat = new THREE.MeshStandardMaterial({ map: wallMarble, color: 0x282b31, metalness: 0.05, roughness: 0.62, envMapIntensity: 0.34 });
+    const coveMat = new THREE.MeshStandardMaterial({ color: 0xffe9c8, emissive: 0xffe1b4, emissiveIntensity: 0.55 });
+    const ledMat = new THREE.MeshStandardMaterial({ color: 0xfff4d6, emissive: 0xffe6b0, emissiveIntensity: 0.85 });
     const screenMat = new THREE.MeshStandardMaterial({ color: 0x041019, emissive: 0x2facec, emissiveIntensity: 1.4 });
     const redMat = new THREE.MeshStandardMaterial({ color: 0xd23a2c, emissive: 0x6e150c, emissiveIntensity: 0.7, metalness: 0.2, roughness: 0.5 });
 
@@ -1028,11 +1031,11 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
     // Softbox fill for the cabin. Toned down (was 3.2 / 1.8) so the interior
     // reads cinematic and contrasted rather than overexposed; these mostly
     // affect the inside beats (aimed at the elevator), leaving the tower alone.
-    const soft1 = new THREE.RectAreaLight(0xfff2e4, 1.7, 7, 4.5);
+    const soft1 = new THREE.RectAreaLight(0xfff2e4, 0.95, 7, 4.5);
     soft1.position.set(0, 3.6, 6.5);
     soft1.lookAt(0, 0, 0);
     scene.add(soft1);
-    const soft2 = new THREE.RectAreaLight(0xdfe8ff, 0.95, 5, 4);
+    const soft2 = new THREE.RectAreaLight(0xdfe8ff, 0.5, 5, 4);
     soft2.position.set(-5, 2.6, 3.5);
     soft2.lookAt(0, 0, 0);
     scene.add(soft2);
@@ -1227,6 +1230,11 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       if (Math.abs(dayTarget - dayBlend) < 0.002) dayBlend = dayTarget;
       const day = dayBlend;
       const dusk = day * (1 - day) * 4; // 0 at both ends, 1 mid-transition
+      // Daylight interior dim: once the camera reaches the threshold/lobby (by
+      // p≈0.30) in DAY mode, ease the interior lighting down so the pale lobby
+      // floor/walls don't blow out to white. Gated by p (so the bright exterior
+      // arrival at p<0.22 is untouched) and by `day` (so night is unchanged).
+      const dayInterior = day * smoothstep(0.22, 0.3, p);
       mixColor3((scene.fog as THREE.Fog).color, NIGHT.fog, SUNSET.fog, DAY.fog, day);
       mixColor3(moon.color, NIGHT.moonColor, SUNSET.sunColor, DAY.moonColor, day);
       mixColor3(hemi.color, NIGHT.hemiSky, SUNSET.hemiSky, DAY.hemiSky, day);
@@ -1234,7 +1242,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       // daylight lifts the ambient outside; ease back so the interior keeps
       // its studio look in both themes
       const hemiOut = mix3n(NIGHT.hemiI, SUNSET.hemiI, DAY.hemiI, day);
-      hemi.intensity = lerp(hemiOut, lerp(hemiOut, 0.65, day), insideT);
+      hemi.intensity = lerp(hemiOut, lerp(hemiOut, 0.65, day), insideT) * lerp(1, 0.72, dayInterior);
       winLitMat.emissiveIntensity = lerp(NIGHT.litWin, DAY.litWin, day);
       streetMat.color.lerpColors(NIGHT.street, DAY.street, day);
       massMat.color.lerpColors(NIGHT.mass, DAY.mass, day);
@@ -1254,10 +1262,10 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       // instead of clipping to white. insideT is 0 during the exterior beats,
       // so this never touches the tower/sky/moon.
       renderer.toneMappingExposure =
-        mix3n(NIGHT.exposure, SUNSET.exposure, DAY.exposure, day) * lerp(1, 0.76, insideT);
+        mix3n(NIGHT.exposure, SUNSET.exposure, DAY.exposure, day) * lerp(1, 0.5, insideT) * lerp(1, 0.6, dayInterior);
       // The warm key is strong for the exterior tower but over-lights the pale
       // lobby marble once we're inside — ease it down with insideT (0 outside).
-      key.intensity = 2.0 * lerp(1, 0.5, insideT);
+      key.intensity = 2.0 * lerp(1, 0.5, insideT) * lerp(1, 0.6, dayInterior);
       // sky: night dome is the base; sunset peaks mid-blend; day fades in last
       sunsetMat.opacity = dusk * 0.95;
       sunsetSky.visible = dusk > 0.01;
@@ -1277,7 +1285,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       // night/day outside → studio reflections come up as we step inside, but
       // eased to a restrained interior level (was ENV.intensity 1.25, which
       // over-lit the chrome/glass) so surfaces read with depth, not glare.
-      scene.environmentIntensity = lerp(lerp(NIGHT.envExterior, DAY.envExterior, day), INTERIOR_ENV, insideT);
+      scene.environmentIntensity = lerp(lerp(NIGHT.envExterior, DAY.envExterior, day), INTERIOR_ENV, insideT) * lerp(1, 0.66, dayInterior);
       // the exterior key light hands over to the interior rig at the threshold
       moon.intensity = lerp(NIGHT.moonI, DAY.moonI, day) * (1 - smoothstep(0.3, INSIDE_P + 0.03, p));
       // the entrance glass dissolves just before the camera passes through it,
@@ -1295,8 +1303,8 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
       // emissive pulses (dialled down so the ceiling LED + COP screen glow
       // read as light sources, not blown highlights, in the rebalanced interior)
       const t = (performance.now() - startT) / 1000;
-      screenMat.emissiveIntensity = 0.95 + Math.sin(t * 3) * 0.22;
-      ledMat.emissiveIntensity = 1.05 + Math.sin(t * 1.4) * 0.14;
+      screenMat.emissiveIntensity = 0.5 + Math.sin(t * 3) * 0.14;
+      ledMat.emissiveIntensity = 0.55 + Math.sin(t * 1.4) * 0.1;
       updateHotspots();
     };
 
@@ -1325,7 +1333,7 @@ function Scene3D({ onContextFail }: { onContextFail: () => void }) {
         ].join("\n"),
       })
     );
-    composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.12, 0.4, 0.9));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.06, 0.4, 0.9));
     composer.addPass(new OutputPass());
     /* MSAA (renderer `antialias:true`) already resolves edges; SMAA is a second
        full-screen AA pass. Skip it on low-perf devices to save that pass. */
