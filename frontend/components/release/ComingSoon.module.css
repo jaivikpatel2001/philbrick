@@ -7,7 +7,7 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
-  padding-block: calc(var(--nav-h) + var(--space-6)) var(--space-7);
+  padding-block: var(--space-6) var(--space-7);
   overflow: clip;
   background: var(--bg-primary);
   isolation: isolate;

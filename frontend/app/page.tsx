@@ -1,4 +1,8 @@
-import { ElevatorHero } from "@/sections/experience/ElevatorHero";
+/* Three.js hero — replaced by the scroll-driven exploded component tour.
+   DO NOT DELETE: restore by swapping the imports + JSX back
+   (sections/experience/ElevatorScene.tsx and friends are kept intact). */
+// import { ElevatorHero } from "@/sections/experience/ElevatorHero";
+import { ExplorationHero } from "@/sections/experience/ExplorationHero";
 import { AboutPreview } from "@/sections/home/AboutPreview";
 import { ProductsShowcase } from "@/sections/home/ProductsShowcase";
 import { ServiceEcosystem } from "@/sections/home/ServiceEcosystem";
@@ -16,8 +20,10 @@ import { COMPANY_STATS } from "@/data/stats";
 export default function HomePage() {
   return (
     <ReleaseGate route="/" label="Home">
-      {/* Cinematic Three.js elevator hero */}
-      <ElevatorHero />
+      {/* Scroll-driven exploded component tour (the Three.js hero is
+          preserved above, commented out — do not delete it) */}
+      <ExplorationHero />
+      {/* <ElevatorHero /> */}
 
       {/* About the company */}
       <AboutPreview />

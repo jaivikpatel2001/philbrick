@@ -6,6 +6,194 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-16 16:50 IST
+
+### Exploration hero: 8 client component cutouts integrated (cards → floating parts)
+
+**Status:** Completed
+
+The client generated all 8 component images from the §11.3 prompts and dropped
+them in `public/images/home/hero-exploration/components/`. Audit: 7 of 8 are
+true-alpha cutouts (opaque coverage 18 to 39%, edges transparent);
+`07-interior-design` arrived fully opaque with a painted fake-transparency
+checkerboard.
+
+**Pipeline:** originals archived to
+`image-sources/home/hero-exploration/components-original/`; the 7 cutouts
+trimmed of transparent padding (sharp `.trim` threshold 8) + 16px margin
+re-added so parts render at full visual size; 07 cropped inside the
+checkerboard to the cabin's rectangle (kept as a framed card — a room reads
+well framed; regenerating with true alpha can upgrade it later);
+`optimizeHeroExploration.mjs` produced 18 WebP variants + manifest entries.
+
+**Wiring:** `data/heroExploration.ts` PART_SPECS now carry per-part
+`treatment` / `image` / natural `aspect` / optional `size` caps (COP strip:
+wCap 110px, hCap 38vh; default 205px / 23vh). `ExplorationHero.tsx` renders
+per-part images with inline aspect-ratio + `min(hCapVh, wCap/aspect)` height
+for cutouts. CSS: cutouts have no card chrome, `object-fit: contain`, a
+static drop-shadow to ground them (theme-tuned), width-auto boxes, capped
+labels. The old 3D_Elevetor photos remain untouched (still used by the
+preserved Three.js hero's modal).
+
+**Verified:** all 8 serve as WebP (HTTP 200, image/webp); forced final-state
+geometry shows the natural-shape boxes sized as designed (e.g. COP 68px wide
+at 38vh tall, door operator 204px wide) and ZERO overlaps among the 8 parts;
+the priority image decodes; lazy siblings pend only in the rAF-frozen preview
+pane (environment artifact — they load normally in a real browser).
+
+**Follow-up:** optional regeneration of 07 with true transparency; consider
+per-part fine-tuning of slot positions now that shapes are natural.
+
+---
+
+## 2026-07-16 15:55 IST
+
+### Exploration hero polish: calmer headline + "machine arrives" intro
+
+**Status:** Completed
+
+- **Intro type (user request, settled after three iterations):** the h1 moved
+  from `--fs-display-2` (≈85px, 4-line wall) through an over-shrunk 46px step
+  to the final `--fs-h1` (≈66px, 3 lines, ~460px intro block including
+  eyebrow + lead) — strong editorial presence without the wall of text;
+  line-height 1.08; the lead is `--fs-body` with a 26rem measure.
+- **Scroll-driven arrival (user request, settled after three iterations):**
+  the elevator rests small (scale 0.45 desktop / 0.6 mobile, opacity 0.92,
+  7vh low, ~243px tall at rest). As the user begins scrolling it scales up
+  ~2.3x into place (power2.out, lands just after the intro beat), then keeps
+  slowly approaching (to scale 1.05) plus the -2vh drift for the rest of the
+  tour. Implemented as sequential same-property tweens on the one scrubbed
+  master timeline (scrub-reversal safe); replaces the old flat spine
+  parallax. Reduced-motion static view untouched (full size).
+
+**Files:** `sections/experience/ExplorationHero.tsx` (arrival tweens),
+`ExplorationHero.module.css` (.title/.lead sizes).
+
+**Verified (geometry, preview tab):** at scrollY 0 the spine computes
+scale 0.78 / opacity 0.92 with the 50% 62% origin; h1 renders 54.4px over 3
+lines. Scrub motion validated in the user's real browser (preview pane
+freezes rAF; known quirk).
+
+---
+
+## 2026-07-16 15:49 IST
+
+### Exploration hero: real cutaway spine integrated + zigzag part layout
+
+**Status:** Completed
+
+**Real center elevator.** The client supplied a photoreal cutaway render
+(1024x1536). It carried a painted grey studio backdrop (alpha channel present
+but background not transparent), so the pipeline feathers its edges to alpha
+(hard fade left/right where the margins are empty, gentle top/bottom where the
+machine nearly touches) — it now melts into the themed stage like a lit
+column. Original archived at
+`image-sources/home/hero-exploration/elevetorhero-original.png`; processed file
+at `public/images/home/hero-exploration/spine/elevator-cutaway.png` with WebP
+variants + manifest entries via `scripts/optimizeHeroExploration.mjs`. Wired
+through the `SPINE` config in `data/heroExploration.ts` (blueprint SVG remains
+the fallback by flipping the config back).
+
+**Zigzag layout (user request: parts must not overlap).** Each column now
+alternates near/far from the elevator: left column x 30/13/30/13, right column
+x 86/69/86/69 (% of stage). The alternating x offsets guarantee vertically
+adjacent cards never collide. Cards slimmed to `clamp(140px, 12.5vw, 190px)`.
+The right rail became dots-only with the name shown just for the active part,
+removing its collision with the far-right cards.
+
+**Verification (geometry, in-page):** spine loads and serves as
+`elevator-cutaway-640.webp` through the loader; all 8 parts forced to their
+final slots and measured — pairwise overlap check: NONE; zero console errors.
+(The embedded preview pane still freezes rAF, so scrub motion remains
+real-browser verified.)
+
+**Affected areas:** `data/heroExploration.ts` (SPINE + zigzag slots),
+`sections/experience/ExplorationHero.tsx` (rail markup),
+`ExplorationHero.module.css` (card width, rail name reveal),
+`public/images/home/hero-exploration/spine/*`, `lib/imageManifest.json`,
+`imagegeneration.md` §11.2 status.
+
+**Follow-up:** a re-render with a TRUE transparent background (prompt in
+§11.2) can drop in at the same path for an even cleaner cutout in light theme;
+the 11 component cutouts (§11.3) remain pending to replace the interim cards.
+
+---
+
+## 2026-07-16 14:57 IST
+
+### New hero: scroll-driven exploded component tour + sticky navbar
+
+**Status:** Completed (live with interim art; final client assets pending)
+
+**Concept.** Replaced the homepage hero with `ExplorationHero`: the assembled
+Philbrick elevator stands centred as a technical spine; as the user scrolls,
+each major component flies out from its position on the machine to its
+catalogue slot, a leader line draws and its label lands, ending on the full
+exploded overview (the product catalogue composition) with CTAs. Scroll drives
+everything forward and backward. Chosen over a frame sequence deliberately:
+~10 small images instead of 360 frames (~1 MB vs 17 MB), crisp at every DPR,
+native reverse scrubbing, responsive recomposition instead of cropping, real
+text labels (SEO/a11y), and independent per-part motion/parallax.
+
+**Architecture.**
+- `data/heroExploration.ts` — everything is config: part list (reuses
+  `ELEVATOR_COMPONENTS` content + images), spine anchor + resting slot per part
+  (% of stage), mobile slots, reveal order, scroll pacing, and the SPINE
+  (blueprint SVG now; one line swaps in the client's photoreal cutaway PNG).
+- `sections/experience/ExplorationHero.tsx` + `.module.css` — tall section
+  (`SCROLL_VH` ≈ 850vh) + CSS sticky stage (house rule: no GSAP pin), ONE
+  master GSAP timeline scrubbed by ScrollTrigger (scrub 1.1, house standard;
+  Lenis already drives ScrollTrigger via the gsap ticker in SmoothScroll).
+  Transform/opacity only; leader lines animate strokeDashoffset (pathLength 1);
+  progress bar via a CSS var (no per-frame React renders); right rail tour
+  index; `gsap.matchMedia` desktop/mobile fork; interim photos render as
+  premium component cards (`treatment: "card"`), client cutouts will render
+  bare (`treatment: "cutout"`).
+- Mobile (≤820px): spine sits higher, parts take turns in one focal slot,
+  labels centred, beat counter instead of the rail, leader lines off.
+- `prefers-reduced-motion`: no pin, no scrub — a static exploded overview
+  (flowing column on mobile). No JS default state = assembled machine +
+  headline (a complete hero).
+- `scripts/optimizeHeroExploration.mjs` — ready-made pipeline for the final
+  assets (recursive PNG → WebP variants + manifest MERGE, alpha preserved).
+
+**Navbar: fixed → sticky (site-wide, user request).** The header now occupies
+its own layout space so no hero or page content ever sits behind it. It keeps
+the scrolled glass state but also carries `background: var(--bg-primary)` at
+top so content can never show through. The old fixed-nav "overlay white text"
+token override was removed (a sticky header never floats over a hero;
+`data-overlay` is now inert). Removed the `--nav-h` compensation from
+`PageHero`, `not-found`, `ComingSoon`; MegaMenu/NavDropdown viewport math is
+unchanged (still correct). The hero stage sticks at `top: var(--nav-h)` with
+`height: calc(100svh - var(--nav-h))`.
+
+**Affected areas:** `data/heroExploration.ts` (new),
+`sections/experience/ExplorationHero.tsx` + `.module.css` (new),
+`scripts/optimizeHeroExploration.mjs` (new), `app/page.tsx` (hero swap;
+Three.js `ElevatorHero` preserved, commented), `components/layout/
+Navbar.module.css`, `sections/shared/PageHero.module.css`,
+`app/not-found.module.css`, `components/release/ComingSoon.module.css`,
+`imagegeneration.md` (intro note + new §11 asset spec/prompts).
+
+**Verification:** user confirmed the experience live in a real browser
+("really good"). Geometry checks in the embedded preview: header sticky at
+top 0 while deep-scrolled with opaque bg; hero + inner-page heroes start
+exactly at the header's bottom edge (no hidden content, no double spacing);
+stage sticks below the nav at the right height; 8 parts mounted with correct
+initial offsets; h1 present. The preview pane freezes rAF (known environment
+quirk, memory-documented) so scrub motion itself was validated in the real
+browser by the user. `npm run build` green: compiled, TypeScript clean, 58/58
+pages.
+
+**Known limitations / follow-ups:**
+- Interim art: blueprint SVG spine + photo cards. Final look needs the client
+  assets per imagegeneration.md §11 (transparent cutaway spine + 11 component
+  cutouts), then config-only swaps in `data/heroExploration.ts`.
+- Right rail is display-only (not click-to-jump) — candidate follow-up.
+- The Three.js hero and its docs remain intact for instant restoration.
+
+---
+
 ## 2026-07-16 12:45 IST
 
 ### Removed the frame-based video hero — restored the Three.js elevator hero

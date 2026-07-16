@@ -6,11 +6,13 @@ brief for generating **custom, India-focused replacements**. Generate one image
 per entry using its **file name** and **aspect ratio**, then hand back the folder
 and the images will be wired into `data/images.ts` / product data by file name.
 
-> **Not included (no photo needed):** the homepage hero is a real-time Three.js
-> 3D elevator scene (procedural, no image file); the logo, favicon, app icons and
-> OG card are already custom (`public/brand/`). The `/news-events` photos are for
-> the **currently mock** newsroom — regenerate with real event photography when
-> real news is published.
+> **Homepage hero (2026-07-16):** the hero is now the scroll-driven exploded
+> component tour (`sections/experience/ExplorationHero.tsx`) running on interim
+> art; its final asset spec + prompts are **§11**. The Three.js scene is kept
+> intact (commented out in `app/page.tsx`). The logo, favicon, app icons and
+> OG card are already custom (`public/brand/`). The `/news-events` photos are
+> for the **currently mock** newsroom — regenerate with real event photography
+> when real news is published.
 >
 > **Planned hero upgrade:** §10 is the complete **video-generation prompt suite**
 > for replacing the procedural hero with a photoreal, scroll-scrubbed cinematic
@@ -743,3 +745,117 @@ Paste the MASTER CONSISTENCY BLOCK (§10.1), then:
 5. Deliver to `public/videos/hero/`; integration (scroll-scrubbed playback
    replacing/augmenting `ElevatorScene`) is a separate implementation task —
    raise it when the final video is approved.
+
+---
+
+## 11. Exploration Hero assets — exploded component tour (LIVE with interim art)
+
+**Status: hero SHIPPED 2026-07-16 with interim art · final assets pending.**
+The homepage hero (`sections/experience/ExplorationHero.tsx`) is a scroll-driven
+exploded component tour: the assembled machine stands centred, and as the user
+scrolls each component flies out to its catalogue position with a leader line
+and label. Interim art = the built-in blueprint SVG spine + the 8 real part
+photos (`public/images/3D_Elevetor`) framed as component cards. The final look
+swaps in the assets below. All layout is config only (`data/heroExploration.ts`).
+
+### 11.1 Folder structure (drop assets exactly here)
+
+```
+public/images/home/hero-exploration/
+  spine/
+    elevator-cutaway.png        # the central assembled system (see 11.2)
+  components/                   # one TRANSPARENT cutout per part (see 11.3)
+    01-control-panel-ard.png
+    02-overload-device.png
+    03-door-operator.png
+    04-fan-blower.png
+    05-traction-machine.png
+    06-floor-announcing-system.png
+    07-cop-lop-display.png
+    08-safety-light-curtain.png
+    09-lift-display.png
+    10-landing-door.png
+    11-accessories.png
+```
+
+Then run `node scripts/optimizeHeroExploration.mjs` (writes WebP variants next
+to each PNG and MERGES them into `lib/imageManifest.json`), update
+`data/heroExploration.ts` (SPINE config + part image paths + `treatment:
+"cutout"`), and keep the source PNGs (CLAUDE.md image rule).
+
+> Pipeline caveat: `scripts/optimizeImages.mjs` rebuilds the manifest from
+> scratch — after running it, re-run BOTH `scripts/optimize3DElevator.mjs` and
+> `scripts/optimizeHeroExploration.mjs` to restore their merged entries.
+
+### 11.2 Center elevator (spine) — generation prompt
+- **Status: SUPPLIED + INTEGRATED (2026-07-16).** Client render (1024x1536,
+  grey studio backdrop) processed with feathered alpha edges so it melts into
+  the stage; wired via `SPINE` in `data/heroExploration.ts`. Original archived
+  at `image-sources/home/hero-exploration/elevetorhero-original.png`. A future
+  re-render with a TRUE transparent background (prompt below) can replace it
+  at the same path for an even cleaner cutout, especially in light theme.
+- **File:** `spine/elevator-cutaway.png` · tall portrait (2:5 to 9:16), ≥1600px
+  tall, **transparent background PNG**
+- **Prompt:**
+
+> Ultra realistic cinematic industrial product render of a complete traction
+> elevator system shown as a tall vertical technical cutaway, viewed straight
+> on, centred, for a premium engineering website hero. At the top a compact
+> machine room platform with a geared traction machine: electric motor, brake
+> and steel wire ropes running over a sheave. Below it an open steel hoistway
+> frame with two vertical T section guide rails, an overspeed governor, and a
+> framed counterweight running beside a brushed stainless passenger car with a
+> warm softly lit interior and a slim door operator header. At the bottom a
+> service pit with two spring buffers and a small maintenance ladder. Photoreal
+> brushed steel, anodised aluminium, cast iron, copper cabling, realistic
+> reflections, soft volumetric key light from the upper left, cool rim light.
+> TRANSPARENT BACKGROUND: a true alpha PNG cutout with no backdrop, no floor,
+> no wall, no cast ground shadow. No people. Absolutely no text, numbers,
+> labels, arrows, callout lines or logos. Tall portrait composition, the
+> machine fills the frame with a small margin on every side.
+
+### 11.3 Component cutouts — the 8 live-tour prompts (+ extended set)
+
+**Status: SUPPLIED + INTEGRATED (2026-07-16).** 7 of 8 arrived as true-alpha
+cutouts and are live (trimmed + 16px margin in-pipeline; originals archived in
+`image-sources/home/hero-exploration/components-original/`).
+`07-interior-design` arrived with a painted checkerboard background — cropped
+to the cabin and kept as a framed card (a room reads well framed); regenerate
+with real transparency to make it a bare cutout too.
+
+**Files (drop into `components/`, exact names):** `01-traction-machine.png`,
+`02-security-key-switch.png`, `03-door-mechanism.png`,
+`04-car-operating-panel.png`, `05-safety-system.png`, `06-display-screen.png`,
+`07-interior-design.png`, `08-emergency-call.png` — one per part currently in
+the tour (full prompts delivered 2026-07-16, chat; each = the template below
+with that part's description; traction machine gets a yellow painted sheave and
+the safety unit yellow accents to tie into the spine render). The extended
+catalogue parts (overload device, fan and blower, floor announcing,
+accessories) reuse the same template when the tour grows to 11.
+
+### Template — per-part requirements + prompt
+Every component image must be: **true alpha transparent PNG**, a single
+component only, ≥1200px on the long edge, ~5% padding on all sides, the SAME
+key light direction (upper left) and the same slightly front-on perspective in
+every render, no baked ground shadows, no text or labels. Consistency across
+the set matters more than any single image.
+
+- **Prompt template** (swap the [PART] description per file):
+
+> Ultra realistic industrial product photograph style render of a single
+> elevator [PART], isolated on a TRANSPARENT background (true alpha PNG cutout,
+> no backdrop, no shadow), viewed slightly from the front, soft volumetric key
+> light from the upper left, cool rim light, photoreal brushed steel and
+> engineering materials, premium product catalogue quality. No text, numbers,
+> labels, arrows or logos.
+
+- **[PART] descriptions:** control panel cabinet with VVVF drive, contactors,
+  circuit boards and the automatic rescue device (door open showing the
+  interior) · overload weighing device with load cell bracket · belt driven
+  door operator with motor, toothed belt, track and arms · compact cabin axial
+  ventilation fan · geared traction machine with motor, sheave and brake ·
+  green floor announcing circuit board with a small speaker · brushed stainless
+  COP LOP panel with round halo lit buttons and a colour LCD · pair of slim
+  vertical safety light curtain strips with controller cable · LED dot matrix
+  and colour TFT lift display modules · brushed stainless two panel landing
+  door with frame · small elevator accessory hardware set.

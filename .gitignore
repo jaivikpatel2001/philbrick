@@ -1,1 +1,4 @@
 /wordpress
+
+# Local MCP server config — contains a personal 21st.dev API key, do not commit
+.mcp.json

@@ -99,6 +99,42 @@
     900,
     1200
   ],
+  "/images/home/hero-exploration/components/01-traction-machine.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/02-security-key-switch.png": [
+    384
+  ],
+  "/images/home/hero-exploration/components/03-door-mechanism.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/home/hero-exploration/components/04-car-operating-panel.png": [
+    295
+  ],
+  "/images/home/hero-exploration/components/05-safety-system.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/06-display-screen.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/07-interior-design.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/08-emergency-call.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/spine/elevator-cutaway.png": [
+    384,
+    640,
+    960
+  ],
   "/images/home/who-we-are.png": [
     384,
     640,
