@@ -9,7 +9,7 @@ import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { contactPageSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { CONTACT_FAQS } from "@/data/faqs";
-import { SITE } from "@/constants/site";
+import { SITE, gmailHref } from "@/constants/site";
 import { HERO } from "@/data/images";
 import styles from "./contact.module.css";
 
@@ -26,7 +26,7 @@ const METHODS = [
     icon: FiMail,
     label: "Email us",
     value: SITE.email,
-    href: `mailto:${SITE.email}`,
+    href: gmailHref(SITE.email),
   },
   {
     icon: FiMapPin,
@@ -109,7 +109,7 @@ export default function ContactPage() {
             </div>
 
             <p className={styles.note}>
-              Philbrick Technologies India Pvt. Ltd. supplies elevator components
+              Philbrick Technologies (India) Pvt. Ltd. supplies elevator components
               across India and exports to markets including China and Taiwan.
               GST&nbsp;{SITE.gst} · CIN&nbsp;{SITE.cin}
             </p>

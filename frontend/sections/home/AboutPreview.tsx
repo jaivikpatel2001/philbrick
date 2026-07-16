@@ -22,11 +22,12 @@ export function AboutPreview() {
         <div className={styles.grid}>
           <div className={styles.content}>
             <p className={styles.text} data-reveal="up">
-              Philbrick Technologies began in Ahmedabad with a focus on the
-              systems that make an elevator work: control, safety, doors and
-              signalling. Three decades on, we manufacture a complete range of
-              elevator components in-house and supply them across India and
-              export markets.
+              Philbrick Controls India was founded in 1992 in Ahmedabad with a
+              main focus on providing automation solutions by research and
+              development and production of Control Instruments and Control
+              Panels. We have a dedicated team with a special focus on Elevator
+              Industry for providing Smarter, Safer and Simpler Control Panels
+              and various accessories for the passenger lift.
             </p>
 
             <div className={styles.stats} data-reveal="up">

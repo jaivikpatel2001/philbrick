@@ -16,8 +16,7 @@ import { COMPANY_STATS } from "@/data/stats";
 export default function HomePage() {
   return (
     <ReleaseGate route="/" label="Home">
-      {/* Cinematic elevator hero (Three.js) — night arrival → dolly-zoom through
-          the facade → lobby → component-by-component reveal */}
+      {/* Cinematic Three.js elevator hero */}
       <ElevatorHero />
 
       {/* About the company */}

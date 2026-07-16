@@ -1,18 +1,13 @@
 /* =============================================================================
    PHILBRICK — SITE CONFIGURATION  (single source of truth)
    Real, publicly-verifiable business data for Philbrick Technologies India
-   Pvt. Ltd. (Ahmedabad, Gujarat). Sourced from the company's public listings.
-
-   NOTE (placeholders to confirm with the client before launch):
-   • email — no public mailbox is published; `info@philbricktech.com` uses the
-     company's verified domain as a sensible default. Confirm the real address.
-   • social profiles — the public site exposes only share buttons, not real
-     profiles, so SOCIALS is intentionally empty until verified URLs are given.
+   Pvt. Ltd. (Ahmedabad, Gujarat). Sourced from the company's WordPress
+   website backup (acharyagroup.in / philbrickindia.com).
    ========================================================================== */
 
 export const SITE = {
   name: "Philbrick",
-  legalName: "Philbrick Technologies India Pvt. Ltd.",
+  legalName: "Philbrick Technologies (India) Pvt. Ltd.",
   tagline: "Providing Elevator Solutions",
   description:
     "Philbrick Technologies is an Ahmedabad-based manufacturer, exporter and supplier of elevator control panels, integrated controllers, automatic rescue devices, door operators, cabins, displays and complete elevator components.",
@@ -21,15 +16,23 @@ export const SITE = {
   founded: 1992,
   themeColor: "#0A0E14",
 
-  /* Contact — published virtual line routed to the Ahmedabad office. */
-  email: "info@philbricktech.com",
-  salesEmail: "info@philbricktech.com",
-  careersEmail: "info@philbricktech.com",
-  phone: "+91 80478 52949",
-  phoneHref: "tel:+918047852949",
+  /* Contact — from the WordPress Contact Us page. */
+  email: "philbrick@philbrickindia.com",
+  salesEmail: "sales@philbrickindia.com",
+  careersEmail: "hr.philbrickindia@gmail.com",
+  phone: "+91 99789 86631",
+  phoneHref: "tel:+919978986631",
+  phones: [
+    "+91 99789 86631",
+    "+91 93740 22660",
+    "+91 84012 19941",
+    "+91 98250 09420",
+  ],
+  whatsapp: "+919978986631",
+  whatsappUrl: "https://api.whatsapp.com/send?phone=+919978986631",
 
   address: {
-    line1: "Plot No. 69, Road No. 6, G.I.D.C. Kathwada, Odhav",
+    line1: "Plot No. 69, Road No. 6, G.I.D.C. Kathwada",
     line2: "Ahmedabad 382430, Gujarat",
     city: "Ahmedabad",
     region: "Gujarat",
@@ -41,7 +44,7 @@ export const SITE = {
   geo: { lat: 23.03676, lng: 72.68678 },
   mapUrl: "https://www.google.com/maps?q=23.03676000,72.68678000",
 
-  hours: "Mon to Sat, 09:30 to 18:30",
+  hours: "Mon to Fri, 09:00 to 18:00",
 
   /* Statutory identifiers (publicly displayed). */
   gst: "24AAHCP6212D1ZU",
@@ -57,7 +60,32 @@ export const SITE = {
   exportMarkets: ["China", "Taiwan"],
 } as const;
 
-/* No verified public social profiles yet — keep empty rather than invent links.
-   Populate with real profile URLs (LinkedIn / Facebook / YouTube) when provided
-   and the footer + Organization `sameAs` schema will pick them up automatically. */
-export const SOCIALS: { label: string; href: string; icon: string }[] = [];
+/* ---------------------------------------------------------------------------
+   Click-to-contact hrefs (centralised so every email/phone link behaves the
+   same across the site).
+     • Email  → opens Gmail's web compose window in a new tab (client
+       preference) instead of the OS default mail app, which is Outlook on
+       Windows. Use with target="_blank" rel="noopener noreferrer".
+     • Phone  → the tel: protocol, which opens the dialpad on phones.
+   -------------------------------------------------------------------------- */
+export const gmailHref = (email: string) =>
+  `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
+
+/* Social profiles from the WordPress child theme footer. */
+export const SOCIALS: { label: string; href: string; icon: string }[] = [
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/philbrick.india",
+    icon: "FiFacebook",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/philbrick.india/",
+    icon: "FiInstagram",
+  },
+  {
+    label: "Twitter",
+    href: "https://twitter.com/SaranshPatel20",
+    icon: "FiTwitter",
+  },
+];

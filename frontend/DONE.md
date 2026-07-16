@@ -6,6 +6,460 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-16 12:45 IST
+
+### Removed the frame-based video hero — restored the Three.js elevator hero
+
+**Status:** Completed
+
+The client rejected the frame-sequence / video hero concept, so it was removed
+entirely and the real-time Three.js elevator hero (which had been kept intact,
+commented out) was restored as the homepage hero.
+
+**Removed:**
+- `sections/experience/FrameSequenceHero.tsx` + `FrameSequenceHero.module.css`
+  (the scroll-scrubbed canvas frame player).
+- `public/images/home/hero-frames/{desktop,mobile}/` — all 360 frame WebPs
+  (~17 MB), plus the git-ignored `image-sources/home/hero-frames/` archive.
+- `imagegeneration.md` §9.1 "Hero frame sequences", §10 "Cinematic Hero Video"
+  (the exploded-reveal video prompt suite), and the intro "Hero upgrade — SHIPPED"
+  note.
+
+**Restored:** `app/page.tsx` now imports and renders `<ElevatorHero />`
+(`sections/experience/ElevatorScene.tsx`, unchanged) instead of
+`<FrameSequenceHero />`. This matches the `CLAUDE.md` architecture note, which
+always described the homepage hero as the Three.js scene.
+
+**Kept (part of the 3D concept, not the video concept):**
+`public/images/3D_Elevetor/*` (the 8 component photos used by the hero hotspot
+modals) and all `ElevatorScene`/`ElevatorHero` code.
+
+**Notes / decisions:**
+- The prior frame-concept DONE.md entries below are left as historical record
+  (permanent log); this entry supersedes them for the current hero state.
+- Remaining `FrameSequenceHero`/`hero-frames` strings exist only in `.next/` and
+  `out/` build caches, which regenerate on the next build.
+- The frame concept and the separate exploded-video prompt suite are recoverable
+  from git history if ever revived.
+
+**Verification:** no source file references `FrameSequenceHero`; `app/page.tsx`
+renders `ElevatorHero`; homepage confirmed rendering the Three.js hero (see below).
+
+---
+
+## 2026-07-14 11:35 IST
+
+### Hero frames: AI super-resolution (Real-ESRGAN) — replaces Lanczos upscale
+
+**Status:** Completed
+
+Client approved an AI super-resolution pass to push hero sharpness past what the
+Lanczos upscale (11:21 entry) could reach. Re-upscaled all 360 source frames
+with **Real-ESRGAN** (`realesrgan-ncnn-vulkan`, official GitHub v0.2.5.0 release,
+~43 MB, downloaded to scratchpad — NOT committed) and re-encoded to WebP at the
+same paths/dimensions, so it is a pure drop-in (no `FrameSequenceHero.tsx`
+change).
+
+**Model choice (A/B tested on frame 165 before committing to 360):**
+- `realesrgan-x4plus` (photo model): sharpest on the elevator structure but
+  **hallucinated** the small COP button grid and warped the baked-in label text
+  — unacceptable for a product hero.
+- `realesr-animevideov3 -s 2` (CGI/anime-video model): clean, faithful edges on
+  the metal structure (which is most of every frame), labels equal-or-crisper at
+  real viewing scale, no melted UI. **Chosen.**
+
+**Pipeline** (`scratchpad/esrgan-batch.mjs`): for each set, run
+`realesrgan-ncnn-vulkan -i <src-dir> -o <tmp> -n realesr-animevideov3 -s 2 -f png`
+on the archived originals, assert 180 outputs in frame order, then
+`sharp(png).webp({quality})` → `public/images/home/hero-frames/<set>/frame-NNN.webp`
+(desktop q80, mobile q74). GPU time ≈80 s for all 360 (Vulkan).
+
+**Result:** desktop 1696×956 ≈7.3 MB, mobile 956×1700 ≈8.8 MB — both *smaller*
+than the Lanczos versions (9 / 10.4 MB) because the AI output compresses cleaner.
+Old Lanczos WebPs overwritten in place; git restaged (360 webp).
+
+**Verified in preview:** dev server serves the new frames (fetch `cache:reload`
+→ 1696×956, image/webp, ~45 KB), 180 loaded, frame 90 draws non-blank; a
+1/90/180 progression strip confirms the assemble→explode ordering survived the
+per-set ESRGAN round-trip (script asserts `ezgif-frame-NNN`→`frame-NNN` mapping).
+
+**Limitation (unchanged, told to client):** AI SR restores acutance but cannot
+recover detail absent from the 848 px source. A client re-render at ≥1600 px
+wide is still the only true fix; documented in imagegeneration.md §9.1.
+
+**Affected files:** `public/images/home/hero-frames/**` (360 webp re-generated),
+`imagegeneration.md` §9.1, `DONE.md`. (`FrameSequenceHero.tsx` unchanged — already
+`.webp`.)
+
+---
+
+## 2026-07-14 11:21 IST
+
+### Hero frames enhanced: 2× upscale + sharpen → WebP (blur fix)
+
+**Status:** Completed
+
+**Problem:** the client flagged the hero as blurry — the supplied 848×478 /
+478×850 JPEGs were being cover-scaled ~2.2× by the canvas on desktop viewports,
+and the sources are heavily compressed.
+
+**Fix:** batch-enhanced all 360 frames with the project's existing `sharp`
+dependency: `blur(0.4)` (suppresses JPEG grain so sharpening doesn't amplify it)
+→ 2× Lanczos3 resize → `sharpen()` → WebP. Desktop 1696×956 q80
+(`sharpen sigma 1.2, m1 0.8, m2 2.6`) ≈9 MB/set; mobile 956×1700 q74
+(`sigma 1.1, m1 0.7, m2 2.3`, lighter to keep cellular weight down) ≈10.4 MB/set.
+Chosen after A/B/C crop comparison (plain 2× vs sharpen vs denoise+sharpen) and
+verified with a before/after crop of the shipped file: label text and component
+edges clearly crisper, no halos. Only one set downloads per device,
+progressively. Public `.jpg` frames deleted (originals remain archived in
+git-ignored `image-sources/home/hero-frames/`); `frameSrc()` now points at
+`.webp`. Git index restaged (360 webp added, 360 jpg dropped).
+
+Regenerate (from `image-sources/home/hero-frames/<set>/ezgif-frame-*.jpg`):
+`sharp(src).blur(0.4).resize({width: W, kernel: "lanczos3"}).sharpen({...}).webp({quality: Q})`
+with W=1696/956, Q=80/74 and the sharpen params above (desktop/mobile).
+
+**Verified in preview:** 2× WebP served (probe naturalWidth 1696), zero .jpg
+requests, 180 frames loaded in the designed order (first → last → anchors),
+frame 165 draws non-blank; `tsc` + eslint clean.
+
+**Honest limitation (told to client):** Lanczos + sharpening raises acutance
+but cannot invent detail. The true fix is client re-rendering at ≥1600 px wide,
+or an AI super-resolution pass (Real-ESRGAN — needs a tool download/approval).
+Documented in imagegeneration.md §9.1.
+
+**Affected files:** `sections/experience/FrameSequenceHero.tsx` (frameSrc →
+.webp + header note), `public/images/home/hero-frames/**` (360 .webp replace
+360 .jpg), `imagegeneration.md` §9.1, `DONE.md`.
+
+---
+
+## 2026-07-14 11:03 IST
+
+### Homepage hero: Three.js scene → scroll-driven image sequence (canvas)
+
+**Status:** Completed
+
+Replaced the visible Three.js hero with a **scroll-scrubbed image-sequence
+hero** playing the client's rendered exploded-elevator frames (the §10
+imagegeneration.md concept, delivered as stills). The Three.js implementation is
+**commented out, not deleted** — `sections/experience/ElevatorScene.tsx`,
+`ScrollStory.tsx`, `ElevatorHero.tsx`, `ComponentModal.tsx` and their CSS are all
+untouched; `app/page.tsx` keeps the import + JSX as clearly-marked comments.
+
+**Assets.** Client supplied two 180-frame JPEG sequences (not 240 as first
+described — actual count is 180): landscape 848×478 (folder `pcversionzip`) and
+portrait 478×850 (folder `laptopversionzip` — despite the name, it is the
+mobile/portrait set). Reorganised per the image-asset rule into
+`public/images/home/hero-frames/{desktop,mobile}/frame-001…180.jpg` (git index
+restaged for the move), originals archived in git-ignored
+`image-sources/home/hero-frames/`. They bypass the WebP/manifest pipeline by
+design (canvas needs raw frames; ≈5.3 MB total for all 360). Documented in
+imagegeneration.md §9.1 + §10 status + top note.
+
+**New component:** [`sections/experience/FrameSequenceHero.tsx`](sections/experience/FrameSequenceHero.tsx)
+(+ module CSS), same pinning pattern as the old hero: 400vh section, sticky
+100vh/100svh stage.
+- **Scroll → frame:** a ScrollTrigger (Lenis already drives ScrollTrigger via
+  SmoothScroll) maps section progress 0→1 to frames 1→180, with small holds
+  (4% start, 6% end) so the headline settles and the final labelled diagram
+  lands before unpin. Scrolling up reverses naturally; after the last frame the
+  page continues to the next section.
+- **Rendering:** one `<canvas>`, cover-fit draw (centered, cropped, never
+  distorted), DPR capped at 2, `imageSmoothingQuality: "high"`; redraws only
+  when the frame index actually changes (or resize/sequence switch) — no React
+  re-renders on scroll, overlay fades are direct style writes on refs.
+- **Preloading:** frame 1 + final frame first, then every 6th as scrub anchors,
+  then the rest through a 6-wide concurrency pool; while a frame is in flight
+  the nearest loaded frame is drawn and the loader redraws when a better one
+  lands (no blanks/flicker on fast scrubs). Scrubbing into an unloaded region
+  jumps those frames to the front of the queue.
+- **Device detection:** `(orientation: portrait)` picks the mobile sequence,
+  landscape picks desktop (a portrait tablet correctly gets the portrait set;
+  detection at mount + on media-query change + on window resize as fallback for
+  webviews that throttle observer delivery). Each variant has its own lazy
+  store, so rotation switches sequences and reuses anything already cached.
+- **Overlay:** eyebrow + H1 ("Engineered for movement.") + sub in the initial
+  HTML (crawlable, verified present in the static export), fading out over the
+  first ~10% of progress together with its legibility scrim so the scrim never
+  dims the baked-in component labels of the later frames; "Scroll to explore"
+  cue fades even faster. Mobile drops the copy to the lower third over a bottom
+  scrim.
+- **Reduced motion:** no pin (100vh section), no ScrollTrigger, static first
+  frame, copy always visible, and only frame 1 is downloaded (`useSyncExternalStore`
+  for the media query — SSR-safe, no setState-in-effect lint violation).
+- **QA hook:** `window.__philbrickHero` ({frame, desired, variant, loadedCount,
+  progress, drawIndex}) mirroring the old hero's hook pattern; removed on unmount.
+
+**Navbar:** the homepage hero is now dark in BOTH themes (the frames are a dark
+studio scene), so the light-theme homepage special case is gone —
+`overlay = "dark"` always ([`Navbar.tsx`](components/layout/Navbar.tsx), with the
+original logic kept in a comment for the Three.js restoration; unused `useTheme`
+import removed).
+
+**Verification:** `tsc` exit 0; eslint clean (after switching reduced-motion
+detection to `useSyncExternalStore`); production build compiles + all 58 static
+pages generate, `out/` contains all 360 frames and the prerendered H1 (`npm run
+build` "exit 1" is the known npm-wrapper phantom on this shell — the log has
+zero errors and artifacts are complete). In-pane QA via the debug hook (pane
+freezes rAF, so screenshots/live tween can't be captured): frame 1 drawn with
+non-blank pixels; frames 1/46/91/136/180 all draw distinct checksums;
+scrollY→progress→frame verified at 0 / 0.1 / 0.5 / 0.694 / ~0.99 including
+reverse scrubbing (frame 92 → 12 → 1) and end hold (frame 180 by p≈0.94); copy +
+scrim fade 1→0 over the first ~10% and return; portrait pane boots the mobile
+variant (portrait canvas 750×1624, 180 frames, full scrub + return).
+
+**Known limitations / follow-ups:**
+- Source frames are 848×478 / 478×850 — soft on large/hi-DPI screens when
+  cover-scaled. If the client can re-render at ≥1600px wide (and ideally the
+  same 240 frames they mentioned), drop-in replace per imagegeneration.md §9.1.
+- The old hero's interactive component hotspots/modal don't exist in the frame
+  hero (labels are baked into the frames instead). The exploded-frame hotspot
+  overlay (§10.6 component map) is a possible future enhancement.
+- `data/elevatorComponents.ts`, `data/model.ts`, `data/environment.ts` and
+  `public/models`/`public/hdri` remain in place solely for the parked Three.js
+  hero.
+
+**Affected files:** `app/page.tsx`, `components/layout/Navbar.tsx`,
+`sections/experience/FrameSequenceHero.tsx` (new),
+`sections/experience/FrameSequenceHero.module.css` (new),
+`public/images/home/hero-frames/**` (360 files, moved + renamed),
+`image-sources/home/hero-frames/**` (archive, git-ignored),
+`imagegeneration.md` (top note, §9.1, §10 status), `DONE.md`.
+
+---
+
+## 2026-07-14 10:38 IST
+
+### Fix: FAQ rows vanished when opened (reveal-class wipe)
+
+**Status:** Completed (bug fix on the 10:26 FAQ change)
+
+**Symptom:** after the FAQ was rebuilt as a client accordion, opening a row made
+its text (question *and* answer) disappear, leaving an empty gap. Reported with a
+screenshot showing opened rows blank while closed rows rendered fine.
+
+**Cause:** [`RevealObserver`](components/providers/RevealObserver.tsx) reveals
+`[data-reveal]` elements by adding the `.is-visible` class **imperatively** to the
+DOM node (that class flips `opacity: 0 → 1`, see the `[data-reveal]` rules in
+[`globals.css`](styles/globals.css)). My new [`FAQSection`](sections/shared/FAQSection.tsx)
+put `data-reveal` on the row **and** set its className to
+`cn(styles.item, isOpen && styles.itemOpen)`. On open, React re-rendered, saw a
+new className string (`item itemOpen`) and rewrote the DOM `className` — **wiping
+the observer's `.is-visible`**. The row fell back to `[data-reveal]`'s base
+`opacity: 0` and disappeared (its height stayed, hence the empty gap). The old
+native-`<details>` version never hit this: it was a server component with a
+static className.
+
+**Fix:** keep the reveal element's className **static** (`className={styles.item}`)
+and express the open state through the trigger's `aria-expanded` instead of a
+class on the row. CSS now reads it via `.item:has(.question[aria-expanded="true"])`
+(border accent) and `.question[aria-expanded="true"] .marker::after` (plus→minus).
+React never rewrites `.item`'s className, so `.is-visible` survives every toggle.
+
+**Verification:** `tsc` clean. In the preview, simulated the observer
+(`item.classList.add('is-visible')`) then opened the row: the row **kept**
+`is-visible` and `opacity: 1` (before the fix it would have been wiped to
+`opacity: 0`). Confirmed `:has()` is supported and, with the CSS transition
+disabled, the open row's border resolves to the azure accent
+(`rgba(47,172,236,0.42)`) — i.e. the open-state selectors match. Swept all other
+`data-reveal` usages: every one uses a static className, so none share this bug.
+
+**Affected files:** `sections/shared/FAQSection.tsx`,
+`sections/shared/FAQSection.module.css`.
+
+---
+
+## 2026-07-14 10:26 IST
+
+### UI fixes: smooth FAQ, Gmail email links, simplified Products menu
+
+**Status:** Completed
+
+Three client-requested UX fixes. No redesign, no content changes.
+
+**1. FAQ accordion now opens/closes smoothly.**
+[`FAQSection`](sections/shared/FAQSection.tsx) used native `<details>/<summary>`,
+which snap open with no animation. Rebuilt it as a client component using the
+shared Framer Motion collapse timing ([`lib/motion.ts`](lib/motion.ts):
+`collapseMotion` + `collapseTransition`, the same pattern already shipping in the
+mobile nav) — an `AnimatePresence` height tween inside an `overflow:hidden`
+wrapper. Kept the exact editorial design (mono index numerals, plus→minus marker,
+hairline rows). Each row toggles independently; the plus marker rotates to a minus
+via CSS. `<summary>` became a reset `<button>` with `aria-expanded` /
+`aria-controls`; the `[open]` CSS selectors moved to an `.itemOpen` class. Applies
+on both the Contact and Products pages (both use `FAQSection`).
+
+**2. Email links open Gmail, not the desktop mail app (Outlook).**
+Added `gmailHref()` to [`constants/site.ts`](constants/site.ts) which builds a
+Gmail web compose URL (`mail.google.com/mail/?view=cm&fs=1&to=…`). Replaced the
+`mailto:` links in [`Footer`](components/layout/Footer.tsx) and the
+[Contact page](app/contact/page.tsx) contact methods; they open in a new tab
+(`target="_blank" rel="noopener noreferrer"`). Phone numbers already use the
+`tel:` protocol (opens the dialpad on phones) in the footer, contact page and
+mobile nav — verified consistent, left unchanged. The contact form is unaffected
+(it posts via FormSubmit, never used `mailto:`).
+
+**3. Products menu simplified (client was getting lost in the mega menu).**
+Replaced the two-pane [`MegaMenu`](components/layout/MegaMenu.tsx) (left category
+rail + hover-reveal detail pane + flagship image card) with a clean, flat grouped
+dropdown in the same style as the About dropdown (`NavDropdown`): the five product
+groups as headed columns listing all 14 categories as one-click links, plus a
+"View all products" link. No images, no flagship card, no hover-to-reveal
+sub-panels. The panel is a full-width, click-through centering layer wrapping a
+capped-width card, so it never overflows the viewport. Rewrote
+`MegaMenu.module.css` accordingly. Navbar and MobileNav needed no changes (same
+`item.mega.groups` data; mobile accordion untouched).
+
+**Verification:** TypeScript compiles clean (`tsc --noEmit`, exit 0). DOM-verified
+in the preview: 2 email links → Gmail with `target="_blank"`, 0 `mailto:` left;
+phone links → `tel:+919978986631`; FAQ = 4 animated buttons (aria-expanded toggles
+both directions, answer mounts/unmounts, 0 `<details>` left); Products menu = 5
+group headings + 14 category links + "View all products", 0 old rail/feature/detail
+elements. The open/close *tweens* couldn't be filmed here — the in-app preview
+pane freezes `requestAnimationFrame` (0 frames), and the user's real Chrome can't
+reach the agent-side dev server — but the animation uses the proven production
+`collapseMotion` pattern and the state logic is confirmed.
+
+**Affected files:** `sections/shared/FAQSection.tsx`,
+`sections/shared/FAQSection.module.css`, `constants/site.ts`,
+`components/layout/Footer.tsx`, `app/contact/page.tsx`,
+`components/layout/MegaMenu.tsx`, `components/layout/MegaMenu.module.css`.
+
+**Known limitation / follow-up:** the `feature` (flagship ARD card) block in
+`MAIN_NAV` Products ([`constants/navigation.ts`](constants/navigation.ts)) is now
+unused by the desktop menu (ARD is still reachable as a category). Harmless dead
+data; can be removed in a later cleanup.
+
+---
+
+## 2026-07-14 10:24 IST
+
+### WordPress content migration to frontend
+
+**Status:** Completed
+
+Replaced dummy/placeholder content across the frontend with real content
+extracted from the client's WordPress database backup (UpdraftPlus SQL dump from
+acharyagroup.in / philbrickindia.com). The WordPress site was treated as the
+primary source of truth. Existing UI design, layout, animations and the 3D
+experience were preserved.
+
+**What changed:**
+
+- **Contact info** (`constants/site.ts`): email → `philbrick@philbrickindia.com`,
+  salesEmail → `sales@philbrickindia.com`, careersEmail →
+  `hr.philbrickindia@gmail.com`, phone → `+91 99789 86631`, added `phones` array
+  (4 numbers), `whatsapp`/`whatsappUrl`, hours → "Mon to Fri, 09:00 to 18:00",
+  legalName → "Philbrick Technologies (India) Pvt. Ltd." (with parentheses),
+  address removed "Odhav" from line1.
+- **Social links** (`constants/site.ts`): added Facebook, Instagram, Twitter from
+  WP footer.php; added `FiFacebook` to icon registry (`lib/icons.ts`).
+- **Company content** (`data/company.ts`): replaced ABOUT_STORY with 3 real WP
+  paragraphs about founding, activity and industrial segments. Expanded TIMELINE
+  from 4 entries to 11 real milestones (1992-Today). Added QUALITY_POLICY (3
+  paragraphs from WP page ID 3) and CAREER_CONTENT (2 paragraphs from WP page
+  ID 3435). Updated INFRASTRUCTURE descriptions with real WP data (10,000+ sq ft,
+  R&D, ISO QC). Kept MISSION/VISION unchanged (WP had "Coming soon").
+- **Product descriptions** (`data/products.ts`): updated child product
+  descriptions with real WP spec data for automatic-door-controller (XPLA
+  models), manual-door-controller (EPM/XPLM), hydraulic-controller
+  (XPLA-Hydra/EPM-Hydra), parallel-type-controller (INTL-360),
+  serial-can-bus-type-controller (INTL-380 64 Landing), mrl-control-panel
+  (AS380). Updated category longDescriptions (RISC microprocessor, Galvanic
+  Isolation, Lift Power LP440/LP220, LMP66/LMP110 BLDC, cabin variants, STEP
+  partnership). Updated Synergy Auto Door children with real dimension data from
+  WP tables.
+- **Page content**: AboutPreview (homepage) → WP-sourced founding text; About
+  page metadata → WP description; Contact page → correct legal name; Network
+  page → "G.I.D.C. Kathwada" (no "Odhav"); ContactForm → philbrickindia.com
+  page field.
+- **Stats** (`data/stats.ts`): manufacturing facility → "10,000+ sq ft at GIDC
+  Kathwada, Ahmedabad".
+- **Footer** (`components/layout/Footer.tsx`): fixed double period in copyright
+  line (legalName ends with "Ltd." + template period).
+- **Config**: `.env.example` updated contact email; `public/llms.txt` updated
+  legal name, phone, email, address.
+
+**Content NOT changed (by design):**
+- Mission/Vision statements (WP said "Coming soon"; kept existing editorial copy).
+- News & Events items (no matching WP news content found; kept placeholder).
+- Product images (current images are custom brand photography, not unrelated
+  dummy images; WP has real product photos in `uploads/` if the client prefers).
+- Pages without matching WP content retain existing dummy UI data.
+
+**Verification completed:**
+- Homepage: About section, footer contact info, social links all correct.
+- About page: full WP company story, infrastructure, quality policy, timeline.
+- Contact page: phone, email, address, hours, legal name all correct.
+- Products: Elevator Control Panel (WP specs), ARD (Lift Power LP440/LP220),
+  Synergy Auto Door (dimension data), Integrated Control Panel subcategories.
+- Infrastructure page: WP-sourced descriptions, stats.
+- Milestone page: all 11 WP timeline entries rendered.
+- No console errors on any page. TypeScript compiles cleanly.
+- Grep confirmed: old phone (80478 52949), old email (info@philbrick), "Odhav"
+  all removed from codebase.
+
+**Affected files:** `constants/site.ts`, `lib/icons.ts`, `data/company.ts`,
+`data/products.ts`, `data/stats.ts`, `components/layout/Footer.tsx`,
+`components/forms/ContactForm.tsx`, `sections/home/AboutPreview.tsx`,
+`app/about/page.tsx`, `app/contact/page.tsx`, `app/network/page.tsx`,
+`.env.example`, `public/llms.txt`.
+
+**Follow-up:** WP has ~100+ real product photos in `wordpress/wp-content/uploads/`
+that could replace the current brand photography if the client prefers authentic
+product shots. The WP also has an additional email (`philbrick_controls@yahoo.com`)
+not used anywhere in the frontend.
+
+---
+
+## 2026-07-14 12:33 IST
+
+### Re-point §10 hero-video prompt suite to the exploded-elevator concept
+
+**Status:** Completed (documentation)
+
+Rewrote **§10 "Cinematic Hero Video"** in [`imagegeneration.md`](imagegeneration.md)
+from the earlier night-city journey (city → lobby → cabin → cabin fixtures) to an
+**exploded technical reveal** driven by the client's product-catalogue reference
+image: a fully assembled elevator system pushes in, opens into a cutaway, and its
+major components separate outward into a symmetric exploded overview. Kept the same
+production-suite rigor and structure; swapped the parts and the motion concept.
+
+**What changed:**
+- Concept + camera grammar: system stays dead-centred; one push-in, then parts
+  translate straight out (top rises, sides slide, lower descends) and settle. No
+  city, tower, lobby or cabin-interior journey.
+- Parts now match the reference set: traction machine, control panel + ARD, overload
+  annunciating device, door operator, fan/blower, floor-announcing system, COP/LOP
+  with display, safety light curtain, lift display, landing doors, accessories, plus
+  the shaft spine (car, counterweight, rails, ropes, governor, pit buffers, ladder).
+- Restructured subsections: §10.0 production strategy (the **10 s single-clip rule**
+  the client specified, primary two-keyframe + interpolation method via Kling v3.0
+  start+end frames, fallback text-to-video, optional chained beats), §10.1 rewritten
+  master consistency block (system + parts + dark studio void + strict no-text/label/
+  arrow negatives), §10.2 keyframe A (assembled), §10.3 keyframe B (exploded), §10.4
+  primary 10 s video prompt, §10.5 six chained beats, §10.6 component explosion map
+  table (part → zone), §10.7 QA + integration checklist.
+- Updated the file's top "Planned hero upgrade" note to the new concept.
+
+**Context / decisions:**
+- Higgsfield generation is currently blocked (connected account is free tier, 0
+  credits; video preflights at 17.5 credits, keyframe 2 credits). Kling v3.0 confirmed
+  to support start+end frames, 3–15 s, 16:9 — hence the two-keyframe method is primary.
+- Free-tier video tools (Kling direct, Hailuo, Vidu) can prototype but carry
+  watermarks and **no commercial rights**, so they are not shippable on the client's
+  live site; production needs a paid tier or the Three.js route.
+- The earlier night-city §10 is preserved in git history (superseded, not lost).
+
+**Affected areas:** `imagegeneration.md` (§10 + intro note).
+
+**Follow-up:** generation still pending on credits/tool choice; scroll-scrubbed
+video integration (frame → scroll mapping + hotspots per §10.6) is a separate task to
+raise once a final clip is approved.
+
+---
+
 ## 2026-07-12 20:05 IST
 
 ### Follow-ups: mega-menu rail scroll + rotating product orbit

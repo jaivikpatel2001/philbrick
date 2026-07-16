@@ -22,7 +22,7 @@ const REACH = [
     iconName: "FiMapPin",
     title: "Ahmedabad HQ & factory",
     description:
-      "Our design and manufacturing base at GIDC Kathwada, Odhav, Ahmedabad, Gujarat.",
+      "Our design and manufacturing base at G.I.D.C. Kathwada, Ahmedabad, Gujarat.",
   },
   {
     iconName: "FiTruck",

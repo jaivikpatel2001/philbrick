@@ -29,7 +29,7 @@ export const COMPANY_STATS: Stat[] = [
 /** Infrastructure scale — About / Infrastructure page. */
 export const GLOBAL_STATS: Stat[] = [
   { value: 5, label: "In-house units", description: "Procurement · design · QC · warehousing · packaging" },
-  { value: 1, label: "Manufacturing facility", description: "GIDC Kathwada, Ahmedabad" },
+  { value: 1, label: "Manufacturing facility", description: "10,000+ sq ft at GIDC Kathwada, Ahmedabad" },
   { value: 14, label: "Product categories", description: "Built under one roof" },
   { value: 2, label: "Export markets", description: "China & Taiwan" },
 ];

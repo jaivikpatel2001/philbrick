@@ -111,7 +111,7 @@ export function ContactForm({
           "Inquiry Type": inquiryType,
           Message: String(data.get("message")),
           "Submitted At": submittedAt,
-          Page: "philbricktech.com/contact",
+          Page: "philbrickindia.com/contact",
           // FormSubmit configuration
           _subject: `Philbrick website enquiry: ${inquiryType}`,
           _template: "table",

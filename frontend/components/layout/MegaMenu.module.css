@@ -1,80 +1,60 @@
+/* Products menu — clean grouped dropdown (see MegaMenu.tsx).
+   .panel is a full-width, click-through positioning layer whose only job is to
+   centre the actual .card. This keeps the drop animation simple and stops the
+   menu from ever overflowing the viewport horizontally. */
 .panel {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-inline: 1rem;
+  pointer-events: none;
+  z-index: var(--z-mega);
+}
+
+.card {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 720px;
+  max-height: calc(100vh - var(--nav-h) - 1rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.25rem;
   background: var(--surface-menu);
   backdrop-filter: saturate(140%) blur(12px);
   -webkit-backdrop-filter: saturate(140%) blur(12px);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-xl);
 }
 
-.inner {
-  /* Usable panel height, shared with the scrollable columns below so they can
-     bound themselves against the viewport. A % max-height on the columns won't
-     resolve here (the grid row is content-sized under align-items: start), so
-     they reference this value directly. */
-  --menu-max-h: calc(100vh - var(--nav-h) - 1rem);
+.grid {
   display: grid;
-  grid-template-columns: 264px minmax(0, 1fr) 296px;
-  gap: clamp(1.5rem, 3vw, 3rem);
-  padding-block: 2rem 2.5rem;
-  /* Bound the panel height, but DON'T scroll the whole grid — each inner
-     column scrolls independently (below), so the header/category nav stay put
-     and only the column that overflows moves. */
-  max-height: var(--menu-max-h);
-  overflow: hidden;
-  align-items: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
 }
 
-/* ----- Left rail — grouped categories --------------------------------- */
-.rail {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  border-right: 1px solid var(--hairline);
-  padding-right: clamp(0.75rem, 1.5vw, 1.5rem);
-  /* Scroll ONLY the category rail if it outgrows the panel. Bound to the panel's
-     usable height (minus its 4.5rem block padding) so it actually scrolls — a
-     % max-height won't resolve against the content-sized grid row. */
-  max-height: calc(var(--menu-max-h) - 4.5rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-}
-.rail::-webkit-scrollbar {
-  width: 6px;
-}
-.rail::-webkit-scrollbar-thumb {
-  background: var(--surface-3);
-  border-radius: var(--radius-pill);
-}
-/* Product-group separation: a rule + accent tick above each group after the
-   first, so the "GROUP → categories" hierarchy reads at a glance. */
-.railGroup:not(:first-child) {
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-.railGroup ul {
+.group ul {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
 }
-.railTitle {
+
+.groupTitle {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
+  margin-bottom: 0.5rem;
   font-family: var(--font-mono);
   font-size: var(--fs-eyebrow);
   text-transform: uppercase;
   letter-spacing: var(--ls-eyebrow);
   font-weight: var(--fw-semibold);
   color: var(--text-secondary);
-  margin-bottom: 0.65rem;
 }
-.railTitle::before {
+.groupTitle::before {
   content: "";
   width: 0.9rem;
   height: 2px;
@@ -82,13 +62,14 @@
   border-radius: 2px;
   flex-shrink: 0;
 }
-.railLink {
+
+.link {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.5rem 0.7rem;
-  margin-inline: -0.35rem;
+  padding: 0.5rem 0.6rem;
+  margin-inline: -0.6rem;
   border-radius: var(--radius-sm);
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
@@ -96,230 +77,46 @@
   transition: background var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
 }
-.railLink:hover,
-.railLinkActive {
+.link:hover {
   background: var(--surface-2);
   color: var(--text-primary);
 }
-/* Subcategory indicator — only rendered for categories that have children.
-   Bolder + clearer than before so the "has more" affordance is obvious. */
-.railChev {
+.arrow {
   flex-shrink: 0;
-  width: 1.1rem;
-  height: 1.1rem;
-  stroke-width: 2.6;
-  color: var(--text-muted);
-  opacity: 0.85;
-  transition: transform var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
-}
-.railLink:hover .railChev,
-.railLinkActive .railChev {
-  color: var(--accent);
-  opacity: 1;
-  transform: translateX(3px);
-}
-
-/* ----- Detail pane ---------------------------------------------------- */
-.detail {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  /* Header stays put; only the product list (.children) scrolls if it's tall. */
-  max-height: calc(var(--menu-max-h) - 4.5rem);
-  min-height: 0;
-}
-.detailHead {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-shrink: 0;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid var(--hairline);
-}
-.detailTitle {
-  font-family: var(--font-display);
-  font-size: var(--fs-h4);
-  font-weight: var(--fw-semibold);
-  color: var(--text-primary);
-}
-.detailDesc {
-  margin-top: 0.25rem;
-  font-size: var(--fs-sm);
-  color: var(--text-muted);
-  max-width: 52ch;
-}
-.viewAll {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  flex-shrink: 0;
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--accent);
-}
-.viewAll:hover {
-  color: var(--accent-hover);
-}
-
-.children {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.25rem 1.5rem;
-  align-content: start;
-  /* Scroll only this product list when it overflows the pane. */
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-right: 0.4rem;
-  scrollbar-width: thin;
-}
-.children::-webkit-scrollbar {
-  width: 6px;
-}
-.children::-webkit-scrollbar-thumb {
-  background: var(--surface-3);
-  border-radius: var(--radius-pill);
-}
-.childLink {
-  display: block;
-  padding: 0.6rem 0.75rem;
-  margin-inline: -0.75rem;
-  border-radius: var(--radius-sm);
-  transition: background var(--dur-fast) var(--ease-out);
-}
-.childLink:hover {
-  background: var(--surface-2);
-}
-.childLabel {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: var(--fs-body);
-  font-weight: var(--fw-semibold);
-  color: var(--text-primary);
-}
-.childArrow {
   opacity: 0;
   transform: translate(-4px, 2px);
   transition: opacity var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
   color: var(--accent);
 }
-.childLink:hover .childArrow {
+.link:hover .arrow {
   opacity: 1;
   transform: translate(0, 0);
 }
-.childDesc {
-  display: block;
-  margin-top: 0.1rem;
-  font-size: var(--fs-xs);
-  color: var(--text-muted);
-  line-height: var(--lh-snug);
-}
 
-/* Standalone category (no children) — image CTA */
-.leaf {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: 220px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  isolation: isolate;
-}
-.leafImg {
-  object-fit: cover;
-  z-index: -2;
-}
-.leaf::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--overlay-img);
-}
-.leafCta {
+.viewAll {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 1.25rem;
-  font-weight: var(--fw-semibold);
-  color: #fff;
-}
-
-/* ----- Feature card --------------------------------------------------- */
-.feature {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: 300px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  isolation: isolate;
-}
-.featureImg {
-  object-fit: cover;
-  z-index: -2;
-  transition: transform var(--dur-slow) var(--ease-out);
-}
-.feature::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--overlay-img);
-}
-.feature:hover .featureImg {
-  transform: scale(1.06);
-}
-.featureBody {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 1.5rem;
-  color: #fff;
-}
-.featureEyebrow {
-  font-size: var(--fs-eyebrow);
-  text-transform: uppercase;
-  letter-spacing: var(--ls-eyebrow);
-  font-weight: var(--fw-semibold);
-  color: var(--blue-300);
-}
-.featureTitle {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: var(--fw-semibold);
-}
-.featureDesc {
-  font-size: var(--fs-sm);
-  color: rgba(255, 255, 255, 0.8);
-  line-height: var(--lh-snug);
-}
-.featureCta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-top: 0.35rem;
+  width: 100%;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
-  color: #fff;
+  color: var(--accent);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.viewAll:hover {
+  color: var(--accent-hover);
 }
 
-/* Hide the flagship feature on smaller laptops to avoid overflow. */
-@media (max-width: 1180px) {
-  .inner {
-    grid-template-columns: 240px minmax(0, 1fr);
+/* Smaller laptops — 2 columns, tighter card. Mobile uses MobileNav instead. */
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .feature {
-    display: none;
-  }
-}
-@media (max-width: 900px) {
-  .children {
-    grid-template-columns: 1fr;
+  .card {
+    max-width: 520px;
   }
 }

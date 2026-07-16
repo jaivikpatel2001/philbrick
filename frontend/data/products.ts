@@ -30,12 +30,12 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Control panels that manage motion, safety, signalling and door operation for a smooth, reliable elevator, engineered and built in-house.",
     longDescription:
-      "The elevator control panel is the intelligence behind the ride: it drives the machine, levels the car, sequences the doors and supervises every safety circuit. Philbrick builds control panels in-house and configures them for automatic-door, manual-door and hydraulic elevators, so the same dependable core suits new installations and modernisation alike.",
+      "The elevator control panel is the intelligence behind the ride: it drives the machine, levels the car, sequences the doors and supervises every safety circuit. Philbrick builds control panels in-house using RISC microprocessor-based High Speed clocked design for automatic-door, manual-door and hydraulic elevators. Features include Multi Functional keypad with LCD display, Programmable configuration, Self Diagnostic/Debugging Mode, Opto Coupler based Galvanic Isolation for all Inputs and Outputs, and PTC protected Digital I/O.",
     highlights: [
-      "In-house designed and manufactured",
+      "RISC microprocessor-based High Speed design",
       "Automatic, manual and hydraulic variants",
-      "Integrated safety and signalling logic",
-      "Suited to new builds and modernisation",
+      "Self Diagnostic/Debugging Mode for onsite troubleshooting",
+      "Opto Coupler based Galvanic Isolation",
     ],
     image: cover("elevator-control-panel"),
     released: true,
@@ -45,7 +45,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "Automatic Door Controller",
         category: "Elevator Control Panel",
         description:
-          "A control panel tuned for elevators with automatic power doors, coordinating car and landing door operation, levelling and safety interlocks for effortless, hands-free entry and exit.",
+          "Xpert Main Board based Auto Door V3F Type Control Panel available in 8, 12 and 16 landing floor configurations with Full Collective Logic. Options include customized MRL enclosure, ARD functionality and control panel for Synchronous Motor (Gearless Machine).",
         image: leaf("elevator-control-panel", "automatic-door-controller"),
         released: true,
       },
@@ -54,7 +54,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "Manual Door Controller",
         category: "Elevator Control Panel",
         description:
-          "A dependable controller for elevators with manual swing or collapsible doors, managing drive, levelling and safety circuits while the doors are operated by hand.",
+          "Available in V3F Drive and Single Speed variants with Elevat+ and Xpert Main Board options. V3F panels in 8 to 16 landing configurations with Down/Full Collective Logic. Options include customized MRL enclosure, ARD functionality, Phase Sequence Corrector and Synchronous Motor control.",
         image: leaf("elevator-control-panel", "manual-door-controller"),
         released: true,
       },
@@ -63,7 +63,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "Hydraulic Controller",
         category: "Elevator Control Panel",
         description:
-          "Purpose-built control for hydraulic elevators: smooth valve-controlled acceleration and levelling with the safety and signalling logic Philbrick panels are known for.",
+          "Xpert and Elevat+ Main Board based Hydraulic Lift Control Panels for up to 8 landing floors, available for Automatic and Manual Door configurations. Options include DOL/Star-Delta Main Pump Starter, MRL application, Phase Sequence Corrector and Front & Rear Door operation.",
         image: leaf("elevator-control-panel", "hydraulic-controller"),
         released: true,
       },
@@ -92,7 +92,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "Parallel Type Controller",
         category: "Integrated Control Panel",
         description:
-          "A parallel-wired integrated panel where each signal runs on its own line: simple to commission and service, ideal for low- and mid-rise installations.",
+          "AS360 based Integrated Control Panel available in 10, 12 and 16 landing configurations with Down Collective and Full Collective Logic. Options include customized MRL enclosure, Pre Door opening, Duplex Control, Analog Weighing Device Interface and Double Door Function.",
         image: leaf("integrated-control-panel", "parallel-type-controller"),
         released: true,
       },
@@ -101,7 +101,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "Serial CAN Bus Type Controller",
         category: "Integrated Control Panel",
         description:
-          "A serial CAN-bus integrated panel that replaces bundled travelling cables with a two-wire data bus: cleaner wiring, faster installation and robust noise immunity.",
+          "AS380 based Integrated Control Panel with 64 Landing Full Collective. Options include customized MRL enclosure, Pre Door opening, Group/Duplex Control, Double Door Function, DDS (Destination Dispatching System), IoT for remote monitoring and Community Monitoring System.",
         image: leaf("integrated-control-panel", "serial-can-bus-type-controller"),
         released: true,
       },
@@ -110,7 +110,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "MRL Control Panel",
         category: "Integrated Control Panel",
         description:
-          "A compact controller engineered for machine-room-less (MRL) elevators: the complete control system fits within the shaft, freeing the rooftop machine room.",
+          "AS380 based Integrated Control Panel with 64 Landing Full Collective in a customized enclosure for MRL application. Features Pre Door opening, Group/Duplex Control, Double Door Function, DDS (Destination Dispatching System), IoT for remote monitoring and Community Monitoring System.",
         image: leaf("integrated-control-panel", "mrl-control-panel"),
         released: true,
       },
@@ -142,7 +142,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "On a power failure the Automatic Rescue Device moves the car to the nearest floor and opens the doors, releasing passengers safely. A core Philbrick safety product.",
     longDescription:
-      "The Automatic Rescue Device (ARD) is a life-safety essential. When mains power fails, it automatically brings the elevator to the nearest landing on backup power and opens the doors so passengers are never left stranded between floors. It is one of Philbrick's flagship safety products, engineered for reliable operation exactly when it is needed most.",
+      "Lift Power LP440/LP220 is a specially designed High Starting Current type Inverter to operate the LIFT in Emergency Mode to rescue the passenger in power fail condition. When mains power fails, it automatically brings the elevator to the nearest landing on backup power and opens the doors so passengers are never left stranded between floors.",
     highlights: [
       "Automatic rescue on power failure",
       "Moves the car to the nearest floor",
@@ -160,7 +160,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Philbrick's dedicated door-operator controller, driving the car-door mechanism with smooth, precisely profiled opening and closing and reliable obstruction handling.",
     longDescription:
-      "Lift Master is Philbrick's dedicated door-operator controller. It drives the car-door mechanism with a smooth, tuned motion profile, holds accurate open and close positions and handles obstructions gracefully. That is the difference between a door that feels effortless and one that feels abrupt across millions of cycles.",
+      "Lift Master is Philbrick's dedicated door-operator controller available in two models: the LMP66 TINY with 66 Watt BLDC Motor suitable for small opening/light weight doors, and the LMP110 with 110 Watt BLDC Motor suitable for medium to large opening/medium to heavy weight doors. It drives the car-door mechanism with a smooth, tuned motion profile and handles obstructions gracefully.",
     highlights: [
       "Smooth, profiled door motion",
       "Reliable obstruction handling",
@@ -193,7 +193,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "2 Panel Centre Opening",
         category: "Synergy Auto Door",
         description:
-          "Two panels that part symmetrically from the centre: fast, balanced operation for standard passenger openings.",
+          "Two panels that part symmetrically from the centre. Available for openings from 600 to 1400 mm. Max. operator width: (2x Clear Opening) + 100 mm.",
         image: leaf("synergy-auto-door", "2-panel-centre-opening"),
         released: true,
       },
@@ -202,7 +202,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "2 Panel Telescopic / Side Opening",
         category: "Synergy Auto Door",
         description:
-          "Two panels that telescope to one side, maximising clear opening width where wall space beside the entrance is limited.",
+          "Two panels that telescope to one side (Right/Left). Available for openings from 650 to 1500 mm. Max. operator width: (1.5x Clear Opening) + 100 mm.",
         image: leaf("synergy-auto-door", "2-panel-telescopic-side-opening"),
         released: true,
       },
@@ -211,7 +211,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         name: "4 Panel Centre Opening",
         category: "Synergy Auto Door",
         description:
-          "Four telescoping panels opening from the centre: the widest clear entrance for hospital beds, freight and high-traffic lobbies.",
+          "Four telescoping panels opening from the centre. Available for openings from 700 to 1800 mm. Max. operator width: 1140 mm for 700 mm opening, (1.5x Clear Opening) + 50 mm for larger sizes.",
         image: leaf("synergy-auto-door", "4-panel-centre-opening"),
         released: true,
       },
@@ -243,12 +243,12 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Passenger cabins built to order: durable construction with a choice of finishes, lighting, flooring and fixtures for residential and commercial elevators.",
     longDescription:
-      "The cabin is the part of the elevator passengers actually experience. Philbrick builds cabins to order with durable construction and a wide choice of wall finishes, ceilings, lighting, flooring and fixtures, so the interior can be plain and hard-wearing or a refined feature of the building.",
+      "Philbrick builds cabins to order with homogeneous bottom and top structure with minimum welding joints. Available in MS Powder Coated, Galvanized Powder Coated and Stainless Steel material with customized designs in various combinations of Plain S.S., Designer S.S. Sheet Material, MS Powder Coated, Titanium Gold Designed, Mirror Finish and Full Glass Capsule Car configurations.",
     highlights: [
-      "Built to order",
-      "Wide choice of finishes and lighting",
-      "Residential and commercial ranges",
-      "Durable, serviceable construction",
+      "Homogeneous bottom and top structure",
+      "MS Powder Coated, Galvanized and Stainless Steel options",
+      "Customized design combinations",
+      "Mirror Finish, Titanium Gold and Full Glass Capsule variants",
     ],
     image: cover("elevator-cabin"),
     released: true,
@@ -463,7 +463,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Elevator products from the STEP range: drives, controllers and integrated components for new installations and modernisation.",
     longDescription:
-      "Philbrick supplies elevator products from the STEP range, including drives, controllers and integrated control components. They give installers and modernisers a proven, widely-supported option that pairs cleanly with Philbrick's own panels, doors and fixtures.",
+      "In 2014 Philbrick partnered with STEP, the largest Chinese manufacturer of elevator products, to keep its image as a trend setter. Philbrick supplies elevator products from the STEP range, including drives, controllers and integrated control components, giving installers and modernisers a proven, widely-supported option that pairs with Philbrick's own panels, doors and fixtures.",
     highlights: [
       "STEP drives and controllers",
       "Integrated control components",
