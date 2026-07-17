@@ -119,11 +119,18 @@ export const EXPLORATION_PARTS: ExplorationPart[] = PART_SPECS.map((spec) => {
   return { ...spec, component, image: spec.image ?? component.image };
 });
 
-/* ---- scroll pacing (timeline units; 1 unit = one component beat) ---------- */
-export const INTRO_UNITS = 0.9; // assembled machine + headline hold
-export const SETTLE_UNITS = 1.1; // exploded overview + CTA hold at the end
-export const TOTAL_UNITS = INTRO_UNITS + EXPLORATION_PARTS.length + SETTLE_UNITS;
+/* ---- scroll pacing (timeline units; 1 unit ≈ VH_PER_UNIT of scroll) --------
+   Strict phase order, each finishing before the next starts:
+     [0 … TEXT_UNITS]                         centred copy holds, then fades up
+     [TEXT_UNITS … PARTS_START]               machine scales 0 → 1 (ease in-out)
+     [PARTS_START … PARTS_START + parts]      components reveal one by one
+     [… TOTAL_UNITS]                          exploded overview holds, outro   */
+export const TEXT_UNITS = 1.0;
+export const ELEVATOR_UNITS = 1.15;
+export const PARTS_START = TEXT_UNITS + ELEVATOR_UNITS;
+export const SETTLE_UNITS = 1.0;
+export const TOTAL_UNITS = PARTS_START + EXPLORATION_PARTS.length + SETTLE_UNITS;
 
-/** ~85vh of scroll per beat reads unhurried without feeling like scroll jail. */
-const VH_PER_UNIT = 85;
+/** ~80vh of scroll per beat reads unhurried without feeling like scroll jail. */
+const VH_PER_UNIT = 80;
 export const SCROLL_VH = Math.round(TOTAL_UNITS * VH_PER_UNIT);

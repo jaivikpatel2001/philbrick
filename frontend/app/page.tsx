@@ -1,60 +1,19 @@
-/* Three.js hero — replaced by the scroll-driven exploded component tour.
-   DO NOT DELETE: restore by swapping the imports + JSX back
-   (sections/experience/ElevatorScene.tsx and friends are kept intact). */
-// import { ElevatorHero } from "@/sections/experience/ElevatorHero";
-import { ExplorationHero } from "@/sections/experience/ExplorationHero";
-import { AboutPreview } from "@/sections/home/AboutPreview";
-import { ProductsShowcase } from "@/sections/home/ProductsShowcase";
-import { ServiceEcosystem } from "@/sections/home/ServiceEcosystem";
-import { IndustriesShowcase } from "@/sections/home/IndustriesShowcase";
-import { StatsBand } from "@/sections/shared/StatsBand";
-import { CTASection } from "@/sections/shared/CTASection";
+import { ElevatorHero } from "@/sections/experience/ElevatorHero";
+import { HomeSections } from "@/sections/home/HomeSections";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
-import { COMPANY_STATS } from "@/data/stats";
 
 /**
- * Homepage = the flagship storytelling experience.
- * The cinematic Three.js elevator hero hands off into Philbrick's content flow:
- * who we are → what we make → what we offer → applications → numbers → CTA.
+ * Homepage `/` — the cinematic Three.js elevator hero version.
+ *
+ * Client-review A/B: `/variant1` is the same page with the scroll-driven
+ * exploded component tour hero (sections/experience/ExplorationHero.tsx). The
+ * page body below the hero is shared via <HomeSections />.
  */
 export default function HomePage() {
   return (
     <ReleaseGate route="/" label="Home">
-      {/* Scroll-driven exploded component tour (the Three.js hero is
-          preserved above, commented out — do not delete it) */}
-      <ExplorationHero />
-      {/* <ElevatorHero /> */}
-
-      {/* About the company */}
-      <AboutPreview />
-
-      {/* Products — the component range */}
-      <ProductsShowcase />
-
-      {/* What we offer — manufacturing · custom/OEM · modernisation · support */}
-      <ServiceEcosystem />
-
-      {/* Applications */}
-      <IndustriesShowcase />
-
-      {/* By the numbers */}
-      <StatsBand
-        eyebrow="05 By the numbers"
-        title="A component maker you can measure"
-        description="Three decades of in-house engineering and a complete elevator-component range, from control panels to signalling."
-        stats={COMPANY_STATS}
-        columns={4}
-        variant="bordered"
-      />
-
-      {/* Contact / CTA */}
-      <CTASection
-        eyebrow="Let's build"
-        title="Ready to specify your next elevator?"
-        description="Tell us about your project and the Philbrick team will help you choose the right control, safety and signalling components."
-        primary={{ label: "Request a quote", href: "/contact" }}
-        secondary={{ label: "Explore products", href: "/products" }}
-      />
+      <ElevatorHero />
+      <HomeSections />
     </ReleaseGate>
   );
 }

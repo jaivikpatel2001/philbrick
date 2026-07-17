@@ -6,6 +6,633 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-17 14:18 IST
+
+### `/variant6` overlay was invisible — z-index (canvas covered it)
+
+**Status:** Completed
+
+The exploded overlay was fully wired but nothing showed: `.mount` (the WebGL
+canvas) is `z-index: 1` and `.v6Overlay` had no z-index, so the overlay painted
+BEHIND the canvas. Fixed: `.v6Overlay { z-index: 3 }` (above the canvas, below
+the HUD rail at 7), and `.v6Part { pointer-events: auto }` so parts stay
+clickable while the overlay stays click-through. Verified on `:3002`: overlay
+z-index 3 vs mount 1; hit-test at the COP slot returns IMG → BUTTON → CANVAS
+(part now paints above the canvas); zero console errors. Files:
+`ElevatorScene.module.css`.
+
+---
+
+## 2026-07-17 14:10 IST
+
+### `/variant6` — exploded view now uses variant1's EXACT DOM layout
+
+**Status:** Completed (scroll reveal to be judged in the real browser)
+
+Feedback: the 3D billboarded part planes overlapped and did not match
+`/variant1`. Root cause: variant1's clean composition is inherently a 2D/DOM
+layout (fixed screen-% slots + leader lines + labels) — faking it with
+perspective 3D planes always distorts and overlaps.
+
+**Fix:** replaced the 3D part planes with a DOM overlay that reuses variant1's
+own data (`EXPLORATION_PARTS` from `data/heroExploration.ts`), so the layout is
+identical by construction:
+- the 3D scene now only plays the building arrival (car + shaft hidden);
+- from the threshold a dark scrim + the overlay fade in, the cutaway render
+  centres, then the 8 component cutouts reveal one by one — each flying from
+  its anchor on the spine to variant1's exact resting slot (30/16, 86/17,
+  13/42, 69/43, 30/68, 86/69, 13/90, 69/91) with a dashed azure leader line
+  and an index/name/tagline label — and ACCUMULATE, exactly like variant1;
+- parts are clickable (open the ComponentModal); the right-side rail stays.
+- Driven by a `gsap.ticker` reading `progress.current` (opacity/left/top/line
+  endpoints only — no React re-renders per frame).
+
+Removed: the 3D part/spine planes, the projected 3D hotspot chips, and the
+bottom-left caption (its per-part labels + View-details are now on the parts).
+The building arrival, camera, day/night and outro remain byte-identical to `/`.
+
+**Files:** `sections/experience/Variant6ElevatorScene.tsx` (overlay JSX + reveal
+ticker; V6 blocks slimmed to `car.visible=false`), `ElevatorScene.module.css`
+(v6 overlay classes appended). No new assets (reuses the machine + 8 component
+renders; `V6_SLOTS`/`FRAMING`-based 3D layout no longer used for parts).
+
+**Verified:** build green (compiled, TypeScript clean, 64/64). Live on
+`:3002/variant6`: overlay present with 8 parts at variant1's exact slots, all
+8 real component images + spine loaded, 8 leader lines, correct labels, zero
+console errors. The reveal animation itself (arrival → centred elevator → 8
+parts one by one with lines) needs a real browser — preview freezes the ticker.
+
+---
+
+## 2026-07-17 13:57 IST
+
+### `/variant6` — remove the 3D elevator entirely; image + variant1-style reveal
+
+**Status:** Completed (scroll reveal to be judged in the real browser)
+
+Feedback: the previous pass only hid the cabin trim, so the modelled elevator
+(doors, header, shaft rail) was still there. The ask: remove the 3D elevator
+ENTIRELY, and once the camera is inside the building show the elevator IMAGE,
+then reveal the parts one by one like `/variant1`.
+
+**Changes (all V6-local in `Variant6ElevatorScene.tsx`):**
+- **Whole 3D elevator gone:** `car.visible = false` (shell, doors, header, COP,
+  brand decal, lights, brakes) and `shaft.visible = false` (rails, counterweight,
+  traction machine, ropes). The building/lobby (in `world`, not `exterior`)
+  stays, so the camera still arrives and ends inside the lit lobby.
+- **Elevator = the cutaway image**, standing on the lobby floor
+  (`v6Spine` at `y = FY + H/2`), revealed as the camera enters (p 0.3→0.37) and
+  held.
+- **8 parts reveal one by one, variant1-style:** new module const `V6_SLOTS`
+  (zigzag around the image); each component cutout fits a ~1.1 box, sits at its
+  slot, and fades in in sequence across COMP_START→COMP_END, ACCUMULATING (once
+  shown it stays), so the full system is assembled by the end.
+- **Camera no longer flies around** the (absent) cabin: the 8 `frameOf` stops
+  are replaced by a steady interior shot facing the image with a slow push-in
+  (z 9.2→5.2). Hotspot anchors repointed to `V6_SLOTS` so the "details" chips
+  land on the parts. `frameOf`/`step` kept (voided) — arrival stops unchanged.
+
+The exterior arrival, dolly-zoom, threshold, day/night cycle, postprocessing
+and outro remain byte-identical to `/`.
+
+**Verified:** build green (compiled, TypeScript clean, 64/64). Live on
+`:3002/variant6`: WebGL alive, canvas sized, all 9 real textures loaded, zero
+console errors. Scroll reveal (arrival → image in the lobby → 8 parts one by
+one) to be confirmed in a real browser — preview freezes the render loop.
+
+**Follow-up:** in-browser, tune the elevator image scale (`V6_SPINE_H = 2.6`),
+the part box size (`V6_MAX = 1.12`) and the 8 `V6_SLOTS` positions if the
+composition needs balancing.
+
+---
+
+## 2026-07-17 13:44 IST
+
+### `/variant6` rebuilt as an exact ElevatorScene duplicate + real imagery
+
+**Status:** Completed (interior reveal to be judged in the real browser)
+
+Clarified intent: variant6 should be an ENTIRE duplicate of the homepage hero
+(`/`), with only the 3D elevator + its parts swapped for the real spine +
+component renders "so it looks real". The earlier variant6 (a fresh matte
+scene) was the wrong interpretation and is deleted.
+
+**Approach (lowest-risk faithful duplicate):** copied
+`ElevatorScene.tsx` → `Variant6ElevatorScene.tsx` verbatim (kept in
+`sections/experience/` so all relative imports resolve unchanged; export
+renamed `Variant6ElevatorScene`). The whole scene — night-city arrival,
+dolly-zoom, threshold, camera stops, day/night cycle, bloom/NaN-guard/SMAA,
+adaptive DPR, IntersectionObserver gating, outro — is byte identical. Two
+clearly-marked "V6 BLOCK" edits are the only change:
+- **BLOCK 1** (after the car build): hides the toy interior detail (`cop`,
+  `sidePanels`, `backMirror`, `handrail`) and hangs the real renders — the
+  cutaway machine at cabin centre + the 8 component cutouts at their exact
+  `FRAMING` anchors (unlit MeshBasic, billboarded, `depthTest:false` so a photo
+  never clips into a wall).
+- **BLOCK 2** (in `pose`, before `updateHotspots`): billboards each plane and
+  fades a component in when it becomes the active component (the camera already
+  frames that anchor); the spine reveals as the camera settles inside
+  (0.34→0.41) and returns for the outro (0.9→0.94).
+
+Because the camera already flies to each `FRAMING` anchor, the real photo lands
+exactly where the modelled part used to be — the entire original camera/scroll
+system is reused untouched. The hotspot chips still project to the same anchors,
+so the "click for details" modal keeps working over the real images.
+
+**Files:** `sections/experience/Variant6ElevatorScene.tsx` (new duplicate),
+`variants/Variant6Hero.tsx` (repointed), `variants/Variant6Scene.tsx` (deleted
+— old fresh scene), `imagegeneration.md` (§11.5 note + §11.6), `VARIANTS.md`.
+No new image assets (reuses the machine + 8 component renders).
+
+**Verified:** build green (compiled, TypeScript clean, 64/64 pages). Live on
+`:3002/variant6`: WebGL context alive, canvas sized, all 9 real textures loaded
+(spine + 8 components) + brand logo (confirming the full original scene is
+intact), zero console errors. The scroll-driven interior reveal (arrival
+identical to `/`, real parts appearing at the anchors) can only be confirmed in
+a real browser — the preview pane freezes the render loop (screenshot timed out,
+same as the original `/`).
+
+**Follow-up:** judge in-browser whether each component photo sits/scales well at
+its anchor; per-part height is `FRAMING.dist * 0.52` (clamped 0.6–1.5) and the
+spine height is 2.3 — both are one-number tunes if any part reads too big/small.
+
+---
+
+## 2026-07-17 13:02 IST
+
+### `/variant5` door pass-through blur — leaves now dissolve to 0 opacity
+
+**Status:** Completed
+
+The reframe/faster-pass reduced but did not kill the gold blur: even fully
+open, the door-leaf photo planes are large surfaces the camera flies *through*,
+so for a frame or two the brushed-steel texture smeared across the whole lens.
+
+**Fix (per user's "0 opacity" suggestion):** captured the leaf materials
+(`panelMats`) and, once the doors are open, fade them to zero
+(`1 - beat(p, 0.5, 0.56)`) and flip `leaf.visible` off below the threshold, so
+the leaves are gone before the camera reaches the doorway. The indicator fades
+on the same curve. The camera then crosses the black void quad (the intended
+"doors open onto darkness" beat) into the clean studio showcase.
+
+**Files:** `variants/Variant5Scene.tsx`. Build green (64/64, TypeScript clean);
+page mounts with mattes + 8 callouts, zero console errors. Final look to be
+confirmed in the real browser.
+
+---
+
+## 2026-07-17 12:54 IST
+
+### `/variant5` polish: door pass blur, blue square, showcase background
+
+**Status:** Completed
+
+Three user-reported issues in the night arrival flow, all fixed:
+
+- **Blurry gold "middle frame":** the camera crossed the doorway slowly and at
+  point-blank range, magnifying the 440px door-leaf texture into a full-screen
+  blur. Fixed by reframing the approach (the portal beat now frames the FULL
+  doors + indicator from 4m back), opening the doors earlier (0.45 to 0.53,
+  slide widened to ±1.5) so they are fully aside before the crossing, and
+  passing through faster (new stops 0.55 / 0.64). The entrance glass fade was
+  moved earlier (0.37 to 0.43) to finish before the quicker camera reaches it.
+- **Blue square behind the machine:** the showcase "halo" was a flat azure
+  8.4x8.4 plane that read as a literal box. Deleted — the cutaway render
+  stands on its own.
+- **Background behind the last frame:** the skyline mattes (z -54/-60) loomed
+  directly behind the showcase. Added an act change: once the camera passes
+  the doorway, the whole city act pops out of the render (towerGrp.visible,
+  behind the lens so it is invisible to drop) and the skylines + tower matte
+  fade to zero (0.56 to 0.66) — the machine and parts now live in a clean
+  dark studio void.
+
+**Files:** `variants/Variant5Scene.tsx` (CAM stops, door timing, halo removal,
+city-act fade). Build green (64/64, TypeScript clean); page verified mounting
+with mattes + 8 callouts. Motion to be judged in the real browser.
+
+---
+
+## 2026-07-17 12:42 IST
+
+### Environment mattes integrated: `/variant5` + `/variant6` go photoreal
+
+**Status:** Completed
+
+The client generated the §11.4 environment set. Audit: all four true-alpha
+(tower 23% opaque, skyline 22%, lobby 43%, door leaf 37%; corners transparent).
+
+**Processing:** originals archived
+(`image-sources/home/hero-exploration/environment-original/`); tower + skyline
+had a semi-transparent gray halo, attenuated (alpha < 235 scaled x0.3) then
+trimmed; lobby trimmed as-is (its warm glow alpha is the design); door leaf
+cropped out of its glow field to the actual panel (440x1372).
+`optimizeHeroExploration.mjs` re-run (WebP variants + manifest). Processed
+aspects: tower 0.248 (slender §10.1 tower), skyline 3.046, lobby 0.679,
+leaf 0.321.
+
+**`/variant5` wiring:** procedural tower exterior (shell/fins/window points/
+podium/canopy) replaced by the tower matte; instanced flanking city replaced by
+the skyline matte mirrored at two depths; procedural door panels replaced by
+the client's leaf render mirrored into the centre-opening pair, sliding over a
+new pitch-black void quad (what the parting doors reveal). The 3D lobby
+interior (stone floor, columns, graphite wall + frame, azure indicator) stays
+real geometry — the camera enters it, so parallax matters there.
+
+**`/variant6` wiring:** all four `MATTES` slots flipped `ready: true` with the
+measured aspects; lobby matte resized to a 7.8-tall portal wall + the same
+black void quad behind the leaves.
+
+**Verified:** build green (compiled, TypeScript clean, 64/64). Live on
+`:3002`: variant5 loads tower/skyline/leaf mattes + 9 part textures, 8
+callouts; variant6 loads all four mattes + 9 part textures, 8 callouts, 8-item
+rail; WebGL contexts alive. Look/motion to be judged in the real browser.
+
+**Note:** matte textures load as the processed PNGs (TextureLoader bypasses
+the next/image loader); post-trim they are small, but converting the loads to
+the -960 WebP variants is a cheap follow-up if profiling ever flags them.
+
+---
+
+## 2026-07-17 12:28 IST
+
+### New `/variant6`: the original journey, photoreal edition (matte slots)
+
+**Status:** Completed (scene live with stand-ins; environment mattes pending
+client generation)
+
+Client wants the ORIGINAL homepage hero's visuals upgraded with real images
+(like the product cutouts) instead of procedural "dummy visuals", as a new
+variant. Rather than forking the 1500-line `ElevatorScene`, `/variant6`
+remakes its narrative on the variants kit: arrival at the night tower →
+approach → the threshold → the doors answer (leaves slide apart) → the
+8-component tour (one real render per beat, centre stage, with the original's
+right-rail index) → the finale gathering all 8 around the machine → outro.
+The original stays untouched at `/` for comparison.
+
+**Matte-slot architecture:** every environment element is a config slot
+(`MATTES` map: tower, skyline, lobby, doorLeaf). `ready: false` renders a
+clean procedural stand-in; when the client's transparent render lands in
+`public/images/home/hero-exploration/environment/` (+ optimize script), flip
+`ready: true` and the photo plane replaces the stand-in. Product imagery
+(machine + 8 cutouts) is already real. Prompts: imagegeneration.md §11.4;
+mapping: §11.5.
+
+**Files:** `variants/Variant6Scene.tsx` + `Variant6Hero.tsx` +
+`app/variant6/page.tsx` (new), `variants.module.css` (railV6 styles),
+`config/pageReleases.ts` (+/variant6), `imagegeneration.md` (§11.5),
+`VARIANTS.md` (row).
+
+**Verified:** build green (compiled, TypeScript clean, 64/64 pages). Live on
+`:3002/variant6`: WebGL context alive, all 9 real textures loaded, 8 callouts,
+8-item tour rail, 940vh. Motion pacing to be judged in the real browser.
+
+---
+
+## 2026-07-17 11:54 IST
+
+### `/variant4` machine cropped — intro reframed; variant5 environment matte plan
+
+**Status:** Completed (code); environment assets pending client generation
+
+- **`/variant4` "my elevator cut":** the cutaway render (7.2 world units tall)
+  was taller than the intro camera's vertical field of view, so its top
+  cropped. Reframed: the intro camera now starts higher and further back
+  (y 2.9, z 14.2) aiming at the machine's centre (y 3.6) — full render in
+  frame with margin — then eases down to part height (target y 2.1) as the
+  lateral take begins. Build green (63/63).
+- **`/variant5` environment looks like a mockup:** agreed — the procedural
+  night world reads as boxes next to the real renders. Plan: replace it with
+  photoreal TRANSPARENT matte planes (same technique as the product cutouts).
+  Asset spec + prompts documented as imagegeneration.md §11.4: `tower-night`
+  (tall cutout, lobby centred at bottom), `skyline-strip` (wide cutout, used
+  mirrored at two depths), `lobby-backdrop` (16:9 full bleed, open DARK
+  doorway, doors ship separately), `door-leaf` (single leaf cutout, mirrored
+  into the centre-opening pair and slid apart in 3D). Drop into
+  `public/images/home/hero-exploration/environment/`, run
+  `optimizeHeroExploration.mjs`, then the scene wiring is a follow-up task.
+
+**Files:** `variants/Variant4Scene.tsx` (camera), `imagegeneration.md` (§11.4).
+
+---
+
+## 2026-07-17 11:50 IST
+
+### `/variant2` machine invisible — glass depth-write occlusion fixed
+
+**Status:** Completed
+
+**Symptom (user report + screenshot):** at the climb beats, no machine render
+and no component images were visible — only the tower ledges, city and the
+HTML callouts.
+
+**Root cause:** the tower's glass facade (`MeshPhysicalMaterial`, transparent)
+kept its default `depthWrite: true`. Even after its opacity scrubbed to 0 it
+still wrote its front face into the depth buffer; the photo planes (transparent,
+`renderOrder 4`, so drawn after it) then failed the depth test behind that
+invisible surface and were discarded. The HTML callouts survived because they
+are DOM, not WebGL — which is why labels floated over nothing.
+
+**Fix:** `depthWrite: false` on the facade glass (physically correct for
+glass) plus `facade.visible = opacity > 0.004` so the dissolved facade leaves
+the render entirely. Applied the same fix preventively to `/variant5`'s
+entrance glass (`entGlassMat` + `entGlass.visible` toggle), which had the
+identical pattern in front of its showcase.
+
+**Files:** `variants/Variant2Scene.tsx`, `variants/Variant5Scene.tsx`.
+
+**Verified:** build green (compiled, TypeScript clean, 63/63). Visual
+confirmation in the user's real browser (the embedded pane cannot advance the
+scrub). Rule of thumb recorded for future scenes: any transparent material
+that can sit between the camera and the photo planes must set
+`depthWrite: false`.
+
+---
+
+## 2026-07-17 11:31 IST
+
+### Variant fixes (v2 flat, v4 flash) + new `/variant5` "Night Arrival"
+
+**Status:** Completed
+
+Client feedback round two, all three items addressed:
+
+- **`/variant4` — jitter/flash after the 4th part, wants one smooth take:**
+  the flash was the five scene architecture (scene-group swaps + camera
+  teleports masked by a fade that scrub speed could outrun). Rebuilt as a
+  SINGLE CONTINUOUS TAKE: the machine and all 8 parts stand along one long
+  gallery; the camera opens on the cutaway, tracks laterally past every
+  component (lit by proximity), then pulls back and up to frame the whole
+  line-up. No visibility toggling, no fade layer, nothing can flash. 840vh.
+- **`/variant2` — looked flat, machine/parts not visible:** root cause was
+  full-width floor plates slicing through the photo planes (parts taller than
+  the 1.75 floor pitch) and part heights misaligned with the camera's climb.
+  Fixed: floor plates are now side ledges around an OPEN CORE (|x| < 4.9) so
+  nothing slices the renders; the spine is 14 units tall centred on the climb
+  (y 3.5 to 17.5); each part's height now matches the camera altitude at its
+  beat so it reveals centred in view (x ±2.4, z 1.0, bigger sizes).
+- **`/variant5` — new, from imagegeneration.md §10.1:** the MASTER CONSISTENCY
+  BLOCK world built live — full moon fixed upper right, stars, deserted
+  boulevard, the main tower (warm amber occupied floors, fins, dark podium,
+  double-height glowing lobby, thin steel canopy), single brushed
+  centre-opening elevator with azure arrow-only indicator; one continuous
+  §10.1 dolly (descend to eye height → lobby → doors part) ending beyond the
+  threshold with the real cutaway + all 8 real components revealed and named.
+  Azure #109BDD + warm amber palette per the block. 880vh, noindex, route
+  registered.
+
+**Affected files:** `Variant4Scene.tsx` (rewritten single take),
+`Variant2Scene.tsx` (open core, climb alignment), `Variant5Scene.tsx` +
+`Variant5Hero.tsx` + `app/variant5/page.tsx` (new), `config/pageReleases.ts`
+(+/variant5), `VARIANTS.md`.
+
+**Verified:** build green (compiled, TypeScript clean, 63/63 pages, was 62).
+Live on `:3002`: v4 shows "Eight components. No cuts." with the fade layer
+gone, 8 callouts, all 9 real textures; v2 loads 9 textures + 8 callouts with
+the open-core layout; v5 mounts with a live WebGL context, 8 callouts, 9
+textures, 880vh. Motion pacing to be judged in the real browser as usual.
+
+---
+
+## 2026-07-17 11:08 IST
+
+### Variants 2 to 4 rebuilt around the real renders (client feedback)
+
+**Status:** Completed
+
+Client feedback on the first pass: the procedural geometry read as toy-like;
+they want realistic structure and materials matching the `/variant1` imagery,
+and EVERY variant must showcase all 8 elevator components.
+
+**Approach:** every Three.js variant is now built around the actual client
+renders — the cutaway machine (spine) and the 8 true-alpha component cutouts —
+placed in the 3D scenes as unlit photo planes (`photoPlane` in heroSceneKit;
+baked lighting, the same rule as the ElevatorScene brand decal), billboarded to
+the camera each frame, grounded with contact glows and additive light cones.
+New shared asset map: `sections/experience/variants/partAssets.ts` (exact WebP
+variants, aspects, names from `data/elevatorComponents.ts`; 07 renders as a
+framed plate because its background is baked).
+
+- **`/variant2`:** the real cutaway stands as the tower core (azure halo);
+  during the climb all 8 real cutouts slide out of the machine at their
+  working heights (safeties at the pit, traction machine at the top),
+  alternating sides; pull-back ends with every part in place. 8 callouts.
+- **`/variant3`:** the scan now materialises the REAL render (blueprint lines
+  clipped above the sweep, photo clipped below — one scrubbed plane constant);
+  after the scan, all 8 real parts detach into a documented two-column
+  exploded layout. 8 callouts, one per beat.
+- **`/variant4`:** the five scenes restaged with real imagery: S1 the cutaway
+  under a key light cone; S2 cabin cluster (interior plate, COP, key switch,
+  emergency call) spotlit in turn; S3 doors + display; S4 traction machine +
+  safety system; S5 the machine with ALL 8 parts assembling around it.
+  8 callouts across S2 to S4.
+
+**Affected files:** `variants/partAssets.ts` (new), `variants/heroSceneKit.tsx`
+(+`loadPhoto`/`photoPlane`/`contactGlow`), `Variant2Scene.tsx`,
+`Variant3Scene.tsx`, `Variant4Scene.tsx` (rewritten), `VARIANTS.md` (photoreal
+edition note + updated storyboards).
+
+**Verified:** build green (compiled, TypeScript clean, 62/62 pages). Live on
+`:3002`: each variant page fetches all 9 real textures into its WebGL scene
+(cutaway + 8 cutouts, confirmed via the resource log), mounts 8 callouts, and
+holds a live WebGL context. Motion pacing to be judged in a real browser as
+usual (preview pane freezes the ticker).
+
+---
+
+## 2026-07-17 10:53 IST
+
+### Three new cinematic Three.js hero variants (`/variant2` `/variant3` `/variant4`)
+
+**Status:** Completed (built + verified live; scrub motion is real-browser
+verified — the preview pane freezes the ticker)
+
+Three original scroll-driven WebGL heroes for client A/B review, joining `/`
+(night-city 3D) and `/variant1` (exploded tour). Full design + implementation
+reference: `sections/experience/variants/VARIANTS.md`.
+
+- **`/variant2` Architectural Journey (780vh):** abstract night skyline →
+  camera flies through the tower facade as floor plates draw in → rides the
+  shaft beside the climbing car (live ropes, counterweight, warm car glow) →
+  machine room → assembled-system pull-back. Component callouts land at their
+  working positions (Synergy Auto Door, ARD following the car, counterweight
+  and rails, Traction Machine).
+- **`/variant3` Engineering Blueprint (720vh):** the system as a living azure
+  wireframe on a drafting grid; a luminous scan ring sweeps up twice —
+  blueprint → raw metal → finished PBR — implemented with three co-located
+  mesh sets partitioned by scrubbed clipping planes (perfectly reversible,
+  zero shader recompiles). Sparks ride the ring; callout windows are derived
+  from the exact scan height crossing each component.
+- **`/variant4` Immersive Storytelling (860vh):** a five scene product film
+  (lobby → shaft ride with light beams and dust → machine room under one
+  dramatic key → three component pedestals lit in turn → assembled system
+  reveal) joined by scrub-reversible fade cuts; only the active scene group is
+  visible/energised.
+
+**Shared kit** (`sections/experience/variants/heroSceneKit.tsx`): renderer
+(ACES/sRGB/alpha, DPR cap 2 desktop 1.5 low-perf, RoomEnvironment IBL), CSS
+sticky stage + ScrollTrigger scrub 1.1 (house pattern, Lenis-driven ticker),
+render loop paused off-screen/hidden, full dispose sweep, world-anchor → HTML
+callout projector, reduced-motion single static frame, no-WebGL branded
+fallback. Shared overlay CSS (`variants.module.css`): film captions, intro,
+outro + scrim, callout chips, vignette, progress, cue.
+
+**Decisions:**
+- Vanilla Three.js, NOT React Three Fiber: npm installs are currently broken
+  on this machine (silent exit 1 — see 2026-07-16 sessions), and the house
+  standard (THREEJS-IMPLEMENTATION.md, ElevatorScene) is vanilla Three.js
+  anyway. Zero new dependencies.
+- No shadow maps or composer passes in any variant (60 FPS budget); glow/depth
+  via emissive materials, additive cones/points, fog and a CSS vignette.
+- Inspiration sites were analysed for qualities only; all geometry, motion and
+  copy are original and Philbrick-specific.
+
+**Routes:** `app/variant2|3|4/page.tsx` (noindex, ReleaseGate, shared
+`HomeSections` body), `config/pageReleases.ts` entries; sitemap already filters
+the `/variant` prefix.
+
+**Verified:** `npm run build` green first pass — compiled, TypeScript clean,
+**62/62 pages** (was 59). Live probes on `:3002`: each page mounts a sized
+canvas with a live (non-lost) WebGL context, correct scroll lengths
+(780/720/860vh), callouts mounted (4/6/3), correct h1s, v4 fade layer present,
+zero console errors.
+
+**Follow-ups:** judge motion pacing in a real browser and tune beat windows;
+optional variant switcher chip for the client; delete losing variants after
+the client decision (git preserves everything).
+
+---
+
+## 2026-07-17 10:34 IST
+
+### `/variant1` closing statement: centred, big, over a readable overlay
+
+**Status:** Completed (composition verified live; scrub reveal real-browser
+verified — preview freezes the ticker)
+
+The outro was colliding with the exploded parts at the bottom. It is now the
+mirror of the intro: a big centred closing line over a scrim that dims the
+machine.
+
+- **Centred + big.** `.outro` moved from `bottom:9%` to true centre
+  (`left/top:50%; translate(-50%,-50%)`, flex column, centre-aligned); GSAP owns
+  the centring (`xPercent/yPercent:-50`) so the reveal's `y` stays additive. The
+  line jumped from `--fs-h4` to `--fs-h1` — verified identical to the intro
+  title (both 65.6px) and dead-centred (X off 5px, Y 0).
+- **Readable overlay.** New `.outroScrim` (full stage, z 5, below the outro at
+  z 6) fades in as the last part lands: a `color-mix(bg-primary 88%)` wash (parts
+  dimmed to ~12%) + a soft accent-glow radial, so the white copy reads with high
+  contrast. `backdrop-filter: blur(6px)` is kept as progressive enhancement, but
+  the CSS pipeline drops it on this rule (likely the `color-mix` interaction), so
+  readability rests on the dim, not the blur — verified the dim resolves
+  (`bgColor = bg-primary / 0.88`).
+- **Timeline.** In the settle phase the scrim fades in at `settleAt − 0.05` and
+  the big outro at `settleAt + 0.2`, so the machine dims just before the closing
+  line lands. Reversible with scrub; mobile keeps it centred (width 90vw, font
+  clamps down).
+
+**Affected files:** `sections/experience/ExplorationHero.tsx` (scrim element +
+settle tweens + outro yPercent), `ExplorationHero.module.css` (`.outroScrim`,
+centred/big `.outro`, mobile).
+
+**Verified:** forced-visible measurement on `:3002/variant1` (font 65.6px,
+centred, scrim full-stage, dim 0.88); `npm run build` green (59/59, TypeScript
+clean). Scrub reveal itself confirmed in the real browser (preview pane freezes
+rAF).
+
+---
+
+## 2026-07-17 10:23 IST
+
+### `/variant1` exploration hero re-choreographed: centred text + strict phase order
+
+**Status:** Completed (initial state + build verified; scrub motion is
+real-browser verified — the preview pane freezes the GSAP ticker)
+
+Reworked `ExplorationHero` per client direction into a centred, phased reveal.
+
+**Layout.** The intro copy is now absolutely centred (both axes) and
+centre-aligned: `.intro { left/top:50%; transform:translate(-50%,-50%); display:
+flex; flex-direction:column; align-items:center; text-align:center; width:
+min(92vw,42rem) }`; mobile just narrows the width. GSAP owns the centring
+transform (`xPercent/yPercent:-50`) so the fade's additive `y` stays correct.
+
+**Strict phase order** (one scrubbed master timeline, each phase finishing before
+the next; new pacing constants in `data/heroExploration.ts`):
+1. **Text** `[0 … TEXT_UNITS=1.0]` — centred copy holds ~0.28, then fades
+   `autoAlpha 1→0` with a `-7vh` rise (power2.in); fully gone by TEXT_UNITS. The
+   scroll cue fades with it.
+2. **Elevator** `[1.0 … PARTS_START=2.15]` — the machine, held at `scale 0 /
+   opacity 0` through phase 1, scales `0→1` (`autoAlpha 0→1`, `y 4vh→0`,
+   power2.inOut) so it emerges rather than pops. A subtle continued push to 1.04
+   runs through the parts phase for depth.
+3. **Parts** `[2.15 …]` — components reveal one by one (fly from anchor to slot,
+   leader line draws, label lands), exactly as before but starting after the
+   elevator is full-scale.
+4. **Settle** — exploded overview + outro CTAs hold to TOTAL_UNITS.
+
+Scroll length `SCROLL_VH` ≈ 890vh (11.15 units × 80vh). Fully reversible (scrub).
+Removed the trailing dead-zone tween so timeline length == TOTAL_UNITS (keeps the
+active-index math exact). Performance unchanged: transform/opacity only, `active`
+state updates once per beat (not per frame), progress bar via CSS var.
+
+**Affected files:** `sections/experience/ExplorationHero.tsx` (timeline),
+`sections/experience/ExplorationHero.module.css` (centred `.intro`),
+`data/heroExploration.ts` (TEXT_UNITS / ELEVATOR_UNITS / PARTS_START / pacing).
+
+**Verified:** live on `:3002/variant1` — initial state reads `spineScale 0`,
+`spineOpacity 0`, `introOpacity 1`, `text-align center`, intro centred (X off 5px,
+Y 0), `part0Opacity 0` — i.e. only the centred text shows, machine hidden at
+scale 0. `npm run build` green (compiled, TypeScript clean). The preview pane
+freezes rAF so the scrub itself is verified in the real browser.
+
+**Note:** the in-app preview auto-targets `:3000` (per `.claude/launch.json`),
+which currently hosts a different local project; the Philbrick dev server is on
+`:3002`. Only affects tooling, not the app.
+
+---
+
+## 2026-07-17 10:04 IST
+
+### Two homepage hero variants for client A/B review (`/` + `/variant1`)
+
+**Status:** Completed
+
+The client will compare hero directions, so the homepage now exists in two
+routes that share everything below the hero:
+- **`/`** — the cinematic Three.js on-scroll elevator hero (`ElevatorHero` /
+  `ElevatorScene`). Restored here from being commented out.
+- **`/variant1`** — the scroll-driven exploded component tour hero
+  (`ExplorationHero`).
+
+**Architecture (DRY):** extracted the shared page body (About → Products →
+Services → Applications → Stats → CTA) into `sections/home/HomeSections.tsx`.
+Each route is just `<ReleaseGate route><Hero /><HomeSections /></ReleaseGate>`,
+so the body is edited once and both variants stay identical.
+
+**Route registration (strict page-release rule):** added `"/variant1": true`
+to `STATIC_ROUTE_RELEASES` (live so it can be shared with the client). Kept out
+of public search: page-level `robots: { index:false, follow:false }` metadata in
+`app/variant1/page.tsx`, plus a `/variant`-prefix filter in `app/sitemap.ts` so
+variant routes are never advertised.
+
+**Affected files:** `app/page.tsx` (→ ElevatorHero + HomeSections),
+`app/variant1/page.tsx` (new), `sections/home/HomeSections.tsx` (new),
+`config/pageReleases.ts` (+ /variant1), `app/sitemap.ts` (variant filter).
+
+**Verification:** `npm run build` green — 59/59 pages (was 58), TypeScript
+clean, `assertReleaseConfig()` passed. Static export checks: `out/index.html`
+carries the Three.js `heroLoading` shell (no exploration markup);
+`out/variant1.html` carries the exploration `spineWrap` + 8 `hero-exploration`
+cutouts + the `One elevator` h1 + `<meta name="robots" content="noindex,
+nofollow">`; `sitemap.xml` contains zero `variant1` occurrences. Both dev routes
+return HTTP 200.
+
+**Follow-up:** temporary review setup — once the client picks a hero, keep the
+winner on `/` and delete `app/variant1/`, its `/variant1` config entry, and the
+loser's hero component (all preserved in git regardless).
+
+---
+
 ## 2026-07-16 16:50 IST
 
 ### Exploration hero: 8 client component cutouts integrated (cards → floating parts)

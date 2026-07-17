@@ -30,7 +30,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/Button";
 import {
   EXPLORATION_PARTS,
-  INTRO_UNITS,
+  TEXT_UNITS,
+  ELEVATOR_UNITS,
+  PARTS_START,
+  SETTLE_UNITS,
   TOTAL_UNITS,
   SCROLL_VH,
   MOBILE_SLOT,
@@ -123,8 +126,11 @@ export function ExplorationHero() {
           const lines = q<SVGLineElement>(`.${styles.line}`);
           const intro = q<HTMLElement>(`.${styles.intro}`);
           const outro = q<HTMLElement>(`.${styles.outro}`);
+          const scrim = q<HTMLElement>(`.${styles.outroScrim}`);
           const spine = q<HTMLElement>(`.${styles.spineWrap}`);
           const glow = q<HTMLElement>(`.${styles.bgGlow}`);
+
+          const cue = q<HTMLElement>(`.${styles.cue}`);
 
           const tl = gsap.timeline({
             defaults: { ease: "none" },
@@ -137,11 +143,13 @@ export function ExplorationHero() {
               onUpdate: (self) => {
                 // progress bar via CSS var (no React re-render per frame)
                 el.style.setProperty("--p", String(self.progress));
-                const u = self.progress * TOTAL_UNITS - INTRO_UNITS;
-                const idx = Math.min(
-                  EXPLORATION_PARTS.length - 1,
-                  Math.floor(u + 0.62)
-                );
+                // active part index — only during the parts phase (-1 before it,
+                // so the rail stays dark through the text + elevator phases)
+                const u = self.progress * TOTAL_UNITS - PARTS_START;
+                const idx =
+                  u < -0.35
+                    ? -1
+                    : Math.min(EXPLORATION_PARTS.length - 1, Math.floor(u + 0.62));
                 if (idx !== activeRef.current) {
                   activeRef.current = idx;
                   setActive(idx);
@@ -150,31 +158,41 @@ export function ExplorationHero() {
             },
           });
 
-          /* keep parts centred on their slot; gsap owns the transform */
+          /* gsap owns the centring transforms so additive x/y stay correct */
           gsap.set(cards, { xPercent: -50, yPercent: -50 });
+          gsap.set(intro, { xPercent: -50, yPercent: -50 });
+          gsap.set(outro, { xPercent: -50, yPercent: -50 });
+          gsap.set(spine, { xPercent: -50, transformOrigin: "50% 55%" });
+          gsap.set(glow, { y: 0 });
 
-          /* the machine arrives: it rests small, then scales up into place as
-             the user starts scrolling, and keeps slowly approaching afterwards
-             for depth (sequential same-property tweens, scrub-safe) */
-          const arrive = INTRO_UNITS + 0.45;
+          /* ---- PHASE 1 — centred text holds, then fades up and out --------- */
+          tl.fromTo(
+            intro,
+            { autoAlpha: 1, y: 0 },
+            { autoAlpha: 0, y: "-7vh", duration: TEXT_UNITS * 0.72, ease: "power2.in" },
+            TEXT_UNITS * 0.28
+          );
+          tl.to(cue, { autoAlpha: 0, duration: 0.4, ease: "power1.in" }, TEXT_UNITS * 0.28);
+
+          /* ---- PHASE 2 — the machine emerges from scale 0 (ease in-out) ---- */
           tl.fromTo(
             spine,
-            { scale: desk ? 0.45 : 0.6, y: "7vh", autoAlpha: 0.92, transformOrigin: "50% 62%" },
-            { scale: 1, y: 0, autoAlpha: 1, duration: arrive, ease: "power2.out" },
-            0
+            { scale: 0, autoAlpha: 0, y: "4vh" },
+            { scale: 1, autoAlpha: 1, y: 0, duration: ELEVATOR_UNITS, ease: "power2.inOut" },
+            TEXT_UNITS
           );
+          /* subtle continued push through the parts phase for depth */
           tl.to(
             spine,
-            { scale: desk ? 1.05 : 1.03, y: "-2vh", duration: TOTAL_UNITS - arrive },
-            arrive
+            { scale: 1.04, y: "-1.5vh", duration: EXPLORATION_PARTS.length + SETTLE_UNITS },
+            PARTS_START
           );
-          tl.to(glow, { y: "-2vh" }, 0);
+          /* slow background drift, tied to the machine's arrival onward */
+          tl.to(glow, { y: "-2vh", duration: TOTAL_UNITS - TEXT_UNITS }, TEXT_UNITS);
 
-          /* intro copy leaves as the first part departs */
-          tl.to(intro, { autoAlpha: 0, y: -36, duration: 0.5, ease: "power1.in" }, INTRO_UNITS * 0.62);
-
+          /* ---- PHASE 3 — components reveal one by one --------------------- */
           EXPLORATION_PARTS.forEach((part, i) => {
-            const at = INTRO_UNITS + i;
+            const at = PARTS_START + i;
             const card = cards[i];
             const label = labels[i];
             const line = lines[i];
@@ -226,17 +244,25 @@ export function ExplorationHero() {
             }
           });
 
-          /* settle: hold the exploded overview, land the outro */
-          const settleAt = INTRO_UNITS + EXPLORATION_PARTS.length;
+          /* settle: once the last part has landed, dim the machine and bring up
+             the big centred closing statement */
+          const settleAt = PARTS_START + EXPLORATION_PARTS.length;
           tl.addLabel("settle", settleAt);
+          tl.fromTo(
+            scrim,
+            { autoAlpha: 0 },
+            { autoAlpha: 1, duration: 0.6, ease: "power1.inOut" },
+            settleAt - 0.05
+          );
           tl.fromTo(
             outro,
             { autoAlpha: 0, y: 26 },
             { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
-            settleAt + 0.15
+            settleAt + 0.2
           );
-          /* dead-zone so the final composition holds before unpinning */
-          tl.to({}, { duration: 0.45 });
+          /* the spine push-through + glow drift (added above) already run to
+             TOTAL_UNITS, holding the exploded overview after the outro lands —
+             so no extra dead-zone is appended (keeps timeline length == units). */
         }
       );
 
@@ -358,7 +384,8 @@ export function ExplorationHero() {
           </p>
         </div>
 
-        {/* outro: the exploded overview holds + CTAs */}
+        {/* closing statement: scrim dims the machine, big centred line + CTAs */}
+        <div className={styles.outroScrim} aria-hidden />
         <div className={styles.outro}>
           <p className={styles.outroLine}>
             Every part above is designed, built and supported by Philbrick.

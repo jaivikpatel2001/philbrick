@@ -130,6 +130,23 @@
     384,
     640
   ],
+  "/images/home/hero-exploration/environment/door-leaf.png": [
+    384
+  ],
+  "/images/home/hero-exploration/environment/lobby-backdrop.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/home/hero-exploration/environment/skyline-strip.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/home/hero-exploration/environment/tower-night.png": [
+    329
+  ],
   "/images/home/hero-exploration/spine/elevator-cutaway.png": [
     384,
     640,

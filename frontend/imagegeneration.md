@@ -859,3 +859,88 @@ the set matters more than any single image.
   vertical safety light curtain strips with controller cable · LED dot matrix
   and colour TFT lift display modules · brushed stainless two panel landing
   door with frame · small elevator accessory hardware set.
+
+### 11.4 Environment matte set — variant5 / variant6 (SUPPLIED + INTEGRATED 2026-07-17)
+
+**Status:** all four assets supplied by the client, processed (gray halo
+attenuation on tower/skyline, trim, door leaf cropped out of its glow field;
+originals archived in `image-sources/home/hero-exploration/environment-original/`)
+and integrated: variant5 uses tower + skyline + door leaves (its lobby stays
+real 3D geometry for parallax); variant6 uses all four via its `MATTES` map.
+Processed aspects: tower 0.248 · skyline 3.046 · lobby 0.679 · leaf 0.321.
+
+Original spec (kept for regeneration):
+
+The variant5 hero (`sections/experience/variants/Variant5Scene.tsx`) currently
+builds its night world procedurally, which reads as a mockup next to the real
+renders. The fix is the same technique that made the products real: photoreal
+TRANSPARENT image planes, staged like film matte paintings. Four assets:
+
+**Folder:** `public/images/home/hero-exploration/environment/` (the optimize
+script scans recursively — run `node scripts/optimizeHeroExploration.mjs`
+after dropping the PNGs).
+
+- **`tower-night.png`** · tall portrait (9:16 or 2:3), ≥1600px tall, TRUE
+  transparent background · the §10.1 main tower, straight on, night; warm
+  amber lit windows scattered across a dark glass and aluminium facade; a dark
+  stone podium with a glowing double height glass lobby centred at street
+  level and one thin steel entrance canopy. The lobby entrance MUST sit
+  centred at the bottom edge. No text, logos, signage or people.
+- **`skyline-strip.png`** · wide (21:9 or wider), ≥2000px wide, TRUE
+  transparent background · a row of varied dark high rise silhouettes at
+  night, dimmer and cooler than the main tower, scattered warm windows,
+  transparent sky above the rooflines. Used twice (mirrored) at different
+  depths, so avoid a recognisable landmark shape. No text or logos.
+- **`lobby-backdrop.png`** · 16:9, ≥1920px wide, full bleed (no transparency
+  needed) · a premium night lobby interior seen straight on: dark polished
+  stone floor, warm downlights, and a brushed stainless elevator portal
+  centred with an OPEN, completely DARK doorway (no doors, no cabin visible —
+  pure black opening; the door leaves ship separately). An azure indicator
+  above the portal showing a simple up arrow only. No text, logos or people.
+- **`door-leaf.png`** · tall portrait (~1:3), ≥1400px tall, TRUE transparent
+  background · a single brushed stainless elevator door leaf, perfectly
+  front on, flat lighting consistent with the lobby backdrop. It will be
+  mirrored into the centre opening pair and slid apart in 3D.
+
+**Shared style block for all four prompts:** ultra realistic night
+architectural photography style, clear dry night, azure #109BDD used only for
+indicator light accents, warm amber #FFC57A for interior and window light,
+photoreal materials, no text, no lettering, no logos, no signage, no people,
+no vehicles. For transparent assets: true alpha PNG cutout, no backdrop, no
+ground shadow.
+
+### 11.5 Variant 6 "The original, photoreal" — asset mapping
+
+`/variant6` (sections/experience/variants/Variant6Scene.tsx) remakes the
+original homepage journey with photoreal imagery. It consumes:
+- the machine + 8 component cutouts (§11.1 to §11.3 — already shipped), and
+- the §11.4 environment matte set: `tower-night.png`, `skyline-strip.png`
+  (used mirrored at two depths), `lobby-backdrop.png`, `door-leaf.png`
+  (mirrored into the centre opening pair, slid apart in 3D).
+
+Until those four land, the scene renders clean procedural stand-ins. To
+activate a matte: drop the PNG in
+`public/images/home/hero-exploration/environment/`, run
+`node scripts/optimizeHeroExploration.mjs`, then set that asset's
+`ready: true` (and correct `aspect`) in the `MATTES` map (variant5 only —
+variant6 was later rebuilt as a direct duplicate of ElevatorScene, see §11.6).
+
+
+### 11.6 Variant 6 — exact ElevatorScene duplicate with real imagery (2026-07-17)
+
+`/variant6` was rebuilt (superseding the earlier matte-slot version) as a
+verbatim copy of the homepage hero `sections/experience/ElevatorScene.tsx`
+(`sections/experience/Variant6ElevatorScene.tsx`, export
+`Variant6ElevatorScene`). The night-city arrival, dolly-zoom, threshold,
+camera choreography, day/night cycle, postprocessing and outro are byte
+identical. Two clearly-marked "V6 BLOCK" edits are the only difference:
+- BLOCK 1 (after the car build): hides the modelled interior detail
+  (`cop`, `sidePanels`, `backMirror`, `handrail`) and hangs the real renders —
+  the cutaway machine (`SPINE_ASSET`) at cabin centre and the 8 component
+  cutouts (`PART_ASSETS`) at their `FRAMING` anchors, unlit + billboarded +
+  depthTest off.
+- BLOCK 2 (in `pose`, before `updateHotspots`): billboards each plane and
+  fades each component in when it becomes the active component; the spine
+  reveals as the camera settles inside and returns for the outro.
+No new image assets — it reuses the machine + 8 component renders already
+shipped (§11.1–§11.3). Env mattes (§11.4) are NOT used by variant6.

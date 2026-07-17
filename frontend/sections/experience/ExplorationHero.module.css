@@ -179,11 +179,15 @@
 /* ---- intro copy ----------------------------------------------------------- */
 .intro {
   position: absolute;
-  left: clamp(1.5rem, 6vw, 7rem);
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
   z-index: 4;
-  max-width: 34rem;
+  width: min(92vw, 42rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 .eyebrow {
   display: flex;
@@ -226,24 +230,46 @@
   max-width: 26rem;
 }
 
-/* ---- outro ---------------------------------------------------------------- */
+/* ---- outro (the closing statement) ---------------------------------------
+   A full-stage scrim dims + blurs the exploded machine so the centred, big
+   closing line reads cleanly — a matching bookend to the centred intro. */
+.outroScrim {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  opacity: 0;
+  background:
+    radial-gradient(58% 46% at 50% 48%, var(--accent-soft), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  /* blur is progressive enhancement — the 88% dim already guarantees the copy
+     reads over the machine even where the pipeline drops backdrop-filter */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: none;
+}
 .outro {
   position: absolute;
   left: 50%;
-  bottom: 9%;
-  transform: translateX(-50%);
-  z-index: 4;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
   text-align: center;
   opacity: 0;
-  width: min(92vw, 640px);
+  width: min(92vw, 760px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .outroLine {
   font-family: var(--font-display);
-  font-size: var(--fs-h4);
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--ls-snug);
+  /* big, matching the intro title */
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.1;
   color: var(--text-primary);
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.8rem;
+  max-width: 18ch;
 }
 .outroCtas {
   display: flex;
@@ -378,12 +404,10 @@
     height: 56%;
   }
   .intro {
-    left: 6vw;
-    right: 6vw;
-    max-width: none;
+    width: 88vw;
   }
   .outro {
-    bottom: 12svh;
+    width: 90vw;
   }
 }
 
