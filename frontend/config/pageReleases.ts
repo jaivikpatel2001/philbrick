@@ -41,13 +41,21 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
        variant3  engineering blueprint (Three.js scan transformation)
        variant4  immersive storytelling (Three.js single take gallery)
        variant5  night arrival (Three.js §10.1 world + 8 part showcase)
-       variant6  the original journey, photoreal edition (matte slots) */
+       variant6  the original journey, photoreal edition (matte slots)
+       variant7  classic split (clean corporate, no WebGL)
+       variant8  building showcase (clean corporate, no WebGL)
+       variant9  premium interior (clean corporate, no WebGL)
+       variant10 product feature showcase (clean corporate, no WebGL) */
   "/variant1": true,
   "/variant2": true,
   "/variant3": true,
   "/variant4": true,
   "/variant5": true,
   "/variant6": true,
+  "/variant7": true,
+  "/variant8": true,
+  "/variant9": true,
+  "/variant10": true,
   "/about": false,
   "/vision-mission": false,
   "/milestone": false,

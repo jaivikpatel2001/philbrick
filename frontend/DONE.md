@@ -6,6 +6,347 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-17 18:38 IST
+
+### `/variant8` — client re-exported a true-transparent tower
+
+**Status:** Completed
+
+Client replaced `india-tower.png` with a properly exported TRUE transparent PNG
+(1024x1536, real alpha: corners alpha 0, ~49% transparent, ~1% semi — clean, no
+baked checkerboard, no green fringe this time). Verified the composite over a
+dark background: crisp premium glass tower (blue glazing, concrete balconies,
+two faces), clean edges, no halo.
+
+Archived the original, trimmed to the building (602x1464, aspect 0.41), and
+generated the optimized webp + manifest. No CSS change — it sits on the existing
+premium dark panel + azure glow (`object-fit: contain`, centred), filling the
+panel height.
+
+**Files:** `public/.../india-tower.png` (trimmed) + webp,
+`image-sources/.../environment-original/india-tower.png` (archive),
+`imageManifest.json`.
+
+**Verified:** build green (compiled, TypeScript clean, 68/68); export references
+`india-tower-384.webp` + png.
+
+---
+
+## 2026-07-17 18:29 IST
+
+### `/variant8` — india-tower checkerboard keyed to true transparency
+
+**Status:** Completed
+
+The supplied india-tower.png wasn't actually transparent — it had the
+transparency-preview CHECKERBOARD baked into the pixels (flattened fake
+transparency): two neutral light squares, ~240 gray and ~254 white. On the
+panel it showed as a visible checkerboard behind the building.
+
+Keyed it out: removed neutral pixels (max-min channel ≤ 12) with min ≥ 236
+(feather 226 to 236), which cleanly separated the light checkerboard from the
+building's darker glass/concrete; trimmed to the building (923x1507, aspect
+0.61). Verified the composite over a dark background — building fully intact,
+no holes, no fringe. Re-optimized (384/640 webp). Reverted the v8 panel from
+the interim LIGHT treatment back to the premium DARK panel + azure glow with
+the now-transparent building `object-fit: contain`, centred, bleeding slightly
+past the bottom.
+
+**Files:** `corporate.module.css` (`.bleedMedia`/`.bleedScrim` → dark panel),
+`public/.../india-tower.png` (keyed) + webp, `imageManifest.json`. Original
+(with checkerboard) archived in `image-sources/.../environment-original/`.
+
+**Verified:** build green (compiled, TypeScript clean, 68/68); export
+references `india-tower-384/640.webp`; alpha coverage 69% opaque / 30%
+transparent / 1% semi (clean cutout).
+
+**Note for the client:** the source had baked fake transparency — future assets
+should be exported as a real transparent PNG (no visible checkerboard when
+opened over a colored background).
+
+---
+
+## 2026-07-17 18:21 IST
+
+### `/variant8` — substantial india-tower building (client-supplied)
+
+**Status:** Completed
+
+Client added `india-tower.png` (1024x1536): a real, substantial premium glass +
+concrete high-rise at a three-quarter angle on a clean WHITE studio background
+(fully opaque, not transparent). Much better than the slender towers.
+
+Tried white-background removal → came out patchy (the white has soft grey
+gradients, leaving a semi-transparent halo). Better solution: keep the clean
+white-bg photo and make the v8 panel LIGHT so the white blends. `.bleedMedia` is
+now a white → soft-grey gradient panel (right ~47%, `object-fit: cover`,
+`object-position: center top`; panel aspect ≈ image 0.667 so it fills edge to
+edge with minimal crop); the dark editorial content stays on the left; the scrim
+fades the dark hero bg into the light panel; the dark-glass spec cards read as
+callouts on the light panel. Optimized to 384/640/960 webp (real resolution).
+
+**Files:** `corporateData.ts` (tower → india-tower.png), `Variant8Hero.tsx`
+(alt), `corporate.module.css` (`.bleedMedia`/`.bleedScrim` → light panel),
+`public/.../india-tower.png` (+ webp), `image-sources/...` (original archive),
+`imageManifest.json`. Old `commercial-tower` no longer used by v8.
+
+**Verified:** build green (compiled, TypeScript clean, 68/68). Export: v8
+references `india-tower-384/640/960.webp`, zero `commercial-tower` refs.
+
+---
+
+## 2026-07-17 18:14 IST
+
+### `/variant9` + `/variant10` fully revamped on real site photography
+
+**Status:** Completed
+
+Client: variants 9 and 10 were "a disaster" and should be rebuilt to match the
+current website and its pages. Root problem: both leaned on the dark cutaway
+render / mismatched generated overlays. Rebuilt both on the site's OWN real
+photography (the same premium imagery used across the pages) and the site's
+editorial vocabulary (mono eyebrow + tick, display title, `next/image`, tokens).
+
+- **v9 Premium Interior:** dropped the mismatched lobby + floating door leaves.
+  Now a full-bleed cinematic hero on the real premium cabin render
+  (`/images/products/elevator-cabin/…` — brushed steel, warm cove lighting,
+  stone floor), slow ken-burns zoom, gradient scrim, white editorial content
+  lower-left. Server component (no JS); pointer-parallax removed.
+- **v10 Product Range Showcase:** dropped the dark-cutaway + hotspots (invisible
+  on the dark theme). Now the split hero with a clean 2x2 grid of the site's
+  real product-category photos (control panels, cabins, auto doors, displays)
+  with labels, a subtle editorial stagger + hover lift, each tile LINKING to
+  its real product page. Uses `PRODUCT_TILES` (real `CATEGORY_IMG` paths + real
+  `/products/…` routes).
+
+**Files:** `corporateData.ts` (+`HERO_IMG.cabin/craft`, `PRODUCT_TILES`),
+`Variant9Hero.tsx` + `Variant10Hero.tsx` (rewritten), `corporate.module.css`
+(ken-burns on `lobbyFill`; new `.tileGrid`/`.tile*`). No new assets — reuses
+existing site photography.
+
+**Verified:** build green (compiled, TypeScript clean, 68/68). Export: v9 uses
+`elevator-cabin-1080.webp` and has zero `door-leaf` refs; v10 renders all 4
+product tiles (control-panel/cabin/synergy-auto-door/display) with correct
+labels and `/products/…` links. Consistent with the rest of the site and free
+of the dark-on-dark visibility problem.
+
+---
+
+## 2026-07-17 16:12 IST
+
+### `/variant8` — real glass tower wired in (client-supplied)
+
+**Status:** Completed
+
+Client generated `commercial-tower.png` (1024x1536, a real photoreal glass
+skyscraper on a gray halo). Processed like the other environment mattes: halo
+attenuated (alpha < 235 × 0.22) + trimmed → 208x1458, aspect 0.143 (a slender
+supertall); original archived; `optimizeHeroExploration.mjs` re-run (webp +
+manifest merge). Pointed `HERO_IMG.tower` at it (was `tower-night.png`), updated
+the alt text, and tuned the panel (`.bleedMedia` bleed −14%/−14%, width
+clamp(340px, 44%, 720px), centered glow) so the taller thin tower reads with
+presence.
+
+**Files:** `corporateData.ts` (tower path), `Variant8Hero.tsx` (alt),
+`corporate.module.css` (`.bleedMedia`), `public/images/.../environment/`
+(processed png + webp), `image-sources/.../environment-original/` (archive),
+`lib/imageManifest.json`.
+
+**Verified:** build green (compiled, TypeScript clean, 68/68). Static export
+`variant8.html` uses `heroBleed`, references `commercial-tower-208.webp`, spec
+cards present, zero remaining `tower-night` refs; webp valid (133 KB), manifest
+merged. (The running dev-server preview 404'd this session — flaky preview
+tooling, not the code; the production build/export are authoritative.)
+
+**Known limitation:** the supplied tower is a slender supertall (aspect 0.143,
+208px native), so it renders crisp but thin, centered on the panel. It reads as
+an intentional premium glass tower now. A wider/chunkier building would fill the
+panel more; the current one is a real, good-looking upgrade over the night
+cutout.
+
+---
+
+## 2026-07-17 16:00 IST
+
+### `/variant8` building — restructured into a premium showcase panel
+
+**Status:** Completed (best achievable with the current slender tower asset)
+
+The prior fix still rendered the tower as a thin strip pinned to the far-right
+edge (source is 329px wide, aspect ~0.25, `object-fit: contain` + right anchor),
+with the spec cards floating in empty black. Restructured the right side into a
+defined **building panel**: `.bleedMedia` is now the right ~46% (`clamp(360px,
+46%, 760px)`), bleeds slightly past top/bottom (`top:-8%; bottom:-12%`), carries
+its own premium gradient + azure glow + left border, and the tower stands
+`object-position: center bottom` centered within it (not on the edge). The
+content-side scrim fades into the panel; spec cards repositioned to flank the
+tower (CARD_POS). Also relaxed the content `max-width` caps this session so the
+copy fills its column.
+
+**Files:** `corporate.module.css` (`.bleedMedia`/`.bleedScrim` rework),
+`Variant8Hero.tsx` (CARD_POS). Build green (68/68, TypeScript clean); on the
+dev server the panel is the right 46% with the tower centered and cards
+flanking. (The preview pane stalls image decode on this heavy page — verified
+the tower src serves HTTP 200 valid WebP; it renders in a real browser.)
+
+**Known limitation:** the tower cutout is inherently slender/low-res (329px) —
+it now reads as an intentional lit tower on a panel, but a wider, higher-res
+building image (prompt already supplied to the client) would make this variant
+substantially stronger.
+
+---
+
+## 2026-07-17 15:47 IST
+
+### Corporate variants — product visibility, doors and building fixes
+
+**Status:** Completed (code); better hero imagery offered to the client
+
+User screenshots (dark theme) showed: v7 product invisible, v10 product barely
+visible, v9 door strips wrong, v8 tower small in the corner.
+
+- **Root cause (v7/v10):** the elevator render is a DARK cutaway; on the dark
+  theme background it disappeared (same class of issue as v6). Fix: a light
+  "product stage" so the dark render always reads. v7 gets a light lightbox
+  panel (`.productStage`) behind the machine; v10 gets a soft light halo
+  (`.centerStageGlow`); both images get `.onStage` (grounded drop-shadow).
+- **v9:** the two floating door-leaf images did not line up with the lobby
+  doorway and looked wrong. Removed them; the full-screen lobby photo (which
+  already has an elegant portal) now carries the scene with its warm glow pulse.
+- **v8:** the tower was a corner thumbnail. Enlarged (`.bleedMedia` width
+  min(66%, 860px)) and bottom/right anchored.
+
+**Files:** `corporate.module.css` (+`.productStage`/`.onStage`/
+`.centerStageGlow`, `.bleedMedia` resize), `Variant7Hero.tsx`,
+`Variant9Hero.tsx`, `Variant10Hero.tsx`.
+
+**Verified:** build green (compiled, TypeScript clean, 68/68). Exported HTML
+confirms v7 `productStage`+`onStage`, v10 `centerStageGlow`+`onStage`, v9 no
+door-leaf refs, v8 tower present.
+
+**Known limitation / follow-up (asset quality):** the reused renders are the
+weak spot for a premium corporate hero — the machine is an engineering cutaway
+(not a glossy passenger elevator) and the trimmed night tower is only 329px
+wide (soft when enlarged). Client offered to generate better images; two
+prompts provided (a premium passenger elevator on a clean studio background for
+v7; a premium daytime commercial tower for v8). The cutaway stays a good fit
+for v10 (its hotspots point at the exposed machine/cabin/doors/controller/
+safety). Drop new PNGs into `public/images/home/hero-exploration/` (or a new
+corporate folder), run the optimize script, and update `HERO_IMG` in
+`corporateData.ts`.
+
+---
+
+## 2026-07-17 15:39 IST
+
+### Corporate variants 8/9/10 given genuinely different LAYOUTS
+
+**Status:** Completed
+
+Feedback: variants 7 to 9 looked the same (one split layout with swapped
+image/text). Rebuilt 8, 9 and 10 as distinct compositions (7 stays the split
+baseline); all still share `corporateData.ts` + `TrustBadges` + the load
+animations, but each has its own layout block in `corporate.module.css`:
+
+- **v7 Classic Split** (`.hero`): content left, product right. Unchanged.
+- **v8 Building Showcase** (`.heroBleed`): the tower now DOMINATES as a
+  full-bleed background bleeding off the right edge and slowly zooming; content
+  sits over a left-to-right gradient scrim; the 4 spec cards float across the
+  building. Media-dominant, single-column-left composition.
+- **v9 Premium Interior** (`.heroFull` + `.onImage`): the lobby photo fills the
+  ENTIRE hero (object-fit cover); the doors slide open once over the doorway; a
+  top-to-bottom scrim anchors the content to the lower-left in white over the
+  image. Immersive full-bleed cinematic.
+- **v10 Product Feature Showcase** (`.heroCenter`): a symmetric, Apple-style
+  centered hero — headline + lead centered on top, the machine centered in the
+  middle with the pulsing hotspots + polyline, CTAs and a centered trust bar
+  below.
+
+New CSS: `.onImage` (white text over photos), `.heroBleed`/`.bleedMedia`/
+`.bleedScrim`/`.bleedContent`, `.heroFull`/`.fullMedia`/`.fullDoorframe`/
+`.fullScrim`/`.fullContent`, `.heroCenter`/`.centerHead`/`.centerProduct`/
+`.centerFoot`/`.trustCenter`, each with its own responsive + reduced-motion
+handling. v9's pointer parallax now drives the full-screen image.
+
+**Files:** `sections/experience/corporate/Variant8Hero.tsx`,
+`Variant9Hero.tsx`, `Variant10Hero.tsx` (rewritten), `corporate.module.css`
+(+distinct-layout blocks). No data/route/asset changes.
+
+**Verified:** build green (compiled, TypeScript clean, 68/68). Exported HTML
+confirms each variant now carries its own layout class (v8 `heroBleed`, v9
+`heroFull`+`onImage`, v10 `heroCenter`; v7 the split base) — no longer one
+shared composition. Visual look to be judged in the running dev server.
+
+---
+
+## 2026-07-17 15:26 IST
+
+### Four clean corporate hero variants (`/variant7`–`/variant10`, no WebGL)
+
+**Status:** Completed (content verified via static export; motion/look to be
+judged in the running dev server)
+
+Client pivoted away from the futuristic 3D direction toward a clean, premium,
+corporate hero (Apple/BMW/Schindler feel): real product photography, light
+backgrounds, trust badges, elegant fade/slide/scale/parallax only. Built 4 new
+DOM/CSS variants (zero WebGL) sharing one kit.
+
+- **`/variant7` Classic Split (recommended):** left headline + copy + CTAs +
+  trust badges; right the elevator machine on a soft light stage. Content fades
+  up, product slides in from the right and gently floats. Pure CSS.
+- **`/variant8` Building Showcase:** left content; right the night tower in a
+  framed dark showcase panel, slowly zooming, with 4 spec cards appearing in
+  sequence around it. Pure CSS.
+- **`/variant9` Premium Interior:** right a luxury lobby photo; the brushed door
+  leaves slide open once on load, warm light gently pulses, and the scene shifts
+  a few px with the pointer (subtle parallax, client component, reduced-motion
+  guarded).
+- **`/variant10` Product Feature Showcase:** right the machine with 5 pulsing
+  hotspots (gearless machine, smart controller, premium cabin, automatic doors,
+  safety system); a thin polyline threads them (draws in on load) and
+  hover/focus reveals each feature card. Product scales very slowly. Pure CSS.
+
+**Shared kit** (`sections/experience/corporate/`): `corporateData.ts` (trust
+badges, CTAs, image paths, spec cards, hotspots), `corporate.module.css`
+(theme-aware two-column layout + all load animations, reduced-motion disables
+them), `TrustBadges.tsx`. Each hero uses `next/image` (resolves to responsive
+WebP via the loader) + the existing `Button`. v7/v8/v10 are server components
+(pure CSS motion, best for SEO/perf); v9 is a client component for the pointer
+parallax.
+
+**Decisions / integrity:**
+- No new image assets — reuses the shipped renders (cutaway machine, night
+  tower, lobby backdrop, door leaf). The brief's "gold accents" is not in the
+  brand palette (tokens map `--gold` to blue), so the brand azure is the accent.
+- Trust badges use ONLY verifiable facts: "Since 1992" (founded 1992), "ISO
+  Process" (data/company.ts ISO certification), "In-house" (Ahmedabad), and
+  "Exporter" (exportMarkets China/Taiwan). The brief's **"1000+ Projects" and
+  "ISI Certified" were intentionally omitted** — not in the verified company
+  data (CLAUDE.md never-fabricate rule).
+- Theme-aware via tokens: clean white/light-grey in light mode (the brief's
+  intent), premium dark in dark mode. Client should review in light mode.
+- CTAs: "Get a free quote" → /contact, "Explore products" → /products.
+
+**Files:** `sections/experience/corporate/*` (new: corporateData.ts,
+corporate.module.css, TrustBadges.tsx, Variant7–10Hero.tsx),
+`app/variant7|8|9|10/page.tsx` (noindex, ReleaseGate, shared HomeSections),
+`config/pageReleases.ts` (+4 routes). Sitemap already excludes /variant.
+
+**Verified:** build green (compiled, TypeScript clean, **68/68** pages, was 64).
+Static export `out/variant7–10.html` confirmed: correct per-variant h1, all 4
+trust badges, both CTAs, correct hero imagery (v7/v10 cutaway, v8 tower, v9
+lobby + door leaf), v10's 5 hotspots, v8's 4 spec cards, next/image resolved to
+`elevator-cutaway-384/640/960.webp`, and no double/trailing spaces in copy.
+Live browser check pending (dev server on :3002 was not reachable from the
+build shell; these are light DOM heroes so they render normally in preview).
+
+**Follow-ups:** judge v9 door-leaf placement over the lobby doorway and v10
+hotspot positions in-browser (both are simple % tweaks in CSS/`corporateData`);
+optionally supply true light-studio product photography if the dark cutaway
+reads low-contrast on the light hero background.
+
+---
+
 ## 2026-07-17 14:18 IST
 
 ### `/variant6` overlay was invisible — z-index (canvas covered it)

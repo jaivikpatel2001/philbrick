@@ -13,6 +13,10 @@ homepage `/` keeps the original cinematic Three.js night-city hero.
 | `/variant4` | Immersive storytelling | Three.js single take gallery (this folder) |
 | `/variant5` | Night arrival (imagegeneration.md §10.1 world) | Three.js journey (this folder) |
 | `/variant6` | The ORIGINAL hero, verbatim, with real spine + component images | duplicate of `../ElevatorScene.tsx` |
+| `/variant7` | Classic split (clean corporate) | DOM/CSS + next/image (`../corporate/`) |
+| `/variant8` | Building showcase (clean corporate) | DOM/CSS + next/image (`../corporate/`) |
+| `/variant9` | Premium interior (clean corporate) | DOM/CSS + pointer parallax (`../corporate/`) |
+| `/variant10` | Product feature showcase (clean corporate) | DOM/CSS + CSS hotspots (`../corporate/`) |
 
 Inspiration was analysed (award-site scroll films, product configurators,
 technical reveal pages) but every concept, asset and interaction here is
@@ -150,3 +154,33 @@ flash. Callouts fire by camera proximity; captions change by zone.
 When the client picks a direction: promote the winning hero to `/`, delete the
 other `app/variantN/` folders and their `config/pageReleases.ts` entries, and
 remove unused scene files. Everything stays recoverable in git.
+
+
+## Corporate variants (7 to 10) — clean, premium, no WebGL
+
+Client feedback (2026-07-17): the 3D/futuristic direction was too much; they
+want a timeless, trustworthy corporate hero. These 4 live in
+`sections/experience/corporate/` (NOT this folder) and share one kit:
+`corporateData.ts` (verifiable trust badges + CTAs + image paths + spec cards +
+hotspots), `corporate.module.css` (theme-aware two-column layout + elegant
+fade/slide/scale/float load animations, all disabled under reduced motion),
+`TrustBadges.tsx`. Real imagery only (cutaway machine, night tower, lobby,
+door leaf); `next/image` → responsive WebP; brand azure accent (no gold —
+tokens map `--gold` to blue).
+
+Each has a DISTINCT layout (not just swapped content):
+- **v7 Classic Split (recommended)** — `.hero`: copy + CTAs + badges left,
+  machine right; fade-up + slide-in + gentle float.
+- **v8 Building Showcase** — `.heroBleed`: the tower dominates as a full-bleed
+  background (bleeds off the right, slow zoom); content over a gradient scrim;
+  4 spec cards float across the building.
+- **v9 Premium Interior** — `.heroFull` + `.onImage`: the lobby photo fills the
+  whole hero; doors open once; content anchored lower-left in white over a
+  scrim; subtle pointer parallax (client component).
+- **v10 Product Feature Showcase** — `.heroCenter`: symmetric Apple-style hero,
+  headline top-centered, machine centered with 5 pulsing hotspots + a polyline
+  that draws in (hover/focus reveals each card), CTAs + centered trust bar below.
+
+Trust badges use only verifiable facts (Since 1992 / ISO Process / In-house /
+Exporter); the brief's "1000+ Projects" and "ISI Certified" were omitted as
+unverifiable (never-fabricate rule).
