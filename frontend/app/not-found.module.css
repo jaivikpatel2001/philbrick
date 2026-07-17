@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   min-height: 80vh;
-  padding-top: calc(var(--nav-h) + 4rem);
+  padding-top: 4rem;
   padding-bottom: var(--section-y);
   text-align: center;
 }

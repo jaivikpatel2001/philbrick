@@ -1,7 +1,11 @@
+/* Sticky, not fixed (2026-07-16): the header keeps its own layout space, so
+   no hero or page content ever sits hidden behind it. It carries the page
+   background at top and turns glass once scrolled. */
 .header {
-  position: fixed;
-  inset: 0 0 auto 0;
+  position: sticky;
+  top: 0;
   z-index: var(--z-nav);
+  background: var(--bg-primary);
   transition: background var(--dur) var(--ease-out),
     border-color var(--dur) var(--ease-out),
     backdrop-filter var(--dur) var(--ease-out);
@@ -15,22 +19,9 @@
   border-bottom-color: var(--border);
 }
 
-/* At the very top the navbar floats over the page hero. The component sets
-   data-overlay from theme + route: "dark" = a dark hero sits beneath (every
-   page in dark theme, and inner photo heroes in both themes) → force white
-   controls; "light" = the homepage daylight scene → keep normal light-theme
-   dark-text tokens. Skipped once scrolled or when the mega panel is open
-   (those bring their own glass background). */
-.header[data-scrolled="false"][data-overlay="dark"]:not(.megaOpen) .inner {
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.8);
-  --text-muted: rgba(255, 255, 255, 0.62);
-  --text-faint: rgba(255, 255, 255, 0.5);
-  --border: rgba(255, 255, 255, 0.18);
-  --border-strong: rgba(255, 255, 255, 0.32);
-  --surface-2: rgba(255, 255, 255, 0.12);
-  --surface-hover: rgba(255, 255, 255, 0.18);
-}
+/* The old fixed-nav "overlay" token overrides are gone: a sticky header never
+   floats over a hero, so normal theme tokens are always correct. The
+   data-overlay attribute the component still sets is inert. */
 
 .inner {
   display: flex;

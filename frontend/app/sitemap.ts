@@ -15,7 +15,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url;
   const now = new Date();
 
-  return releasedRoutes().map((route) => {
+  /* Client-review variant routes (/variant1, …) are live but intentionally
+     kept out of the public sitemap; they carry a page-level noindex too. */
+  const publicRoutes = releasedRoutes().filter(
+    (route) => !route.startsWith("/variant")
+  );
+
+  return publicRoutes.map((route) => {
     const depth = route === "/" ? 0 : route.split("/").filter(Boolean).length;
     const priority = route === "/" ? 1 : depth === 1 ? 0.8 : depth === 2 ? 0.7 : 0.6;
     return {

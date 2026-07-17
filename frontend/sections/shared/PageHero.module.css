@@ -4,7 +4,8 @@
   flex-direction: column;
   justify-content: flex-end;
   min-height: 68vh;
-  padding-top: calc(var(--nav-h) + clamp(3rem, 8vw, 7rem));
+  /* sticky navbar occupies its own space now — no nav-h compensation */
+  padding-top: clamp(3rem, 8vw, 7rem);
   padding-bottom: clamp(3rem, 6vw, 6rem);
   overflow: hidden;
   isolation: isolate;

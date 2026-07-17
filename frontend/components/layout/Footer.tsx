@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 import { FOOTER_NAV } from "@/constants/navigation";
-import { SITE, SOCIALS } from "@/constants/site";
+import { SITE, SOCIALS, gmailHref } from "@/constants/site";
 import { Logo } from "@/components/ui/Logo";
 import { NewsletterForm } from "@/components/ui/NewsletterForm";
 import { getIcon } from "@/lib/icons";
@@ -51,7 +51,13 @@ export function Footer() {
               </li>
               <li>
                 <FiMail />
-                <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+                <a
+                  href={gmailHref(SITE.email)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {SITE.email}
+                </a>
               </li>
             </ul>
           </div>
@@ -86,7 +92,7 @@ export function Footer() {
 
         <div className={styles.bottom}>
           <p className={styles.copy}>
-            © {year} {SITE.legalName}. All rights reserved.
+            © {year} {SITE.legalName} All rights reserved.
           </p>
 
           {SOCIALS.length > 0 && (

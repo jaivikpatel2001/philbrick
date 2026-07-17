@@ -2,8 +2,9 @@ import type { TimelineItem, Value, TeamMember, Feature } from "@/types";
 
 /* =============================================================================
    PHILBRICK — COMPANY CONTENT
-   Real, publicly-verifiable content only. Mission/Vision are brand-voice
-   statements (not factual claims). No fabricated stats, awards or people.
+   Content sourced from the WordPress website backup (acharyagroup.in /
+   philbrickindia.com). Mission/Vision are brand-voice statements (the WP
+   pages said "Coming soon", so the existing editorial copy is retained).
    ========================================================================== */
 
 export const MISSION =
@@ -13,9 +14,9 @@ export const VISION =
   "To be a trusted partner to elevator makers and modernisers in India and beyond, known for quality components, honest engineering and long-term support.";
 
 export const ABOUT_STORY = [
-  "Philbrick Technologies began in 1992 in Ahmedabad, Gujarat, with a focus on the systems that make an elevator work: control panels, safety devices, doors and signalling.",
-  "Guided by founder and mentor Mr. Vasant Patel and led today by Mr. Saransh Patel, the company has grown into a manufacturer, exporter and supplier of a broad range of elevator components, from control and integrated panels to the Automatic Rescue Device, door operators, cabins, displays and passenger fixtures.",
-  "Everything is engineered and built under one roof, across dedicated units for procurement, design, quality control, warehousing and packaging. That in-house control is what lets Philbrick keep quality consistent, support both new installations and modernisation, and supply customers across India and export markets including China and Taiwan.",
+  "Philbrick Controls India was founded in 1992 in Ahmedabad, a city of Gujarat, India with a main focus on providing automation solution by research and development and production of Control Instruments and Control Panels. A teamwork of young and professional entrepreneurial and engineers with apex of providing technical solution with economy, the proficiency, in depth techno-commercial knowledge has brought the results in front of you.",
+  "Company provides automation solution to various industries by producing microcontroller based instruments and control panels. We are specialized in understanding the application to fulfil the industrial requirements by providing the best efficient economical solutions. We offer our best proficient automation solutions by advance development techniques, hi-tech manufacturing process, systematic testing methodology and strong quality assessment.",
+  "We have been catering our services to various industrial segments like Construction, Textile, Steel, Plastic, Paper, Glass, Power, Chemical and Pollution Control Equipment manufacturers etc. We have dedicated team with a special focus on Elevator Industry for providing Smarter, Safer and Simpler Control Panels and various accessories for the passenger lift.",
 ];
 
 export const VALUES: Value[] = [
@@ -65,19 +66,19 @@ export const INFRASTRUCTURE: Feature[] = [
     iconName: "FiTool",
     title: "In-house manufacturing",
     description:
-      "Modern machinery and assembly lines produce control panels, doors, cabins and fixtures in-house, giving us end-to-end control of quality and lead time.",
+      "A well organised campus with 10,000+ sq feet of working area with latest manufacturing facilities and LAN connectivity, doubled in 2019 to meet growing market demand.",
   },
   {
     iconName: "FiCpu",
     title: "Design & R&D",
     description:
-      "A dedicated design and R&D function develops and refines our control, door-operator, safety and display products for real-world elevator conditions.",
+      "High tech equipped R&D infrastructure backed by Highly Qualified Engineers' team, skilled technicians and ERP, dedicated to developing control, door-operator, safety and display products.",
   },
   {
     iconName: "FiCheckCircle",
     title: "Quality control",
     description:
-      "A dedicated quality-control unit checks components before dispatch so that what leaves the factory meets a consistent standard.",
+      "Strict quality checks, records and test certificates as per ISO certification. Each part undergoes stage wise and final inspection as per Q.A. plan and tested as per Indian standard specification.",
   },
   {
     iconName: "FiPackage",
@@ -99,20 +100,59 @@ export const INFRASTRUCTURE: Feature[] = [
   },
 ];
 
-/* Factual milestones only. Undated events are described without inventing a year. */
+/* Milestones sourced from the WordPress Company page History section. */
 export const TIMELINE: TimelineItem[] = [
   {
     year: "1992",
     title: "Founded in Ahmedabad",
     description:
-      "Philbrick Technologies is established in Ahmedabad, Gujarat, focused on elevator control and safety systems.",
+      "Philbrick started with low cost high performing Digital Temperature Indicators, Temperature Controllers and scanners.",
     milestone: true,
   },
   {
-    year: "2014",
-    title: "Incorporated as a Private Limited company",
+    year: "1994",
+    title: "Programmable Temperature Profile Controller",
     description:
-      "The business is incorporated as Philbrick Technologies India Pvt. Ltd. (CIN U31501GJ2014PTC078837).",
+      "Introduction of Programmable Temperature Profile Controller PC-2000 for the Dyeing machine, accepted by most dyeing and printing process houses as a preferred option for the replacement of imported controllers.",
+  },
+  {
+    year: "1997",
+    title: "First Microcontroller based Elevator Controller",
+    description:
+      "Philbrick started manufacturing Automation Control Panels and introduced the first Microcontroller based elevator controller panel in Ahmedabad.",
+    milestone: true,
+  },
+  {
+    year: "2001",
+    title: "Advanced Elevator Controller Series",
+    description:
+      "Introduced more featured Elevator Controller Series E203DL, E203VF and E203ADVF along with electronics accessories like Car Position/Direction display, Dot Matrix Scrolling display, Digital Clock and Temperature Indicator for COP.",
+  },
+  {
+    year: "2008",
+    title: "New generation controllers",
+    description:
+      "Introduced new series of Elevator Controller \"Elevator+\" and \"I-Auto\" along with Monochrome LCD, Full colour TFT, Touch Panel COP and the indigenous door operator controller \"LIFT MASTER\".",
+  },
+  {
+    year: "2009",
+    title: "New manufacturing campus",
+    description:
+      "Shifted to a new well organised campus having 10,000 sq feet of working area with latest manufacturing facilities and LAN connectivity. Started manufacturing \"Synergy\" brand Automatic Door Operator with the \"Ultima\" series.",
+    milestone: true,
+  },
+  {
+    year: "2012",
+    title: "Xpert motherboard series",
+    description:
+      "Introduced the new more featured motherboard series \"Xpert\" along with FA300, RFID and Biometric access for Lift.",
+  },
+  {
+    year: "2014",
+    title: "STEP partnership and incorporation",
+    description:
+      "Partnership with STEP, the largest Chinese manufacturer of elevator products. The business is incorporated as Philbrick Technologies (India) Pvt. Ltd.",
+    milestone: true,
   },
   {
     year: "2017",
@@ -121,12 +161,31 @@ export const TIMELINE: TimelineItem[] = [
       "Operations are GST-registered as the product range and customer base continue to expand.",
   },
   {
-    year: "Today",
-    title: "A complete elevator-component range",
+    year: "2019",
+    title: "Doubled infrastructure",
     description:
-      "From the Ahmedabad facility, Philbrick manufactures and supplies control panels, ARD, door mechanisms, cabins, displays and fixtures across India and export markets.",
+      "To fulfil the market demand Philbrick doubled its infrastructure facility.",
+  },
+  {
+    year: "Today",
+    title: "High tech R&D and manufacturing",
+    description:
+      "Philbrick is an organization having high tech equipped R&D manufacturing infrastructure backboned by Highly Qualified Engineers' team, skilled technicians and ERP, serving customers across India and export markets.",
     milestone: true,
   },
+];
+
+/* Quality Policy — from the WordPress Quality Policy page (page ID 3). */
+export const QUALITY_POLICY = [
+  "Philbrick Technologies (India) Pvt. Ltd. products and services constantly meet or exceed customer's expectation and implied needs together with safety at customer's premises. Each produced part undergoes strict quality inspection as per the quality plan and applicable Standards.",
+  "Philbrick Technologies (India) Pvt. Ltd. prepares and submits the quality plan for order execution and maintains the quality record as per ISO certification. The procured material is 100% chemically and physically tested under strict quality supervision.",
+  "Strict quality checks, records and test certificates ensure the final finished product is of high quality without any manufacturing defects. The quality assurance plan approved by leading engineering consultants and industrial giants is strictly followed with upkeep of certifications till the dispatch of the parts. Each part undergoes stage wise and final inspection as per Q.A. plan and tested as per Indian standard specification.",
+];
+
+/* Career content — from the WordPress Career page (page ID 3435). */
+export const CAREER_CONTENT = [
+  "Working at Philbrick Technologies (India) Pvt. Ltd. might seem anarchic at times, but it's never dreary. There is always something happening that keeps the passion flowing continually. The work is such, after all. It requires fervor that comes from inside and builds brands that endure.",
+  "Philbrick Technologies (India) Pvt. Ltd. is not a single, person-centric company. It is a family where every person and his ideas are treated equally. We even undertake training programmes at various levels, so as to ensure that every employee works to the best of his or her capabilities.",
 ];
 
 /* Real, named people only — no stock portraits stand in for real individuals.

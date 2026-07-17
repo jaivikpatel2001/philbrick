@@ -384,3 +384,100 @@
     display: none;
   }
 }
+
+/* ===== VARIANT 6 exploded component overlay (variant1 layout) ==============
+   A DOM layer over the 3D canvas: a centred cutaway render, 8 component
+   cutouts at variant1's exact screen-% slots, leader lines and labels.
+   Fades in once the camera is inside the building. Positions/opacity are set
+   by the v6 reveal ticker; these rules are the static styling only. */
+.v6Overlay {
+  position: absolute;
+  inset: 0;
+  /* above the WebGL canvas (.mount is z-index 1), below the HUD (rail is 7) */
+  z-index: 3;
+  pointer-events: none;
+  will-change: opacity;
+}
+.v6Scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 92% at 50% 42%, rgba(10, 14, 22, 0.7), rgba(4, 6, 11, 0.94));
+}
+.v6Lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.v6Line {
+  stroke: color-mix(in srgb, var(--accent, #2facec) 70%, transparent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 2 3;
+}
+.v6Spine {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: min(60vh, 58vw);
+  width: auto;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+  will-change: opacity, transform;
+}
+.v6Part {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  width: max-content;
+  max-width: 22vw;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+  pointer-events: auto;
+  will-change: opacity, left, top;
+}
+.v6PartImg {
+  display: block;
+  max-height: 26vh;
+  max-width: 15vw;
+  width: auto;
+  height: auto;
+  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.55));
+}
+.v6Label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  line-height: 1.15;
+}
+.v6Idx {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  color: var(--accent, #2facec);
+}
+.v6Name {
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(0.85rem, 0.7rem + 0.5vw, 1.08rem);
+  font-weight: 600;
+  color: #f4f7fb;
+}
+.v6Tag {
+  font-size: 0.72rem;
+  color: rgba(226, 232, 240, 0.62);
+}
+@media (max-width: 860px) {
+  .v6PartImg { max-height: 16vh; max-width: 26vw; }
+  .v6Tag { display: none; }
+  .v6Name { font-size: 0.8rem; }
+}

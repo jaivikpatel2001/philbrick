@@ -32,6 +32,22 @@ import { newsRoutes } from "@/data/news";
 /** Static (non-product) routes. Keep in sync with the app/ route folders. */
 export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/": true,
+  /* Client-review A/B alternatives of the homepage. Live so they can be shared
+     with the client, but noindex (see each app/variantN/page.tsx) and excluded
+     from the sitemap (app/sitemap.ts filters the /variant prefix). Temporary —
+     remove once a hero direction is chosen.
+       variant1  exploded component tour (photo cutouts + GSAP)
+       variant2  architectural journey (Three.js fly-through)
+       variant3  engineering blueprint (Three.js scan transformation)
+       variant4  immersive storytelling (Three.js single take gallery)
+       variant5  night arrival (Three.js §10.1 world + 8 part showcase)
+       variant6  the original journey, photoreal edition (matte slots) */
+  "/variant1": true,
+  "/variant2": true,
+  "/variant3": true,
+  "/variant4": true,
+  "/variant5": true,
+  "/variant6": true,
   "/about": false,
   "/vision-mission": false,
   "/milestone": false,

@@ -8,7 +8,6 @@ import { MAIN_NAV } from "@/constants/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { useTheme } from "@/components/providers/ThemeProvider";
 import { MegaMenu } from "./MegaMenu";
 import { NavDropdown } from "./NavDropdown";
 import { MobileNav } from "./MobileNav";
@@ -21,12 +20,13 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeTimer = useRef<number | undefined>(undefined);
   const pathname = usePathname();
-  const { theme } = useTheme();
 
-  /* What sits under the transparent navbar at the top of the page: inner pages
-     always open on a dark photo hero; the homepage's 3D scene is dark at night
-     but daylight in light theme — the only case needing dark-text controls. */
-  const overlay = pathname === "/" && theme === "light" ? "light" : "dark";
+  /* Every page now opens on a dark hero: inner pages use dark photo heroes and
+     the homepage's frame-sequence hero is a dark studio scene in both themes.
+     If the Three.js hero returns (daylight scene in light theme), restore:
+       const { theme } = useTheme();
+       const overlay = pathname === "/" && theme === "light" ? "light" : "dark"; */
+  const overlay = "dark";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

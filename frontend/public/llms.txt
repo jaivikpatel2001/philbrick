@@ -1,9 +1,10 @@
 # Philbrick
 
-> Philbrick Technologies India Pvt. Ltd. is a manufacturer, exporter and
+> Philbrick Technologies (India) Pvt. Ltd. is a manufacturer, exporter and
 > supplier of elevator components, based in Ahmedabad, Gujarat, India.
-> Founded 1992. Address: Plot No. 69, Road No. 6, G.I.D.C. Kathwada, Odhav,
-> Ahmedabad 382430, Gujarat, India. Phone: +91 80478 52949.
+> Founded 1992. Address: Plot No. 69, Road No. 6, G.I.D.C. Kathwada,
+> Ahmedabad 382430, Gujarat, India. Phone: +91 99789 86631.
+> Email: philbrick@philbrickindia.com · sales@philbrickindia.com.
 > GST 24AAHCP6212D1ZU · CIN U31501GJ2014PTC078837 · IEC 0814002951.
 
 Philbrick manufactures the components that make an elevator work: elevator
@@ -33,7 +34,7 @@ China and Taiwan.
 
 ## Facts
 
-- Legal name: Philbrick Technologies India Pvt. Ltd.
+- Legal name: Philbrick Technologies (India) Pvt. Ltd.
 - Founded: 1992 (Ahmedabad, Gujarat, India)
 - Business: manufacturer, exporter and supplier of elevator components
 - Flagship safety product: Automatic Rescue Device (ARD)

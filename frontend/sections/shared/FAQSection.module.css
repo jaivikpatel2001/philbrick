@@ -1,4 +1,5 @@
-/* Editorial Q&A rows — hairline dividers, mono index, plus-marker toggle. */
+/* Editorial Q&A rows — hairline dividers, mono index, plus-marker toggle.
+   Smooth open/close (height) is handled by Framer Motion in FAQSection.tsx. */
 .list {
   display: flex;
   flex-direction: column;
@@ -6,23 +7,32 @@
 
 .item {
   border-top: 1px solid var(--border);
+  transition: border-color var(--dur) var(--ease-out);
 }
 .item:last-child {
   border-bottom: 1px solid var(--border);
 }
+/* Open state is read from the trigger's aria-expanded (not a class on .item),
+   so React never rewrites .item's className and can't wipe RevealObserver's
+   imperative .is-visible class. */
+.item:has(.question[aria-expanded="true"]) {
+  border-color: var(--border-accent);
+}
 
+/* Trigger is a <button> — reset native chrome, keep the editorial grid. */
 .question {
   display: grid;
   grid-template-columns: minmax(2.6rem, 5rem) 1fr 2rem;
   align-items: baseline;
   gap: clamp(0.9rem, 2vw, 2rem);
+  width: 100%;
   padding-block: clamp(1.2rem, 2.2vw, 1.8rem);
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
   cursor: pointer;
-  list-style: none;
-  transition: color var(--dur) var(--ease-out);
-}
-.question::-webkit-details-marker {
-  display: none;
 }
 .question:hover .qText {
   color: var(--accent);
@@ -65,18 +75,28 @@
 .marker::after {
   transform: translateY(-50%) rotate(90deg);
 }
-.item[open] .marker::after {
+.question[aria-expanded="true"] .marker::after {
   transform: translateY(-50%) rotate(0deg);
 }
 
+/* Wrapper clips the answer while its height animates open/closed. */
+.answerWrap {
+  overflow: hidden;
+}
 .answer {
-  grid-column: 2;
   max-width: 68ch;
   margin: 0 0 clamp(1.4rem, 2.4vw, 2rem);
   padding-left: clamp(3.5rem, 7vw, 7rem);
   font-size: var(--fs-body);
   line-height: var(--lh-relaxed);
   color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker::before,
+  .marker::after {
+    transition: none;
+  }
 }
 
 @media (max-width: 640px) {
