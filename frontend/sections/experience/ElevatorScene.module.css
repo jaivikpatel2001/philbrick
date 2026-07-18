@@ -392,7 +392,15 @@
    by the v6 reveal ticker; these rules are the static styling only. */
 .v6Overlay {
   position: absolute;
-  inset: 0;
+  /* The 3D stage is full-viewport (it runs behind the sticky navbar for the
+     cinematic arrival), but the exploded overlay's % coordinates must live in
+     the SAFE area — start below the navbar and keep a small bottom inset so
+     no part slot can land behind the header or off the fold (matches the
+     ExplorationHero stage geometry that the slot data was designed for). */
+  top: calc(var(--nav-h) + 4px);
+  right: 0;
+  bottom: 1vh;
+  left: 0;
   /* above the WebGL canvas (.mount is z-index 1), below the HUD (rail is 7) */
   z-index: 3;
   pointer-events: none;

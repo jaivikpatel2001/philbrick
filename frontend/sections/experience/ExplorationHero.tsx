@@ -39,8 +39,63 @@ import {
   MOBILE_SLOT,
   MOBILE_ANCHOR,
   SPINE,
+  type ExplorationPart,
+  type SpineConfig,
+  type StagePoint,
 } from "@/data/heroExploration";
 import styles from "./ExplorationHero.module.css";
+
+/* Optional config: lets sibling variants (e.g. /variant11's catalogue set)
+   reuse this exact experience with a different spine + part set + copy. When
+   omitted, the defaults below reproduce /variant1 byte for byte. */
+export interface ExplorationHeroConfig {
+  parts: ExplorationPart[];
+  spine: SpineConfig;
+  pacing: {
+    textUnits: number;
+    elevatorUnits: number;
+    partsStart: number;
+    settleUnits: number;
+    totalUnits: number;
+    scrollVh: number;
+  };
+  mobileSlot: StagePoint;
+  mobileAnchor: StagePoint;
+  copy: {
+    ariaLabel: string;
+    eyebrow: string;
+    title: React.ReactNode;
+    lead: string;
+    outroLine: string;
+  };
+}
+
+const DEFAULT_CONFIG: ExplorationHeroConfig = {
+  parts: EXPLORATION_PARTS,
+  spine: SPINE,
+  pacing: {
+    textUnits: TEXT_UNITS,
+    elevatorUnits: ELEVATOR_UNITS,
+    partsStart: PARTS_START,
+    settleUnits: SETTLE_UNITS,
+    totalUnits: TOTAL_UNITS,
+    scrollVh: SCROLL_VH,
+  },
+  mobileSlot: MOBILE_SLOT,
+  mobileAnchor: MOBILE_ANCHOR,
+  copy: {
+    ariaLabel:
+      "The Philbrick elevator system taken apart component by component as you scroll",
+    eyebrow: "The Philbrick system",
+    title: (
+      <>
+        One elevator. <em>Every component,</em> engineered in-house.
+      </>
+    ),
+    lead: "Scroll to take the machine apart: control, drive, doors, safety and signalling, revealed one by one.",
+    outroLine: "Every part above is designed, built and supported by Philbrick.",
+  },
+};
 
 /* Blueprint spine: a hairline technical drawing of the assembled system —
    shaft, machine room (motor + sheave), ropes, car, counterweight, guide
@@ -95,7 +150,16 @@ function SpineArt() {
   );
 }
 
-export function ExplorationHero() {
+export function ExplorationHero({ config }: { config?: ExplorationHeroConfig }) {
+  const cfg = config ?? DEFAULT_CONFIG;
+  const {
+    parts: PARTS,
+    spine: SPINE_CFG,
+    mobileSlot: MOB_SLOT,
+    mobileAnchor: MOB_ANCHOR,
+    pacing: PACE,
+    copy: COPY,
+  } = cfg;
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(-1);
   const activeRef = useRef(-1);
@@ -110,7 +174,7 @@ export function ExplorationHero() {
          overview as a calm, complete, static hero. */
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         el.classList.add(styles.isStatic);
-        setActive(EXPLORATION_PARTS.length - 1);
+        setActive(PARTS.length - 1);
         return;
       }
 
@@ -145,11 +209,11 @@ export function ExplorationHero() {
                 el.style.setProperty("--p", String(self.progress));
                 // active part index — only during the parts phase (-1 before it,
                 // so the rail stays dark through the text + elevator phases)
-                const u = self.progress * TOTAL_UNITS - PARTS_START;
+                const u = self.progress * PACE.totalUnits - PACE.partsStart;
                 const idx =
                   u < -0.35
                     ? -1
-                    : Math.min(EXPLORATION_PARTS.length - 1, Math.floor(u + 0.62));
+                    : Math.min(PARTS.length - 1, Math.floor(u + 0.62));
                 if (idx !== activeRef.current) {
                   activeRef.current = idx;
                   setActive(idx);
@@ -169,36 +233,36 @@ export function ExplorationHero() {
           tl.fromTo(
             intro,
             { autoAlpha: 1, y: 0 },
-            { autoAlpha: 0, y: "-7vh", duration: TEXT_UNITS * 0.72, ease: "power2.in" },
-            TEXT_UNITS * 0.28
+            { autoAlpha: 0, y: "-7vh", duration: PACE.textUnits * 0.72, ease: "power2.in" },
+            PACE.textUnits * 0.28
           );
-          tl.to(cue, { autoAlpha: 0, duration: 0.4, ease: "power1.in" }, TEXT_UNITS * 0.28);
+          tl.to(cue, { autoAlpha: 0, duration: 0.4, ease: "power1.in" }, PACE.textUnits * 0.28);
 
           /* ---- PHASE 2 — the machine emerges from scale 0 (ease in-out) ---- */
           tl.fromTo(
             spine,
             { scale: 0, autoAlpha: 0, y: "4vh" },
-            { scale: 1, autoAlpha: 1, y: 0, duration: ELEVATOR_UNITS, ease: "power2.inOut" },
-            TEXT_UNITS
+            { scale: 1, autoAlpha: 1, y: 0, duration: PACE.elevatorUnits, ease: "power2.inOut" },
+            PACE.textUnits
           );
           /* subtle continued push through the parts phase for depth */
           tl.to(
             spine,
-            { scale: 1.04, y: "-1.5vh", duration: EXPLORATION_PARTS.length + SETTLE_UNITS },
-            PARTS_START
+            { scale: 1.04, y: "-1.5vh", duration: PARTS.length + PACE.settleUnits },
+            PACE.partsStart
           );
           /* slow background drift, tied to the machine's arrival onward */
-          tl.to(glow, { y: "-2vh", duration: TOTAL_UNITS - TEXT_UNITS }, TEXT_UNITS);
+          tl.to(glow, { y: "-2vh", duration: PACE.totalUnits - PACE.textUnits }, PACE.textUnits);
 
           /* ---- PHASE 3 — components reveal one by one --------------------- */
-          EXPLORATION_PARTS.forEach((part, i) => {
-            const at = PARTS_START + i;
+          PARTS.forEach((part, i) => {
+            const at = PACE.partsStart + i;
             const card = cards[i];
             const label = labels[i];
             const line = lines[i];
             const from = desk
               ? { dx: part.anchor.x - part.slot.x, dy: part.anchor.y - part.slot.y }
-              : { dx: MOBILE_ANCHOR.x - MOBILE_SLOT.x, dy: MOBILE_ANCHOR.y - MOBILE_SLOT.y };
+              : { dx: MOB_ANCHOR.x - MOB_SLOT.x, dy: MOB_ANCHOR.y - MOB_SLOT.y };
 
             tl.addLabel(`part-${i}`, at);
 
@@ -232,7 +296,7 @@ export function ExplorationHero() {
 
             if (desk) {
               /* micro-drift: settled parts keep breathing outward */
-              tl.to(card, { y: "-=10", duration: TOTAL_UNITS - at - 0.62 }, at + 0.62);
+              tl.to(card, { y: "-=10", duration: PACE.totalUnits - at - 0.62 }, at + 0.62);
             } else {
               /* mobile: the previous part yields the focal slot */
               const prev = cards[i - 1];
@@ -246,7 +310,7 @@ export function ExplorationHero() {
 
           /* settle: once the last part has landed, dim the machine and bring up
              the big centred closing statement */
-          const settleAt = PARTS_START + EXPLORATION_PARTS.length;
+          const settleAt = PACE.partsStart + PARTS.length;
           tl.addLabel("settle", settleAt);
           tl.fromTo(
             scrim,
@@ -271,14 +335,14 @@ export function ExplorationHero() {
     { scope: root }
   );
 
-  const n = EXPLORATION_PARTS.length;
+  const n = PARTS.length;
 
   return (
     <section
       ref={root}
       className={styles.section}
-      style={{ height: `${SCROLL_VH}vh` }}
-      aria-label="The Philbrick elevator system taken apart component by component as you scroll"
+      style={{ height: `${PACE.scrollVh}vh` }}
+      aria-label={COPY.ariaLabel}
     >
       <div className={styles.stage}>
         <div className={styles.bgGlow} aria-hidden />
@@ -289,14 +353,14 @@ export function ExplorationHero() {
           className={styles.spineWrap}
           aria-hidden
           style={
-            SPINE.type === "image"
-              ? ({ "--spine-aspect": String(SPINE.aspect) } as React.CSSProperties)
+            SPINE_CFG.type === "image"
+              ? ({ "--spine-aspect": String(SPINE_CFG.aspect) } as React.CSSProperties)
               : undefined
           }
         >
-          {SPINE.type === "image" ? (
+          {SPINE_CFG.type === "image" ? (
             <Image
-              src={SPINE.src}
+              src={SPINE_CFG.src}
               alt=""
               fill
               sizes="(max-width: 820px) 60vw, 34vw"
@@ -310,7 +374,7 @@ export function ExplorationHero() {
 
         {/* leader lines (desktop) — drawn from spine anchor toward each slot */}
         <svg className={styles.lines} aria-hidden focusable="false">
-          {EXPLORATION_PARTS.map((p) => (
+          {PARTS.map((p) => (
             <line
               key={p.key}
               className={styles.line}
@@ -325,7 +389,7 @@ export function ExplorationHero() {
 
         {/* the components */}
         <ul className={styles.parts} role="list">
-          {EXPLORATION_PARTS.map((p, i) => (
+          {PARTS.map((p, i) => (
             <li
               key={p.key}
               className={`${styles.part} ${p.treatment === "cutout" ? styles.isCutout : ""} ${
@@ -335,8 +399,8 @@ export function ExplorationHero() {
                 {
                   "--sx": `${p.slot.x}%`,
                   "--sy": `${p.slot.y}%`,
-                  "--mx": `${MOBILE_SLOT.x}%`,
-                  "--my": `${MOBILE_SLOT.y}%`,
+                  "--mx": `${MOB_SLOT.x}%`,
+                  "--my": `${MOB_SLOT.y}%`,
                 } as React.CSSProperties
               }
             >
@@ -374,22 +438,15 @@ export function ExplorationHero() {
 
         {/* intro copy */}
         <div className={styles.intro}>
-          <p className={styles.eyebrow}>The Philbrick system</p>
-          <h1 className={styles.title}>
-            One elevator. <em>Every component,</em> engineered in-house.
-          </h1>
-          <p className={styles.lead}>
-            Scroll to take the machine apart: control, drive, doors, safety and
-            signalling, revealed one by one.
-          </p>
+          <p className={styles.eyebrow}>{COPY.eyebrow}</p>
+          <h1 className={styles.title}>{COPY.title}</h1>
+          <p className={styles.lead}>{COPY.lead}</p>
         </div>
 
         {/* closing statement: scrim dims the machine, big centred line + CTAs */}
         <div className={styles.outroScrim} aria-hidden />
         <div className={styles.outro}>
-          <p className={styles.outroLine}>
-            Every part above is designed, built and supported by Philbrick.
-          </p>
+          <p className={styles.outroLine}>{COPY.outroLine}</p>
           <div className={styles.outroCtas}>
             <Button href="/products" withArrow>
               Explore all products
@@ -402,7 +459,7 @@ export function ExplorationHero() {
 
         {/* right rail (desktop): tour index */}
         <ol className={styles.rail} aria-hidden>
-          {EXPLORATION_PARTS.map((p, i) => (
+          {PARTS.map((p, i) => (
             <li
               key={p.key}
               className={`${i <= active ? styles.railDone : ""} ${

@@ -949,3 +949,564 @@
     transition: none !important;
   }
 }
+
+/* =============================================================================
+   VARIANT 13 — scroll component reveal (drawing + one part at a time)
+   ========================================================================== */
+.hero13 {
+  position: relative;
+  background:
+    radial-gradient(120% 90% at 82% 20%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--section-bg-a), var(--section-bg-b));
+}
+
+.stage13 {
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100svh - var(--nav-h));
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(1.5rem, 4vh, 3rem) clamp(1.25rem, 5vw, 6rem);
+  overflow: hidden;
+}
+
+.panel13 {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.step13 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateY(26px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out), visibility 0s 0.55s;
+  pointer-events: none;
+}
+
+.step13Active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%);
+  transition: opacity 0.55s var(--ease-out) 0.1s, transform 0.55s var(--ease-out) 0.1s, visibility 0s;
+  pointer-events: auto;
+}
+
+.title13 {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.stepMedia13 {
+  position: relative;
+  width: min(360px, 74%);
+  max-height: 30vh;
+  filter: drop-shadow(0 22px 40px rgba(6, 14, 26, 0.4));
+}
+
+.stepMedia13 :global(img) {
+  object-fit: contain;
+}
+
+.dots13 {
+  position: absolute;
+  left: 0;
+  bottom: clamp(0.6rem, 3vh, 2rem);
+  display: flex;
+  gap: 0.45rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dots13 li {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+}
+
+.dot13Done,
+.dot13Active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.dot13Active {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.drawWrap13 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.draw13 {
+  position: relative;
+  height: min(80vh, 86%);
+  filter: drop-shadow(0 30px 60px rgba(6, 14, 26, 0.35));
+}
+
+.draw13 :global(img) {
+  object-fit: contain;
+}
+
+.marker13 {
+  position: absolute;
+  left: var(--hx, 50%);
+  top: var(--hy, 50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: color-mix(in srgb, var(--accent) 32%, transparent);
+  border: 2px solid var(--accent);
+  opacity: 0;
+  transition: left 0.7s var(--ease-in-out), top 0.7s var(--ease-in-out), opacity 0.4s var(--ease-out);
+  pointer-events: none;
+}
+
+.marker13::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  animation: m13pulse 2.2s ease-in-out infinite;
+}
+
+.marker13On {
+  opacity: 1;
+}
+
+@keyframes m13pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.5);
+    opacity: 0.2;
+  }
+}
+
+/* static fallback (reduced motion): stacked list, no pin */
+.hero13Static .stage13 {
+  position: relative;
+  top: 0;
+  height: auto;
+  align-items: start;
+}
+
+.hero13Static .panel13 {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  height: auto;
+  padding: 3rem 0;
+}
+
+.hero13Static .step13 {
+  position: static;
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.hero13Static .dots13,
+.hero13Static .marker13 {
+  display: none;
+}
+
+.hero13Static .drawWrap13 {
+  align-items: flex-start;
+  padding-top: 3rem;
+}
+
+@media (max-width: 900px) {
+  .stage13 {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 42%) minmax(0, 58%);
+    gap: 0.5rem;
+  }
+
+  .drawWrap13 {
+    order: -1;
+  }
+
+  .draw13 {
+    height: 100%;
+  }
+
+  .stepMedia13 {
+    width: min(240px, 60%);
+    max-height: 20vh;
+  }
+
+  .title13 {
+    font-size: clamp(1.5rem, 5.5vw, 2.1rem);
+  }
+}
+
+/* =============================================================================
+   VARIANT 14 — floating product constellation gallery
+   ========================================================================== */
+.galleryStage {
+  position: absolute;
+  inset: clamp(0.5rem, 2vh, 1.5rem) 0;
+  /* border-radius: var(--radius-2xl); */
+  /* background: radial-gradient(120% 95% at 50% 25%, #f6f9fc, #d9e2ec 82%); */
+  /* box-shadow: var(--shadow-lg); */
+  overflow: hidden;
+}
+
+.orbitRing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, #0a6a9c 26%, transparent);
+  transform: translate(-50%, -50%);
+  animation: orbitSpin 60s linear infinite;
+  pointer-events: none;
+}
+
+.orbitRing2 {
+  width: 105%;
+  animation-duration: 95s;
+  animation-direction: reverse;
+  opacity: 0.6;
+}
+
+@keyframes orbitSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.galleryItem {
+  position: absolute;
+  height: min(var(--gi-h, 16vh), 220px);
+  margin: 0;
+  opacity: 0;
+  transform: translate(-50%, -50%) translateY(20px) scale(0.92);
+  animation: gEnter 0.85s var(--ease-out) var(--gi-delay, 0.2s) forwards;
+}
+
+@keyframes gEnter {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate3d(calc(var(--gx, 0) * var(--gi-depth, 1) * 16px),
+        calc(var(--gy, 0) * var(--gi-depth, 1) * 12px),
+        0);
+  }
+}
+
+.galleryItem :global(img) {
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(8, 18, 32, 0.35));
+  animation: gFloat var(--gi-dur, 7s) ease-in-out calc(var(--gi-delay, 0s) + 0.9s) infinite;
+}
+
+@keyframes gFloat {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--gi-rot, 0deg));
+  }
+
+  50% {
+    transform: translateY(-9px) rotate(calc(var(--gi-rot, 0deg) * -1));
+  }
+}
+
+.galleryLabel {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  transform: translateX(-50%) translateY(4px);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #22405c;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+  pointer-events: none;
+}
+
+.galleryItem:hover .galleryLabel,
+.galleryItem:focus-within .galleryLabel {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 900px) {
+  .galleryStage {
+    position: relative;
+    inset: auto;
+    height: 54vh;
+    width: 100%;
+  }
+
+  .galleryItem {
+    height: min(var(--gi-h, 16vh), 140px);
+  }
+}
+
+/* =============================================================================
+   VARIANT 15 — product spotlight hero + category browser
+   ========================================================================== */
+.spotlight15 {
+  position: absolute;
+  inset: clamp(0.5rem, 2vh, 1.5rem) 0;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  /* border: 1px solid var(--border); */
+  /* box-shadow: var(--shadow-lg); */
+  /* background: linear-gradient(160deg, #0d1420, #0a1017 70%); */
+  /* IMPORTANT: this rule wins the `animation` shorthand over .animInRight
+     (same specificity, later in source), so it must run BOTH the entrance and
+     the float itself — otherwise the entrance never fires and the panel stays
+     at .animInRight's initial opacity 0 (the "invisible spotlight" bug). */
+  animation:
+    corpInRight 1.1s var(--ease-out) 0.2s forwards,
+    corpFloat 7s ease-in-out 1.8s infinite;
+}
+
+.slide15 {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 0;
+  transform: scale(1.035);
+  transition: opacity 0.8s var(--ease-in-out), transform 1.1s var(--ease-in-out);
+  pointer-events: none;
+}
+
+.slide15Active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.slide15Img {
+  object-fit: cover;
+}
+
+/* catalogue part cutouts: contained on the panel with breathing room (extra
+   at the bottom so the label never overlaps the part), soft drop shadow */
+.slide15Part {
+  object-fit: contain;
+  padding: clamp(1.6rem, 4vh, 3rem) clamp(1.6rem, 4vw, 3rem) clamp(4.5rem, 12vh, 7rem);
+}
+
+.slide15Label {
+  position: absolute;
+  left: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3.5vh, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* the panel dressing was removed (no dark background), so the label sits on
+   the page background: theme tokens keep it legible in light AND dark */
+.slide15Name {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.7rem);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.slide15Tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.slide15 .slide15Tag :global(svg) {
+  transition: transform 0.3s var(--ease-out);
+}
+
+.slide15:hover .slide15Tag :global(svg) {
+  transform: translateX(4px);
+}
+
+.dots15 {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3.5vh, 2rem);
+  display: flex;
+  gap: 0.45rem;
+  z-index: 2;
+}
+
+.dot15 {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+
+.dot15Active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.15);
+}
+
+/* ---- category browser grid ---- */
+.catGrid15 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+  gap: clamp(0.9rem, 1.6vw, 1.4rem);
+  list-style: none;
+  padding: 0;
+  margin: clamp(2rem, 5vh, 3.5rem) 0 0;
+}
+
+.catCard15 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+}
+
+.catCard15:hover,
+.catCard15:focus-visible {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-accent);
+}
+
+/* card media shows a transparent catalogue part render: contain it with
+   breathing room on a soft theme surface (cover would crop the cutout) */
+.catMedia15 {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.catImg15 {
+  object-fit: contain;
+  padding: clamp(0.9rem, 1.6vw, 1.4rem);
+  transition: transform 0.6s var(--ease-out);
+}
+
+.catCard15:hover .catImg15 {
+  transform: scale(1.05);
+}
+
+.catBody15 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.95rem 1.05rem 1.15rem;
+}
+
+.catName15 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.catArrow15 {
+  color: var(--accent);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.catCard15:hover .catArrow15 {
+  transform: translateX(4px);
+}
+
+.catDesc15 {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.catCrumb15 {
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ---- reduced motion for 13/14/15 ---- */
+@media (prefers-reduced-motion: reduce) {
+
+  .orbitRing,
+  .orbitRing2,
+  .galleryItem,
+  .galleryItem :global(img),
+  .spotlight15,
+  .marker13::after {
+    animation: none !important;
+  }
+
+  .galleryItem {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  .slide15 {
+    transition: none;
+  }
+}

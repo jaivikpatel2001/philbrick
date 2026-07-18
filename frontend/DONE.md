@@ -6,6 +6,276 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-18 11:50 IST
+
+### Site default theme flipped to LIGHT (persistence unchanged)
+
+**Status:** Completed (verified live)
+
+Client: the site should open in LIGHT for every visitor; if they toggle to
+dark it must stay dark across refresh/navigation. The persistence mechanism was
+already correct (localStorage `philbrick-theme`, read before paint by
+`themeInitScript`, a saved choice always wins) — only the FIRST-TIME default
+needed flipping dark → light.
+
+Changed the three dark defaults to light: `themeInitScript` (`var t='light'`),
+`ThemeProvider` initial state + the `useEffect` fallback, and the layout
+`viewport.themeColor` (#0A0E14 → #FFFFFF, so the browser chrome starts light
+too). No OS colour-scheme following (unchanged, deliberate). tokens.css bare
+`:root` stays dark as the pre-script base, but the inline head script sets
+`data-theme` before paint so there is no flash (same no-FOUC pattern that
+already worked for the dark default).
+
+**Verified live** (dev server): with localStorage cleared, a fresh load applies
+`data-theme="light"`, meta theme-color #FFFFFF, and NOTHING is written to
+storage (a real first-time state). After setting `philbrick-theme="dark"` and
+reloading, it applies `data-theme="dark"` with meta #0A0E14 —
+"DARK PERSISTS ACROSS REFRESH". Export confirms `var t='light'` +
+theme-color #FFFFFF baked in. Build green (73/73).
+
+**Files:** `components/providers/ThemeProvider.tsx`, `app/layout.tsx`.
+
+**Note:** existing visitors who already toggled dark keep dark (their saved
+choice wins); only visitors with no saved preference now get light. To see the
+new default yourself, clear the `philbrick-theme` localStorage key (or use a
+fresh/incognito profile).
+
+---
+
+## 2026-07-18 11:44 IST
+
+### `/variant15` — spotlight drop-shadow removed
+
+**Status:** Completed (verified live)
+
+User circled a soft rectangular shadow around the spotlight area in light
+mode. Live probe confirmed the only remaining shadow source was the
+`drop-shadow(0 22px 40px …)` filter on `.slide15Part` (the panel dressing was
+already removed); at 40px blur it read as a large soft rectangle on the light
+background. Removed the filter — the spotlight is now a completely flat cutout
+on the page background. Verified live: all 9 spotlight images compute
+`filter: none`. Build green (73/73).
+
+**Files:** `corporate.module.css` (`.slide15Part`).
+
+---
+
+## 2026-07-18 11:40 IST
+
+### `/variant15` — spotlight now rotates ALL 9 catalogue components
+
+**Status:** Completed (verified live)
+
+Client: the hero should display all components, not 5. The spotlight now maps
+over the full `CATALOG_PARTS` set (catalogue order) via `CATEGORY_FOR_PART`,
+adding the four that were missing with sensible category links: Overload
+Annunciating Device + Fan and Blower → /products/elevator-kit-accessories,
+Floor Announcing System → /products/voice-announcing-systems, Safety Light
+Curtain → /products/synergy-auto-door. 9 slides, 9 dots, ~34s full rotation
+(3.8s per slide, pauses on hover). Verified live on the dev server: 9 slides
+with correct names/images/links. Build green (73/73).
+
+**Files:** `corporate/Variant15Hero.tsx`.
+
+---
+
+## 2026-07-18 11:38 IST
+
+### `/variant15` — theme-aware spotlight text + parts imagery in the category grid
+
+**Status:** Completed (verified live in forced light mode)
+
+Two client requests after they removed the spotlight's panel dressing
+(background/border/box-shadow commented out in corporate.module.css — kept):
+
+- **Light-mode legibility:** with no dark panel behind it, the spotlight's
+  hardcoded white label text vanished in light mode. `.slide15Name` →
+  `var(--text-primary)`, `.slide15Tag` → `var(--text-secondary)`, `.dot15`
+  border → `var(--border-strong)`; removed the leftover dark scrim span (JSX)
+  and the `::before` azure glow, completing the client's de-dressing. Verified
+  by forcing `data-theme="light"` on the dev server: name rgb(11,16,23), tag
+  rgb(69,80,92), dot visible, scrim gone.
+- **"Find it by product category" imagery:** the 14 category cards now use the
+  catalogue part renders (components/parts/) instead of the category cover
+  photography, mapped per closest fit (`PART_FOR_CATEGORY` in
+  CategoryBrowse15; related families intentionally share a render — all three
+  control panel categories show the control panel part, both COP/LOP families
+  the COP render, etc.). Card media restyled for transparent cutouts:
+  `object-fit: contain` + padding on a `var(--surface-2)` stage (cover would
+  crop cutouts). Verified: 14/14 cards serve components/parts images.
+
+**Files:** `corporate/Variant15Hero.tsx` (scrim span removed),
+`corporate/CategoryBrowse15.tsx` (part mapping), `corporate.module.css`
+(label/dot tokens, glow removed, catMedia/catImg cutout treatment). Build
+green (73/73).
+
+---
+
+## 2026-07-18 11:31 IST
+
+### `/variant12` parts behind the navbar — overlay safe area fixed
+
+**Status:** Completed (verified live on the dev server)
+
+User report: variant11 was fine but variant12's top part images sat behind the
+navbar. Root cause: variant11's ExplorationHero stage starts BELOW the sticky
+navbar (`top: var(--nav-h)`), but variant12 (like variant6) reuses the 3D
+hero's FULL-VIEWPORT stage — intentional for the cinematic arrival — so the
+exploded overlay's % coordinates started at y=0 behind the header, and the
+same slot data landed the top row under the navbar.
+
+**Fixes:**
+- `.v6Overlay` (shared by v6 + v12): `inset: 0` → `top: calc(var(--nav-h) +
+  4px); bottom: 1vh` — the overlay's whole coordinate space now lives in the
+  safe area, matching the geometry the slot data was designed for (also
+  corrects the same latent clipping in variant6).
+- `data/catalogParts.ts` slot tuning (measured empirically with real card +
+  label heights on a 720px viewport): control panel slot y 14→20, overload
+  y 15→18, elevator door y 86→80 with hCapVh 22→19 (shared data — keeps
+  variant11 clean too, where the door was marginally clipping the fold).
+
+**Verified live** (dev server, sticky-engaged geometry): probe of all 9 part
+cards reports behindNav: [] and belowFold: [] — "ALL PARTS IN SAFE AREA".
+Production build green (73/73).
+
+---
+
+## 2026-07-18 11:24 IST
+
+### `/variant15` spotlight invisible — animation shorthand collision fixed
+
+**Status:** Completed
+
+User report: the v15 hero's right side rendered empty. Root cause: the
+spotlight element carries BOTH `.animInRight` (entrance: initial `opacity: 0`
++ `animation: corpInRight`) and `.spotlight15` (`animation: corpFloat`). The
+`animation` SHORTHAND on `.spotlight15` (same specificity, later in source)
+completely overrode `.animInRight`'s animation — so the entrance never ran and
+the panel stayed at opacity 0 forever.
+
+**Fix:** `.spotlight15` now declares both animations itself
+(`corpInRight … forwards, corpFloat … infinite`) with a comment explaining the
+collision. Verified on the dev server: both animations attach with correct
+fill/duration/delay; the embedded preview freezes animation clocks
+(currentTime stuck at 0), so the fix was PROVEN by fast-forwarding
+`getAnimations()` currentTime → computed opacity 1 with the float phase
+active. In a real browser the panel fades/slides in on load as designed.
+Build green (73/73).
+
+**Rule of thumb recorded:** never pair `.animInRight` (or any entrance class)
+with another class that sets the `animation` shorthand — the later rule wins
+the whole shorthand and cancels the entrance while keeping the hidden initial
+state. Merge the animations into one declaration instead.
+
+**Files:** `corporate.module.css` (`.spotlight15`).
+
+---
+
+## 2026-07-18 11:20 IST
+
+### `/variant14` + `/variant15` switched to the catalogue parts imagery
+
+**Status:** Completed
+
+Client: both should use `components/parts/` (the catalogue cutouts) like
+variants 11 to 13, not the older photoreal set / category photography.
+
+- **v14:** the floating gallery now maps `CATALOG_PARTS` (all 9 catalogue
+  cutouts) with a re-tuned 9-item cluster layout (`LAYOUT` keyed by catalogue
+  keys); labels from the catalogue names. Old `PART_ASSETS` import removed.
+- **v15:** the rotating spotlight now shows 5 catalogue parts (control panel
+  and ARD, cabin, COP and LOP with display, lift display, elevator door), each
+  linking to its closest REAL product category (/products/elevator-control-panel,
+  /elevator-cabin, /cop-lop, /elevator-display, /elevator-doors). Cutouts
+  render `object-fit: contain` with padding + drop shadow on the dark panel
+  (new `.slide15Part`) with a soft azure glow behind (`.spotlight15::before`);
+  the category browser section below keeps the real category photography (it
+  is about the categories themselves).
+
+**Files:** `corporate/Variant14Hero.tsx`, `corporate/Variant15Hero.tsx`,
+`corporate.module.css`. Build green (73/73, TypeScript clean). Export checks:
+v14 shows all 9 parts and zero old refs; v15 spotlight shows the 5 parts with
+5 correct category links and the browser still lists all 14 categories.
+
+---
+
+## 2026-07-18 11:16 IST
+
+### Five new hero variants (`/variant11`–`/variant15`) on the catalogue assets
+
+**Status:** Completed (motion to be judged in the real browser as usual)
+
+Client supplied a new asset set: the printed catalogue's exploded diagram
+separated into 9 true-alpha part cutouts
+(`public/images/home/hero-exploration/components/parts/`) + the central
+technical drawing of the whole installation (`environment/drawing-elevetor.png`),
+with a reference image mapping each part to its position on the drawing.
+
+**Asset pipeline:** originals archived
+(`image-sources/home/hero-exploration/parts-original/`); filenames normalised
+to kebab-case (had spaces); trimmed + 16px margin; duplicate drawing copy in
+parts/ removed (canonical in environment/); `optimizeHeroExploration.mjs`
+re-run (webp + manifest). New shared data module **`data/catalogParts.ts`**:
+9 parts with honest catalogue names/taglines/descriptions, aspects, `anchor`
+(where the part lives on the drawing, stage %) mapped from the reference
+(machine room top → pit bottom, catalogue-true left/right sides), `slot`
+(zigzag exploded columns) + `CATALOG_SPINE` + pacing.
+
+- **`/variant11` Catalogue exploded tour:** `ExplorationHero` was
+  PARAMETERISED with an optional `config` prop (parts, spine, pacing, mobile
+  slots, copy) whose defaults reproduce /variant1 exactly (verified: variant1
+  export unchanged — cutaway spine, 8 original parts, original copy, 892vh).
+  `Exploration11Hero` passes the catalogue config: drawing spine + 9 parts
+  flying to their documented positions with leader lines. 9 beats, ~970vh.
+- **`/variant12` Catalogue journey:** `Variant12ElevatorScene` duplicates
+  Variant6ElevatorScene (100% of the 3D arrival/GSAP/scroll preserved); only
+  the DOM overlay changed: drawing spine + the 9 catalogue parts/labels
+  (from catalogParts). Parts are informational (no modal — the catalogue set
+  has no spec-sheet content; empty modals would read broken). Rail lists the
+  9 parts.
+- **`/variant13` Corporate scroll component reveal:** new
+  `corporate/Variant13Hero` — sticky stage, the drawing right with a pulsing
+  azure marker that eases to each part's anchor, content panel left crossfades
+  one component at a time (index, name, description, image) until all 9 are
+  introduced; step dots; reduced-motion = static stacked list. ~900vh,
+  transitions CSS-only (React state changes ~10x per page).
+- **`/variant14` Animated product gallery:** `corporate/Variant14Hero` keeps
+  variant10's split; the right side is a floating product constellation of the
+  8 photoreal component renders — staggered entrance, per-item float/rotation
+  at varied tempos, two slow orbiting dashed rings, layered pointer parallax by
+  depth (CSS vars + one rAF), hover name chips. Transform/opacity only.
+- **`/variant15` Product spotlight + category browser:** `corporate/
+  Variant15Hero` (original hero inspired by the QUALITIES of product-first
+  machinery sites: bold type left, an auto-rotating category spotlight right —
+  4 flagship categories crossfading with name/tagline/link, dots for manual
+  selection, pauses on hover/reduced-motion) + `corporate/CategoryBrowse15`
+  ("Browse by product category": all 14 REAL categories from data/products.ts
+  as premium cards — real photography, name, clamped description, hover
+  lift/zoom/arrow, whole card links to /products/<slug>).
+
+**Files:** `data/catalogParts.ts` (new), `ExplorationHero.tsx` (config prop,
+defaults = variant1), `Exploration11Hero.tsx`, `Variant12ElevatorScene.tsx` +
+`variants/Variant12Hero.tsx`, `corporate/Variant13Hero.tsx`,
+`corporate/Variant14Hero.tsx`, `corporate/Variant15Hero.tsx`,
+`corporate/CategoryBrowse15.tsx`, `corporate.module.css` (+v13/14/15 blocks,
+all reduced-motion guarded), `app/variant11–15/page.tsx` (noindex,
+ReleaseGate, shared HomeSections), `config/pageReleases.ts` (+5 routes).
+
+**Verified:** build green (compiled, TypeScript clean, **73/73** pages, was
+68). Export checks: v11 has the drawing + all 9 part images + 9 names; v13 has
+the drawing, 9 steps ("of 09"), 9 part images, intro headline; v14 has all 8
+gallery renders; v15 has 14 category links + the browse header; v12 is a
+client-only shell like v6 (same architecture, verified at runtime). variant1
+regression-checked and unchanged. Existing variants untouched.
+
+**Notes:** the catalogue reference also showed door operators and accessories
+callouts — no cutouts were supplied for those two, so the set is the 9
+provided parts (drop-in extensible via catalogParts.ts). The drawing's
+anchor→drawing-box mapping for v13's marker assumes the drawing spans stage
+x 42..58, y 6..90 (same numbers documented in catalogParts.ts).
+
+---
+
 ## 2026-07-17 18:38 IST
 
 ### `/variant8` — client re-exported a true-transparent tower
