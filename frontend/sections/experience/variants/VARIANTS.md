@@ -17,6 +17,11 @@ homepage `/` keeps the original cinematic Three.js night-city hero.
 | `/variant8` | Building showcase (clean corporate) | DOM/CSS + next/image (`../corporate/`) |
 | `/variant9` | Premium interior (clean corporate) | DOM/CSS + pointer parallax (`../corporate/`) |
 | `/variant10` | Product feature showcase (clean corporate) | DOM/CSS + CSS hotspots (`../corporate/`) |
+| `/variant11` | Catalogue exploded tour (drawing + 9 catalogue parts) | ExplorationHero config (`data/catalogParts.ts`) |
+| `/variant12` | Catalogue journey (variant6 3D arrival + catalogue overlay) | duplicate of `../Variant6ElevatorScene.tsx` |
+| `/variant13` | Corporate scroll component reveal (drawing + marker) | DOM/CSS + ScrollTrigger (`../corporate/`) |
+| `/variant14` | Animated floating product gallery | DOM/CSS + pointer parallax (`../corporate/`) |
+| `/variant15` | Product spotlight hero + category browser | DOM/CSS + rotating spotlight (`../corporate/`) |
 
 Inspiration was analysed (award-site scroll films, product configurators,
 technical reveal pages) but every concept, asset and interaction here is

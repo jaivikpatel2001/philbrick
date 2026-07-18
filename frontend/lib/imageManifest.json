@@ -130,10 +130,47 @@
     384,
     640
   ],
+  "/images/home/hero-exploration/components/parts/blower-fan.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/parts/cabin.png": [
+    384
+  ],
+  "/images/home/hero-exploration/components/parts/control-panel-ard.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/parts/cop-lop-display.png": [
+    368
+  ],
+  "/images/home/hero-exploration/components/parts/elevator-door.png": [
+    384
+  ],
+  "/images/home/hero-exploration/components/parts/floor-announcing-system.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/home/hero-exploration/components/parts/lift-display.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/parts/overload-announcing-device.png": [
+    384,
+    640
+  ],
+  "/images/home/hero-exploration/components/parts/safety-light-curtain.png": [
+    384,
+    640
+  ],
   "/images/home/hero-exploration/environment/commercial-tower.png": [
     208
   ],
   "/images/home/hero-exploration/environment/door-leaf.png": [
+    384
+  ],
+  "/images/home/hero-exploration/environment/drawing-elevetor.png": [
     384
   ],
   "/images/home/hero-exploration/environment/india-tower.png": [
