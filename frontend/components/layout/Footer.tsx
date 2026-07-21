@@ -45,9 +45,18 @@ export function Footer() {
                   {SITE.address.line1}, {SITE.address.line2}
                 </span>
               </li>
+              {/* Every number the client publishes, not just the first — the
+                  WordPress footer lists them all, plus the office hours. */}
               <li>
                 <FiPhone />
-                <a href={SITE.phoneHref}>{SITE.phone}</a>
+                <span className={styles.phoneList}>
+                  {SITE.phones.map((number) => (
+                    <a key={number} href={`tel:${number.replace(/\s/g, "")}`}>
+                      {number}
+                    </a>
+                  ))}
+                  <span className={styles.hours}>{SITE.hours}</span>
+                </span>
               </li>
               <li>
                 <FiMail />

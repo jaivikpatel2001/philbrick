@@ -1200,3 +1200,19 @@
   pointer-events: auto;
   padding-block: 4rem;
 }
+
+/* The story canvas is hardcoded near-black in BOTH themes (see .story), so its
+   secondary CTA must be light-on-dark too. Reading theme tokens made it
+   near-black text on a near-black border in light theme — invisible. Same fix
+   as sections/shared/CTASection.module.css. */
+.finaleActions .secondaryOnDark {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.finaleActions .secondaryOnDark:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.18);
+}

@@ -16,6 +16,10 @@ import manifest from "./imageManifest.json";
 
 const VARIANT_WIDTHS = manifest as Record<string, number[]>;
 
+/* Brand photography is PNG; the client's original product catalogue photos are
+   JPG (scripts/optimizeProductImages.mjs). Both ladder into WebP the same way. */
+const SOURCE_EXT = /\.(png|jpe?g)$/i;
+
 export default function imageLoader({
   src,
   width,
@@ -26,10 +30,11 @@ export default function imageLoader({
 }): string {
   const clean = src.split("?")[0];
   const widths = VARIANT_WIDTHS[clean];
-  if (widths && widths.length > 0 && clean.endsWith(".png")) {
+  const ext = clean.match(SOURCE_EXT);
+  if (widths && widths.length > 0 && ext) {
     // Smallest generated width that still covers the request (cap at the largest).
     const chosen = widths.find((w) => w >= width) ?? widths[widths.length - 1];
-    return `${clean.slice(0, -".png".length)}-${chosen}.webp`;
+    return `${clean.slice(0, -ext[0].length)}-${chosen}.webp`;
   }
   return src;
 }

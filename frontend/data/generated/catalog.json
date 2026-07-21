@@ -1,0 +1,885 @@
+{
+  "categories": [
+    {
+      "slug": "elevator-control-panel",
+      "products": [
+        {
+          "slug": "automatic-door-controller",
+          "name": "Automatic Door Controller",
+          "wpId": "3772",
+          "images": [
+            "/images/products/catalog/automatic-door-controller01.jpg",
+            "/images/products/catalog/automatic-door-controller02.jpg",
+            "/images/products/catalog/automatic-door-controller03.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "16 Bit/ 32 Bit RISC microprocessor-based High Speed clocked design which enhance the processing speed for better elevator control.",
+                "Multi Functional keypad with LCD 20 * 4 line display.",
+                "Programmable configuration & Functionality makes flexible controlling.",
+                "Programmable Number of Floors, Floor Designation like B, P, C, L-1, -2, etc, Fireman floor, Home Landing Floor, Door Timings, Front & Rear Door Operation etc.",
+                "Non Stop, VIP Mode & HALT Functionality.",
+                "Password protected trip setting.",
+                "Self Diagnostic/ Debugging Mode for Onsite troubleshooting.",
+                "Auto FAN/ LIGHT functionality to save energy.",
+                "Intelligent electronics STOP function.",
+                "Auto/ Attendant Mode.",
+                "Audio Buzzer O/P for Open Door condition in Manual Door.",
+                "Call Buzzer O/P for Landing Floor Call prompting.",
+                "Opto Coupler based Galvanic Isolation for all Inputs & Outputs.",
+                "Separate LED Indication for all Inputs & Outputs.",
+                "Hardware & Digital Filtering in all the input to suppress effects of Electrical Noise.",
+                "PTC protected all the Digital I/O to avoid failure due to field faults.",
+                "Solid State Display Driver with Resettable Fuse protection.",
+                "Faster learning & simple maintenance."
+              ]
+            }
+          ],
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td rowspan=\"3\">Xpert Main Board Based Auto Door V3F Type Control Panel</td><td>XPLA-8L-V3F</td><td>8 Landing Floors Full Collective Logic</td><td rowspan=\"3\"><ul><li>Customized Control Panel Enclosure for MRL application</li><li>ARD (Automatic Rescue Device) Functionality</li><li>Control Panel for Synchronous Motor (Gearless M/c.)</li></ul></td></tr><tr><td>XPLA-12L-V3F</td><td>12 Landing Floors Down Collective Logic</td></tr><tr><td>XPLA-16L-V3F</td><td>16 Landing Floors Full Collective Logic</td></tr></tbody></table>",
+          "hasContent": true
+        },
+        {
+          "slug": "manual-door-controller",
+          "name": "Manual Door Controller",
+          "wpId": "3777",
+          "images": [
+            "/images/products/catalog/manual-door-controller01.jpg",
+            "/images/products/catalog/manual-door-controller02.jpg",
+            "/images/products/catalog/manual-door-controller03.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "RISC microprocessor-based High Speed clocked design which enhances the processing speed for better elevator control.",
+                "Multi Functional keypad with 2 digits LED segment display.",
+                "Programmable configuration & Functionality makes flexible controlling.",
+                "Programmable, Floor Designation like B,P,C,L-1,-2, etc, Fireman floor etc.",
+                "DIP switch settable number of floors.",
+                "Non Stop Functionality.",
+                "Auto FAN/LIGHT functionality to save energy.",
+                "Intelligent electronics STOP function.",
+                "Auto / Attendant Mode.",
+                "Supports simple Gate Lock & Pre Gate Lock (OTIS type lock) configuration.",
+                "Audio Buzzer O/P for Open Door condition in Manual Door.",
+                "Call Buzzer O/P for Landing Floor Call prompting.",
+                "Opto Coupler based Galvanic Isolation for all Inputs & Outputs.",
+                "Separate LED Indication for all Inputs & Outputs.",
+                "Hardware & Digital Filtering in all the input to suppress effects of Electrical Noise.",
+                "PTC protected all the Digital I/O to avoid failure due to field faults.",
+                "Solid State Display Driver with Resettable Fuse protection.",
+                "Faster learning & simple maintenance."
+              ]
+            }
+          ],
+          "specHtml": "<h3>Manual Door Control Panels With V3F Drive</h3><table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td rowspan=\"2\">Elevat + Main Board Based V3F Type Control Panel</td><td>EPM-8L-V3F</td><td>Landing Floors Down Collective Logic</td><td rowspan=\"5\"><ul><li>Customized Control Panel Enclosure for MRL application</li><li>ARD (Automatic Rescue Device) Functionality</li><li>Control Panel for Synchronous Motor (Gearless M/c.)</li></ul></td></tr><tr><td>EPM-12L-V3F</td><td>12 Landing Floors Down Collective Logic</td></tr><tr><td rowspan=\"3\">Xpert Main Board Based V3F type Control Panel</td><td>XPLM-8L-V3F</td><td>8 Landing Floors Full Collective Logic</td></tr><tr><td>XPLM-12L-V3F</td><td>12 Landing Floors Down Collective Logic</td></tr><tr><td>XPLM-16L-V3F</td><td>16 Landing Floors Full Collective Logic</td></tr></tbody></table><h3>Single Speed Manual Door Control Panels</h3><table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td rowspan=\"2\">Elevat + Main Board Based Single Speed Control Panel</td><td>EPM-8L-DOL</td><td>8 Landing Floors Down Collective Logic</td><td rowspan=\"5\"><ul><li>Phase Sequence Corrector</li><li>Customized Control Panel Enclosure</li></ul></td></tr><tr><td>EPM-12L-DOL</td><td>12 Landing Floors Down Collective Logic</td></tr><tr><td rowspan=\"3\">Xpert Main Board Based Single Speed Control Panel</td><td>XPLM-8L-DOL</td><td>8 Landing Floors Full Collective Logic</td></tr><tr><td>XPLM-12L-DOL</td><td>12 Landing Floors Down Collective Logic</td></tr><tr><td>XPLM-16L-DOL</td><td>16 Landing Floors Full Collective Logic</td></tr></tbody></table>",
+          "hasContent": true
+        },
+        {
+          "slug": "hydraulic-controller",
+          "name": "Hydraulic Controller",
+          "wpId": "99",
+          "images": [
+            "/images/products/catalog/hydraulic-lift-controller01.jpg",
+            "/images/products/catalog/hydraulic-lift-controller02.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Suitable for Hydraulic LIFT with DOL Delta / Wye-Delta Starter for pump.",
+                "4-Nos. Relay O/P to control 2-speed operation.",
+                "Supports Simple Gate Lock Contact & Pre Gate Lock Configuration for manually operated door LIFT.",
+                "Automatic Rescue Functionality.",
+                "Available for Automatic Door LIFT.",
+                "Auto Releveling functionality.",
+                "Electronics Single Phasing/ Reverse Phasing preventer.",
+                "Speed Up to 0.5 m/s for open-loop.",
+                "Available Up to 30 .0 H.P."
+              ]
+            }
+          ],
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>Xpert Main Board Based Auto Door Hydraulic Lift Control Panel</td><td>XPLA - Hydra - 8L</td><td>Up to 8 landing floors for Automatic Door</td><td rowspan=\"2\"><ul><li>Available for DOL / Star-Delta Main Pump Stater.</li><li>Controller for MRL Application.</li><li>Phase Sequence Corrector.</li><li>Front &amp; Rear Door.</li></ul></td></tr><tr><td>Elevate + Main Board Based Manual Door Hydraulic Lift Control Panel</td><td>EPM - Hydra - 8L</td><td>Up to 8 landing floors for Manual Door</td></tr></tbody></table>",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "integrated-control-panel",
+      "products": [
+        {
+          "slug": "parallel-type-controller",
+          "name": "Parallel Type Controller",
+          "wpId": "3524",
+          "images": [
+            "/images/products/catalog/parallel-type-controller01.jpg",
+            "/images/products/catalog/parallel-type-controller02.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Perfect Integration of Control Logic and V3F Drive of elevator leads to compact structure, less wiring, high reliability, easy operation and cost-efficiency.",
+                "Double 32 - bit MCU combines the elevator control and motor control.",
+                "Full featured LCD Keyboard tool for programming & Debugging.",
+                "Direct to Floor Landing Give jerk less starting & stopping.",
+                "Redundant safety design, Double safety protection for control & Drive.",
+                "All parallel input and output.",
+                "Support speed – 2.5 m/s.",
+                "Support one main contactor solution.",
+                "Support Geared (Asynchronous) and Gearless (Synchronous) motor.",
+                "Sin /Cos. Endat, ABZ Incremental Resolver Interface.",
+                "Support Auto Door & Manual Door Lift Logic.",
+                "Use PIM Module Hardware, lower loss in switch on & off and longer lifetime.",
+                "Creative zero speed torque compensation technology provides the elevators with good starting ride quality without installing weighing devices.",
+                "New PWM dead - zone compensation technology brings less energy loss.",
+                "Dynamic PWM carrier modulation technology brings less motor noise."
+              ]
+            }
+          ],
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td rowspan=\"3\">AS360 Based Integrated Control Panel</td><td>INTL-360-10L</td><td>10 Landing Down Collective / 7 Landing Full Collective</td><td rowspan=\"3\"><ul><li>Customized Control Panel Enclosure for MRL application.</p><li>Pre Door opening.</p><li>Duplex Control.</p><li>Analog Weighing Device Interface Double Door Function.</p></ul></td></tr><tr><td>INTL-360-12L</td><td>12 Landing Down Collective / 9 Landing Full Collective</td></tr><tr><td>INTL-360-16L</td><td>16 Landing Full Collective</td></tr></tbody></table>",
+          "hasContent": true
+        },
+        {
+          "slug": "serial-can-bus-type-controller",
+          "name": "Serial Can Bus Type Controller",
+          "wpId": "3786",
+          "images": [
+            "/images/products/catalog/serial-can-bus-type-controller01.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Perfect integration for Control Logic & V3F drive of elevator leads to compact structure, few wiring, high reliability, easy operation & cost efficiency.",
+                "Double 32 - bit MCU combines the elevator control and motor control",
+                "Direct to Floor Landing Give jerk less starting & stopping",
+                "Full featured LCD Keyboard tool for programming & Debugging",
+                "Analog Weighing Device Interface.",
+                "Redundant safety design, Double safety protection for control & Drive.",
+                "CAN Bus communication for COP, LOP & other accessories make the whole system rugged, easy, fast & reliable.",
+                "Support speed – 4.0 m/s.",
+                "Support traditional Group control and DDS – Destination Dispatching System control & IOT.",
+                "LIFT Debugging from COP by connecting programming tool in COP Board.",
+                "Support one main Contactor solution.",
+                "Support Geared (Asynchronous) and Gearless (Synchronous) motor.",
+                "Sin /Cos. Endat, ABZ Incremental Resolver Interface.",
+                "Support Auto Door & Manual Door Lift Logic.",
+                "Use PIM module, lower loss in switch on and off and longer lifetime.",
+                "Creative zero speed torque compensation technology provides the elevators with good starting ride quality without installing weighing devices.",
+                "Close loop vector brings higher performance in control.",
+                "New PWM dead - zone compensation technology brings less energy loss.",
+                "Dynamic PWM carrier modulation technology brings less motor noise."
+              ]
+            }
+          ],
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>AS380 Based Integrated Control Panel</td><td>INTL-380-64L</td><td>64 Landing Full Collective</td><td><ul><li>Customized Control Panel Enclosure for MRL application.</li><li>Pre Door opening.</li><li>Group / Duplex Control.</li><li>Double Door Function.</li><li>DDS - Destination Dispatching System control.</li><li>IOT - Internet of Things for remote monitoring of LIFT.</li><li>Community Monitoring System.</li></ul></td></tr></tbody></table>",
+          "hasContent": true
+        },
+        {
+          "slug": "mrl-control-panel",
+          "name": "MRL Control Panel",
+          "wpId": "3790",
+          "images": [
+            "/images/products/catalog/serial-can-bus-type-controller02.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Perfect integration for Control Logic & V3F drive of elevator leads to compact structure, few wiring, high reliability, easy operation & cost efficiency.",
+                "Double 32 - bit MCU combines the elevator control and motor control",
+                "Direct to Floor Landing Give jerk less starting & stopping",
+                "Full featured LCD Keyboard tool for programming & Debugging",
+                "Analog Weighing Device Interface.",
+                "Redundant safety design, Double safety protection for control & Drive.",
+                "CAN Bus communication for COP, LOP & other accessories make the whole system rugged, easy, fast & reliable.",
+                "Support speed – 4.0 m/s.",
+                "Support traditional Group control and DDS – Destination Dispatching System control & IOT.",
+                "LIFT Debugging from COP by connecting programming tool in COP Board.",
+                "Support one main Contactor solution.",
+                "Support Geared (Asynchronous) and Gearless (Synchronous) motor.",
+                "Sin /Cos. Endat, ABZ Incremental Resolver Interface.",
+                "Support Auto Door & Manual Door Lift Logic.",
+                "Use PIM module, lower loss in switch on and off and longer lifetime.",
+                "Creative zero speed torque compensation technology provides the elevators with good starting ride quality without installing weighing devices.",
+                "Close loop vector brings higher performance in control.",
+                "New PWM dead - zone compensation technology brings less energy loss.",
+                "Dynamic PWM carrier modulation technology brings less motor noise."
+              ]
+            }
+          ],
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>AS380 Based Integrated Control Panel</td><td>INTL-380-64L</td><td>64 Landing Full Collective</td><td><ul><li>Customized Control Panel Enclosure for MRL application.</li><li>Pre Door opening.</li><li>Group / Duplex Control.</li><li>Double Door Function.</li><li>DDS - Destination Dispatching System control.</li><li>IOT - Internet of Things for remote monitoring of LIFT.</li><li>Community Monitoring System.</li></ul></td></tr></tbody></table>",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "elevator-iot",
+      "products": [
+        {
+          "slug": "elevator-iot",
+          "name": "Elevator - IOT",
+          "wpId": "3791",
+          "images": [
+            "/images/products/catalog/elevator-iot01-1.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        }
+      ]
+    },
+    {
+      "slug": "ard",
+      "products": [
+        {
+          "slug": "automatic-rescue-device",
+          "name": "ARD (Automatic Rescue Device)",
+          "wpId": "3525",
+          "images": [
+            "/images/products/catalog/automatic-rescue-device01.jpg",
+            "/images/products/catalog/automatic-rescue-device02.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Suitable for Auto Door / Manual Door Lift.",
+                "High Starting Current for High Starting Torque Requirement.",
+                "Automatic Shut Down to prevent unnecessary Battery Usage.",
+                "Digital Signal processing for Pure Sinewave output with Power Efficient Low On-Resistance Easy based design.",
+                "IGBT based charging for longer battery life.",
+                "Automatic Battery Charging Cut off.",
+                "Protection against deep discharge of Battery.",
+                "Status indication on LCD / LEDs.",
+                "Available up to 30 H.P. Motor Rating."
+              ]
+            }
+          ],
+          "specHtml": "<h3>Automatic Rescue Device (ARD) for Lift</h3><p>Lift Power LP440/ LP220 is application specially designed High Starting Current type Inverter to operate the LIFT in Emergency Mode to rescue the passenger in Power fail condition.</p>",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "lift-master",
+      "products": [
+        {
+          "slug": "lift-master-door-operator-controller",
+          "name": "Lift Master - Door Operator Controller",
+          "wpId": "3526",
+          "images": [
+            "/images/products/catalog/lift-master-door-operator-controller01-1.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Becomes operational in the blink of an eye! With any kind of main controller",
+              "items": [
+                "Plug & Start The LIFT MASTER simply takes the control of the doors as soon as it is powered.",
+                "Self Learning Automatically adapts the Opening & Load parameters of loads by just your fingertip.",
+                "Flexibility By Programable Parameters Tunes to your imaginations of door functionality by its programmable parameters viz. Opening Full Speed, Opening Slow Speed, Closing Full Speed, Closing Slow Speed, Slowing distance while opening, Slowing distance while closing, Braking slop, Safety force, Open holding force, Skate speed, Close holding force, etc.",
+                "Door Status Outputs Relay Contact O/P as per the status of the door viz. Fully opened, Fully closed, Object, Obstruction.",
+                "Visibility of All Inputs, Outputs, Operations Displays the status of I/P s, O/P s, & Operations to make you more comfortable while monitoring the operation of the unit.",
+                "Safety Dual (Digital & Analog) monitoring of safety force prevents an accident while closing the door even in photo safety sensor failure condition."
+              ]
+            }
+          ],
+          "specHtml": "<table><thead><tr><th>Model</th><th>Description</th><th>Application</th></tr></thead><tbody><tr><td>LMP66 – TINY</td><td>66 Watt BLDC Motor</td><td>Suitable for Small Opening/ Light Weight Doors</td></tr><tr><td>LMP110</td><td>110 Watt BLDC Motor</td><td>Suitable for Medium – Large Opening / Medium – Heavy Weight Doors</td></tr></tbody></table>",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "synergy-auto-door",
+      "products": [
+        {
+          "slug": "2-panel-centre-opening",
+          "name": "2-Panel Centre Opening",
+          "wpId": "3798",
+          "images": [
+            "/images/products/catalog/synergy-auto-door-door-mechanism01.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism02.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism07.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism08.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism09.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Rugged Design with reduced overall Dimensions.",
+                "Belt driven Car Header for silent operation.",
+                "Wider Belt size for giving higher operating torque.",
+                "Hard Anodized Aluminium Track for quiet operation.",
+                "Dynamically Auto Learning for variable door weight & size.",
+                "Spped control of Skate–Coupler gives noiseless opening / closing.",
+                "Dedicated VVVF gives flexibility of programmable parameters to cater user choice of door operation.",
+                "Continuously monitors operating Torque to give safe operation even in failure of photosensor.",
+                "Wide input power supply range gives trouble-free operation in power fluctuation.",
+                "Long life door contacts.",
+                "Adjustable idle pulley with spring tension.",
+                "Groove less Bottom Sill Design to prevent dirt entry and giving attractive look.",
+                "Built in track cleaners & Roller cleaners for long time noiseless operation.",
+                "Easy installation & faster debugging.",
+                "Field configurable VVVF to interface with various type of main controller panels."
+              ]
+            }
+          ],
+          "specHtml": "<h3>Available Option</h3><table><thead><tr><th>Type</th><th>Available for opening (mm)</th><th>Max. Operator width (mm)</th></tr></thead><tbody><tr><td>2 Panel Centre opening</td><td>600, 650, 700, 750, 800, 850, 900, 1000, 1100, 1200, 1300, 1400</td><td>(2* Clear Opening) + 100</td></tr></tbody></table>",
+          "hasContent": true
+        },
+        {
+          "slug": "2-panel-telescopic-side-opening",
+          "name": "2-Panel Telescopic/Side Opening",
+          "wpId": "3799",
+          "images": [
+            "/images/products/catalog/synergy-auto-door-door-mechanism03.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism04.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism08.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism09.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Rugged Design with reduced overall Dimensions.",
+                "Belt driven Car Header for silent operation.",
+                "Wider Belt size for giving higher operating torque.",
+                "Hard Anodized Aluminium Track for quiet operation.",
+                "Dynamically Auto Learning for variable door weight & size.",
+                "Spped control of Skate–Coupler gives noiseless opening / closing.",
+                "Dedicated VVVF gives flexibility of programmable parameters to cater user choice of door operation.",
+                "Continuously monitors operating Torque to give safe operation even in failure of photosensor.",
+                "Wide input power supply range gives trouble-free operation in power fluctuation.",
+                "Long life door contacts.",
+                "Adjustable idle pulley with spring tension.",
+                "Built in track cleaners & Roller cleaners for long time noiseless operation.",
+                "Easy installation & faster debugging.",
+                "Field configurable VVVF to interface with various type of main controller panels."
+              ]
+            }
+          ],
+          "specHtml": "<h3>Available Option</h3><table><thead><tr><th>Type</th><th>Available for opening (mm)</th><th>Max. Operator width (mm)</th></tr></thead><tbody><tr><td>2 Panel Side Opening (Right/Left)</td><td>650, 700, 750, 800, 850, 900, 1000, 1100, 1200, 1300, 1400, 1500</td><td>(1.5* Clear opening) + 100</td></tr></tbody></table>",
+          "hasContent": true
+        },
+        {
+          "slug": "4-panel-centre-opening",
+          "name": "4-Panel Centre Opening",
+          "wpId": "3527",
+          "images": [
+            "/images/products/catalog/synergy-auto-door-door-mechanism05.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism06.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism08.jpg",
+            "/images/products/catalog/synergy-auto-door-door-mechanism09.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Rugged Design with reduced overall Dimensions.",
+                "Belt driven Car Header for silent operation.",
+                "Wider Belt size for giving higher operating torque.",
+                "Hard Anodized Aluminium Track for quiet operation.",
+                "Dynamically Auto Learning for variable door weight & size.",
+                "Spped control of Skate–Coupler gives noiseless opening / closing.",
+                "Dedicated VVVF gives flexibility of programmable parameters to cater user choice of door operation.",
+                "Continuously monitors operating Torque to give safe operation even in failure of photosensor.",
+                "Wide input power supply range gives trouble-free operation in power fluctuation.",
+                "Long life door contacts.",
+                "Adjustable idle pulley with spring tension.",
+                "Built in track cleaners & Roller cleaners for long time noiseless operation.",
+                "Easy installation & faster debugging.",
+                "Field configurable VVVF to interface with various type of main controller panels."
+              ]
+            }
+          ],
+          "specHtml": "<h3>Available Option</h3><table><thead><tr><th>Type</th><th>Available for opening (mm)</th><th>Max. Operator width (mm)</th></tr></thead><tbody><tr><td rowspan=\"2\">4 Panel Centre Openiong</td><td rowspan=\"2\">700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1800</td><td>1140mm For 700mm Opening</td></tr><tr><td>(1.5* Clear opening) + 50</td></tr></tbody></table>",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "elevator-doors",
+      "products": [
+        {
+          "slug": "elevator-doors",
+          "name": "Elevator Doors",
+          "wpId": "3528",
+          "images": [
+            "/images/products/catalog/elevator-doors01.jpg",
+            "/images/products/catalog/elevator-doors02.jpg",
+            "/images/products/catalog/elevator-doors03.jpg",
+            "/images/products/catalog/elevator-doors04.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Available in MS Powder Coated / Galvanized Powder Coated and Stainless Steel Material.",
+                "Plain SS or SS cladding over MS sheet doors.",
+                "Flush Doors, Full Vision Glass Doors, Full Glass Doors.",
+                "Different kinds of Vision Cutting patterns in Doors.",
+                "Attractive Powder Coating designs with latest technology.",
+                "Available in various kind of SS Designer sheet of material."
+              ]
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "elevator-cabin",
+      "products": [
+        {
+          "slug": "elevator-cabin",
+          "name": "Titanium Gold Designed with Stainless Steel with Finish Car",
+          "wpId": "3529",
+          "images": [
+            "/images/products/catalog/elevator-cabin01.jpg",
+            "/images/products/catalog/elevator-cabin02.jpg",
+            "/images/products/catalog/elevator-cabin03.jpg",
+            "/images/products/catalog/elevator-cabin04.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Homogeneous Bottom & Top Structure with minimum welding joints.",
+                "Available in MS Powder Coated / Galvanized Powder Coated and Stainless Steel Material.",
+                "Customized Design of Various combination of Plain S. S., Designer S. S. Sheet Material, MS Powder Coated, etc."
+              ]
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        },
+        {
+          "slug": "elevator-cabin-stainless-steel-with-mirror-finish-car",
+          "name": "Stainless Steel with Mirror Finish Car",
+          "wpId": "3718",
+          "images": [
+            "/images/products/catalog/elevator-cabin02.jpg",
+            "/images/products/catalog/elevator-cabin03.jpg",
+            "/images/products/catalog/elevator-cabin04.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Homogeneous Bottom & Top Structure with minimum welding joints.",
+                "Available in MS Powder Coated / Galvanized Powder Coated and Stainless Steel Material.",
+                "Customized Design of Various combination of Plain S. S., Designer S. S. Sheet Material, MS Powder Coated, etc."
+              ]
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        },
+        {
+          "slug": "elevator-cabin-stainless-steel-with-m-s-coated-car",
+          "name": "Stainless Steel with M S Coated Car",
+          "wpId": "3719",
+          "images": [
+            "/images/products/catalog/elevator-cabin03.jpg",
+            "/images/products/catalog/elevator-cabin02.jpg",
+            "/images/products/catalog/elevator-cabin04.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Homogeneous Bottom & Top Structure with minimum welding joints.",
+                "Available in MS Powder Coated / Galvanized Powder Coated and Stainless Steel Material.",
+                "Customized Design of Various combination of Plain S. S., Designer S. S. Sheet Material, MS Powder Coated, etc."
+              ]
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        },
+        {
+          "slug": "elevator-cabin-full-glass-capsule-car-square",
+          "name": "Elevator Cabin (Full Glass Capsule Car Square)",
+          "wpId": "3720",
+          "images": [
+            "/images/products/catalog/elevator-cabin04.jpg",
+            "/images/products/catalog/elevator-cabin02.jpg",
+            "/images/products/catalog/elevator-cabin03.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Homogeneous Bottom & Top Structure with minimum welding joints.",
+                "Available in MS Powder Coated / Galvanized Powder Coated and Stainless Steel Material.",
+                "Customized Design of Various combination of Plain S. S., Designer S. S. Sheet Material, MS Powder Coated, etc."
+              ]
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "elevator-display",
+      "products": [
+        {
+          "slug": "xn-1000-led-segment-display",
+          "name": "XN-1000-LED Segment Display",
+          "wpId": "3806",
+          "images": [
+            "/images/products/catalog/elevator-display-xenon02.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xn-2000-dot-matrix-display",
+          "name": "XN-2000-DOT Matrix Display",
+          "wpId": "3807",
+          "images": [
+            "/images/products/catalog/elevator-display-xenon01.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xn-2100-dot-matrix-display",
+          "name": "XN-2100-DOT Matrix Display",
+          "wpId": "3808",
+          "images": [
+            "/images/products/catalog/elevator-display-xenon07.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xn-3000-dot-matrix-display",
+          "name": "XN-3000-DOT Matrix Display",
+          "wpId": "3810",
+          "images": [
+            "/images/products/catalog/elevator-display-xenon05.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xn-4000-date-time-temperature-display",
+          "name": "XN-4000-Date/ Time/ Temperature Display",
+          "wpId": "3811",
+          "images": [
+            "/images/products/catalog/elevator-display-xenon06.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xlcd-01-monochrome-lcd-display",
+          "name": "XLCD-01-Monochrome LCD Display",
+          "wpId": "3812",
+          "images": [
+            "/images/products/catalog/elevator-display-xenon03.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xlcd-02-monochrome-lcd-display",
+          "name": "XLCD-02-Monochrome LCD Display",
+          "wpId": "3813",
+          "images": [
+            "/images/products/catalog/elevator-display-xenon04.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xtft-043-tft-display",
+          "name": "XTFT-043-TFT Display",
+          "wpId": "3815",
+          "images": [
+            "/images/products/catalog/xtft-043-tft-display1.jpg",
+            "/images/products/catalog/xtft-043-tft-display2.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xtft-056-tft-display",
+          "name": "XTFT-056-TFT Display",
+          "wpId": "3825",
+          "images": [
+            "/images/products/catalog/xtft-056-tft-display1.jpg",
+            "/images/products/catalog/xtft-056-tft-display2.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xtft-070-tft-display",
+          "name": "XTFT-070-TFT Display",
+          "wpId": "3826",
+          "images": [
+            "/images/products/catalog/xtft-070-tft-display1.jpg",
+            "/images/products/catalog/xtft-070-tft-display2.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "xtab-smart-display-with-audio",
+          "name": "XTAB-Smart Display With Audio",
+          "wpId": "3827",
+          "images": [
+            "/images/products/catalog/xtab-smart-display-with-audio1.jpg",
+            "/images/products/catalog/xtab-smart-display-with-audio2.jpg",
+            "/images/products/catalog/xtab-smart-display-with-audio3.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Customized Android Application with wireless connectivity.",
+                "User Friendly software menu for Designing Display.",
+                "Customized Audio Announcement with Music.",
+                "Automatic Charger Control for Tablet.",
+                "Parallel/ Serial Interface with main controller."
+              ]
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "cop-lop",
+      "products": [
+        {
+          "slug": "cop-lop",
+          "name": "COP/LOP",
+          "wpId": "3532",
+          "images": [
+            "/images/products/catalog/cop-lop1.jpg",
+            "/images/products/catalog/cop-lop2.jpg",
+            "/images/products/catalog/cop-lop3.jpg",
+            "/images/products/catalog/cop-lop4.jpg",
+            "/images/products/catalog/cop-lop5.jpg",
+            "/images/products/catalog/cop-lop6.jpg",
+            "/images/products/catalog/cop-lop7.jpg",
+            "/images/products/catalog/cop-lop8.jpg",
+            "/images/products/catalog/cop-lop9.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        }
+      ]
+    },
+    {
+      "slug": "touch-cop-lop",
+      "products": [
+        {
+          "slug": "touch-cop-lop",
+          "name": "Touch COP/LOP",
+          "wpId": "3533",
+          "images": [
+            "/images/products/catalog/touch-cop-lop1.jpg",
+            "/images/products/catalog/touch-cop-lop2.jpg",
+            "/images/products/catalog/touch-cop-lop3.jpg",
+            "/images/products/catalog/touch-cop-lop4.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "C-TOUCH - Salient Features",
+              "items": [
+                "Feel of Touch with Low Cost",
+                "Touch Sensing Principal with built-in Digital Signal Processing.",
+                "Auto Calibration feature for consistent performance in moist weather.",
+                "Flat Surface with customized shapes & sizes of the keys.",
+                "High Bright bi-color LED Backlighting for Call Registration.",
+                "Free from mechanical wear & tare of button contacts.",
+                "Customized Legend printing with Name, Logo etc.",
+                "Open collector o/p for a recognized key press.",
+                "Accepts Open collector o/p for call registration indicaton.",
+                "On/Off type button functionality for LIGHT & FAN",
+                "Available with Seven Segment, Dot Matrix, Mono LCD, Full Colour TFT.",
+                "Parallel / Serial Interface option available."
+              ]
+            },
+            {
+              "heading": "E-SENSE - Salient Features",
+              "items": [
+                "Customized Android Application with wireless connectivity.",
+                "User Friendly software menu for Designing COP Appearance.",
+                "Suits to any size Android Tablet IE 7”, 8”, 10”, 14”.",
+                "Elegant Looking Button Area with customized Button Appearance.",
+                "Short Circuit Proof o/p for recognized Button Press.",
+                "Isolated Open Collector Interface for Call Registration Lights.",
+                "Latch (On/Off) type Button functionality for FAN/LIGHT",
+                "Floor Position & Direction & other status Indication.",
+                "Customized Audio Announcement with Music.",
+                "Automatic Charger Control for Tablet.",
+                "Parallel / Serial Interface with main controller."
+              ]
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "slug": "voice-announcing-systems",
+      "products": [
+        {
+          "slug": "fa-50-chip-based-voice-ann-system",
+          "name": "FA-50-Chip Based Voice Ann. System",
+          "wpId": "3802",
+          "images": [
+            "/images/products/catalog/voice-announcing-systems02.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "fa-250-mp3-voice-ann-system",
+          "name": "FA-250-Mp3 Voice Ann. System",
+          "wpId": "3803",
+          "images": [
+            "/images/products/catalog/voice-announcing-systems01.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "close-door-announcer",
+          "name": "Close Door Announcer",
+          "wpId": "3804",
+          "images": [
+            "/images/products/catalog/voice-announcing-systems04.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "elevator-gong",
+          "name": "Elevator Gong",
+          "wpId": "3805",
+          "images": [
+            "/images/products/catalog/voice-announcing-systems06.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        }
+      ]
+    },
+    {
+      "slug": "elevator-kit-accessories",
+      "products": [
+        {
+          "slug": "blower-fan",
+          "name": "Blower Fan",
+          "wpId": "3530",
+          "images": [
+            "/images/products/catalog/elevator-kit-accessories01.jpg",
+            "/images/products/catalog/elevator-kit-accessories02.jpg",
+            "/images/products/catalog/elevator-kit-accessories03.jpg",
+            "/images/products/catalog/elevator-kit-accessories04.jpg",
+            "/images/products/catalog/elevator-kit-accessories05.jpg",
+            "/images/products/catalog/elevator-kit-accessories06.jpg",
+            "/images/products/catalog/elevator-kit-accessories07.jpg",
+            "/images/products/catalog/elevator-kit-accessories08.jpg",
+            "/images/products/catalog/elevator-kit-accessories09.jpg",
+            "/images/products/catalog/elevator-kit-accessories10.jpg",
+            "/images/products/catalog/elevator-kit-accessories11.jpg",
+            "/images/products/catalog/elevator-kit-accessories12.jpg",
+            "/images/products/catalog/elevator-kit-accessories13.jpg",
+            "/images/products/catalog/elevator-kit-accessories14.jpg",
+            "/images/products/catalog/elevator-kit-accessories15.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "round-fan",
+          "name": "Round Fan",
+          "wpId": "3723",
+          "images": [
+            "/images/products/catalog/elevator-kit-accessories02.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        },
+        {
+          "slug": "led-lights",
+          "name": "LED Lights",
+          "wpId": "3724",
+          "images": [
+            "/images/products/catalog/elevator-kit-accessories03.jpg"
+          ],
+          "featureGroups": [],
+          "specHtml": "",
+          "hasContent": false
+        }
+      ]
+    },
+    {
+      "slug": "step-products",
+      "products": [
+        {
+          "slug": "step-products",
+          "name": "STEP Products",
+          "wpId": "3535",
+          "images": [
+            "/images/products/catalog/step-products01.jpg",
+            "/images/products/catalog/step-products02.jpg",
+            "/images/products/catalog/step-products03.jpg",
+            "/images/products/catalog/step-products04.jpg",
+            "/images/products/catalog/step-products05.jpg"
+          ],
+          "featureGroups": [
+            {
+              "heading": "Salient Features",
+              "items": [
+                "Attractive & Sturdy Design for larger Application.",
+                "Machine Room Type, MRL Type & Customised Enclosures.",
+                "Digital Voltage Protection Relay to protect control system against Input Voltage fluctuation.",
+                "Mains Isolated supply for Field Interlocking, Brake & CAM using Isolation control transformer.",
+                "Line chock to protect VVVF.",
+                "Natural cooling OR Forced cooling to prevent heating inside the control room.",
+                "Stable Power Supply - SMPS with EMI / RFI noise filter.",
+                "STOP, Auto / Inspection command section to operate LIFT from control panel."
+              ],
+              "note": "Download Brochure"
+            }
+          ],
+          "specHtml": "",
+          "hasContent": true
+        }
+      ]
+    }
+  ]
+}

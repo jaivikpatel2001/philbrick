@@ -185,6 +185,28 @@
     960,
     1280
   ],
+  "/images/home/hero-exploration/environment/hero-sky-day.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/home/hero-exploration/environment/hero-sky-night.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/home/hero-exploration/environment/hero-tower-day.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/home/hero-exploration/environment/hero-tower-night.png": [
+    384,
+    640,
+    960
+  ],
   "/images/home/hero-exploration/environment/india-tower.png": [
     384
   ],
@@ -285,6 +307,350 @@
     1080,
     1600,
     2048
+  ],
+  "/images/products/catalog/automatic-door-controller01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/automatic-door-controller02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/automatic-door-controller03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/automatic-rescue-device01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/automatic-rescue-device02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop2.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop3.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop4.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop5.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop6.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop7.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop8.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/cop-lop9.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-cabin01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-cabin02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-cabin03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-cabin04.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-display-xenon01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-display-xenon02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-display-xenon03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-display-xenon04.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-display-xenon05.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-display-xenon06.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-display-xenon07.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-doors01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-doors02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-doors03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-doors04.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-iot01-1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories04.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories05.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories06.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories07.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories08.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories09.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories10.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories11.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories12.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories13.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories14.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/elevator-kit-accessories15.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/hydraulic-lift-controller01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/hydraulic-lift-controller02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/lift-master-door-operator-controller01-1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/manual-door-controller01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/manual-door-controller02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/manual-door-controller03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/parallel-type-controller01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/parallel-type-controller02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/serial-can-bus-type-controller01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/serial-can-bus-type-controller02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/step-products01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/step-products02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/step-products03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/step-products04.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/step-products05.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism03.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism04.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism05.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism06.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism07.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism08.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/synergy-auto-door-door-mechanism09.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/touch-cop-lop1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/touch-cop-lop2.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/touch-cop-lop3.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/touch-cop-lop4.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/voice-announcing-systems01.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/voice-announcing-systems02.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/voice-announcing-systems04.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/voice-announcing-systems06.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtab-smart-display-with-audio1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtab-smart-display-with-audio2.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtab-smart-display-with-audio3.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtft-043-tft-display1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtft-043-tft-display2.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtft-056-tft-display1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtft-056-tft-display2.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtft-070-tft-display1.jpg": [
+    320,
+    640
+  ],
+  "/images/products/catalog/xtft-070-tft-display2.jpg": [
+    320,
+    640
   ],
   "/images/products/cop-lop/cop-lop.png": [
     384,

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FiCheck } from "react-icons/fi";
 import { PageHero } from "@/sections/shared/PageHero";
 import { TechShowcase } from "@/sections/shared/TechShowcase";
 import { CTASection } from "@/sections/shared/CTASection";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProductCard } from "@/components/cards/ProductCard";
+import { ProductDetail } from "@/sections/products/ProductDetail";
+import { categoryProducts, productImage } from "@/data/catalog";
 import {
   getCategory,
   categoryHref,
@@ -52,6 +53,13 @@ export default async function CategoryPage({ params }: Props) {
     description: "",
   }));
 
+  /* Categories the client's menu links to directly (Elevator Doors, COP/LOP,
+     Elevator Cabin…) have no submenu, so their real product content — photos,
+     salient features, specification tables — belongs on this page rather than
+     behind another click. Categories that DO have a submenu keep the card grid. */
+  const inlineProducts = cat.children?.length ? [] : categoryProducts(cat.slug);
+  const heroImage = productImage(cat.slug, cat.image);
+
   return (
     <ReleaseGate route={categoryHref(cat.slug)} label={cat.name}>
       <JsonLd data={productSchema(cat, categoryHref(cat.slug))} />
@@ -67,7 +75,7 @@ export default async function CategoryPage({ params }: Props) {
         eyebrow={cat.category}
         title={cat.name}
         description={cat.tagline ?? cat.description}
-        image={cat.image}
+        image={heroImage}
         imageAlt={cat.name}
         breadcrumb={[
           { label: "Home", href: "/" },
@@ -76,19 +84,43 @@ export default async function CategoryPage({ params }: Props) {
         ]}
       />
 
-      {/* Overview */}
-      <section className="section">
-        <div className="container--wide">
-          <TechShowcase
-            eyebrow="Overview"
-            title={cat.tagline ?? cat.name}
-            description={cat.longDescription ?? cat.description}
-            image={cat.image}
-            imageAlt={cat.name}
-            features={highlightFeatures}
-          />
-        </div>
-      </section>
+      {/* Overview — only where a card grid follows; a self-contained category
+          leads with the product itself instead of an abstract intro. */}
+      {inlineProducts.length === 0 && (
+        <section className="section">
+          <div className="container--wide">
+            <TechShowcase
+              eyebrow="Overview"
+              title={cat.tagline ?? cat.name}
+              description={cat.longDescription ?? cat.description}
+              image={cat.image}
+              imageAlt={cat.name}
+              features={highlightFeatures}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Self-contained category: the client's own product content, inline */}
+      {inlineProducts.length > 0 && (
+        <section className="section">
+          <div className="container--wide">
+            <div className={styles.inlineProducts}>
+              {inlineProducts.map((product, i) => (
+                <ProductDetail
+                  key={product.slug}
+                  product={product}
+                  description={
+                    i === 0 ? (cat.longDescription ?? cat.description) : ""
+                  }
+                  showName={inlineProducts.length > 1}
+                  priority={i === 0}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Child products (the range) */}
       {cat.children && cat.children.length > 0 && (
@@ -111,23 +143,6 @@ export default async function CategoryPage({ params }: Props) {
           </div>
         </section>
       )}
-
-      {/* Standalone category — highlights band instead of a child range */}
-      {(!cat.children || cat.children.length === 0) &&
-        cat.highlights &&
-        cat.highlights.length > 0 && (
-          <section className={`section--sm ${styles.highlightBand}`}>
-            <div className="container--wide">
-              <ul className={styles.highlights}>
-                {cat.highlights.map((h) => (
-                  <li key={h} data-reveal="up">
-                    <FiCheck /> {h}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
 
       <CTASection
         title={`Interested in ${cat.name}?`}

@@ -1,0 +1,248 @@
+/* =============================================================================
+   PRODUCT DETAIL BODY
+
+   Two-column on desktop (photography left, copy right), stacked on tablet and
+   below. The specification tables are the client's own WordPress markup, so the
+   styling here has to work on arbitrary table shapes: merged cells, nested
+   option lists, and tables far wider than the column.
+   ========================================================================== */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.media {
+  position: sticky;
+  top: calc(var(--nav-h) + 1.5rem);
+}
+
+/* No features published: stack copy over photography instead of leaving an
+   empty half-row. The gallery is capped so a lone studio shot does not sprawl. */
+.topSolo {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+
+.topSolo .info {
+  order: -1;
+  max-width: var(--container-prose);
+  text-align: center;
+}
+
+.topSolo .media {
+  position: static;
+  width: min(100%, 34rem);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.name {
+  font-size: var(--fs-h2);
+  letter-spacing: var(--ls-tight);
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-snug);
+  color: var(--text-secondary);
+}
+
+/* ----- salient features ----- */
+.featureBlock {
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.featureHeading {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+}
+
+.featureNote {
+  color: var(--text-secondary);
+  margin-bottom: 0.9rem;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+}
+
+.featureList li {
+  position: relative;
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+  line-height: var(--lh-snug);
+}
+
+/* machined tick rather than a bullet, matching the editorial direction */
+.featureList li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.7rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ----- specification tables (client's WordPress markup) ----- */
+.specs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.specsHeading {
+  font-size: var(--fs-h3);
+  letter-spacing: var(--ls-tight);
+}
+
+/* the tables are wide; let them scroll inside their own box so the page never
+   scrolls horizontally on mobile */
+.specsBody {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.specsBody table {
+  width: 100%;
+  min-width: 44rem;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.specsBody thead th {
+  background: var(--surface-2);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  text-align: left;
+  letter-spacing: var(--ls-snug);
+  white-space: nowrap;
+}
+
+.specsBody th,
+.specsBody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+  border-right: 1px solid var(--hairline);
+  vertical-align: top;
+  color: var(--text-secondary);
+  line-height: var(--lh-snug);
+}
+
+.specsBody th:last-child,
+.specsBody td:last-child {
+  border-right: none;
+}
+
+.specsBody tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* merged "Application"/"Options" cells read as the anchor of their group */
+.specsBody td[rowspan] {
+  background: var(--surface-2);
+  color: var(--text-primary);
+  font-weight: var(--fw-medium);
+}
+
+.specsBody td ul,
+.specsBody td ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+}
+
+.specsBody td li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.specsBody td li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* a few products carry prose instead of a table (e.g. the ARD) */
+.specsBody h3,
+.specsBody h4,
+.specsBody h5 {
+  font-size: var(--fs-h3);
+  margin-bottom: 0.6rem;
+}
+
+.specsBody p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  max-width: var(--container-prose);
+}
+
+.specsBody > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.2rem;
+}
+
+.specsBody > ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.specsBody > ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.7rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .media {
+    position: static;
+  }
+
+  .specsBody table {
+    min-width: 34rem;
+  }
+}

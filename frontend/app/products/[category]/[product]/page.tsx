@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageHero } from "@/sections/shared/PageHero";
-import { TechShowcase } from "@/sections/shared/TechShowcase";
 import { CTASection } from "@/sections/shared/CTASection";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProductCard } from "@/components/cards/ProductCard";
+import { ProductDetail } from "@/sections/products/ProductDetail";
+import { getCatalogProduct, productImage } from "@/data/catalog";
 import {
   getCategory,
   getProduct,
@@ -48,15 +49,13 @@ export default async function ProductPage({ params }: Props) {
   const p = getProduct(category, product);
   if (!cat || !p) notFound();
 
+  /* The client's real photography, features and specification tables. */
+  const catalog = getCatalogProduct(product);
+  const hero = productImage(product, p.image);
+
   const related = (cat.children ?? [])
     .filter((c) => c.slug !== p.slug)
     .slice(0, 3);
-
-  const features = (p.highlights ?? []).slice(0, 4).map((h) => ({
-    iconName: "FiCheckCircle",
-    title: h,
-    description: "",
-  }));
 
   return (
     <ReleaseGate route={productHref(category, product)} label={p.name}>
@@ -74,7 +73,7 @@ export default async function ProductPage({ params }: Props) {
         eyebrow={cat.name}
         title={p.name}
         description={p.description}
-        image={p.image}
+        image={hero}
         imageAlt={p.name}
         breadcrumb={[
           { label: "Home", href: "/" },
@@ -84,39 +83,16 @@ export default async function ProductPage({ params }: Props) {
         ]}
       />
 
-      {/* Overview */}
-      <section className="section">
-        <div className="container--wide">
-          <TechShowcase
-            eyebrow="Overview"
-            title={p.tagline ?? p.name}
-            description={p.longDescription ?? p.description}
-            image={p.image}
-            imageAlt={p.name}
-            features={features}
-          />
-        </div>
-      </section>
-
-      {/* Specifications — only when verified specs exist */}
-      {p.specs && p.specs.length > 0 && (
-        <section className={`section ${styles.specSection}`}>
+      {/* Photography, salient features and the client's specification tables */}
+      {catalog && (
+        <section className="section">
           <div className="container--wide">
-            <div className={styles.specLayout}>
-              <SectionHeader
-                eyebrow="Technical"
-                title="Specifications"
-                description="Indicative figures. Final specifications are confirmed during engineering."
-              />
-              <dl className={styles.specs}>
-                {p.specs.map((spec) => (
-                  <div key={spec.label} className={styles.specRow} data-reveal="up">
-                    <dt>{spec.label}</dt>
-                    <dd>{spec.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+            <ProductDetail
+              product={catalog}
+              description={p.longDescription ?? p.description}
+              showName={false}
+              priority
+            />
           </div>
         </section>
       )}

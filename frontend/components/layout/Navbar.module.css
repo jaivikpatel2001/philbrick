@@ -56,10 +56,12 @@
   padding: 0.6rem 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.74rem;
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-semibold);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  /* full-strength ink rather than the muted secondary tone: at this size and
+     letter-spacing the mid grey was the weakest text in the header */
+  color: var(--text-primary);
   transition: color var(--dur) var(--ease-out);
 }
 .navLink::after {
@@ -84,17 +86,29 @@
 .navLinkActive {
   color: var(--text-primary);
 }
+/* The caret is a 6px box with two borders, rotated into a chevron. It flips
+   about its own centre: `rotate()` runs LAST in both states so the optical
+   nudge is applied in unrotated space — writing `rotate() translateY()` moved
+   the arrow diagonally along the rotated axis, which is why it drifted upward
+   when it flipped. The nudge is mirrored (-1px / +1px) because the ink sits in
+   the lower half of the box when the chevron points down and the upper half
+   when it points up. */
 .caret {
   width: 6px;
   height: 6px;
   border-right: 1.5px solid currentColor;
   border-bottom: 1.5px solid currentColor;
-  transform: rotate(45deg) translateY(-1px);
+  transform-origin: center;
+  transform: translateY(-1px) rotate(45deg);
   opacity: 0.6;
   transition: transform var(--dur) var(--ease-out);
 }
-.navItem:hover .caret {
-  transform: rotate(225deg) translateY(-1px);
+
+/* The caret reflects menu STATE, so it flips when the menu is open — not on
+   hover, which used to point it upwards while the menu was still closed. */
+[aria-expanded="true"] .caret {
+  transform: translateY(1px) rotate(225deg);
+  opacity: 1;
 }
 
 /* ----- Right actions ----- */

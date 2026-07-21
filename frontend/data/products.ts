@@ -343,6 +343,33 @@ export const PRODUCT_TREE: ProductNode[] = [
         image: leaf("elevator-display", "xtft-043-tft-display"),
         released: false,
       },
+      {
+        slug: "xtft-056-tft-display",
+        name: "XTFT-056 TFT Display",
+        category: "Elevator Display",
+        description:
+          "A 5.6-inch full-colour TFT display for floor, direction and multimedia signalling in the car or at the landing.",
+        image: leaf("elevator-display", "xtft-056-tft-display"),
+        released: false,
+      },
+      {
+        slug: "xtft-070-tft-display",
+        name: "XTFT-070 TFT Display",
+        category: "Elevator Display",
+        description:
+          "A 7-inch full-colour TFT display, the largest in the Xenon TFT range, for high-visibility signalling and media.",
+        image: leaf("elevator-display", "xtft-070-tft-display"),
+        released: false,
+      },
+      {
+        slug: "xtab-smart-display-with-audio",
+        name: "XTAB Smart Display with Audio",
+        category: "Elevator Display",
+        description:
+          "A smart display that combines full-colour signalling with an integrated audio announcing system in a single unit.",
+        image: leaf("elevator-display", "xtab-smart-display-with-audio"),
+        released: false,
+      },
     ],
   },
   {
@@ -400,7 +427,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     released: true,
     children: [
       {
-        slug: "fa-50-chip-based",
+        slug: "fa-50-chip-based-voice-ann-system",
         name: "FA-50 Chip Based Voice Announcement System",
         category: "Voice Announcing Systems",
         description:
@@ -409,7 +436,7 @@ export const PRODUCT_TREE: ProductNode[] = [
         released: false,
       },
       {
-        slug: "fa-250-mp3",
+        slug: "fa-250-mp3-voice-ann-system",
         name: "FA-250 MP3 Voice Announcement System",
         category: "Voice Announcing Systems",
         description:

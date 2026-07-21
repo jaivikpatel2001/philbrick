@@ -477,11 +477,21 @@ main>section:nth-of-type(even) {
   border-radius: var(--radius-pill);
   /* genuinely translucent, not a solid bar: thin the glass token down so the
      photo reads through it, and let the blur do the legibility work */
-  background: color-mix(in srgb, var(--surface-glass) 58%, transparent);
+  /* No fill at all — the client found any tint distracting. The pill is
+     defined purely by the blur behind it plus a hairline edge, so whatever is
+     underneath shows through frosted rather than tinted. */
+  background: transparent;
   /* declare ONLY the standard property — the CSS minifier auto-prefixes it.
      Writing the -webkit- alias by hand makes it dedupe to the prefixed form
      alone, which modern Chrome no longer supports, and the blur silently dies. */
-  backdrop-filter: saturate(190%) blur(5px);
+  /* carries the whole effect now that there is no fill, so it needs more than
+     the 5px that a tinted pill could get away with */
+  /* Blur ONLY — no saturation boost. `saturate()` made sense when the bar had
+     a tinted fill to sit under, but with no fill it just recolours whatever is
+     behind: it turned the pale daylight sky into vivid electric blue that no
+     longer matched the photo. Dark theme hid the fault because a near-black
+     backdrop has almost no saturation to amplify. */
+  backdrop-filter: blur(5px);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
   padding-inline: clamp(1rem, 2.2vw, 1.6rem);
@@ -491,10 +501,9 @@ main>section:nth-of-type(even) {
     border-color var(--dur) var(--ease-out);
 }
 
-/* a touch more presence once the page scrolls under it — background only, the
-   height deliberately stays put */
+/* a touch more presence once the page scrolls under it. No fill here either —
+   only the shadow and edge deepen, so the bar stays purely frosted. */
 [data-nav="float"] header[data-scrolled="true"]>.container--wide {
-  background: color-mix(in srgb, var(--surface-glass) 72%, transparent);
   box-shadow: var(--shadow-lg);
   border-color: var(--border-strong, var(--border));
 }
@@ -505,4 +514,19 @@ main>section:nth-of-type(even) {
   [data-nav="float"] header[data-scrolled]>.container--wide {
     width: 100%;
   }
+}
+/* With no fill behind it, the floating bar sits directly on the hero
+   photograph before the page scrolls — where light theme's dark nav text
+   measured 1.45:1, effectively invisible. So the links go light while the bar
+   is over the hero and hand back to the theme tokens once the page scrolls
+   under it (7.50:1 there). Targets elements, not the Navbar's hashed classes. */
+[data-nav="float"] header[data-scrolled="false"] nav a,
+[data-nav="float"] header[data-scrolled="false"] nav button {
+  color: rgba(255, 255, 255, 0.96);
+}
+
+[data-nav="float"] header[data-scrolled="false"] nav a:hover,
+[data-nav="float"] header[data-scrolled="false"] nav button:hover,
+[data-nav="float"] header[data-scrolled="false"] nav [aria-expanded="true"] {
+  color: #fff;
 }
