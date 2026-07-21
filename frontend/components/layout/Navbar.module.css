@@ -56,10 +56,12 @@
   padding: 0.6rem 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.74rem;
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-semibold);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  /* full-strength ink rather than the muted secondary tone: at this size and
+     letter-spacing the mid grey was the weakest text in the header */
+  color: var(--text-primary);
   transition: color var(--dur) var(--ease-out);
 }
 .navLink::after {

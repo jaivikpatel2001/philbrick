@@ -1706,7 +1706,8 @@
    and only the middle characters are occluded */
 .title17 {
   max-width: none;
-  font-size: clamp(2.8rem, 1.4rem + 5vw, 5.4rem);
+  font-size: clamp(3rem, 1.2rem + 7.6vw, 8.2rem);
+  line-height: 0.98;
 }
 
 /* the middle column is the clear channel the tower rises through */
@@ -1717,18 +1718,50 @@
 .flank17::before {
   content: "";
   position: absolute;
-  inset: -3rem -3vw;
+  /* Deliberately far wider than the row. A two-stop radial centred at 17% with
+     a 46% radius never reached transparent before the element's own left edge,
+     so the box boundary showed as a hard vertical seam over the dark skyline.
+     The extra bleed gives each gradient room to finish inside its own box. */
+  inset: -5rem -28vw;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(46% 72% at 17% 50%, rgba(255, 255, 255, 0.92), transparent 76%),
-    radial-gradient(40% 72% at 86% 50%, rgba(255, 255, 255, 0.92), transparent 76%);
+    radial-gradient(
+      32% 58% at 30% 50%,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.72) 28%,
+      rgba(255, 255, 255, 0.4) 52%,
+      rgba(255, 255, 255, 0.14) 74%,
+      transparent 92%
+    ),
+    radial-gradient(
+      30% 58% at 71% 50%,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.72) 28%,
+      rgba(255, 255, 255, 0.4) 52%,
+      rgba(255, 255, 255, 0.14) 74%,
+      transparent 92%
+    );
 }
 
 :global([data-theme="dark"]) .flank17::before {
   background:
-    radial-gradient(46% 72% at 17% 50%, rgba(5, 9, 15, 0.88), transparent 76%),
-    radial-gradient(40% 72% at 86% 50%, rgba(5, 9, 15, 0.88), transparent 76%);
+    radial-gradient(
+      32% 58% at 30% 50%,
+      rgba(5, 9, 15, 0.88) 0%,
+      rgba(5, 9, 15, 0.7) 28%,
+      rgba(5, 9, 15, 0.38) 52%,
+      rgba(5, 9, 15, 0.13) 74%,
+      transparent 92%
+    ),
+    radial-gradient(
+      30% 58% at 71% 50%,
+      rgba(5, 9, 15, 0.88) 0%,
+      rgba(5, 9, 15, 0.7) 28%,
+      rgba(5, 9, 15, 0.38) 52%,
+      rgba(5, 9, 15, 0.13) 74%,
+      transparent 92%
+    );
 }
 
 .flank17 {
@@ -1753,7 +1786,9 @@
 }
 
 .trust17 .badgeLabel {
-  color: var(--text-secondary);
+  /* secondary measured 4.30:1 against the brighter band the enlarged layout
+     pushed it into — primary clears AA with room to spare */
+  color: var(--text-primary);
 }
 
 .trust17 {
@@ -1772,7 +1807,7 @@
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  height: min(86%, 92svh);
+  height: min(112%, 108svh);
   z-index: 3;
   pointer-events: none;
 }
@@ -1818,4 +1853,143 @@
   .fg17Img {
     transition: none;
   }
+}
+
+/* ----- draggable tower -----
+   The plate itself stays click-through; only this narrow grip over the visible
+   building takes pointer events, so the rest of the hero (headline, lead,
+   badges) is still selectable and the transparent parts of the PNG never
+   swallow a click. Sized to the building rather than the image, which is mostly
+   empty alpha. The offset lives in component state, so a refresh recentres it. */
+.grip17 {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: clamp(90px, 11vw, 160px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+.grip17:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+.fg17[data-dragging] .grip17 {
+  cursor: grabbing;
+}
+
+/* no easing while the pointer drives it, or the tower lags the cursor */
+.fg17 {
+  transition: transform 0.45s var(--ease-out);
+}
+
+.fg17[data-dragging] {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg17 {
+    transition: none;
+  }
+}
+
+/* ----- variant 17 scrim -----
+   Client direction: NO white overlay in light theme — the daylight photograph
+   shows completely unveiled. Dark theme keeps its veil, where the wash darkens
+   rather than whitens and is what keeps white copy legible over lit windows.
+   Separate from .scrim16 so variant16 is untouched. */
+.scrim17 {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+:global([data-theme="dark"]) .scrim17 {
+  background:
+    radial-gradient(
+      78% 86% at 50% 48%,
+      rgba(5, 9, 15, 0.7),
+      rgba(5, 9, 15, 0.46) 52%,
+      rgba(5, 9, 15, 0.12) 78%,
+      transparent 92%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(5, 9, 15, 0.56) 0%,
+      rgba(5, 9, 15, 0.1) 26%,
+      transparent 55%,
+      rgba(5, 9, 15, 0.52) 100%
+    );
+}
+
+/* the per-block WHITE wash is gone in light theme */
+.flank17::before {
+  background: none;
+}
+
+/* ----- light theme: white copy on a soft DARK veil -----
+   The client wants no white overlay, but with the photograph unveiled the dark
+   copy measured 1.0–1.2:1 against the glass towers — invisible. So light theme
+   now borrows the dark-theme treatment: the type goes white and the veil
+   DEEPENS the photo instead of whitening it, which keeps the daylight shot
+   vivid rather than washed out. Dark theme is unchanged. */
+:global([data-theme="light"]) .scrim17 {
+  /* A single bottom-up linear wash instead of a radial: it anchors the copy to
+     the base of the frame and fades out above the headline, so the sky and the
+     tower's crown stay completely clear. */
+  background: linear-gradient(
+    to top,
+    rgba(6, 12, 22, 0.88) 0%,
+    rgba(6, 12, 22, 0.8) 30%,
+    rgba(6, 12, 22, 0.68) 55%,
+    rgba(6, 12, 22, 0.52) 75%,
+    /* not fully transparent at the very top: the floating navbar has no fill
+       of its own, so it needs something to sit on or its links drop to 3.5:1
+       over the bright sky */
+    rgba(6, 12, 22, 0.3) 92%,
+    rgba(6, 12, 22, 0.26) 100%
+  );
+}
+
+:global([data-theme="light"]) .flank17::before {
+  background:
+    radial-gradient(
+      32% 58% at 30% 50%,
+      rgba(6, 12, 22, 0.74) 0%,
+      rgba(6, 12, 22, 0.58) 28%,
+      rgba(6, 12, 22, 0.32) 52%,
+      rgba(6, 12, 22, 0.1) 74%,
+      transparent 92%
+    ),
+    radial-gradient(
+      30% 58% at 71% 50%,
+      rgba(6, 12, 22, 0.74) 0%,
+      rgba(6, 12, 22, 0.58) 28%,
+      rgba(6, 12, 22, 0.32) 52%,
+      rgba(6, 12, 22, 0.1) 74%,
+      transparent 92%
+    );
+}
+
+:global([data-theme="light"]) .hero17 .title,
+:global([data-theme="light"]) .hero17 .lead,
+:global([data-theme="light"]) .hero17 .badgeStat,
+:global([data-theme="light"]) .hero17 .badgeLabel {
+  color: #fff;
+}
+
+/* the brand accents lighten so they read on the veil rather than sinking into it */
+:global([data-theme="light"]) .hero17 .title em,
+:global([data-theme="light"]) .hero17 .eyebrow {
+  color: color-mix(in srgb, var(--accent) 42%, white);
+}
+
+:global([data-theme="light"]) .hero17 .eyebrow::before {
+  background: color-mix(in srgb, var(--accent) 42%, white);
 }

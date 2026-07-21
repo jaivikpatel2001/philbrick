@@ -60,6 +60,98 @@ three layer sandwich and the heading stays real markup:
   plus primary/secondary badge tones. Re-measured: lead **7.21:1**, badge stat
   **8.70:1**, badge label **4.53:1**, headline **11.79:1** left of the tower and
   **12.42:1** right of it. All pass.
+- **Scaled up on client request:** headline `clamp(2.8rem…5.4rem)` →
+  `clamp(3rem, 1.2rem + 7.6vw, 8.2rem)` with `line-height: 0.98` (127px at a
+  1440 viewport, up from ~90px), tower box 86% → 112% of the hero. The crown now
+  cuts through TWO words — "machi◼e" and "sm◼oth" — which is much closer to the
+  reference than the single-word overlap. Re-measured at the new size: headline
+  10.81:1 left of the tower and 4.59:1 right of it, lead 8.42:1; the badge label
+  had drifted into a brighter band at 4.30:1 (a marginal AA fail) so it moved
+  from `--text-secondary` to `--text-primary`, now 9.98:1.
+- **Background switched to variant16's city pair** (`hero-city-day/night.png`)
+  on client direction, replacing the open-centre `hero-sky-*` plates. The two
+  variants now share a backdrop and differ only in the foreground tower and the
+  layered headline. `hero-sky-day.png` / `hero-sky-night.png` are unused by any
+  route but kept on disk. Contrast re-measured against the denser skyline:
+  headline 11.70:1 left of the tower and 3.25:1 right of it (large text needs
+  3:1), lead 9.58:1, badge stat 6.96:1, badge label 9.13:1 — all pass, though
+  the headline's right half is now the tightest number on the page because it
+  crosses the lit tower cluster.
+- **Hard seam on the wash fixed.** Against the darker city photo the flank
+  wash showed a visible vertical edge on the left. Cause: the radial was centred
+  at 17% with a 46% radius, so it was still at roughly half alpha when it hit
+  the element's own left border and got clipped — the box boundary WAS the
+  seam, not the gradient. Fixed by bleeding the pseudo-element far wider
+  (`inset: -3rem -3vw` → `-5rem -28vw`), re-centring the two gradients at 30%
+  and 71% of that wider box, and replacing the two-stop falloff with five stops
+  so it eases out instead of ramping linearly. Contrast came out **better**, not
+  worse, because the gradients now cover the copy more evenly: lead 9.58 →
+  11.07:1, badge stat 6.96 → 8.09:1, badge label 9.13 → 10.44:1, headline right
+  of the tower 3.25 → 3.43:1.
+- **The tower is now draggable horizontally.** Offset lives in component state
+  only — deliberately NOT persisted, so a refresh recentres it, which is what
+  the client asked for. Clamped to ±34% of the viewport (±483px at 1440) so it
+  can never be dragged out of frame.
+  - **Only a narrow grip is interactive**, not the plate. `.fg17` stays
+    `pointer-events: none` and a ~156px `.grip17` over the visible building
+    re-enables them. Enabling them on the plate would have made the whole
+    full-width rectangle — mostly transparent alpha — swallow every click meant
+    for the headline. Verified: `elementFromPoint` over the headline still
+    returns the `<h1>`.
+  - `setPointerCapture` keeps the drag alive when the pointer leaves the grip,
+    wrapped in try/catch because it throws for a pointer id the browser no
+    longer considers active.
+  - Keyboard equivalent so it is not pointer-only: the grip is a focusable
+    `role="slider"`, arrows nudge 24px, Home/Escape recentre. Verified 24 → 48
+    → 0 once the transition settles.
+  - `transition: transform` for keyboard and release, disabled via
+    `[data-dragging]` while the pointer drives it so the tower does not lag the
+    cursor.
+- **Light theme reworked on client direction: no white overlay.** The white
+  scrim and the white flank washes are gone. With the photo unveiled, dark copy
+  measured **1.0–1.24:1** against the glass towers — literally invisible — so
+  light theme now borrows the dark-theme treatment: white type over a wash that
+  DEEPENS the photo instead of whitening it. Two iterations were needed; the
+  first veil left the headline at 2.4–2.5:1 because white on bright sky is as
+  weak as dark on bright glass.
+- **Scrim shape changed to a bottom-up linear gradient** (was a centred radial),
+  again on client direction: it anchors the copy to the base of the frame and
+  releases the sky. First attempt faded too early and dropped the headline to
+  **2.0:1**; the stops now hold ~0.5 alpha through the headline band. Final
+  light-theme figures: headline **4.68:1** left of the tower and **4.18:1**
+  right, lead **13.86:1**, badge label **16.90:1**.
+- **Floating navbar has no fill at all** (client: "remove background colour
+  entirely, only blur"). Both the base and scrolled rules lost their
+  `color-mix` background; the bar is now defined purely by `backdrop-filter`
+  plus a hairline edge. Nav links went `--fw-medium` → `--fw-semibold`.
+  Measured against the frosted backdrop while scrolled over the product grid:
+  **4.86:1 worst case** against a 4.5 minimum — it passes, but with only ~8%
+  margin, and the blur is currently 5px, which is now doing all the legibility
+  work alone. Raising it to 12–16px would restore headroom without adding any
+  colour back.
+- **Navbar looked electric blue in light theme — cause was `saturate(180%)`.**
+  The client reported the bar not matching the photo behind it. The backdrop
+  filter was `saturate(180%) blur(5px)`; saturation made sense when the bar had
+  a tinted fill to sit under, but with the fill removed it simply recolours
+  whatever is behind, turning the pale daylight sky vivid. Dark theme hid the
+  fault entirely because a near-black backdrop has almost no saturation to
+  amplify — which is why it "looked great" there. Now `blur(5px)` only.
+- **Knock-on: nav links then failed in light theme.** With no fill and no
+  tint, light theme's dark nav text measured **1.45:1** over the hero photo
+  (fine at 7.50:1 once scrolled over page content). Fixed by flipping the links
+  to near-white while `data-scrolled="false"` and handing back to the theme
+  tokens on scroll, plus holding a little alpha (0.26) at the very top of the
+  linear scrim so the bar has something to sit on. Two passes: white alone got
+  3.56:1, white + the scrim shoulder reaches **5.29:1**.
+- **Known, not fixed:** the Philbrick logo's "PROVIDING ELEVATOR SOLUTIONS"
+  tagline is dark ink baked into the PNG, so it sinks into the photo behind the
+  transparent bar in both themes. Needs a light variant of the asset.
+- **Sizing limit worth knowing:** the tower cannot get much wider than this. Its
+  source is a very slender building (roughly 1:7) sitting in a tall transparent
+  canvas, and because `contain` preserves aspect, width only grows with height —
+  past ~112% the crown is pushed off the top of the hero. A materially chunkier
+  tower needs either a wider building in the artwork or the transparent padding
+  trimmed off the source.
 - Mobile (≤860px) stacks the copy, centres it and drops the tower to 46% height
   at 0.55 opacity behind the text, since there is no room to flank. No
   horizontal overflow at 390px.

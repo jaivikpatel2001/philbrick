@@ -20,17 +20,24 @@
    lib/imageLoader.ts passes unknown paths through untouched, so the hero simply
    shows its gradient fallback rather than breaking.
    ========================================================================== */
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { TrustBadges } from "./TrustBadges";
 import styles from "./corporate.module.css";
 
+/** How far the tower may be dragged from centre, as a share of the viewport. */
+const DRAG_LIMIT = 0.34;
+/** Arrow-key step, in pixels. */
+const KEY_STEP = 24;
+
 const ENV = "/images/home/hero-exploration/environment";
 
-/** Background plates — open, uncluttered centre so the tower reads against sky. */
+/** Background plates. Shares variant16's city photographs (client direction)
+    rather than the open-centre sky pair, so the two variants differ only in the
+    foreground tower and the layered headline. */
 export const HERO_SKY = {
-  day: `${ENV}/hero-sky-day.png`,
-  night: `${ENV}/hero-sky-night.png`,
+  day: `${ENV}/hero-city-day.png`,
+  night: `${ENV}/hero-city-night.png`,
 } as const;
 
 /** Foreground cutouts — transparent PNGs that overlap the headline. */
@@ -47,6 +54,53 @@ export function Variant17Hero() {
     const de = document.documentElement;
     de.setAttribute("data-nav", "float");
     return () => de.removeAttribute("data-nav");
+  }, []);
+
+  /* Horizontal drag for the tower. Held in component state only, so a browser
+     refresh puts it back in the centre — deliberately NOT persisted. */
+  const [offset, setOffset] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const drag = useRef<{ pointerX: number; startOffset: number } | null>(null);
+
+  const clamp = (px: number) => {
+    const limit = window.innerWidth * DRAG_LIMIT;
+    return Math.max(-limit, Math.min(limit, px));
+  };
+
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      /* capture keeps the drag alive if the pointer leaves the grip; it throws
+         for a pointer id the browser no longer considers active */
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch {}
+      drag.current = { pointerX: e.clientX, startOffset: offset };
+      setDragging(true);
+    },
+    [offset]
+  );
+
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current) return;
+    setOffset(clamp(drag.current.startOffset + (e.clientX - drag.current.pointerX)));
+  }, []);
+
+  const endDrag = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId))
+        e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
+    drag.current = null;
+    setDragging(false);
+  }, []);
+
+  /* Keyboard equivalent, so the control is not pointer-only. */
+  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowLeft") setOffset((o) => clamp(o - KEY_STEP));
+    else if (e.key === "ArrowRight") setOffset((o) => clamp(o + KEY_STEP));
+    else if (e.key === "Home" || e.key === "Escape") setOffset(0);
+    else return;
+    e.preventDefault();
   }, []);
 
   return (
@@ -73,8 +127,9 @@ export function Variant17Hero() {
         />
       </div>
 
-      {/* z 1 — legibility veil */}
-      <div className={styles.scrim16} aria-hidden />
+      {/* z 1 — legibility veil. Dark theme only: in light the client wants the
+          photograph completely unveiled, so this paints nothing there. */}
+      <div className={styles.scrim17} aria-hidden />
 
       {/* z 2 — the headline the tower will cut across */}
       <div className={styles.stack17}>
@@ -106,9 +161,14 @@ export function Variant17Hero() {
         </div>
       </div>
 
-      {/* z 3 — tower, drawn over the headline. Click-through so it never
-          intercepts a link underneath it. */}
-      <div className={styles.fg17} aria-hidden>
+      {/* z 3 — tower, drawn over the headline. The plate stays click-through so
+          it never swallows a click meant for the copy; only the narrow grip
+          over the building itself is interactive. */}
+      <div
+        className={styles.fg17}
+        style={{ transform: `translate3d(${offset}px, 0, 0)` }}
+        data-dragging={dragging || undefined}
+      >
         <Image
           src={HERO_TOWER.day}
           alt=""
@@ -123,6 +183,24 @@ export function Variant17Hero() {
           fill
           sizes="100vw"
           className={`${styles.fg17Img} ${styles.bg16Night}`}
+        />
+
+        <div
+          className={styles.grip17}
+          role="slider"
+          tabIndex={0}
+          aria-label="Move the tower horizontally"
+          aria-orientation="horizontal"
+          aria-valuemin={-100}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(
+            (offset / (typeof window === "undefined" ? 1 : window.innerWidth * DRAG_LIMIT)) * 100
+          )}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onKeyDown={onKeyDown}
         />
       </div>
     </section>
