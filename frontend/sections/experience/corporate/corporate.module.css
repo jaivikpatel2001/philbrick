@@ -1510,3 +1510,152 @@
     transition: none;
   }
 }
+
+/* =============================================================================
+   VARIANT 16 — full-bleed city hero, CENTRED content, theme-swapped background.
+
+   No right-hand media column (client direction): one centred content block over
+   a skyline photograph. The two photos cross-fade purely in CSS by the
+   [data-theme] attribute the ThemeProvider sets on <html> before paint, so the
+   swap needs no JS and never flashes. The floating glass navbar for this page
+   lives in globals.css under [data-nav="float"].
+   ========================================================================== */
+.hero16 {
+  position: relative;
+  isolation: isolate;
+  /* the navbar floats OVER this hero, so it claims the full viewport */
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + clamp(2rem, 7vh, 5rem)) clamp(1.25rem, 5vw, 4rem)
+    clamp(2.5rem, 8vh, 5rem);
+  overflow: hidden;
+  /* fallback if a photo is missing — never looks broken */
+  background: linear-gradient(180deg, var(--section-bg-a), var(--section-bg-b));
+}
+
+.bg16 {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg16Img {
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.6s var(--ease-out);
+}
+
+/* light theme (site default) shows the day photo */
+.bg16Day {
+  opacity: 1;
+}
+
+.bg16Night {
+  opacity: 0;
+}
+
+:global([data-theme="dark"]) .bg16Day {
+  opacity: 0;
+}
+
+:global([data-theme="dark"]) .bg16Night {
+  opacity: 1;
+}
+
+/* Legibility veil. The radial has to cover the WHOLE content block (eyebrow →
+   trust row), otherwise the small grey badge labels land on bright water and
+   drop below AA. Kept soft-edged so the skyline still reads as a photograph. */
+.scrim16 {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      78% 86% at 50% 48%,
+      rgba(255, 255, 255, 0.58),
+      rgba(255, 255, 255, 0.34) 52%,
+      rgba(255, 255, 255, 0.06) 78%,
+      transparent 92%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.05) 26%,
+      transparent 55%,
+      rgba(255, 255, 255, 0.38) 100%
+    );
+}
+
+:global([data-theme="dark"]) .scrim16 {
+  background:
+    radial-gradient(
+      78% 86% at 50% 48%,
+      rgba(5, 9, 15, 0.7),
+      rgba(5, 9, 15, 0.46) 52%,
+      rgba(5, 9, 15, 0.12) 78%,
+      transparent 92%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(5, 9, 15, 0.56) 0%,
+      rgba(5, 9, 15, 0.1) 26%,
+      transparent 55%,
+      rgba(5, 9, 15, 0.52) 100%
+    );
+}
+
+/* centred content block over the photo */
+.content16 {
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  text-align: center;
+  max-width: 62rem;
+  gap: 1.5rem;
+}
+
+/* The scrim is deliberately light so the skyline reads as a photograph, which
+   leaves the secondary greys short of AA where the copy crosses the towers.
+   Fix it on the TEXT rather than by pouring white back over the picture. */
+.content16 .lead {
+  margin-inline: auto;
+  max-width: 42rem;
+  color: var(--text-primary);
+}
+
+/* trust row centres under the copy. Columns come from the item count rather
+   than a fixed `repeat(4, …)` because this variant shows only two badges. */
+.content16 .trust {
+  justify-content: center;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  text-align: left;
+  border-top-color: var(--border-strong);
+}
+
+/* the muted label tone is tuned for a flat surface; over a photograph it needs
+   the primary tone to stay readable */
+.content16 .badgeLabel {
+  color: var(--text-primary);
+}
+
+@media (max-width: 760px) {
+  .content16 .trust {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+    gap: 1.1rem 1.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg16Img {
+    transition: none;
+  }
+}

@@ -44,9 +44,11 @@ html.lenis,
 html.lenis body {
   height: auto;
 }
+
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
+
 .lenis.lenis-stopped {
   overflow: clip;
 }
@@ -117,14 +119,17 @@ p {
   width: 10px;
   height: 10px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-secondary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--surface-3);
   border-radius: var(--radius-pill);
   border: 2px solid var(--bg-secondary);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-faint);
 }
@@ -140,15 +145,19 @@ p {
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
+
 .container {
   max-width: var(--container-max);
 }
+
 .container--wide {
   max-width: var(--container-wide);
 }
+
 .container--narrow {
   max-width: var(--container-narrow);
 }
+
 .container--prose {
   max-width: var(--container-prose);
 }
@@ -157,6 +166,7 @@ p {
   position: relative;
   padding-block: var(--section-y);
 }
+
 .section--sm {
   padding-block: var(--section-y-sm);
 }
@@ -169,18 +179,22 @@ p {
    background), then content sections alternate A, B, A, B… Cards use --surface
    and hairline borders, so they stay visible on both A and B.
    -------------------------------------------------------------------------- */
-main > section {
+main>section {
   background-color: var(--section-bg-b);
 }
-main > section:nth-of-type(even) {
+
+main>section:nth-of-type(even) {
   background-color: var(--section-bg-a);
 }
+
 .section--flush-top {
   padding-top: 0;
 }
+
 .section--flush-bottom {
   padding-bottom: 0;
 }
+
 /* Full-viewport breakout for a child of a centered container. */
 .bleed {
   width: 100vw;
@@ -197,6 +211,7 @@ main > section:nth-of-type(even) {
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
 }
+
 .display-2 {
   font-family: var(--font-display);
   font-size: var(--fs-display-2);
@@ -204,15 +219,19 @@ main > section:nth-of-type(even) {
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
 }
+
 .heading-1 {
   font-size: var(--fs-h1);
 }
+
 .heading-2 {
   font-size: var(--fs-h2);
 }
+
 .heading-3 {
   font-size: var(--fs-h3);
 }
+
 .lead {
   font-size: var(--fs-lead);
   line-height: var(--lh-snug);
@@ -220,6 +239,7 @@ main > section:nth-of-type(even) {
   font-weight: var(--fw-regular);
   letter-spacing: var(--ls-snug);
 }
+
 /* Technical label — small, mono, marked with a machined tick. */
 .eyebrow {
   display: inline-flex;
@@ -232,6 +252,7 @@ main > section:nth-of-type(even) {
   text-transform: uppercase;
   color: var(--accent);
 }
+
 .eyebrow::before {
   content: "";
   width: 1.75rem;
@@ -239,9 +260,11 @@ main > section:nth-of-type(even) {
   background: currentColor;
   opacity: 0.55;
 }
+
 .eyebrow--muted {
   color: var(--text-muted);
 }
+
 /* Editorial statement paragraph — display voice at reading scale. */
 .statement {
   font-family: var(--font-display);
@@ -251,12 +274,15 @@ main > section:nth-of-type(even) {
   letter-spacing: var(--ls-snug);
   text-wrap: balance;
 }
+
 .text-secondary {
   color: var(--text-secondary);
 }
+
 .text-muted {
   color: var(--text-muted);
 }
+
 .text-gradient {
   background: var(--grad-text);
   -webkit-background-clip: text;
@@ -264,6 +290,7 @@ main > section:nth-of-type(even) {
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
+
 .text-accent-gradient {
   background: var(--grad-accent);
   -webkit-background-clip: text;
@@ -271,9 +298,11 @@ main > section:nth-of-type(even) {
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
+
 .balance {
   text-wrap: balance;
 }
+
 .mono {
   font-family: var(--font-mono);
   font-feature-settings: "tnum";
@@ -288,9 +317,11 @@ main > section:nth-of-type(even) {
   -webkit-backdrop-filter: saturate(180%) blur(18px);
   border: 1px solid var(--border);
 }
+
 .hairline {
   border: 1px solid var(--hairline);
 }
+
 .grain::after {
   content: "";
   position: absolute;
@@ -300,15 +331,14 @@ main > section:nth-of-type(even) {
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
 }
+
 .divider {
   height: 1px;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--border-strong),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      var(--border-strong),
+      transparent);
 }
 
 /* =============================================================================
@@ -321,24 +351,30 @@ main > section:nth-of-type(even) {
   transition-delay: var(--reveal-delay, 0s);
   will-change: opacity, transform;
 }
+
 [data-reveal="fade"] {
   transform: none;
 }
+
 [data-reveal="left"] {
   transform: translate3d(-36px, 0, 0);
 }
+
 [data-reveal="right"] {
   transform: translate3d(36px, 0, 0);
 }
+
 [data-reveal="scale"] {
   transform: scale(0.96);
 }
+
 /* Hairline rules draw in from the left. */
 [data-reveal="line"] {
   transform: scaleX(0);
   transform-origin: left center;
   transition-duration: 1.1s;
 }
+
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
@@ -358,6 +394,7 @@ main > section:nth-of-type(even) {
   white-space: nowrap;
   border: 0;
 }
+
 .skip-link {
   position: fixed;
   top: -120px;
@@ -370,11 +407,13 @@ main > section:nth-of-type(even) {
   font-weight: var(--fw-semibold);
   transition: top var(--dur) var(--ease-out);
 }
+
 .skip-link:focus {
   top: 1rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -383,6 +422,7 @@ main > section:nth-of-type(even) {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
@@ -393,4 +433,76 @@ main > section:nth-of-type(even) {
 .no-js [data-reveal] {
   opacity: 1;
   transform: none;
+}
+
+/* -----------------------------------------------------------------------------
+   FLOATING GLASS NAVBAR  (opt-in, per page)
+
+   A page opts in by setting `data-nav="float"` on <html> while it is mounted
+   (see sections/experience/corporate/Variant16Hero.tsx). The global sticky
+   header then detaches from the top edge and its inner container becomes a
+   translucent, blurred pill that floats over the page — the hero photograph
+   runs full-bleed underneath it.
+
+   Targets the element (`header`) rather than a class because the Navbar's
+   classes are hashed CSS-Module names. The `[data-scrolled]` attribute (always
+   present on the header) lifts specificity above the module's own
+   `.header[data-scrolled="true"]` / `.header.megaOpen` background rules.
+   Removing the attribute on unmount restores the normal navbar everywhere else.
+   -------------------------------------------------------------------------- */
+[data-nav="float"] header[data-scrolled] {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  /* detaching padding — also the gap the mega menu drops from */
+  padding: clamp(0.6rem, 1.6vh, 1.1rem) clamp(0.75rem, 2.5vw, 1.5rem);
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+/* The pill itself. It HUGS its content (`width: fit-content`) instead of
+   filling container--wide: the navbar's `justify-content: space-between` was
+   pushing the logo and the actions to the far edges and leaving two large dead
+   gaps inside the glass. Sizing to content removes them and the auto margins
+   centre what is left. */
+[data-nav="float"] header[data-scrolled]>.container--wide {
+  width: fit-content;
+  max-width: 100%;
+  gap: clamp(1rem, 2.4vw, 2.2rem);
+  /* ONE height in both scroll states — the module shrinks .inner from
+     var(--nav-h) to 64px once scrolled, which made the bar visibly jump. 64px
+     (the scrolled height) is the one to keep. */
+  height: 64px;
+  border-radius: var(--radius-pill);
+  /* genuinely translucent, not a solid bar: thin the glass token down so the
+     photo reads through it, and let the blur do the legibility work */
+  background: color-mix(in srgb, var(--surface-glass) 58%, transparent);
+  /* declare ONLY the standard property — the CSS minifier auto-prefixes it.
+     Writing the -webkit- alias by hand makes it dedupe to the prefixed form
+     alone, which modern Chrome no longer supports, and the blur silently dies. */
+  backdrop-filter: saturate(190%) blur(5px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding-inline: clamp(1rem, 2.2vw, 1.6rem);
+  transition:
+    background var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+/* a touch more presence once the page scrolls under it — background only, the
+   height deliberately stays put */
+[data-nav="float"] header[data-scrolled="true"]>.container--wide {
+  background: color-mix(in srgb, var(--surface-glass) 72%, transparent);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-strong, var(--border));
+}
+
+/* below the desktop-nav breakpoint the bar is just logo + hamburger, so a
+   content-hugging pill would collapse to a stub — keep it full width there */
+@media (max-width: 1079px) {
+  [data-nav="float"] header[data-scrolled]>.container--wide {
+    width: 100%;
+  }
 }

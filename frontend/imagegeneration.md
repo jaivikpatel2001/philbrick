@@ -944,3 +944,49 @@ identical. Two clearly-marked "V6 BLOCK" edits are the only difference:
   reveals as the camera settles inside and returns for the outro.
 No new image assets — it reuses the machine + 8 component renders already
 shipped (§11.1–§11.3). Env mattes (§11.4) are NOT used by variant6.
+
+### 11.7 Variant 16 hero background pair (theme-swapped city skyline)
+
+`/variant16` = variant15 with a full-bleed city photograph behind the hero that
+follows the theme toggle (light theme → day photo, dark theme → night photo,
+cross-faded in CSS by `[data-theme]`; no JS).
+
+**Status: SUPPLIED** (2026-07-21). Both photos are in place at 1535 x 1024 and
+optimized to WebP at 384/640/960/1280.
+
+**Files** (normal photos, NO transparency), landscape, placed in
+`public/images/home/hero-exploration/environment/`:
+
+| File | Used in | Prompt |
+| --- | --- | --- |
+| `hero-city-day.png` | light theme | bright daylight skyline across water |
+| `hero-city-night.png` | dark theme | night skyline across water, lit towers |
+
+Composition constraint for BOTH: the hero is now a single CENTRED content block
+over the full-bleed photo (the right-hand product spotlight was removed on
+client direction), so the frame needs a calm, uncluttered middle band; keep the
+densest towers to one side. No text, logos, people, boats or watermarks.
+
+Day prompt:
+"Ultra realistic wide photograph of a modern city business district skyline seen
+across calm open water on a bright clear day, clusters of glass and steel high
+rise towers, soft blue sky with a few light clouds, gentle reflections on the
+water surface, crisp clean daylight, airy and optimistic. Wide cinematic
+landscape composition, the tallest towers grouped right of centre, open sky and
+calm water on the left. Photoreal, high resolution, premium corporate feel. No
+text, no logos, no people, no boats, no watermarks."
+
+Night prompt:
+"Ultra realistic wide photograph of a modern city skyline at night seen across
+dark calm water, deep navy black sky, high rise towers brightly lit with warm
+and cool window lights, glowing reflections shimmering on the water, dramatic
+and premium. Wide cinematic landscape composition, tower cluster right of
+centre, deep calm darkness on the left. Photoreal, high resolution, moody and
+elegant, rich contrast. No text, no logos, no people, no boats, no watermarks."
+
+Because these live under `hero-exploration/`, regenerate them with
+`node scripts/optimizeHeroExploration.mjs`. If you also run
+`node scripts/optimizeImages.mjs`, run it FIRST and the hero exploration script
+afterwards: the exploration script MERGES its entries into the same manifest and
+a plain optimizeImages run drops them. Re-run the exploration script whenever a
+photo is replaced under the same filename, or the stale WebP variants stay.
