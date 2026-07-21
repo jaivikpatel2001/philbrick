@@ -1595,17 +1595,17 @@
   background:
     radial-gradient(
       78% 86% at 50% 48%,
-      rgba(5, 9, 15, 0.55),
-      rgba(5, 9, 15, 0.34) 52%,
-      rgba(5, 9, 15, 0.08) 78%,
+      rgba(5, 9, 15, 0.7),
+      rgba(5, 9, 15, 0.46) 52%,
+      rgba(5, 9, 15, 0.12) 78%,
       transparent 92%
     ),
     linear-gradient(
       180deg,
-      rgba(5, 9, 15, 0.45) 0%,
-      rgba(5, 9, 15, 0.07) 26%,
+      rgba(5, 9, 15, 0.56) 0%,
+      rgba(5, 9, 15, 0.1) 26%,
       transparent 55%,
-      rgba(5, 9, 15, 0.45) 100%
+      rgba(5, 9, 15, 0.52) 100%
     );
 }
 

@@ -85,6 +85,22 @@ because fixing them changes every page's appearance mid client review.
   your project", which now invites an action the hero no longer offers — flagged
   to the client, copy left as-is pending their call. The navbar's "Get a quote"
   button is the only hero-level conversion path on this variant now.
+- **Dark-theme scrim lightened too**, but only as far as the photograph allows:
+  0.86 → **0.70** centre (mid 0.6 → 0.46, top 0.7 → 0.56, bottom 0.65 → 0.52).
+  Chosen by sweeping candidate strengths through the same measurement harness
+  rather than by eye — the night photo's lit tower windows sit directly behind
+  the copy, so at 0.55 the lead was 3.50:1 and the badges 4.26/4.48:1 (all
+  failing) and at 0.62 the lead was still 4.33:1. 0.70 is the lightest tier
+  where every white text role clears AA: h1 5.23:1, lead 5.52:1, badge stat
+  6.45:1, badge label 6.77:1.
+- **Known issue, PRE-EXISTING (not introduced here):** in dark theme the
+  accent-blue eyebrow "ELEVATOR COMPONENTS, MADE IN INDIA" ends over a brightly
+  lit tower crown, and `--accent` on that backdrop fails AA at **every** scrim
+  strength tested — 1.49:1 at 0.55, 2.36:1 at 0.70, and **3.98:1 even at the
+  old 0.86**, all short of the 4.5:1 small-text minimum. The scrim cannot fix
+  it because the accent is itself a light blue. Options if the client wants it
+  resolved: use `--text-primary` for the eyebrow in this variant's dark theme,
+  shorten the eyebrow so it clears the tower, or narrow `.content16`.
 - **Light-theme scrim lightened** so the skyline reads as a photograph rather
   than a washed-out backdrop: radial centre 0.9 → 0.58 alpha, mid 0.6 → 0.34,
   top wash 0.62 → 0.4, bottom 0.55 → 0.38. Dark theme untouched.
