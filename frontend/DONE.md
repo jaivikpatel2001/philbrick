@@ -6,6 +6,82 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-21 15:45 IST
+
+### New `/variant17` — depth hero, headline behind the tower
+
+**Status:** Built and wired; awaiting the four photographs.
+
+Client reference: a hero where the building rises in FRONT of the headline so
+the middle characters are occluded. That cannot come from one picture — baking
+the words into the artwork would stop the `<h1>` being text (no responsive
+scaling, nothing for search engines, blur at large sizes). So the hero is a
+three layer sandwich and the heading stays real markup:
+
+| z | layer | asset |
+| --- | --- | --- |
+| 3 | tower, drawn OVER the text | `hero-tower-{day,night}.png` (transparent) |
+| 2 | content: h1, eyebrow, lead, badges | — |
+| 1 | legibility scrim | — |
+| 0 | sky | `hero-sky-{day,night}.png` |
+
+- Duplicated from variant16: same floating glass navbar opt-in, same centred
+  content, same two-badge trust row, same CSS-only day/night cross-fade driven
+  by `[data-theme]`. Both plates swap together, so the tower's lighting always
+  matches its sky.
+- The foreground is **height-capped and bottom-anchored** (`height: min(86%,
+  92svh)`, `object-fit: contain`, `object-position: bottom center`) rather than
+  `cover`: `cover` on a wide viewport crops the crown, which is precisely the
+  part that has to cross the headline. Mobile drops it to 62% and pushes the
+  copy clear, since `contain` on a narrow frame otherwise squeezes the tower.
+- `pointer-events: none` on the tower plate so it never intercepts a click on
+  the copy beneath it.
+- **Graceful until the art lands:** `lib/imageLoader.ts` passes unknown paths
+  through untouched, so the page builds and renders its gradient fallback
+  rather than breaking. Verified 78/78 static pages with `/variant17` present,
+  layer order 0/1/2/3 correct, and the `<h1>` still real selectable text.
+
+**UPDATE — the four photographs are in and the hero is live.**
+- Supplied: skies 1536 × 1024 (3 channel), towers 1024 × 1536 **portrait with a
+  genuine alpha channel** (min 0, mean 35 — mostly transparent). Composited over
+  a bright field to check the cutout: no dark fringe, no halo, no painted
+  checkerboard. Optimized to WebP; the towers cap at 960px because that is the
+  source width, which is ample (they render ~500px wide at 1440 viewport).
+- **The layout had to change once the art was in.** With the copy centred, the
+  tower's opaque shaft ran straight down through the lead paragraph and hid the
+  "In-house" badge. The reference solves this by FLANKING the building, so the
+  hero is now a stack: centred eyebrow + headline (crossed by the crown), then
+  a three column row with the lead left, the trust badges right, and a clear
+  middle channel the tower rises through.
+- **Contrast measured, not eyeballed.** The sky photo is busiest at its left and
+  right edges, exactly where the flanked copy lands: first pass gave lead
+  4.02:1, badge stat 4.09:1 and badge labels 1.00:1 — all failing. Fixed with
+  two soft radial washes (one per text block, middle left clear for the tower)
+  plus primary/secondary badge tones. Re-measured: lead **7.21:1**, badge stat
+  **8.70:1**, badge label **4.53:1**, headline **11.79:1** left of the tower and
+  **12.42:1** right of it. All pass.
+- Mobile (≤860px) stacks the copy, centres it and drops the tower to 46% height
+  at 0.55 opacity behind the text, since there is no room to flank. No
+  horizontal overflow at 390px.
+
+**Build note:** a build failed with `Type error: Declaration or statement
+expected` in `.next/dev/types/routes.d.ts` — a Next.js GENERATED file corrupted
+by the dev server writing to `.next/dev` while the build ran. Not source. `rm
+-rf .next/dev/types` and rebuild; 78/78 pages.
+
+**Original asset spec** (superseded by what was supplied above; 2400 × 1600, into
+`public/images/home/hero-exploration/environment/`): `hero-sky-day.png`,
+`hero-tower-day.png`, `hero-sky-night.png`, `hero-tower-night.png`. The two
+tower plates MUST carry a real alpha channel — an earlier asset
+(`india-tower.png`) had a checkerboard pattern painted into the pixels instead
+and rendered as a visible grid. Prompts for all four are in `imagegeneration.md`.
+
+**Follow-up once supplied:** run `scripts/optimizeHeroExploration.mjs`, then
+re-check headline contrast where the tower crosses it — that is the spot most
+likely to fail AA.
+
+---
+
 ## 2026-07-21 15:10 IST
 
 ### WordPress parity pass: menu, product photos, footer + a content audit

@@ -185,6 +185,28 @@
     960,
     1280
   ],
+  "/images/home/hero-exploration/environment/hero-sky-day.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/home/hero-exploration/environment/hero-sky-night.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/home/hero-exploration/environment/hero-tower-day.png": [
+    384,
+    640,
+    960
+  ],
+  "/images/home/hero-exploration/environment/hero-tower-night.png": [
+    384,
+    640,
+    960
+  ],
   "/images/home/hero-exploration/environment/india-tower.png": [
     384
   ],

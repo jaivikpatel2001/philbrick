@@ -1659,3 +1659,163 @@
     transition: none;
   }
 }
+
+/* =============================================================================
+   VARIANT 17 — depth hero: the headline sits BEHIND the tower.
+
+   Inherits variant16's background, scrim and centred content (.bg16*, .scrim16,
+   .content16) and adds the foreground plate. Only the pieces that differ are
+   declared here.
+   ========================================================================== */
+.hero17 {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + clamp(2rem, 7vh, 5rem)) clamp(1.25rem, 5vw, 4rem)
+    clamp(2.5rem, 8vh, 5rem);
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--section-bg-a), var(--section-bg-b));
+}
+
+/* ----- z 2: content -----
+   A vertical stack: centred headline on top, then a row that FLANKS the tower.
+   The tower is opaque, so anything centred below the headline would simply be
+   hidden behind its shaft. */
+.stack17 {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 78rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2rem, 6vh, 4rem);
+  margin-bottom: clamp(2rem, 8vh, 6rem);
+}
+
+.content17 {
+  align-items: center;
+  text-align: center;
+  gap: 1.1rem;
+}
+
+/* let the headline run wide so the words extend past the tower on both sides
+   and only the middle characters are occluded */
+.title17 {
+  max-width: none;
+  font-size: clamp(2.8rem, 1.4rem + 5vw, 5.4rem);
+}
+
+/* the middle column is the clear channel the tower rises through */
+/* The sky photograph is busiest at its left and right edges, which is exactly
+   where the flanked copy lands, so each block gets its own soft wash. Two
+   radial gradients rather than one band: the middle stays clear for the tower,
+   and there is no hard-edged panel. */
+.flank17::before {
+  content: "";
+  position: absolute;
+  inset: -3rem -3vw;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 72% at 17% 50%, rgba(255, 255, 255, 0.92), transparent 76%),
+    radial-gradient(40% 72% at 86% 50%, rgba(255, 255, 255, 0.92), transparent 76%);
+}
+
+:global([data-theme="dark"]) .flank17::before {
+  background:
+    radial-gradient(46% 72% at 17% 50%, rgba(5, 9, 15, 0.88), transparent 76%),
+    radial-gradient(40% 72% at 86% 50%, rgba(5, 9, 15, 0.88), transparent 76%);
+}
+
+.flank17 {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr clamp(9rem, 20vw, 17rem) 1fr;
+  align-items: start;
+  gap: 0;
+}
+
+.flank17 .lead {
+  grid-column: 1;
+  max-width: 24rem;
+  margin: 0;
+  text-align: left;
+  color: var(--text-primary);
+}
+
+.trust17 .badgeStat {
+  color: var(--text-primary);
+}
+
+.trust17 .badgeLabel {
+  color: var(--text-secondary);
+}
+
+.trust17 {
+  grid-column: 3;
+  justify-self: end;
+  grid-template-columns: none;
+  grid-auto-flow: row;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  border-top: none;
+  text-align: left;
+}
+
+.fg17 {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: min(86%, 92svh);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.fg17Img {
+  object-fit: contain;
+  object-position: bottom center;
+  transition: opacity 0.6s var(--ease-out);
+}
+
+@media (max-width: 860px) {
+  /* No room to flank on a narrow screen: the copy stacks and the tower drops
+     behind it, smaller and anchored low so it never covers a line of text. */
+  .flank17 {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    justify-items: center;
+  }
+
+  .flank17 .lead {
+    grid-column: 1;
+    max-width: 34rem;
+    text-align: center;
+  }
+
+  .trust17 {
+    grid-column: 1;
+    justify-self: center;
+    grid-auto-flow: column;
+  }
+
+  .fg17 {
+    height: min(46%, 42svh);
+    opacity: 0.55;
+  }
+
+  .stack17 {
+    margin-bottom: clamp(6rem, 26vh, 14rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg17Img {
+    transition: none;
+  }
+}
