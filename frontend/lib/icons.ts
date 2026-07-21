@@ -36,6 +36,7 @@ import {
   FiYoutube,
   FiZap,
   FiFacebook,
+  FiMessageCircle,
   FiFeather,
   FiNavigation,
   FiThermometer,
@@ -87,6 +88,7 @@ export const ICONS: Record<string, IconType> = {
   FiEye,
   FiTarget,
   FiFacebook,
+  FiMessageCircle,
   FiPackage,
 };
 

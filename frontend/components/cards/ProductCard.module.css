@@ -10,9 +10,14 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: var(--radius-sm);
+  /* the client's catalogue shots are studio-lit on white, so they sit on a
+     surface panel and are CONTAINED — cropping a control panel or door header
+     hides exactly the detail a technical buyer is looking for */
+  background: var(--surface-2);
 }
 .img {
-  object-fit: cover;
+  object-fit: contain;
+  padding: clamp(0.6rem, 2vw, 1.1rem);
   filter: saturate(0.96);
   transition: transform 0.8s var(--ease-out), filter 0.8s var(--ease-out);
 }

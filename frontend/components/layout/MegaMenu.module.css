@@ -1,122 +1,163 @@
-/* Products menu — clean grouped dropdown (see MegaMenu.tsx).
-   .panel is a full-width, click-through positioning layer whose only job is to
-   centre the actual .card. This keeps the drop animation simple and stops the
-   menu from ever overflowing the viewport horizontally. */
+/* =============================================================================
+   PRODUCTS MENU — two-level, click-driven (see MegaMenu.tsx)
+
+   Deliberately shares the About dropdown's visual language (NavDropdown.module
+   .css): same panel surface, same row padding and radius, same hover wash and
+   arrow reveal — so the two menus read as one system. The only addition is the
+   submenu for the five categories that have children.
+
+   The panel is anchored to the Products nav item rather than centred, exactly
+   like the About dropdown.
+   ========================================================================== */
 .panel {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 0.4rem);
   left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-inline: 1rem;
-  pointer-events: none;
-  z-index: var(--z-mega);
-}
-
-.card {
-  pointer-events: auto;
-  width: 100%;
-  max-width: 720px;
-  max-height: calc(100vh - var(--nav-h) - 1rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 1.25rem;
+  /* wide enough for the longest category ("Lift Master Door Operator
+     Controller") to sit on one line — at 250px most of them wrapped */
+  min-width: 21rem;
+  padding: 0.5rem;
   background: var(--surface-menu);
   backdrop-filter: saturate(140%) blur(12px);
-  -webkit-backdrop-filter: saturate(140%) blur(12px);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-xl);
+  z-index: var(--z-mega);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem 1rem;
-}
-
-.group ul {
+/* No max-height and no scrolling: the menu expands to its natural content
+   height, as the client's WordPress site does. If it runs past the fold the
+   PAGE scrolls, which is why the submenu can now be a plain descendant again
+   (nothing clips it) and its offset no longer has to track a scroll position. */
+.list {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
 }
 
-.groupTitle {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  margin-bottom: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-eyebrow);
-  text-transform: uppercase;
-  letter-spacing: var(--ls-eyebrow);
-  font-weight: var(--fw-semibold);
-  color: var(--text-secondary);
-}
-.groupTitle::before {
-  content: "";
-  width: 0.9rem;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 2px;
-  flex-shrink: 0;
+.row {
+  position: relative;
 }
 
+/* one row style for links and for submenu buttons alike */
 .link {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.5rem 0.6rem;
-  margin-inline: -0.6rem;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
   border-radius: var(--radius-sm);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
-  color: var(--text-secondary);
-  transition: background var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease-out);
 }
-.link:hover {
+
+.link:hover,
+.linkOpen {
   background: var(--surface-2);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
   color: var(--text-primary);
 }
+
 .arrow {
-  flex-shrink: 0;
   opacity: 0;
   transform: translate(-4px, 2px);
-  transition: opacity var(--dur-fast) var(--ease-out),
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
   color: var(--accent);
 }
+
 .link:hover .arrow {
   opacity: 1;
   transform: translate(0, 0);
 }
 
-.viewAll {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  width: 100%;
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--hairline);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--accent);
-  transition: color var(--dur-fast) var(--ease-out);
-}
-.viewAll:hover {
-  color: var(--accent-hover);
+.chevron {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
-/* Smaller laptops — 2 columns, tighter card. Mobile uses MobileNav instead. */
-@media (max-width: 860px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.link:hover .chevron,
+.linkOpen .chevron {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+/* ----- submenu -----
+   A child of its row, aligned to it with plain CSS. `top` pulls back by the
+   panel's own padding so the submenu's first item lines up with the category
+   it belongs to. */
+.flyout {
+  position: absolute;
+  top: -0.5rem;
+  left: calc(100% + 0.9rem);
+  /* the display model names are long ("XN-4000 Date/Time/Temperature Display") */
+  min-width: 19rem;
+  max-width: 24rem;
+  padding: 0.5rem;
+  background: var(--surface-menu);
+  backdrop-filter: saturate(140%) blur(12px);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  animation: flyoutIn 0.18s var(--ease-out);
+}
+
+.flyout ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+@keyframes flyoutIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
   }
-  .card {
-    max-width: 520px;
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ----- footer link ----- */
+.viewAll {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--hairline);
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  transition: gap var(--dur-fast) var(--ease-out);
+}
+
+.viewAll:hover {
+  gap: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .arrow,
+  .chevron,
+  .viewAll {
+    transition: none;
+  }
+
+  .flyout {
+    animation: none;
   }
 }

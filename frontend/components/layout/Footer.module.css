@@ -188,3 +188,17 @@
     align-items: flex-start;
   }
 }
+
+/* The client's footer lists several numbers plus office hours under one icon,
+   so the phone row stacks instead of sitting on a single line. */
+.phoneList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.hours {
+  margin-top: 0.15rem;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}

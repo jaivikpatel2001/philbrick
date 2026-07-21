@@ -6,6 +6,332 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-21 15:10 IST
+
+### WordPress parity pass: menu, product photos, footer + a content audit
+
+**1. Products menu no longer scrolls.** Removed `max-height` / `overflow-y`
+from the category list and the submenu, so the menu grows to its natural height
+like the client's site and the PAGE scrolls if it runs past the fold. That also
+let `MegaMenu.tsx` get materially simpler: with nothing clipping it, the
+submenu went back to being a plain child of its row positioned in pure CSS —
+the offset measuring and `scrollTop` tracking added earlier only existed to
+work around the scrolling container.
+
+**1b. …and it now scrolls WITH the page.** Removing the internal scroll was
+only half the fix: the header is sticky (fixed on variant16), so an open menu
+stayed pinned while the page scrolled underneath it and the lower categories
+were still unreachable. While a menu is open the header is now released into
+the document at its current scroll offset (`position: absolute; top: scrollY`,
+inline so it also beats the floating navbar's `position: fixed`). It looks
+identical at the moment of opening and then scrolls away with the page,
+carrying the menu — which is how the client's own non-sticky header behaves.
+The `data-scrolled` compact/tall toggle is frozen while open, otherwise
+`.inner` shrinking mid-scroll dragged the menu ~6px further than the page and
+produced a visible jolt. Verified: 400px of page scroll moves the menu exactly
+400px, the last category becomes visible, and the header returns to `sticky`
+(and to `fixed` on variant16) with no leftover inline style on close.
+
+**2. Real product photography everywhere.** `ProductCard` now resolves its
+image through `productImage()`, and that helper accepts a category slug as well
+as a product slug (a category shows its first product's lead photo). All 14
+cards on `/products` verified using `/images/products/catalog/…`, zero
+AI-generated shots left in the grids. Card media switched to `object-fit:
+contain` on a surface panel — the client's photos are studio-lit on white, and
+cropping a control panel hides the detail a technical buyer is looking for.
+
+**3. Footer synced to the client's real data.**
+- **Phones: 1 → 5.** The footer rendered only `SITE.phone`. It now lists every
+  number the client publishes plus the office hours, sourced from two places:
+  `philbrick-child-theme/footer.php` (99789 86631, 93740 22660, **99789 86635**
+  — the last was missing from our data entirely) and the Contact Us page
+  (84012 19941, 98250 09420).
+- **Socials: 3 → 4.** WhatsApp was missing. Added with the client's exact
+  prefilled-message URL, first in the list as their own "Join Us:" widget has
+  it. `FiMessageCircle` had to be registered in `lib/icons.ts` — `getIcon`
+  silently falls back to a generic box icon for unknown names, so the icon
+  would have rendered wrong rather than erroring.
+
+**IMPORTANT — the live site is NEWER than the database backup.** `+91 99789
+86635` and "Mon-Fri 9:00 to 18:00" appear in the theme's `footer.php` but are
+**nowhere in the SQL dump**. Anything sourced only from the DB may therefore be
+stale; the theme files are the better source for footer/chrome content.
+
+**4. Page content audit (extracted, not yet migrated).**
+`scripts/extractWordpressPages.mjs` → `data/generated/wpPages.json`. Real
+content per page, in characters (HTML body + Elementor blocks):
+
+| page | HTML | Elementor | verdict |
+| --- | --- | --- | --- |
+| company (About) | 5082 | 5240 | **rich** — About/Activity/History sections |
+| front-page | 4196 | 0 | rich |
+| privacy-policy | 2481 | 0 | real |
+| quality-policy | 1109 | 0 | real |
+| career | 625 | 0 | thin |
+| contact-us | 290 | 0 | address + phones (already migrated) |
+| vision-mission | 12 | 2825 | **shared template, no unique copy** |
+| milestone-awards | 12 | 2825 | same shared template |
+| news-events | 12 | 2825 | same shared template |
+| **infrastructure** | **0** | **0** | **EMPTY in WordPress** |
+| **network** | **0** | **0** | **EMPTY in WordPress** |
+
+The identical 2825/1-block figure across vision-mission, milestone-awards and
+news-events is one shared Elementor template, not three pages of copy — so
+those pages have no unique content to migrate. Infrastructure and Network are
+completely empty in the database (their visible content, e.g. the "Our Domestic
+Business" map, is imagery placed by the page builder).
+
+**Still to do:** port the About page's three real sections (founding story,
+Activity, the 1992→ History timeline) into the new design, and decide what to
+do about Infrastructure/Network, which have no source content to migrate.
+
+**Files:** `components/layout/MegaMenu.{tsx,module.css}`,
+`components/cards/ProductCard.{tsx,module.css}`, `data/catalog.ts`,
+`constants/site.ts`, `lib/icons.ts`,
+`components/layout/Footer.{tsx,module.css}`,
+`scripts/extractWordpressPages.mjs`, `data/generated/wpPages.json`.
+
+**Verified:** build 77/77; menu list and submenu both `overflow: visible` /
+`max-height: none`; 14/14 product cards on real photos; footer renders 5 tel:
+links and 4 social hosts (api.whatsapp.com, facebook, instagram, twitter).
+
+---
+
+## 2026-07-21 13:25 IST
+
+### Products section rebuilt from the client's real WordPress data
+
+**Status:** Completed and verified (desktop + mobile, build 77/77).
+
+Brief: replicate the client's product navigation hierarchy exactly, and make
+every product page carry everything the old WordPress site shows, with a proper
+gallery, using the original product photography.
+
+**Source of truth.** The client's full WordPress install is in the repo at
+`wordpress/`, and `wp-content/updraft/backup_2026-07-11-0205_…-db.gz` is a
+complete mysqldump. Rather than transcribe pages by hand, the dump was parsed
+directly (scratchpad script; UpdraftPlus writes `INSERT INTO \`tbl\` VALUES`
+with **no column list**, and MySQL-escapes strings — a naive split on `),(`
+corrupts the content). That yielded 38 published products, 322 attachments, the
+58-item nav menu and the WooCommerce taxonomy.
+
+**Key finding — the nav is NOT the WooCommerce taxonomy.** `product_cat` holds
+sub-brand names (Hydra, Xpert, Step, Xenon Lift Display, TFT Display, Deci Bel
+Audio Devices…) that do not match the menu at all. The hierarchy in the client's
+reference screenshots is a hand-built menu of custom links. It was transcribed
+from `wp_posts`/`wp_postmeta` nav_menu_item rows into `CATEGORY_PRODUCTS` in
+`scripts/generateCatalog.mjs`: **14 categories, 5 with children, 24 child
+products** — matching the reference exactly. Verified against the derived
+`MAIN_NAV`: 14 categories / 24 children.
+
+**What the site was missing:** 3 display products (XTFT-056, XTFT-070, XTAB
+Smart Display with Audio) and 2 product slugs that did not match WordPress
+(`fa-50-chip-based`, `fa-250-mp3` → the full WP slugs, so URLs line up with the
+client's old paths).
+
+**Content pipeline (new, reproducible):**
+- `scripts/generateCatalog.mjs` — WP dump → `data/generated/catalog.json`.
+  `post_excerpt` ("Salient Features" lists, sometimes several per product —
+  Touch COP/LOP carries C-TOUCH and E-SENSE blocks) is parsed into structured
+  `{heading, items[]}` groups. `post_content` (specification tables) is
+  **sanitised, not re-parsed**: presentational attributes from the old theme are
+  stripped so the site's tokens style it, while `rowspan`/`colspan` and nested
+  option lists survive verbatim. A bespoke parser would have silently dropped
+  merged cells, and the brief was that nothing published is lost.
+- `scripts/stageProductImages.mjs` — copies only the referenced photos out of
+  `components/original/` into `public/images/products/catalog/`, normalising
+  mixed-case names (`XTFT-043-TFT-Display1.jpg`) to lower kebab-case. Windows is
+  case-insensitive but the production host is not, so this prevents a whole
+  class of 404s. **All 104 image references (86 unique files) resolved; zero
+  missing.**
+- `scripts/optimizeProductImages.mjs` — the existing two optimisers are
+  PNG-only and the client's photos are JPG, so this generates the WebP ladder
+  for the catalogue and MERGES into `lib/imageManifest.json` (86 entries, 172
+  variants). `lib/imageLoader.ts` was made extension-agnostic (png|jpe?g) —
+  existing PNG behaviour unchanged.
+- `data/catalog.ts` — typed accessor joining the generated content to
+  `PRODUCT_TREE`, which keeps owning navigation.
+
+**UI:**
+- `components/products/ProductGallery.tsx` — main image, thumbnail strip,
+  arrows, cross-fade, and a focus-trapped lightbox (Escape/arrows/backdrop,
+  focus restored on close). Adapts from 1 photo (no strip) to 15 (Blower Fan).
+  Images are CONTAINED, never cropped — a technical buyer needs to see the whole
+  panel.
+- `sections/products/ProductDetail.tsx` — gallery + salient features + spec
+  tables, each rendered only when the client actually published it, so there is
+  no empty "Specifications" shell. Products with no copy switch to a stacked,
+  centred layout instead of leaving half the row blank.
+- Category pages: the 9 categories the client's menu links to **directly**
+  (Elevator Doors, COP/LOP, Elevator Cabin…) now show their real product content
+  inline rather than bouncing the visitor through a one-item list. Elevator
+  Cabin renders all 4 finishes and KIT Accessories all 3 items on one page.
+  The 5 categories with submenus keep the card grid.
+
+**HONEST CONTENT GAP — the client's WordPress simply does not have some of what
+the brief asked for. Nothing was invented (CLAUDE.md rule):**
+- **Specifications/attributes:** WooCommerce `_product_attributes` is `a:0:{}`
+  on **all 38** products. The only spec data that exists is the HTML tables in
+  the body of **11** products; those are shipped in full.
+- **Downloads:** `_downloadable_files` is `a:0:{}` on all 38, and there are
+  **zero PDFs in the entire uploads folder**. No downloads section is rendered.
+- **19 of 38 products have no text whatsoever** on the client's live site and
+  are image-only here by explicit decision: Elevator - IOT; all 10 of
+  XN-1000/2000/2100/3000/4000, XLCD-01/02, XTFT-043/056/070; COP/LOP; all 4
+  voice systems (FA-50, FA-250, Close Door Announcer, Elevator Gong); Blower
+  Fan, Round Fan, LED Lights. **Hand this list to the client for copy.**
+- The client's nav links "Elevator KIT Accessories" to a product slug that has
+  no published post; the category page shows the 3 real accessory products
+  instead.
+
+**Follow-up — desktop Products menu rebuilt as a true two-level flyout.** The
+nested products were still unreachable from the navbar: `MegaMenu.tsx` rendered
+only the 14 categories in themed columns and never touched `cat.children`,
+which the nav data had been carrying all along. It is now the client's own
+shape — one vertical list of all 14 categories in PRODUCT_TREE order (new flat
+`mega.categories`, built straight from the tree so it cannot drift from the
+themed `mega.groups` the footer uses), with a chevron and hover/focus flyout on
+the five that have children.
+
+Two layout traps worth recording:
+- The category list scrolls (14 rows outgrow a short viewport) and
+  `overflow-y: auto` **clips on both axes**, so a flyout nested inside the list
+  was sliced off at its right edge — visible in `getComputedStyle` as
+  `visibility: visible` while painting nothing. The flyout is now a SIBLING of
+  the list, positioned from the hovered row's measured `offsetTop` (recomputed
+  on scroll so it stays pinned).
+- Top-aligning an 11-item flyout (Elevator Display) with a row low in the list
+  runs it past the fold, so `max-height` is set inline from the row offset and
+  it scrolls internally. Verified at 804px: control panel 3 items, display 11,
+  voice 4 — all bottoms inside the viewport.
+
+**Follow-up 2 — navigation is now click-driven, and the menus share one look.**
+- **"About" and "Products" are no longer links.** They are group labels, so
+  they render as `<button>` and never navigate; clicking toggles their menu.
+  Only the items inside are destinations. Same rule one level down: a category
+  with children (5 of 14) is a button that opens its submenu, while the other 9
+  are plain links.
+- **Hover no longer opens anything.** The hover-intent timer (`closeTimer`,
+  `openSub`, `scheduleClose`, `keepOpen`) and the header's `onMouseLeave` are
+  gone. Menus close on outside pointerdown, on Escape (focus returns to the
+  trigger), on choosing a link, and on route change.
+- **`MegaMenu.module.css` now mirrors `NavDropdown.module.css`** — same panel
+  surface, row padding, radius, hover wash and arrow reveal, anchored under the
+  nav item rather than centred — so Products and About read as one system. The
+  old hairline row separators are gone.
+- ~~Each submenu leads with an "All &lt;category&gt;" link.~~ **Removed on client
+  direction** — the submenus now list products only, matching the client's own
+  site where a parent category is a grouping with no page of its own. The 5
+  category landing pages still exist and are reachable from `/products` and from
+  product breadcrumbs; they are simply not advertised in the navigation.
+- Verified: triggers are buttons, no `a[href="/products"]` in the nav, hover
+  does not open, click does, switching menus closes the other, outside click
+  and Escape both close, submenu opens on click with the "All …" link present.
+
+**Two fixes on top of that:**
+- **Products panel opened at the far LEFT of the header.** `MegaMenu` was
+  mounted as a direct child of `<header>` (a leftover from when it was a
+  full-width centred panel), so its `left: 0` anchored to the header rather
+  than to the nav item. It now renders inside the Products `<li>` next to
+  `NavDropdown`, which is why About had always been positioned correctly.
+  Verified: panel left === trigger left (454px), flyout right 1099 < 1422.
+- **The caret flipped on HOVER**, pointing up while the menu was still closed
+  (`.navItem:hover .caret`). It is now driven by state —
+  `[aria-expanded="true"] .caret` — so it reflects open/closed, not pointer
+  position. Verified the transform is unchanged on hover and flips on click.
+- Panel widened to 21rem (submenu 19rem): at 250px most category labels wrapped
+  onto two lines ("Lift Master Door Operator Controller", "Automatic Rescue
+  Device (ARD)"). No label wraps now.
+
+**Light-theme bug — invisible secondary CTA on dark bands.** The CTA band is
+always a dark photograph in BOTH themes (its eyebrow, title and description are
+hardcoded white for exactly that reason), but the shared secondary Button was
+still reading theme tokens, so in LIGHT theme it rendered near-black text on a
+near-black border against the dark image and vanished. Fixed by giving those
+buttons an explicit light-on-dark treatment (white text, translucent white
+border and fill), scoped under the actions row so it outranks
+`Button.module.css`'s own single-class `.secondary` rules regardless of
+stylesheet order.
+
+Swept the other 12 `variant="secondary"` usages for the same fault: all sit on
+normal theme surfaces except **`ScrollStory.tsx`** — its `.story` canvas is a
+hardcoded near-black gradient in both themes, so "Explore solutions" had the
+identical bug. Fixed the same way. (That view is the no-WebGL /
+reduced-motion homepage fallback, which is why nobody had noticed it.)
+
+**Encoding bug — mojibake on 8 product pages (found by the client).** The dump
+parser read the SQL as **latin1**, decoding each byte of a UTF-8 sequence
+separately, so `–` became `â€“`, `"` became `â€`, and those strings shipped to
+the live product pages (`/products/lift-master` showed `LMP66 â€“ TINY`).
+Fixed by reading the dump as `utf8`. Affected: parallel-type-controller,
+serial-can-bus-type-controller, mrl-control-panel,
+lift-master-door-operator-controller, the three Synergy door mechanisms and
+touch-cop-lop.
+
+Two things were hardened so this cannot recur silently:
+- The parser moved out of the scratchpad into
+  **`scripts/parseWordpressDump.mjs`**, so the whole WordPress → site pipeline
+  is reproducible in-repo and carries the encoding requirement in its header.
+- **`scripts/generateCatalog.mjs` now fails** (non-zero exit, no file written)
+  if any product contains mojibake, rather than publishing gibberish.
+
+Verified: 0 affected products after regeneration, and a scan of **all 71
+exported pages** finds no mojibake and no U+FFFD replacement characters.
+`/products/lift-master` now reads "LMP66 – TINY" and "Medium – Large Opening".
+
+**Third pass — caret geometry + hover restored alongside click:**
+- **The caret drifted up-and-right when it flipped.** The transform was written
+  `rotate(45deg) translateY(-1px)` / `rotate(225deg) translateY(2px)`: a
+  translate listed AFTER a rotate runs in the ROTATED coordinate space, so a
+  "vertical" 1px nudge actually moved the arrow diagonally, and the two states
+  used different magnitudes. Now `translateY(-1px) rotate(45deg)` /
+  `translateY(1px) rotate(225deg)` — translate first, so it stays in unrotated
+  space, mirrored about the centre. The mirroring is deliberate rather than
+  zero: the ink of a border-drawn chevron sits in the LOWER half of its box
+  when pointing down and the UPPER half when pointing up, so the box has to
+  move the opposite way to keep the visible arrow centred. Verified the
+  matrix translation is (0, -1) closed and (0, +1) open — purely vertical, no
+  horizontal component, where it used to be (0.707, -0.707) / (1.373, -1.428).
+- **Both hover and click now open the menus, at both levels.** Top level: a
+  short (160 ms) close delay covers the few pixels of gap between trigger and
+  panel — the panels are DOM descendants of their `<li>`, so hovering a panel
+  never fires the item's `mouseleave`. Nested level needs no timer at all: the
+  submenu sits flush against the category list inside the same panel, and
+  hovering a childless row dismisses whichever submenu is showing so the panel
+  always reflects the row under the pointer. Click still toggles (clicking an
+  open menu closes it), and parents remain non-navigable.
+- Verified: hover opens the menu, hover opens a submenu, hovering a childless
+  row dismisses the submenu, click closes an open menu and re-opens it.
+
+**Deliberate deviations from a literal copy, for review:**
+- Nav **labels** keep the house text style (`XN-1000 LED Segment Display`, not
+  `XN-1000-LED Segment Display`; `Elevator IoT`, not `Elevator - IOT`) because
+  CLAUDE.md's STRICT dash rule forbids the connector dashes while preserving
+  official model names. Structure and order are identical. Say the word to
+  switch to the client's literal strings.
+- The mega menu groups the 14 categories into themed columns (PRODUCT_GROUPS)
+  rather than one flat list. Parent/child structure is unchanged.
+- Product routes remain **default-deny** in `config/pageReleases.ts`
+  (`RELEASED_PRODUCT_ROUTES: []`), so they show Coming Soon in production and
+  are fully browsable in development. Flip when the client signs off.
+
+**Files:** `scripts/{generateCatalog,stageProductImages,optimizeProductImages}.mjs`,
+`data/catalog.ts`, `data/generated/{catalog.json,wpProducts.json,catalog-map.json}`,
+`data/products.ts`, `lib/imageLoader.ts`, `lib/imageManifest.json`,
+`components/products/ProductGallery.{tsx,module.css}`,
+`sections/products/ProductDetail.{tsx,module.css}`,
+`app/products/[category]/page.tsx`, `app/products/[category]/[product]/page.tsx`,
+`app/products/[category]/detail.module.css`,
+`public/images/products/catalog/` (86 JPG + 172 WebP).
+
+**Verified:** build 77/77 static pages (was 74). Automatic Door Controller
+renders 3 photos + 24 feature bullets + the model table with both `rowspan`
+cells intact; COP/LOP renders all 9 photos; Elevator Cabin renders 4 variants;
+breadcrumbs Home > Products > Category > Product. At 390px there is no page
+overflow and the wide spec tables scroll inside their own box.
+
+---
+
 ## 2026-07-21 12:40 IST
 
 ### `/variant16` — city photos supplied, floating glass navbar, centred hero

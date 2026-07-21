@@ -1,0 +1,242 @@
+/* =============================================================================
+   PRODUCT GALLERY
+
+   The client's catalogue photography is studio-shot on white, so every frame
+   sits on a light surface panel with the image CONTAINED (never cropped) — a
+   control panel or door header must be seen whole. Cropping would hide exactly
+   the detail a technical buyer is looking for.
+   ========================================================================== */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+/* ----- main stage ----- */
+.stage {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.mainButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+}
+
+.mainImage {
+  object-fit: contain;
+  padding: clamp(1rem, 3vw, 2.25rem);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.mainImageActive {
+  opacity: 1;
+}
+
+.zoomHint {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass-strong);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.mainButton:hover .zoomHint,
+.mainButton:focus-visible .zoomHint {
+  opacity: 1;
+}
+
+/* ----- arrows ----- */
+.arrow {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass-strong);
+  backdrop-filter: saturate(160%) blur(10px);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  transition:
+    background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+.arrow:hover {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+
+.arrowPrev {
+  left: 0.6rem;
+}
+
+.arrowNext {
+  right: 0.6rem;
+}
+
+/* ----- thumbnails ----- */
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.thumb {
+  display: block;
+  width: clamp(3.4rem, 6vw, 4.4rem);
+  aspect-ratio: 1 / 1;
+  padding: 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  transition:
+    border-color var(--dur) var(--ease-out),
+    opacity var(--dur) var(--ease-out);
+  opacity: 0.68;
+}
+
+.thumb:hover {
+  opacity: 1;
+  border-color: var(--border-strong);
+}
+
+.thumbActive {
+  opacity: 1;
+  border-color: var(--accent);
+}
+
+.thumbImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ----- lightbox ----- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal, 200);
+  display: grid;
+  place-items: center;
+  padding: clamp(2.5rem, 7vw, 4rem);
+  background: rgba(5, 9, 15, 0.88);
+  backdrop-filter: blur(6px);
+  animation: galleryFade 0.25s var(--ease-out);
+}
+
+.lightboxStage {
+  position: relative;
+  width: min(100%, 62rem);
+  height: min(78vh, 62rem);
+}
+
+.lightboxImage {
+  object-fit: contain;
+}
+
+.lightboxTitle {
+  position: absolute;
+  top: clamp(1rem, 3vw, 1.6rem);
+  left: clamp(1rem, 3vw, 1.6rem);
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+}
+
+.lightboxCount {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lightboxClose {
+  position: absolute;
+  top: clamp(1rem, 3vw, 1.6rem);
+  right: clamp(1rem, 3vw, 1.6rem);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.25rem;
+  transition: background var(--dur) var(--ease-out);
+}
+
+.lightboxClose:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* arrows sit on the dark backdrop inside the lightbox */
+.arrowLight {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.arrowLight:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes galleryFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mainImage,
+  .zoomHint,
+  .thumb,
+  .arrow {
+    transition: none;
+  }
+
+  .lightbox {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .arrow {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}

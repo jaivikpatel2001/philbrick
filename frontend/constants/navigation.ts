@@ -6,7 +6,7 @@
    Product navigation is derived from the product tree (data/products.ts) so the
    mega menu, mobile accordion and footer always match the real routes.
    ========================================================================== */
-import type { NavItem, MegaGroup } from "@/types";
+import type { NavItem, MegaGroup, MegaCategory } from "@/types";
 import {
   PRODUCT_TREE,
   PRODUCT_GROUPS,
@@ -15,6 +15,23 @@ import {
   productHref,
 } from "@/data/products";
 import { CATEGORY_IMG } from "@/data/images";
+
+/* The Products menu is a single vertical list of every category in the order
+   the client's own site uses (PRODUCT_TREE order), with a flyout for the five
+   categories that have children — see components/layout/MegaMenu.tsx. The
+   themed `megaGroups` below are kept for the footer and the mobile accordion. */
+const megaCategories: MegaCategory[] = PRODUCT_TREE.map((cat) => ({
+  slug: cat.slug,
+  label: cat.name,
+  href: categoryHref(cat.slug),
+  description: cat.tagline ?? cat.description,
+  image: CATEGORY_IMG[cat.slug],
+  children: (cat.children ?? []).map((child) => ({
+    label: child.name,
+    href: productHref(cat.slug, child.slug),
+    description: child.description,
+  })),
+}));
 
 /* Build the mega-menu groups from PRODUCT_GROUPS × PRODUCT_TREE. */
 const megaGroups: MegaGroup[] = PRODUCT_GROUPS.map((group) => ({
@@ -52,6 +69,7 @@ export const MAIN_NAV: NavItem[] = [
     href: "/products",
     mega: {
       groups: megaGroups,
+      categories: megaCategories,
       feature: {
         eyebrow: "Flagship safety product",
         title: "Automatic Rescue Device (ARD)",

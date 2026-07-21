@@ -90,3 +90,19 @@
     gap: 0.25rem;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   Self-contained categories (the client's nav links straight to them) render
+   their real products inline. Several — Elevator Cabin, KIT Accessories — carry
+   more than one variant, so they are separated by a hairline rule.
+   -------------------------------------------------------------------------- */
+.inlineProducts {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 7vw, 5.5rem);
+}
+
+.inlineProducts > * + * {
+  padding-top: clamp(3rem, 7vw, 5.5rem);
+  border-top: 1px solid var(--hairline);
+}

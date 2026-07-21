@@ -48,7 +48,10 @@ export interface NavItem {
   href: string;
   dropdown?: NavLink[];
   mega?: {
+    /** Themed grouping, used by the footer and the mobile accordion. */
     groups: MegaGroup[];
+    /** Flat list in the client's own nav order — what the desktop menu renders. */
+    categories?: MegaCategory[];
     feature?: MegaMenuFeature;
   };
 }

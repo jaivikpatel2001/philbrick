@@ -22,14 +22,19 @@ export const SITE = {
   careersEmail: "hr.philbrickindia@gmail.com",
   phone: "+91 99789 86631",
   phoneHref: "tel:+919978986631",
+  /* The union of every number the client publishes: the first three are the
+     footer block in philbrick-child-theme/footer.php, the last two appear on
+     the Contact Us page and the helpline widget. */
   phones: [
     "+91 99789 86631",
     "+91 93740 22660",
+    "+91 99789 86635",
     "+91 84012 19941",
     "+91 98250 09420",
   ],
   whatsapp: "+919978986631",
-  whatsappUrl: "https://api.whatsapp.com/send?phone=+919978986631",
+  whatsappUrl:
+    "https://api.whatsapp.com/send?phone=+919978986631&text=Hello%20Sir%2C%20I%20would%20like%20to%20inquire%20about",
 
   address: {
     line1: "Plot No. 69, Road No. 6, G.I.D.C. Kathwada",
@@ -71,8 +76,15 @@ export const SITE = {
 export const gmailHref = (email: string) =>
   `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
 
-/* Social profiles from the WordPress child theme footer. */
+/* Social profiles from the WordPress child theme footer, in the order the
+   client's own "Join Us:" widget lists them (footer.php, #tz_socials-4).
+   WhatsApp is the first of the four and had been missing here. */
 export const SOCIALS: { label: string; href: string; icon: string }[] = [
+  {
+    label: "WhatsApp",
+    href: "https://api.whatsapp.com/send?phone=+919978986631&text=Hello%20Sir%2C%20I%20would%20like%20to%20inquire%20about",
+    icon: "FiMessageCircle",
+  },
   {
     label: "Facebook",
     href: "https://www.facebook.com/philbrick.india",

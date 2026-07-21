@@ -466,7 +466,12 @@ export function ScrollStory() {
               <Button href="/contact" size="lg" withArrow>
                 Request consultation
               </Button>
-              <Button href="#solutions" size="lg" variant="secondary">
+              <Button
+                href="#solutions"
+                size="lg"
+                variant="secondary"
+                className={styles.secondaryOnDark}
+              >
                 Explore solutions
               </Button>
             </div>

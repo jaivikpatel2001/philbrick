@@ -80,3 +80,26 @@
   justify-content: center;
   margin-top: 1rem;
 }
+
+/* -----------------------------------------------------------------------------
+   The CTA band is ALWAYS a dark photograph, in both themes — which is why its
+   eyebrow, title and description are hardcoded white above rather than using
+   theme tokens. The shared secondary button was the one control still reading
+   from tokens, so in light theme it rendered near-black text on a near-black
+   border against the dark image and effectively disappeared.
+
+   Scoped under .actions so it outranks Button.module.css's own `.secondary`
+   rules (which are single-class) regardless of stylesheet order.
+   -------------------------------------------------------------------------- */
+.actions .secondaryOnDark {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: saturate(150%) blur(6px);
+}
+
+.actions .secondaryOnDark:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.18);
+}

@@ -7,12 +7,13 @@ import styles from "./NavDropdown.module.css";
 
 interface NavDropdownProps {
   links: NavLink[];
-  onEnter: () => void;
-  onLeave: () => void;
+  /** Close the menu once a destination is chosen. */
+  onNavigate: () => void;
 }
 
-/** Compact flat dropdown anchored under a nav item (e.g. About). */
-export function NavDropdown({ links, onEnter, onLeave }: NavDropdownProps) {
+/** Compact flat dropdown anchored under a nav item (e.g. About). Opened by
+    clicking the nav item — the trigger itself is a button, never a link. */
+export function NavDropdown({ links, onNavigate }: NavDropdownProps) {
   return (
     <motion.div
       className={styles.panel}
@@ -20,15 +21,18 @@ export function NavDropdown({ links, onEnter, onLeave }: NavDropdownProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
       role="menu"
       data-lenis-prevent
     >
       <ul>
         {links.map((link) => (
           <li key={link.href}>
-            <Link href={link.href} className={styles.link} role="menuitem">
+            <Link
+              href={link.href}
+              className={styles.link}
+              role="menuitem"
+              onClick={onNavigate}
+            >
               <span className={styles.label}>
                 {link.label}
                 <FiArrowUpRight className={styles.arrow} aria-hidden />
