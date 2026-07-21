@@ -6,6 +6,182 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-21 12:40 IST
+
+### `/variant16` — city photos supplied, floating glass navbar, centred hero
+
+**Status:** Completed and verified (light + dark + scrolled + mobile).
+
+Client direction on variant16: drop the right-hand product spotlight, centre the
+hero content, and float the navigation bar as a glassmorphism pill (reference:
+"Aether Lane" style rounded, detached bar) at the width it already has.
+
+- **Background photos supplied** — `hero-city-day.png` / `hero-city-night.png`
+  (1535 x 1024) now live in
+  `public/images/home/hero-exploration/environment/`, optimized to WebP at
+  384/640/960/1280 via `scripts/optimizeHeroExploration.mjs` (the merge-safe
+  script — a plain `optimizeImages.mjs` run would wipe the hero-exploration
+  manifest entries). The night photo was replaced once under the same filename;
+  the script must be re-run in that case or the old variants persist.
+- **`corporate/Variant16Hero.tsx` rewritten** — the entire `.media` spotlight
+  block is gone. One centred content column (eyebrow, headline, lead, CTAs,
+  trust row) sits over the full-bleed photo. The two photos still cross-fade
+  purely in CSS by the `[data-theme]` attribute set pre-paint, so no JS and no
+  flash.
+- **Floating glass navbar (opt-in, per page)** — the hero sets
+  `data-nav="float"` on `<html>` while mounted and removes it on unmount, and
+  `styles/globals.css` restyles the global header for that flag only: the header
+  goes `position: fixed` with transparent background and detaching padding, and
+  its existing `.container--wide` becomes the pill (radius-pill, glass
+  background, blur, hairline border, shadow). Width is unchanged, so it lines up
+  with the rest of the site. Verified `/variant15` and the other routes still
+  render the normal sticky navbar.
+- **Selector note:** the override targets `header[data-scrolled]` rather than a
+  class because the Navbar's classes are hashed CSS-Module names, and the
+  attribute is what lifts specificity above the module's own
+  `.header[data-scrolled="true"]` / `.header.megaOpen` background rules.
+- **Legibility pass** — the radial scrim now covers the whole content block
+  (the badge labels were landing on bright water); badge labels use
+  `--text-secondary` inside `.content16`; the ghost "Explore products" CTA gets
+  the same glass fill as the navbar so it survives over the photograph.
+
+**Bug found and fixed (was silently breaking all glass surfaces):** the CSS
+minifier auto-prefixes `backdrop-filter`, but when a rule declares BOTH
+`backdrop-filter` and `-webkit-backdrop-filter` by hand it dedupes to the
+`-webkit-` form ALONE — and current Chrome has dropped that alias
+(`CSS.supports('-webkit-backdrop-filter', …)` is now `false`), so the blur never
+applies. Fixed in the new rules by declaring only the standard property. **16
+pre-existing source files still declare both** (`Navbar`, `MegaMenu`,
+`MobileNav`, `NavDropdown`, `ComingSoon`, `Modal`, `ComponentModal`,
+`ElevatorScene`, `ExplorationHero`, `ScrollStory`, `variants`, `TechShowcase`,
+`corporate`, `globals`) — their blur is dead in Chrome today. Left alone here
+because fixing them changes every page's appearance mid client review.
+
+**Follow-up pass the same afternoon (client feedback on the floating bar):**
+
+- **Dead space removed** — the pill was inheriting the navbar's
+  `justify-content: space-between` at full `container--wide` width, which parked
+  the logo and the actions at the far edges and left two large empty gaps inside
+  the glass. It now sizes to its content (`width: fit-content`, auto margins
+  centre it) with an explicit `gap`. Below the 1080px desktop-nav breakpoint it
+  reverts to full width, otherwise the logo + hamburger would collapse to a stub.
+- **No more height jump on scroll** — the module shrinks `.inner` from
+  `var(--nav-h)` (76px) to 64px once `data-scrolled="true"`. The float override
+  now pins it to **64px in both states** (the height the client preferred).
+  Verified: pill height 64 before and after scrolling, delta 0.
+- **Genuinely translucent** — was `--surface-glass-strong` (0.85 alpha), which
+  read as a solid white/black bar. Now
+  `color-mix(in srgb, var(--surface-glass) 58%, transparent)` (~0.42 alpha,
+  ~0.52 when scrolled), so the photo reads through it. Kept token-based rather
+  than hardcoding rgba. Blur was dialled back on client feedback: 26px → 14px →
+  **5px** (the last step was set directly in the file), so content passing under
+  the bar stays recognisable rather than becoming a smear.
+- **Both hero CTAs removed** — "Get a free quote" and "Explore products" are
+  gone on client direction, so the hero is eyebrow → headline → lead → trust
+  row. The trust badges moved from the `d5` to the `d4` entrance delay to close
+  the gap the CTA beat left in the stagger, and the now-dead `.content16
+  .ctaRow` / `.glassBtn16` rules plus the `Button` and `CTA` imports were
+  deleted. **Note:** the lead still ends "Explore the range or tell us about
+  your project", which now invites an action the hero no longer offers — flagged
+  to the client, copy left as-is pending their call. The navbar's "Get a quote"
+  button is the only hero-level conversion path on this variant now.
+- **Light-theme scrim lightened** so the skyline reads as a photograph rather
+  than a washed-out backdrop: radial centre 0.9 → 0.58 alpha, mid 0.6 → 0.34,
+  top wash 0.62 → 0.4, bottom 0.55 → 0.38. Dark theme untouched.
+  **Contrast was re-measured, not eyeballed** (screenshot with the copy hidden,
+  sample the true backdrop under each text box, worst-case WCAG ratio): at the
+  lighter scrim the lead fell to **2.27:1** and the badge labels to **2.3:1**,
+  both failing AA. Fixed by darkening the TEXT instead of pouring white back
+  over the picture — `.content16 .lead` and `.content16 .badgeLabel` now use
+  `--text-primary`. Re-measured: h1 5.32:1, lead 5.27:1, badge stat 6.06:1,
+  badge label 7.51:1 — all pass.
+- **Trust row trimmed to two badges** — "ISO Process" and "Exporter" dropped on
+  client direction. `TrustBadges` gained an optional `only` prop (filter by
+  `stat`) so variant16 shows a subset **without forking the shared data**;
+  variants 7/8/9/10/14/15 still render all four (verified in the export).
+  `.content16 .trust` switched from `repeat(4, auto)` to
+  `grid-auto-flow: column` so the column count follows the item count.
+
+**Files:** `sections/experience/corporate/Variant16Hero.tsx`,
+`sections/experience/corporate/TrustBadges.tsx`,
+`sections/experience/corporate/corporate.module.css` (V16 block rewritten),
+`styles/globals.css` (floating navbar), `imagegeneration.md` §11.7,
+`public/images/home/hero-exploration/environment/hero-city-*.{png,webp}`,
+`lib/imageManifest.json`.
+
+**Verification note (important for future work):** the in-app preview pane
+returns STALE computed styles — it reported the pill as transparent with no
+blur even after `element.style.background` was set inline, and screenshots timed
+out. Everything above was verified instead by driving a real headless Chrome
+over the DevTools Protocol (launch with `--remote-debugging-port`, drive via
+Node 22's global `WebSocket`: seed `localStorage` for the theme, navigate,
+`document.getAnimations().forEach(a => a.finish())` to settle entrances, then
+`Page.captureScreenshot` + `Runtime.evaluate` probes;
+`Emulation.setDeviceMetricsOverride` for mobile, since Chrome on Windows clamps
+real window width to ~500px). Production build stays clean: 74/74 static pages.
+
+---
+
+## 2026-07-21 11:51 IST
+
+### New `/variant16` — variant15 with a theme-swapped city background
+
+**Status:** Completed (awaiting the two client photos)
+
+Client picked variant15 and wants a full-bleed city photograph behind the hero
+(reference: blue-hour skyline across water), with the light/dark pair idea:
+the background follows the theme toggle.
+
+- **`corporate/Variant16Hero.tsx`** — variant15's hero verbatim (same 9-part
+  rotating spotlight, dots, CTAs, trust badges) plus two stacked background
+  photos cross-faded purely in CSS by the `[data-theme]` attribute the
+  ThemeProvider sets on `<html>` BEFORE paint, so there is no JS and no flash:
+  light → `hero-city-day.png`, dark → `hero-city-night.png`.
+- **Legibility scrim** (`.scrim16`, theme-aware): strong veil on the left
+  (headline + trust badges), a soft radial veil behind the right spotlight, and
+  clear in between; on mobile (stacked layout) it becomes an even top-to-bottom
+  veil. Content z-3 / spotlight z-2 / scrim z-1 / photos z-0.
+- **Graceful fallback:** `lib/imageLoader.ts` passes unknown paths through, so
+  until the photos are added the build still succeeds and the hero simply shows
+  variant15's gradient — nothing looks broken.
+- `/variant16` page reuses `CategoryBrowse15` + `HomeSections`; route added to
+  `config/pageReleases.ts`; asset spec + both prompts documented as
+  imagegeneration.md §11.7.
+
+**Verified:** build green (compiled, TypeScript clean, **74/74** pages, was 73);
+export references both `hero-city-day.png` and `hero-city-night.png`, renders
+the 9-part spotlight and the browse grid; `/variant15` confirmed untouched
+(zero hero-city refs).
+
+**Next:** client drops `public/images/home/hero-city-day.png` and
+`hero-city-night.png` (16:9, >=2400px). Then run `optimizeImages.mjs` FOLLOWED
+BY `optimizeHeroExploration.mjs` (the latter merges into the same manifest and
+a plain optimizeImages run would drop its entries).
+
+---
+
+## 2026-07-18 11:56 IST
+
+### `/variant15` browse grid — one card per UNIQUE image (9, no duplicates)
+
+**Status:** Completed (verified live)
+
+Client: the category grid must not repeat images — show only cards with a
+unique image (9 part images → 9 cards). Rebuilt `CategoryBrowse15` to iterate
+`CATALOG_PARTS` (the 9 unique renders) instead of the 14 `PRODUCT_TREE`
+categories (which shared images). Each card: the part render, the part name,
+its description, a small "In <category>" crumb, and a link to its closest
+category (`CATEGORY_FOR_PART`). Header copy updated ("Find it by component",
+no fabricated count). New `.catCrumb15` style.
+
+**Verified live** (dev server): the grid renders exactly 9 cards, 9 unique
+images, duplicates: [] — each with the right name/crumb/href. Build green
+(73/73).
+
+**Files:** `corporate/CategoryBrowse15.tsx`, `corporate.module.css`.
+
+---
+
 ## 2026-07-18 11:50 IST
 
 ### Site default theme flipped to LIGHT (persistence unchanged)

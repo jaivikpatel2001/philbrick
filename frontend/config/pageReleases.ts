@@ -50,7 +50,8 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
        variant12 catalogue journey (variant6 3D arrival + catalogue overlay)
        variant13 corporate scroll component reveal (drawing + parts)
        variant14 animated floating product gallery (corporate)
-       variant15 product spotlight hero + category browser (corporate) */
+       variant15 product spotlight hero + category browser (corporate)
+       variant16 centred hero on a theme-swapped city photo + floating glass nav */
   "/variant1": true,
   "/variant2": true,
   "/variant3": true,
@@ -66,6 +67,7 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/variant13": true,
   "/variant14": true,
   "/variant15": true,
+  "/variant16": true,
   "/about": false,
   "/vision-mission": false,
   "/milestone": false,

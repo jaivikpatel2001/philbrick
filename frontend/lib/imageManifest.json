@@ -173,6 +173,18 @@
   "/images/home/hero-exploration/environment/drawing-elevetor.png": [
     384
   ],
+  "/images/home/hero-exploration/environment/hero-city-day.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
+  "/images/home/hero-exploration/environment/hero-city-night.png": [
+    384,
+    640,
+    960,
+    1280
+  ],
   "/images/home/hero-exploration/environment/india-tower.png": [
     384
   ],
