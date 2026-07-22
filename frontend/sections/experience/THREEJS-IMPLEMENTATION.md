@@ -15,13 +15,14 @@ normally.
 
 | File | Role |
 |---|---|
-| [`app/page.tsx`](../../app/page.tsx) | Homepage. Renders `<ElevatorScene/>` then About → Products → Lifecycle support → Projects → Industries → Stats → CTA. |
+| [`app/page.tsx`](../../app/page.tsx) | Homepage. Renders `<ElevatorHero/>` then `<HomeSections/>` — About → Products → What we offer → Applications → Stats → CTA. |
+| [`sections/experience/ElevatorHero.tsx`](ElevatorHero.tsx) | Entry point the homepage imports; lazy-loads the scene client-side. |
 | [`sections/experience/ElevatorScene.tsx`](ElevatorScene.tsx) | **The hero.** Capability wrapper + the Three.js `Scene3D`. |
 | [`sections/experience/ElevatorScene.module.css`](ElevatorScene.module.css) | Stage / canvas mount / atmosphere / copy positioning. |
 | [`sections/experience/ScrollStory.tsx`](ScrollStory.tsx) | **Fallback hero** (hand-built CSS/GSAP elevator) for no-WebGL / reduced-motion. Also the source of the shared copy/HUD/finale styles. |
 | [`sections/experience/ScrollStory.module.css`](ScrollStory.module.css) | Shared scene/HUD/finale styling, reused by `ElevatorScene` via `import story from "./ScrollStory.module.css"`. |
 | [`data/model.ts`](../../data/model.ts) | Optional GLTF model drop-in config (default off). |
-| [`styles/tokens.css`](../../styles/tokens.css) | Global palette/tokens (champagne gold, electric blue, steel, deep black) the hero and overlays use. |
+| [`styles/tokens.css`](../../styles/tokens.css) | Global palette/tokens the hero and overlays use — Philbrick azure blue + signal red on navy-black. Window and interior light stays a realistic warm amber, independent of the brand palette; the azure accent lights the screens and signage glow. |
 
 Global [`components/providers/SmoothScroll.tsx`](../../components/providers/SmoothScroll.tsx)
 runs **Lenis** and wires it into the GSAP ticker + `ScrollTrigger` site-wide.
@@ -84,7 +85,7 @@ thresholds below (`ARRIVE_END` / `APPROACH_END` / `INSIDE_P` / `COMP_START` /
 
 | Beat | progress | 3D behaviour | Copy / UI |
 |---|---|---|---|
-| Arrival (exterior) | 0.00–0.12 | Wide night establishing shot: procedural VERTIQ tower (instanced curtain-wall + lit offices, gold podium, backlit sign, entrance glow), fogged context towers, gradient sky dome, reflective plaza | "Engineered for **movement.**" |
+| Arrival (exterior) | 0.00–0.12 | Wide night establishing shot: a procedural tower (instanced curtain-wall + lit offices, podium, entrance glow), fogged context towers, gradient sky dome, reflective plaza. **The facade carries no brand name** — it stays a clean, realistic tower; the Philbrick mark is a decal on the car's door-operator header instead | "Engineered for **movement.**" |
 | The Approach | 0.12–0.24 | Dolly-zoom push toward the entrance — the camera moves in while the fov narrows 52°→38°, so the tower looms | "Your elevator **arrives.**" |
 | Threshold | 0.24–0.34 | Camera passes under the canopy and *through* the entrance glass (the glass + plaza pool light fade just before contact); studio reflections ramp back up; lands on the original lobby wide shot | — |
 | The Call | 0.34–0.42 | Lobby wide → closer; **doors part** (`smoothstep(0.36, 0.45, p)`) | — |

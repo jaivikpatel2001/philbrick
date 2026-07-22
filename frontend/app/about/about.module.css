@@ -39,6 +39,75 @@
   object-fit: cover;
 }
 
+/* ----- Activity ------------------------------------------------------- */
+.activity {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: start;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+.activityText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+/* Industry segments on hairline rules with index numerals, per the
+   "Engineered Editorial" direction. No icon-box cards. */
+.segments {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+}
+.segment {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+}
+.segmentIndex {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent);
+}
+
+/* ----- History -------------------------------------------------------- */
+.history {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--border);
+}
+.chapter {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+  border-bottom: 1px solid var(--border);
+}
+.chapterPeriod {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--accent);
+  padding-top: 0.2rem;
+}
+.chapterBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.chapterTitle {
+  font-size: var(--fs-h4);
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  color: var(--text-primary);
+}
+
 /* Infrastructure — scale stats below the capability grid */
 .infraStats {
   margin-top: clamp(2.5rem, 5vw, 4rem);
@@ -62,8 +131,13 @@
 }
 
 @media (max-width: 900px) {
-  .story {
+  .story,
+  .activity {
     grid-template-columns: 1fr;
+  }
+  .chapter {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
   .storyMedia {
     aspect-ratio: 16 / 11;

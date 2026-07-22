@@ -1,0 +1,42 @@
+/* Text-only page header — see PageHeader.tsx. */
+.header {
+  position: relative;
+  padding-top: clamp(2.5rem, 6vw, 5rem);
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 60rem;
+  animation: fadeUp 1s var(--ease-out) 0.05s both;
+}
+
+.crumbs {
+  margin-bottom: 0.25rem;
+}
+.eyebrow {
+  color: var(--accent);
+}
+.title {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  text-wrap: balance;
+  color: var(--text-primary);
+}
+.desc {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-snug);
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FiPhone, FiMail, FiMapPin, FiClock, FiUser } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa6";
 import { PageHero } from "@/sections/shared/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { FAQSection } from "@/sections/shared/FAQSection";
@@ -9,7 +10,7 @@ import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { contactPageSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { CONTACT_FAQS } from "@/data/faqs";
-import { SITE, gmailHref } from "@/constants/site";
+import { SITE, gmailHref, telHref } from "@/constants/site";
 import { HERO } from "@/data/images";
 import styles from "./contact.module.css";
 
@@ -20,22 +21,85 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-const METHODS = [
-  { icon: FiPhone, label: "Call us", value: SITE.phone, href: SITE.phoneHref },
-  {
-    icon: FiMail,
-    label: "Email us",
-    value: SITE.email,
-    href: gmailHref(SITE.email),
-  },
+/* Every number and inbox the company publishes, grouped by what it is for, so
+   a visitor knows exactly which line to call, which to chat on and which desk
+   to write to. Data lives in constants/site.ts. */
+type Method = {
+  icon: typeof FiPhone;
+  label: string;
+  value: string;
+  note?: string;
+  href?: string;
+};
+
+const PHONE_METHODS: Method[] = SITE.phones.map((p) => ({
+  icon: p.whatsapp ? FaWhatsapp : FiPhone,
+  label: p.label,
+  value: p.number,
+  note: p.purpose,
+  href: telHref(p.number),
+}));
+
+const EMAIL_METHODS: Method[] = SITE.emails.map((e) => ({
+  icon: FiMail,
+  label: e.label,
+  value: e.address,
+  note: e.purpose,
+  href: gmailHref(e.address),
+}));
+
+const VISIT_METHODS: Method[] = [
   {
     icon: FiMapPin,
-    label: "Visit us",
+    label: "Address",
     value: `${SITE.address.line1}, ${SITE.address.line2}`,
+    note: "Manufacturing facility and head office",
     href: SITE.mapUrl,
   },
-  { icon: FiClock, label: "Hours", value: SITE.hours },
+  {
+    icon: FiClock,
+    label: "Hours",
+    value: SITE.hours,
+    note: "Indian Standard Time",
+  },
 ];
+
+function MethodList({ methods }: { methods: Method[] }) {
+  return (
+    <div className={styles.methods}>
+      {methods.map((m) => {
+        const Inner = (
+          <>
+            <span className={styles.methodIcon}>
+              <m.icon />
+            </span>
+            <span>
+              <span className={styles.methodLabel}>{m.label}</span>
+              <span className={styles.methodValue}>{m.value}</span>
+              {m.note && <span className={styles.methodNote}>{m.note}</span>}
+            </span>
+          </>
+        );
+        return m.href ? (
+          <a
+            key={m.label + m.value}
+            href={m.href}
+            className={styles.method}
+            {...(m.href.startsWith("http")
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
+          >
+            {Inner}
+          </a>
+        ) : (
+          <div key={m.label + m.value} className={styles.method}>
+            {Inner}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function ContactPage() {
   return (
@@ -62,50 +126,48 @@ export default function ContactPage() {
         <div className={`container--wide ${styles.layout}`}>
           {/* Left: info */}
           <div className={styles.info}>
-            <div className={styles.methods}>
-              {METHODS.map((m) => {
-                const Inner = (
-                  <>
-                    <span className={styles.methodIcon}>
-                      <m.icon />
-                    </span>
-                    <span>
-                      <span className={styles.methodLabel}>{m.label}</span>
-                      <span className={styles.methodValue}>{m.value}</span>
-                    </span>
-                  </>
-                );
-                return m.href ? (
-                  <a
-                    key={m.label}
-                    href={m.href}
-                    className={styles.method}
-                    {...(m.href.startsWith("http")
-                      ? { target: "_blank", rel: "noopener noreferrer" }
-                      : {})}
-                  >
-                    {Inner}
-                  </a>
-                ) : (
-                  <div key={m.label} className={styles.method}>
-                    {Inner}
-                  </div>
-                );
-              })}
+            {/* Phone lines — helpline first, then the WhatsApp line and the
+                office numbers, each saying what it is for. */}
+            <div className={styles.group}>
+              <p className={styles.groupTitle}>Call or chat</p>
+              <MethodList methods={PHONE_METHODS} />
+              <a
+                href={SITE.whatsappUrl}
+                className={styles.chatCta}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaWhatsapp aria-hidden />
+                Chat on WhatsApp · {SITE.whatsappDisplay}
+              </a>
             </div>
 
-            <div className={styles.methods}>
-              {SITE.contacts.map((c) => (
-                <div key={c.name} className={styles.method}>
-                  <span className={styles.methodIcon}>
-                    <FiUser />
-                  </span>
-                  <span>
-                    <span className={styles.methodLabel}>{c.name}</span>
-                    <span className={styles.methodValue}>{c.role}</span>
-                  </span>
-                </div>
-              ))}
+            {/* Inboxes by department: sales, general, careers, alternate. */}
+            <div className={styles.group}>
+              <p className={styles.groupTitle}>Email the right desk</p>
+              <MethodList methods={EMAIL_METHODS} />
+            </div>
+
+            <div className={styles.group}>
+              <p className={styles.groupTitle}>Visit us</p>
+              <MethodList methods={VISIT_METHODS} />
+            </div>
+
+            <div className={styles.group}>
+              <p className={styles.groupTitle}>Speak to a person</p>
+              <div className={styles.methods}>
+                {SITE.contacts.map((c) => (
+                  <div key={c.name} className={styles.method}>
+                    <span className={styles.methodIcon}>
+                      <FiUser />
+                    </span>
+                    <span>
+                      <span className={styles.methodLabel}>{c.name}</span>
+                      <span className={styles.methodValue}>{c.role}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <p className={styles.note}>

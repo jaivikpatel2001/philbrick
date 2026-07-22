@@ -6,6 +6,379 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-22 14:30 IST
+
+### Fix: the chat window could not be closed
+
+**Status:** Completed
+
+Reported with a screenshot: chat open, conversation in progress, the close
+button does nothing. Three separate defects, all introduced by this morning's
+skinning work. Reproduced and fixed each.
+
+**1. Tawk was left in a state where `minimize()` is ignored.** The widget was
+hidden with `hideWidget()` at load and again on every minimize, so Tawk was
+flagged *hidden* while its window was *maximized* — a combination it does not
+expect. In that state it can ignore `minimize()`, and since its own launcher was
+hidden too, there was no way out at all. `openTawk()` now calls `showWidget()`
+before `maximize()`, and `hideWidget()` is called once at load only (to stop the
+launcher flashing before skinning runs) and never again. Tawk's state machine
+stays consistent; the launcher stays invisible because the site hides that
+iframe directly rather than through the API.
+
+**2. The fallback did not work either.** `closeTawk()` fell back to
+`hideWidget()`, which flips the flag but leaves an open window exactly where it
+is — verified by sabotaging `minimize()` in the page and watching the window
+stay put. The fallback is now to set `display: none` on the window's own iframe,
+which cannot fail because that element is in our document. Restoring is tracked
+in a `WeakSet`: a hidden frame measures 0x0 and can no longer be recognised by
+size, so without that the chat would close and never reopen (which is exactly
+what the first attempt at this fix did).
+
+**3. Tawk's green launcher was never actually hidden.** Two rules were tried
+and both were wrong. Classifying by size mis-tagged the window at 300x150
+mid-animation and fails on phones, where the window is small by design.
+Classifying by z-index hid only one bubble — Tawk keeps **two** launcher frames
+(64x60 and 124x95 observed), so the visible one survived, which is the green
+chevron in the client's screenshots. Roles now come from what actually holds:
+the window is the only frame Tawk gives an `open`/`closed` class, and a launcher
+is any other frame that draws something at most 200px in both directions. Tawk's
+zero-size helper frames are never touched — hiding one could break its message
+transport — and the "Powered by tawk.to" strip is 350 wide so it can never match.
+
+**Verified** across five states, twice each, with the button only:
+
+| Step | Result |
+| --- | --- |
+| Open | window 350x520 + branding strip; no Tawk launcher anywhere |
+| Close with `minimize()` sabotaged (the reported bug) | everything gone |
+| Reopen after that forced close | window returns |
+| Close normally | gone, `isChatMaximized() === false` |
+| Reopen | window returns |
+
+**Affected Areas:** `components/providers/TawkTo.tsx` (`skinTawk`, `openTawk`,
+`closeTawk`, bootstrap callbacks, the re-skin effect).
+
+**Technical Decisions:**
+- Roles are re-derived on every pass instead of locked in on first sight, so a
+  frame that was mid-animation when one pass ran is picked up by the next and a
+  wrong guess can never persist.
+- The forced close hides the branding strip along with the window. Tawk hides it
+  itself when minimizing normally, so leaving it behind would orphan a
+  "Powered by tawk.to" bar over the page.
+
+**Known Limitations:**
+- Under a browser with third-party frames blocked, the button still falls back
+  to WhatsApp, as before.
+
+---
+
+## 2026-07-22 13:45 IST
+
+### Documentation pass: every .md re-checked against the code
+
+**Status:** Completed
+
+Read every markdown file in the repo against the actual code and corrected what
+had drifted. Findings, not just edits:
+
+| File | What was wrong | Fixed to |
+| --- | --- | --- |
+| `SITE-STRUCTURE.md` | Whole document predated the last three releases: no `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`, `/news-events/[slug]` or the 17 variants; release flags showed `/about` and `/products` as live when only `/` and the variants are; product count said 35 routes | Rewritten. Verified counts: 30 static (13 pages + 17 variants) + 38 product (14 categories + **24** products, counted off `out/`) + 6 news = 74 release entries, 82 prerendered pages |
+| `README.md` | Folder tree missing `hooks/`, `scripts/`, `content-audit/`, `components/{products,seo}`, the four new routes, the variants and half the providers; stack omitted Tawk.to and FormSubmit; release instructions wrong (see below) | Updated, plus a documentation map table and a content-audit section |
+| `CLAUDE.md` | **Product-route releases were documented wrong**: it said to flip the node's `released` flag in `data/products.ts`. That flag is a content-readiness hint; production gating reads the `RELEASED_PRODUCT_ROUTES` allow-list. Also said the site's chat button hides while the chat is open, which stopped being true this morning | Corrected in both the STRICT RULE and the architecture section; added a docs table and a rule to update `SITE-STRUCTURE.md` / `README.md` alongside `DONE.md` |
+| `imagegeneration.md` | Opened with "Today all of these come from Unsplash placeholders" — every one was replaced back in July; homepage-hero note claimed the Three.js scene was commented out in `app/page.tsx`, which it is not | Status corrected, plus a note on the four pages that deliberately have no imagery |
+| `DESIGN.md` | Is an **analysis of apple.com**, with Apple's hexes and SF Pro type scale, but nothing said so above the fold. A reader could easily take `#0066cc` for a project token | Added a banner: reference only, `styles/tokens.css` is the real system |
+| `THREEJS-IMPLEMENTATION.md` | Homepage flow listed sections that no longer exist ("Lifecycle support → Projects"); file table missed `ElevatorHero.tsx`; palette line still said champagne gold/electric blue; the arrival beat described a "VERTIQ tower ... backlit sign" | Corrected. The gold **material** reference at §4 is accurate and stays: `#c7a96a` is still in the scene as architectural metal, unrelated to the brand palette |
+| `variants/VARIANTS.md` | Said "Four alternative homepage heroes" above a table of 15 | 17, table completed with variant16/17, plus a reminder to delete the routes and their release flags together |
+| `public/hdri/README.md` | "steel, glass and gold" from the old palette | Neutral wording |
+| **new** `README.md` (repo root) | Did not exist. Nothing explained that `wordpress/` is a read-only content reference rather than a deployed app, or that `backend/` is empty | Added |
+
+`DONE.md` and `AGENTS.md` needed no changes; `public/models/README.md` is still
+accurate.
+
+**Verified, not assumed:** product route counts were taken from the built `out/`
+tree (14 category + 24 product HTML files), release flags from
+`config/pageReleases.ts`, the homepage composition from `app/page.tsx` +
+`sections/home/HomeSections.tsx`, and every relative link in the seven main docs
+was resolved against the filesystem (0 broken).
+
+**Affected Areas:** `README.md` (root, new), `frontend/{README,CLAUDE,SITE-STRUCTURE,imagegeneration,DESIGN}.md`,
+`frontend/sections/experience/THREEJS-IMPLEMENTATION.md`,
+`frontend/sections/experience/variants/VARIANTS.md`,
+`frontend/public/hdri/README.md`.
+
+**Follow-up:**
+- `DESIGN.md` is a large reference document that no longer describes anything in
+  this project. Consider moving it out of the repo root, or into a `docs/`
+  folder, so it stops reading like a project spec.
+
+---
+
+## 2026-07-22 13:15 IST
+
+### Chat widget on-brand, one control in both states, agency credit in the footer
+
+**Status:** Completed
+
+**1. The chat widget looked like someone else's product.** Opening it swapped a
+52px brand-blue circle for Tawk's own 64x60 green chevron, next to a green
+window. Tawk renders into cross-origin iframes, so the inside of that window
+(header colour, bubbles) cannot be restyled from this codebase at all — that is
+a property setting. What is reachable is the iframe **elements**, which live in
+our document. So:
+
+- `skinTawk()` (`components/providers/TawkTo.tsx`) finds Tawk's container and
+  tags each iframe by role. Every id and class Tawk writes is randomised per
+  load and its `open` class comes and goes, so the container is found by shape
+  instead: the `<body>` child div whose children are all iframes. Roles are then
+  assigned by measured size (launcher ≤120px wide, window ≥200×200, the wide
+  short one is the "Powered by tawk.to" strip).
+- **Tawk's launcher is hidden outright**, so the site's own floating button is
+  the only chat control. It stays exactly where it was and becomes the close
+  control: same circle, same 52px, same `--accent`, with the speech bubble and
+  the chevron cross-fading and counter-rotating in place. That is what makes the
+  open and closed states read as one control.
+- The chat window gets `--radius-lg`, a `--border-accent` hairline and
+  `--shadow-xl`.
+- **Overrides are applied inline, not from the stylesheet.** Tawk writes its own
+  inline `!important` declarations, which an author `!important` rule cannot
+  outrank; only another inline declaration can. The matching rules in
+  `styles/globals.css` document the intent and take over if Tawk ever drops
+  `!important`. `skinTawk()` re-runs on ready, on open and every 2s, because
+  Tawk rewrites those inline styles as the chat opens and closes.
+- The "Powered by tawk.to" strip is deliberately left alone: removing it breaches
+  Tawk's terms on the free plan.
+
+Measured at 1280×800: window `[900,352 → 1250,702]`, button
+`[1186,716 → 1238,768]`, no overlap, the window sits directly above the button
+in the space Tawk's launcher used to occupy. At 375×812 the window fits the
+viewport with no horizontal overflow.
+
+**Remaining, and it needs the client's Tawk login:** the window's header and
+message-bubble colour. `TAWK_BRAND_NOTE` in `TawkTo.tsx` records the one-time
+setting — Administration → Chat Widget → Appearance → widget colour `#109BDD`
+(light-theme `--accent`). There is no JavaScript API for it; this build's
+`Tawk_API` has no `customStyle` property at all.
+
+**2. Agency credit** in the footer, which the client's WordPress footer also
+carried ("Design & Developed By Media Radical"). A single highlight travels
+across the studio name every 7s using an animated `background-position` on
+gradient text, with a long rest between passes so it reads as craft rather than
+motion. Hover swaps the gradient for solid `--accent` and draws a hairline in
+from the left. `prefers-reduced-motion` stops the shimmer and renders the name
+in `--text-secondary`. Links to `https://mediaradical.in/` in a new tab with
+`rel="noopener noreferrer"`. Centred under a hairline rule, wraps to two lines
+on mobile.
+
+**Affected Areas:**
+- `components/providers/TawkTo.tsx` (`skinTawk`, `closeTawk`, `TAWK_BRAND_NOTE`,
+  a tagging effect), `styles/globals.css` (widget rules),
+  `components/ui/FloatingActions.{tsx,module.css}` (persistent toggle, icon
+  cross-fade), `components/layout/Footer.{tsx,module.css}` (credit).
+
+**Technical Decisions:**
+- Roles are assigned once per iframe and never re-classified, because the sizes
+  that identify them change as the chat opens and closes.
+- The site button no longer hides while the chat is open. Hiding it was the old
+  way of avoiding two controls; hiding Tawk's launcher instead is what the
+  client actually asked for, and it keeps the control in one place.
+
+**Known Limitations:**
+- The chat window's interior stays Tawk green until the dashboard setting above
+  is changed. Nothing in this repo can reach inside that iframe.
+- Window size (350×350) is also a dashboard setting; it is left as Tawk serves
+  it, since forcing a different iframe size would not re-lay-out the content
+  inside it.
+
+---
+
+## 2026-07-22 12:40 IST
+
+### WordPress content audit: superset migration, Tawk.to, floating buttons
+
+**Status:** Completed
+
+Full page-by-page comparison of the client's WordPress site against this one,
+then everything WordPress had that we did not was added, in our design system.
+No existing section was removed.
+
+**How the audit was done (repeatable):** the WordPress database dump in
+`wordpress/wp-content/updraft/backup_2026-07-11-0205_…-db.gz` was parsed with
+the existing `scripts/parseWordpressDump.mjs`, which yields posts, meta and
+terms. That gives the real page bodies, the four nav menus, the Contact Form 7
+definitions, `wp_options` (Tawk.to ids, widgets, theme mods), the Yoast fields
+and the 38 WooCommerce products. Findings below cite page IDs.
+
+**What WordPress had that we were missing, and what was added:**
+
+| WordPress | Gap | Now |
+| --- | --- | --- |
+| Company (3318) "Activity" | Text existed inside `ABOUT_STORY` but under no heading, and the industry list was invisible | Own section on `/about`, plus the 9 industrial segments as an indexed hairline list |
+| Company (3318) "History" | Only the condensed `/milestone` timeline existed; the long narrative did not | `HISTORY_CHAPTERS`, 11 chapters, on `/about`, linked to `/milestone` |
+| Career (3435) | No route; `CAREER_CONTENT` sat unused | `/career` with the HR inbox callout |
+| Quality Policy (3) | No route; `QUALITY_POLICY` sat unused, and one sentence had been dropped | `/quality-policy`, 4 clauses, sentence restored |
+| Privacy policy (3992) | No route | `/privacy-policy`, section for section (`data/legal.ts`) |
+| Download (3662) + Step Brochure (3899) | No route, brochure link lost | `/downloads` with the STEP catalogue (`https://acharyagroup.in/cdn/2023catalog.pdf`) and the client's empty-state wording kept for when the list is bare |
+| Inquiry form (CF7 id 5) | Website, Address, City, State, Country fields absent | Added to `ContactForm`, optional so the form stays quick |
+| Step Brochure form (CF7 3901) | Gated the PDF behind a form | Document linked directly; a "Brochure or Catalogue Request" enquiry type covers anything unpublished |
+| Footer menus `footer1`/`footer2` | Career and both policies were not linked | Added to `FOOTER_NAV` |
+| Tawk.to plugin | Not integrated | See below |
+
+**Verified as already complete (no action):** all 38 products, with salient
+features and specification tables (`data/generated/catalog.json` covers 38/38);
+every contact detail; the 7-item top menu; the site tagline; Vision & Mission,
+Milestone and News & Events (the WordPress pages hold Lorem ipsum only);
+Infrastructure and Network (WordPress pages are empty); the 11 blog posts are
+all theme demo content; there are no PDFs in `wp-content/uploads`; Yoast held no
+real meta descriptions; the Revolution Slider is the theme's demo slider.
+
+**Tawk.to** (`components/providers/TawkTo.tsx`): the same property the client
+already runs, ids read from `wp_options` (`tawkto-embed-widget-page-id` =
+`6039cf23385de407571a9744`, `…-widget-id` = `1evgt29n1`, visibility
+`always_display = 1`). Loaded in the root layout with `next/script`
+`afterInteractive`, so it is on every page. Ids are overridable through
+`NEXT_PUBLIC_TAWKTO_PROPERTY_ID` / `NEXT_PUBLIC_TAWKTO_WIDGET_ID`.
+
+**Floating buttons** (`components/ui/FloatingActions.tsx`): scroll to top,
+which appears past 60% of a viewport and returns through Lenis
+(`scrollToTop()`), and a chat button that opens Tawk. The chat button is
+draggable by mouse or finger with pointer events, clamped inside the viewport,
+and its offset lives in component state only, so a refresh returns it to the
+corner as specified. A move under 5px counts as a click, so dragging never opens
+the chat by accident.
+
+**Content audit workbook:** `content-audit/Philbrick-content-audit.xlsx`,
+1,471 text items across 58 pages, in the requested columns (Page URL · Section ·
+Current Website Text · Suggested / WordPress Text · Client Final Text) plus an
+item type and a status. Sheets: Read me · Summary (live COUNTIF) · Site content ·
+Product content · Global elements · SEO & meta · WordPress source · Product
+source. Regenerate with `node scripts/contentAuditCrawl.mjs http://localhost:3000`
+then `python scripts/buildContentAudit.py`.
+
+**Affected Areas:**
+- New routes: `app/{career,quality-policy,privacy-policy,downloads}/`.
+- New shared piece: `sections/shared/PageHeader.tsx` (text-only page header for
+  pages that have no brand photograph), `app/prose.module.css`.
+- Content: `data/company.ts` (Activity, segments, History, Quality Policy
+  sentence), `data/legal.ts`, `data/downloads.ts`.
+- Chrome: `app/layout.tsx`, `constants/navigation.ts`, `styles/tokens.css`
+  (`--z-fab`), `components/providers/SmoothScroll.tsx` (`scrollToTop`).
+- Tooling: `scripts/contentAuditCrawl.mjs`, `scripts/buildContentAudit.py`.
+
+**Technical Decisions:**
+- The four new pages use a text-only `PageHeader` rather than borrowing an
+  existing hero photograph, per the image rule: no unrelated image is better
+  than a wrong one. If the client wants photography there, it needs a documented
+  prompt in `imagegeneration.md` first.
+- Tawk re-shows its own launcher whenever the chat window is maximized, so the
+  site hides that launcher again on minimize and hides its own button while the
+  chat is open. Exactly one control is ever on screen.
+- The chat button carries a speech bubble, not the WhatsApp mark, because it
+  opens Tawk; WhatsApp is only the fallback when Tawk is blocked.
+- The workbook traces copy back to WordPress in two grades, "Matches WordPress"
+  for verbatim text and "Adapted from WordPress" for text re-punctuated or split
+  for the new layout, so the client can see that adapted copy is still their own
+  facts rather than something invented.
+
+**Known Limitations:**
+- `/news-events` still runs on the mock items in `data/news.ts`; all 150 of its
+  text rows are flagged "Placeholder" in the workbook.
+- The workbook's Summary sheet uses formulas with no cached values (LibreOffice
+  is not installed here, so `recalc.py` could not run). Excel and Google Sheets
+  compute them on open; a script reading the file with `data_only=True` sees
+  blanks until then.
+- All four new routes are `false` in `config/pageReleases.ts`, matching the
+  Home-only production release. Flip them when the client approves.
+
+**Follow-up:**
+- Send the workbook to the client; feed the "Client Final Text" column back into
+  `data/` and `constants/site.ts`.
+- Replace `data/news.ts` with real dated announcements before releasing
+  `/news-events`.
+
+---
+
+## 2026-07-22 12:20 IST
+
+### Categorised contact channels: labelled emails, helpline vs WhatsApp
+
+**Status:** Completed
+
+The site published one email address and an unlabelled list of five numbers, so
+a visitor could not tell which line to call, which to chat on, or which desk to
+write to. The client's WordPress site does carry that split across three pages,
+so it is now modelled properly.
+
+Sources reconciled (nothing left behind):
+
+| WordPress source | Detail | Where it now lives |
+| --- | --- | --- |
+| Contact Us (ID 3631) | `philbrick@philbrickindia.com`, `philbrick_controls@yahoo.com`, `sales@philbrickindia.com` | `SITE.emails` |
+| Career (ID 3435) | "Mail your resume on `hr.philbrickindia@gmail.com`" | `SITE.emails` (Careers) |
+| Contact Us + Privacy policy (ID 3992) | `+91 84012 19941` listed first, and given as the contact number | `SITE.phones` (Helpline) + `SITE.phone` |
+| Contact Us + `footer.php` | `+91 99789 86631` followed by "OR Chat On" / "Or Chat" WhatsApp | `SITE.phones` (WhatsApp) |
+| Contact Us + `footer.php` | `+91 93740 22660`, `+91 98250 09420`, `+91 99789 86635` | `SITE.phones` (Office) |
+| `footer.php` | "Mon-Fri 9:00 to 18:00" | `SITE.hours` (already present) |
+
+**Changes:**
+- `constants/site.ts`: `emails` (Sales · General enquiries · Careers · Alternate
+  inbox) and `phones` (Helpline · WhatsApp · three Office lines), each entry
+  carrying a `label` and a plain `purpose`. Added `altEmail`,
+  `whatsappDisplay` and a `telHref()` helper. **`SITE.phone` is now the helpline
+  `+91 84012 19941`**, not the WhatsApp number, because that is the number the
+  client publishes first on Contact and as the contact number on the privacy
+  policy page.
+- `app/contact/page.tsx`: the info column is now four labelled groups, Call or
+  chat · Email the right desk · Visit us · Speak to a person. Every row shows
+  label, value and what it is for, and the phone group ends in a "Chat on
+  WhatsApp" pill linking to the client's own `api.whatsapp.com` message.
+- `components/layout/Footer.tsx`: phone and email lists became tag + value rows;
+  the WhatsApp row carries an inline "Or chat on WhatsApp" link, mirroring the
+  WordPress footer wording.
+- `components/layout/MobileNav.tsx`: the drawer number is labelled "Helpline"
+  and gained a WhatsApp chat link beneath it.
+- `lib/schema.ts`: one `ContactPoint` per channel (customer support / sales /
+  human resources) instead of a single sales point.
+- `data/faqs.ts`: new "Which number or email should I use?" question, and the
+  quotation answer now names the sales inbox and the helpline.
+- `public/llms.txt`, `app/network/page.tsx`: contact block updated to match.
+
+**Affected Areas:**
+- `constants/site.ts`, `lib/schema.ts`, `data/faqs.ts`, `app/contact/*`,
+  `app/network/page.tsx`, `components/layout/{Footer,MobileNav}*`,
+  `public/llms.txt`.
+
+**Brand icons (same session):**
+- Every WhatsApp affordance (contact phone row, contact CTA pill, footer chat
+  link, footer social button) now uses the real `FaWhatsapp` glyph instead of
+  the generic Feather speech bubble, and the footer's Twitter bird became
+  `FaXTwitter`. Both come from `react-icons/fa6`, registered in `lib/icons.ts`
+  next to the Feather set. The social label is "X (formerly Twitter)" (it is the
+  `aria-label`, so "X" alone would read as nothing); the href stays on
+  `twitter.com`, which redirects.
+
+**Technical Decisions:**
+- The three unlabelled numbers are tagged "Office", not invented roles. Only the
+  helpline and the WhatsApp line carry a function on the client's own site, so
+  only those two are given one.
+- Brand marks (WhatsApp, X) are only correct as their own glyph, so those two
+  break the otherwise Feather-only icon rule; everything else stays Feather.
+- Scalar `SITE.email` / `salesEmail` / `careersEmail` / `phone` kept alongside
+  the new arrays, so structured data and single-slot UI need no rework.
+
+**Known Limitations:**
+- The enquiry form still posts to one inbox (`NEXT_PUBLIC_CONTACT_FORM_TO_EMAIL`);
+  the department split is informational, not routing.
+
+**Follow-up:**
+- WordPress has a **Career** page (ID 3435) and a **Privacy policy** page
+  (ID 3992) with no route here yet. Content for both already sits in
+  `data/company.ts` (`CAREER_CONTENT`) and `wpPages.json`. Adding them needs new
+  routes plus `config/pageReleases.ts` entries.
+
+---
+
 ## 2026-07-21 15:45 IST
 
 ### New `/variant17` — depth hero, headline behind the tower

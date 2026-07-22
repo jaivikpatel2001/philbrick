@@ -114,6 +114,9 @@ export const FOOTER_NAV: FooterColumn[] = [
       { label: "Milestone & Awards", href: "/milestone" },
       { label: "Infrastructure", href: "/infrastructure" },
       { label: "Network", href: "/network" },
+      /* The client's WordPress footer menu also carries Career and the two
+         policies, so they belong here rather than only in the legal row. */
+      { label: "Career", href: "/career" },
     ],
   },
   {
@@ -127,8 +130,9 @@ export const FOOTER_NAV: FooterColumn[] = [
     title: "Resources",
     links: [
       { label: "News & Events", href: "/news-events" },
-      { label: "Products", href: "/products" },
-      { label: "Contact", href: "/contact" },
+      { label: "Downloads", href: "/downloads" },
+      { label: "Quality Policy", href: "/quality-policy" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
     ],
   },
   {
@@ -136,6 +140,7 @@ export const FOOTER_NAV: FooterColumn[] = [
     links: [
       { label: "Contact Us", href: "/contact" },
       { label: "Request a quote", href: "/contact" },
+      { label: "Career", href: "/career" },
     ],
   },
 ];

@@ -140,6 +140,9 @@
   --z-sticky: 50;
   --z-nav: 100;
   --z-mega: 95;
+  /* Floating action buttons sit above the sticky nav but below the drawer and
+     any modal, so an open panel always covers them. */
+  --z-fab: 150;
   --z-drawer: 200;
   --z-modal: 300;
   --z-toast: 400;

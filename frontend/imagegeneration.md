@@ -1,15 +1,28 @@
 # Philbrick — Image Generation Checklist
 
-A complete, page-by-page list of **every image the website renders**. Today all
-of these come from Unsplash placeholders (`data/images.ts`); this document is the
-brief for generating **custom, India-focused replacements**. Generate one image
-per entry using its **file name** and **aspect ratio**, then hand back the folder
-and the images will be wired into `data/images.ts` / product data by file name.
+A complete, page-by-page list of **every image the website renders**, with the
+prompt and aspect ratio for each. Generate one image per entry using its **file
+name** and **aspect ratio**, then hand back the folder and the images will be
+wired into `data/images.ts` / product data by file name.
 
-> **Homepage hero (2026-07-16):** the hero is now the scroll-driven exploded
-> component tour (`sections/experience/ExplorationHero.tsx`) running on interim
-> art; its final asset spec + prompts are **§11**. The Three.js scene is kept
-> intact (commented out in `app/page.tsx`). The logo, favicon, app icons and
+> **Status (2026-07-22): all 60 catalogued images are supplied and integrated.**
+> There are **no Unsplash or other external images left** anywhere in the site —
+> never reintroduce one. §8 records the delivery and §9 is the authoritative
+> asset mapping. Sections §1–§7 remain the brief that produced those assets, and
+> the template for anything new.
+>
+> **Pages with no imagery by design:** `/career`, `/quality-policy`,
+> `/privacy-policy` and `/downloads` use the text-only
+> `sections/shared/PageHeader.tsx` rather than a photographic hero, because no
+> brand photograph exists for them and borrowing an unrelated one would be worse
+> than none. If the client wants photography there, add the requirement here
+> first (prompt + exact aspect ratio), then generate and wire it.
+
+> **Homepage hero:** `app/page.tsx` renders the Three.js scene
+> (`sections/experience/ElevatorHero.tsx`). The scroll-driven exploded component
+> tour (`ExplorationHero.tsx`) is the `/variant1` review page, and its asset spec
+> + prompts are **§11**; the other hero directions under review are listed in
+> `sections/experience/variants/VARIANTS.md`. The logo, favicon, app icons and
 > OG card are already custom (`public/brand/`). The `/news-events` photos are
 > for the **currently mock** newsroom — regenerate with real event photography
 > when real news is published.

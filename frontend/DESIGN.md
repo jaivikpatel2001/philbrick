@@ -273,6 +273,18 @@ components:
     padding: 64px
 ---
 
+> ## ⚠ This is a reference document, not Philbrick's design system
+>
+> Everything below analyses **apple.com** — its colours, type scale and
+> components — as inspiration for the "premium, restrained, photography-first"
+> direction named in `CLAUDE.md`. None of these tokens exist in this codebase.
+>
+> **Philbrick's actual design system is [`styles/tokens.css`](styles/tokens.css)**
+> — azure blue + signal red on a navy-black / cool-white base, Space Grotesk +
+> Inter, the `--fs-*` / `--space-*` / `--radius-*` / `--dur` scales. Use those
+> tokens and nothing else. Do not copy hexes, fonts or component specs from this
+> file into the site; read it for the *thinking*, not the values.
+
 ## Overview
 
 Apple's web presence is a masterclass in **reverent product photography framed by near-invisible UI**. Every page is a stack of edge-to-edge product "tiles" — alternating light and dark canvases, each centered on a hero headline, a one-line tagline, two tiny blue pill CTAs, and an impossibly crisp product render. Nothing competes with the product. Typography is confident but quiet; color is either pure white, an off-white parchment, or a near-black tile; interactive elements are a single, quiet blue.

@@ -1,0 +1,113 @@
+/* Downloads — hairline rows with index numerals, not cards. */
+.list {
+  border-top: 1px solid var(--border);
+}
+.item {
+  display: grid;
+  grid-template-columns: 3rem 48px 1fr auto auto;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) 0;
+  border-bottom: 1px solid var(--border);
+}
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--accent);
+}
+.icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 1.25rem;
+}
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  color: var(--text-primary);
+}
+.desc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+}
+.format {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  white-space: nowrap;
+  transition: border-color var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out);
+}
+.action:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Empty state, mirroring the client's own Download page copy. */
+.empty {
+  max-width: 56ch;
+  margin: 0 auto;
+  text-align: center;
+  padding-block: clamp(2rem, 6vw, 4.5rem);
+}
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 1.5rem;
+  border-radius: var(--radius-circle);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 1.6rem;
+}
+.emptyTitle {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  margin-bottom: 0.75rem;
+}
+.emptyAction {
+  margin-top: 1.75rem;
+}
+
+@media (max-width: 760px) {
+  .item {
+    grid-template-columns: 2.5rem 1fr;
+    row-gap: 0.75rem;
+  }
+  .icon,
+  .format {
+    display: none;
+  }
+  .action {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

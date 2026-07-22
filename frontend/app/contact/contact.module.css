@@ -8,8 +8,24 @@
 .info {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
+
+/* Each contact channel group (call, email, visit, people) gets its own small
+   heading so a visitor can find the right line or inbox at a glance. */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.groupTitle {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--text-muted);
+}
+
 .methods {
   display: flex;
   flex-direction: column;
@@ -53,6 +69,39 @@ a.method:hover {
   font-size: var(--fs-body);
   font-weight: var(--fw-medium);
   color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+/* What the line or inbox is actually for. */
+.methodNote {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* WhatsApp call to action, sitting under the phone list. */
+.chatCta {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-accent);
+  background: var(--accent-soft);
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  transition: border-color var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+.chatCta svg {
+  color: var(--accent);
+  font-size: 1.1em;
+}
+.chatCta:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
 .emergency {

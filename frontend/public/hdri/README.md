@@ -1,7 +1,7 @@
 # Hero environment (HDRI) — the realism unlock
 
 Real-time metal looks "real" when it reflects a real lit room. Dropping an
-interior **HDRI** here makes the elevator's steel, glass and gold reflect a
+interior **HDRI** here makes the elevator's steel, glass and brushed metal reflect a
 believable environment instead of the generic studio default — the single
 biggest step toward the photographic look.
 

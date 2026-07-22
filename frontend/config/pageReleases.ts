@@ -78,6 +78,11 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/news-events": false,
   "/products": false,
   "/contact": false,
+  /* Pages migrated from the client's WordPress footer menu (2026-07-22). */
+  "/career": false,
+  "/quality-policy": false,
+  "/privacy-policy": false,
+  "/downloads": false,
 };
 
 /**

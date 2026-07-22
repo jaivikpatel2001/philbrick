@@ -44,6 +44,9 @@ import {
   FiTarget,
   FiPackage,
 } from "react-icons/fi";
+/* Brand marks are only correct as their own glyph, so the two social platforms
+   that have one come from the brand set instead of the Feather line set. */
+import { FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 
 /** Central icon registry — data files reference icons by string name. */
 export const ICONS: Record<string, IconType> = {
@@ -90,6 +93,8 @@ export const ICONS: Record<string, IconType> = {
   FiFacebook,
   FiMessageCircle,
   FiPackage,
+  FaWhatsapp,
+  FaXTwitter,
 };
 
 /** Resolve an icon by name, falling back to a neutral glyph. */

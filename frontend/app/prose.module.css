@@ -1,0 +1,111 @@
+/* Shared editorial-prose layout for the text pages
+   (Career, Quality Policy, Privacy Policy). */
+
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.lede {
+  font-size: var(--fs-h3);
+  font-family: var(--font-display);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+  color: var(--text-primary);
+}
+.para {
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+}
+
+/* Numbered clause blocks (Quality Policy, Privacy Policy). */
+.clause {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0.5rem 1.25rem;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) 0;
+  border-top: 1px solid var(--border);
+}
+.clauseIndex {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--accent);
+  padding-top: 0.35rem;
+}
+.clauseBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.clauseHeading {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  color: var(--text-primary);
+}
+
+/* Highlighted contact block that closes a text page. */
+.callout {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+}
+.calloutIcon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+.calloutLabel {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--text-muted);
+}
+.calloutValue {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+.calloutValue:hover {
+  color: var(--accent);
+}
+/* A callout that lists more than one channel. */
+.calloutList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin-top: 0.15rem;
+}
+
+.updated {
+  margin-top: 2rem;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+@media (max-width: 620px) {
+  .clause {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}

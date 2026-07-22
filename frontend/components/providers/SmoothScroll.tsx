@@ -17,6 +17,19 @@ export function startLenis() {
 }
 
 /**
+ * Scroll the page back to the top. Uses Lenis when it is running so the motion
+ * matches the rest of the site, and falls back to native smooth scrolling when
+ * Lenis is disabled (reduced motion) or not yet mounted.
+ */
+export function scrollToTop() {
+  if (lenisInstance) {
+    lenisInstance.scrollTo(0, { duration: 1.1 });
+    return;
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/**
  * Lenis smooth scroll wired into the GSAP ticker + ScrollTrigger.
  * Respects prefers-reduced-motion (falls back to native scroll).
  */

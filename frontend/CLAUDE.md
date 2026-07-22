@@ -16,9 +16,12 @@ sync when architecture, standards, or vision change.
 The site uses an **environment-based page-release system** (static-export safe):
 
 - **Single source of truth:** [`config/pageReleases.ts`](config/pageReleases.ts).
-  Static routes are literal in `STATIC_ROUTE_RELEASES`; product routes are
-  composed from the product tree ([`data/products.ts`](data/products.ts)) where
-  each node carries a `released` flag.
+  Static routes are literal in `STATIC_ROUTE_RELEASES`; product and news detail
+  routes are enumerated from [`data/products.ts`](data/products.ts) /
+  [`data/news.ts`](data/news.ts) and are **default-deny** unless their path is
+  listed in `RELEASED_PRODUCT_ROUTES` / `RELEASED_NEWS_ROUTES`. The `released`
+  flag on a product node is a **content-readiness hint only** and does not gate
+  production.
 - **Logic:** [`lib/release.ts`](lib/release.ts) → `isReleased()`,
   `releasedRoutes()`, `validateReleaseConfig()`, `assertReleaseConfig()`.
 - **Gate:** every page wraps its content in
@@ -30,8 +33,9 @@ The site uses an **environment-based page-release system** (static-export safe):
   **production** only routes flagged `true` show real content.
 
 **Whenever you add, remove, rename or move a route you MUST, in the same change:**
-1. Update `config/pageReleases.ts` (static route) **or** the node's `released`
-   flag in `data/products.ts` (product route).
+1. Update `config/pageReleases.ts` — the flag in `STATIC_ROUTE_RELEASES` for a
+   normal page, or the path in `RELEASED_PRODUCT_ROUTES` / `RELEASED_NEWS_ROUTES`
+   for a product or news detail page.
 2. Wrap the new page in `<ReleaseGate route="…">`.
 3. Keep the config exhaustive and exact — **no missing, duplicate, outdated or
    invalid routes**. `assertReleaseConfig()` runs at build (via `sitemap.ts`) and
@@ -241,28 +245,48 @@ The hero (`sections/experience/ElevatorScene.tsx`) is the brand centerpiece.
 ## Documentation standards
 
 Every major module should document: **purpose · architecture · dependencies ·
-extension points.** Keep `README.md`, this file, and `THREEJS-IMPLEMENTATION.md`
-in sync with the code so a new developer (or AI) can get productive fast.
+extension points.** Keep the docs in sync with the code so a new developer (or
+AI) can get productive fast:
+
+| File | Covers |
+|---|---|
+| `CLAUDE.md` (this file) | Vision, standards, STRICT RULES |
+| `README.md` | Stack, folder structure, getting started, deployment |
+| `SITE-STRUCTURE.md` | Every route + release flag, chrome, product tree, content map |
+| `DONE.md` | Dated implementation history (append after every task) |
+| `imagegeneration.md` | Image briefs + the authoritative asset mapping (§9) |
+| `sections/experience/THREEJS-IMPLEMENTATION.md` | The 3D hero |
+| `sections/experience/variants/VARIANTS.md` | The client-review hero variants |
+| `DESIGN.md` | **External reference** (apple.com analysis), not this project's system |
+
+**Whenever routes, sections, content files or chrome change, update
+`SITE-STRUCTURE.md` and `README.md` in the same task**, not just `DONE.md`.
 
 ---
 
 ## Current architecture (high level)
 
-- **Homepage `/` is the flagship experience:** `app/page.tsx` renders the Three.js
-  elevator hero, then About → Products (the range) → What we offer → Applications →
-  (stats) → Contact/CTA. The global `app/layout.tsx` adds Navbar, Lenis smooth
-  scroll, Footer, theme + reveal providers.
+- **Homepage `/` is the flagship experience:** `app/page.tsx` renders
+  `<ElevatorHero />` (the Three.js scene) then `<HomeSections />` — About →
+  Products (the range) → What we offer → Applications → stats → Contact/CTA. The
+  body is shared with every `/variantN` review page, so it is only ever edited
+  once. The global `app/layout.tsx` adds Navbar, Lenis smooth scroll, Preloader,
+  Footer, the floating action buttons, Tawk.to live chat, theme + reveal providers.
 - There is **no standalone `/experience` route** — the experience IS the homepage.
 - **Navigation:** Home · About ▾ (About Us · Vision & Mission · Milestone) ·
   Products ▾ (two-pane mega menu, `components/layout/MegaMenu.tsx`) ·
   Infrastructure · Network · News & Events · Contact Us. Nav + footer are derived
   from the product tree in `constants/navigation.ts`.
 - **Routes:** `/`, `/about`, `/vision-mission`, `/milestone`, `/infrastructure`,
-  `/network`, `/news-events`, `/products`, `/products/[category]`,
-  `/products/[category]/[product]`, `/contact` (+ `/sitemap.xml`, `/robots.txt`,
-  app icons). Product routes come from the tree in `data/products.ts`
-  (14 categories, ~21 nested products). **Every route must appear in
-  `config/pageReleases.ts` — see the STRICT RULE at the top.**
+  `/network`, `/news-events`, `/news-events/[slug]`, `/products`,
+  `/products/[category]`, `/products/[category]/[product]`, `/contact`,
+  `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`, plus the
+  temporary `/variant1…17` review pages (+ `/sitemap.xml`, `/robots.txt`, app
+  icons). Product routes come from the tree in `data/products.ts` (14
+  categories, 24 nested products); news detail routes from `data/news.ts`
+  (6 items, currently mock). **Every route must appear in
+  `config/pageReleases.ts` — see the STRICT RULE at the top.** A full route map
+  with release flags lives in [`SITE-STRUCTURE.md`](SITE-STRUCTURE.md).
 - Real Philbrick company data lives in `constants/site.ts`; product data in
   `data/products.ts`; company content in `data/company.ts`. Logo assets are in
   `public/brand/` (`logo.png` full lockup, `philbrick-mark.png` emblem)
@@ -273,3 +297,18 @@ in sync with the code so a new developer (or AI) can get productive fast.
   `NEXT_PUBLIC_CONTACT_FORM_TO_EMAIL` (see `.env.example`; inlined at build).
   Spam protection = honeypot `_honey` + FormSubmit filtering. Never hardcode the
   address in components and never put secret API keys in `NEXT_PUBLIC_*` vars.
+- **Live chat + floating buttons:** `components/providers/TawkTo.tsx` loads the
+  client's own Tawk.to property (ids from `NEXT_PUBLIC_TAWKTO_*`, defaults in the
+  file) on every page; `components/ui/FloatingActions.tsx` renders the
+  bottom-right pair at `--z-fab` — scroll to top, and a draggable chat button.
+  **Tawk's own launcher is hidden and the site button is the only chat control**,
+  staying in place and switching to a close glyph when the window opens, so the
+  two states read as one control. Tawk writes inline `!important` styles that no
+  stylesheet can outrank, so `skinTawk()` applies the overrides inline and
+  re-runs as the chat opens and closes. The window's interior colours are a Tawk
+  dashboard setting (`TAWK_BRAND_NOTE`) and are unreachable from this codebase.
+- **Content parity with the client's WordPress site is a requirement.** The new
+  site must remain a **superset**: nothing published on WordPress may be missing
+  here. The audit workbook and its generators live in `content-audit/` and
+  `scripts/{contentAuditCrawl.mjs,buildContentAudit.py}` — regenerate after any
+  content change so the client review sheet stays current.
