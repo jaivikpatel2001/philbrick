@@ -1,10 +1,13 @@
-/* Floating action buttons — see FloatingActions.tsx.
-   The dock itself is not interactive; only the buttons are, so page content
-   underneath stays clickable. */
+/* Floating action button — see FloatingActions.tsx.
+   The dock itself is not interactive; only the button is, so page content
+   underneath stays clickable. It also sits clear of Tawk's own chat launcher,
+   which occupies the corner itself. */
 .dock {
   position: fixed;
   right: clamp(1rem, 3vw, 2rem);
-  bottom: clamp(1rem, 3vw, 2rem);
+  /* Above Tawk's launcher (roughly 60px tall plus its own margin), so the two
+     controls stack instead of overlapping. */
+  bottom: clamp(5.5rem, 5vw + 4.5rem, 7rem);
   z-index: var(--z-fab);
   display: flex;
   flex-direction: column;
@@ -40,7 +43,7 @@
   outline-offset: 3px;
 }
 
-/* Scroll to top: hidden until the visitor is past one screen. */
+/* Hidden until the visitor is past one screen. */
 .top {
   opacity: 0;
   transform: translateY(10px) scale(0.9);
@@ -52,102 +55,9 @@
   pointer-events: auto;
 }
 
-/* Chat: brand-filled, draggable. `touch-action: none` so a finger drag moves
-   the button instead of scrolling the page. */
-.chat {
-  position: relative;
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-contrast);
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-.chat:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent);
-  color: var(--accent-contrast);
-  transform: translateY(-2px);
-}
-/* Open state: same circle, same size, same colour — only the glyph changes, so
-   the closed and open states read as one control. */
-.icon {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 1em;
-  height: 1em;
-}
-.icon > svg {
-  grid-area: 1 / 1;
-  transition: opacity var(--dur) var(--ease-out),
-    transform var(--dur) var(--ease-out);
-}
-.iconClose {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.7);
-}
-.open .iconOpen {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.7);
-}
-.open .iconClose {
-  opacity: 1;
-  transform: none;
-}
-/* The ring is an invitation to open; once open it would only add noise. */
-.open .pulse {
-  animation: none;
-  opacity: 0;
-}
-
-.dragging {
-  cursor: grabbing;
-  /* The inline transform carries the drag offset — no transition while the
-     finger is down, or the button lags behind the pointer. */
-  transition: none;
-  box-shadow: var(--shadow-xl);
-}
-
-/* One soft ring, drawing the eye without a blinking badge. */
-.pulse {
-  position: absolute;
-  inset: -1px;
-  border-radius: var(--radius-circle);
-  border: 1px solid var(--accent);
-  opacity: 0.45;
-  animation: fabPulse 2.8s var(--ease-out) infinite;
-  pointer-events: none;
-}
-
-@keyframes fabPulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.45;
-  }
-  70% {
-    transform: scale(1.45);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1.45);
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .fab {
     transition: opacity 0.01ms;
-  }
-  .icon > svg {
-    transition: opacity 0.01ms;
-    transform: none !important;
-  }
-  .pulse {
-    animation: none;
-  }
-  .chat:hover {
-    transform: none;
   }
 }
 

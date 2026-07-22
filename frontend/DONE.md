@@ -6,6 +6,530 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-22 21:45 IST
+
+### Variant18: the bottom wash takes the theme's polarity
+
+**Status:** Completed
+
+Client: in light theme make the bottom band a **white** blurred fade, and black
+in dark, so the copy reads properly. Previously it was a dark veil in both,
+which is variant17's logic and wrong for a daylight scene.
+
+`.scrim18` is now a tint plus a frost, both shaped by the SAME mask so they fade
+out together at the 30% line — no visible band edge:
+
+| | tint | blur |
+| --- | --- | --- |
+| light | `rgba(255,255,255,0.86)` | `backdrop-filter: blur(14px)` |
+| dark | `rgba(5,9,15,0.82)` | same |
+
+Mask: `#000 0% → 0.88 at 10% → 0.45 at 20% → transparent at 30%`.
+
+**The copy follows the wash**, which is the part variant17 does not have to
+handle: dark over the white band in light theme, white over the near-black band
+in dark.
+
+**Two contrast failures caught by measuring rather than eyeballing.** First pass
+kept the copy white in light theme, over what was now a white band. Second pass
+put the badge label on `--text-secondary`, which measured **3.62:1** at 0.72rem —
+below the 4.5:1 it needs at that size. Both fixed; the label uses
+`--text-primary`, exactly as variant17 had to.
+
+Final, composited against the real plate, the tint and the mask:
+
+| | light | dark |
+| --- | --- | --- |
+| lead | 10.26:1 | 15.02:1 |
+| badge stat | 6.23:1 | 16.35:1 |
+| badge label | 8.40:1 | 16.10:1 |
+
+**Self-inflicted break worth recording:** the first edit dropped its comment text
+after an already-closed `*/`, which is a CSS parse error — the dev server
+returned 500 until it was fixed. Caught immediately because the route was polled
+after the edit.
+
+**Affected Areas:** `corporate.module.css` (variant18 scrim and copy colours).
+
+---
+
+## 2026-07-22 21:15 IST
+
+### Variant18: overlay cut back to a bottom-30% gradient
+
+**Status:** Completed
+
+Client: too much darkness over the scene. Correct, and the cause was inherited
+rather than intended — variant18 was still using variant17's `.scrim17`, which in
+**light theme** washes the entire frame from `rgba(6,12,22,0.88)` at the foot to
+`0.26` at the very top. It never fully clears, so a daylight photograph rendered
+like dusk. Dark theme added a 0.7 radial over the middle on top of that.
+
+**`.scrim18` replaces it:** one bottom-up linear gradient over the lowest 30% of
+the hero and nothing above it, per the client's own suggestion. `0.72 → 0.46 →
+0.18 → transparent` in light, a gentler `0.62 → 0.38 → 0.14 → transparent` in
+dark, since the night plate is already dark. Variant17 is untouched.
+
+**No top scrim, because it turned out not to be needed.** The scrim's other job
+was giving the fill-less floating navbar something to sit on. Measured against
+the scene's own top 10% (`#3578b9` day), white nav links sit at **4.62:1**, which
+clears AA; night is 19.49:1. So the top of the frame is now completely clear.
+
+**Also removed:** the per-block radial washes behind the lead and badges
+(`.flank18::before`). They covered the same band as the new gradient, and
+stacking the two was a large part of what made the hero look murky.
+
+**A real bug this exposed.** With the radials gone and no light-theme override,
+the lead and badges fell back to the near-black body colour over a dark scene:
+measured **1.66:1** (lead), **1.67:1** and **1.71:1** (badges) — unreadable. They
+are now white in light theme. Note this is deliberately NOT the same decision as
+the headline, which does not take variant17's white treatment: the headline is
+baked into the picture, while the lead and badges sit at the foot of the scene
+over dark buildings.
+
+**After, composited against the real plate plus the gradient:**
+
+| | light | dark |
+| --- | --- | --- |
+| lead | 11.52:1 | 11.80:1 |
+| badge stat | 11.43:1 | 14.89:1 |
+| badge label | 11.15:1 | 13.93:1 |
+
+**One dead end worth recording.** The dev page reported the floating navbar's
+links resolving to the light-theme near-black over the hero, which would have
+been a contrast failure. It is a dev-server hot-reload artifact: the production
+CSS contains no `@layer`, so specificity decides there and
+`[data-nav="float"] header[data-scrolled="false"] nav a` (0,2,3) beats
+`.navLink` (0,1,0). The client's own screenshots show light nav links. No change
+made.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx`,
+`corporate.module.css` (variant18 block).
+
+---
+
+## 2026-07-22 20:40 IST
+
+### Variant18 becomes a single-scene hero
+
+**Status:** Completed
+
+Client supplied `hero-scene-{day,night}.png` (2752x1536, headline baked in) and
+asked for the whole layered build to be replaced by one background image, with
+only the lead paragraph and the two trust badges kept live in front of it.
+
+**Now:**
+
+| z | layer |
+| --- | --- |
+| 2 | lead + trust badges |
+| 1 | scrim (dark theme only) |
+| 0 | the scene, day/night cross-faded by `[data-theme]` |
+
+Removed: the open-sky plates, the transparent building plate, the visible
+headline and eyebrow, and all the CSS that anchored towers to the headline
+(`.content18`, `.title18`, `.titleWrap18`, `.front18*`, `--peak-lift`).
+
+**The `<h1>` is still in the DOM, `sr-only`.** The headline is pixels inside a
+photograph now; without this the page has no heading outline for screen readers
+and nothing for search engines to read. Zero visual cost. It must be kept in step
+with the picture — the prompts are §11.10 of `imagegeneration.md`.
+
+**Sharpness is fixed by the new source.** At 1440x900 the browser now serves the
+1920 variant and paints it 1612px wide: a **0.84x downscale**, where the old
+1536px plates were being upscaled 1.24x and the original 1280 ladder 1.50x.
+
+**The crop threshold was measured, not guessed.** Scanning both plates for the
+azure accent line, the headline occupies rows 509–704 and spans x 293–2458 —
+**10.6% to 89.3%** of the width, identical in day and night. So it needs 78.7% of
+the plate's width on screen, and since `cover` crops horizontally below the
+plate's 1.79 aspect, anything narrower than **1.41:1** starts eating the first
+and last words:
+
+| Viewport | Aspect | Width shown | Headline |
+| --- | --- | --- | --- |
+| 1920x1080 | 1.78 | 99% | intact |
+| 1440x900 | 1.59 | 89% | intact |
+| iPad landscape 1180x820 | 1.44 | 80% | intact |
+| 1024x768 | 1.33 | 74% | would clip |
+| 768x1024 | 0.75 | 42% | would clip |
+| 388x841 | 0.46 | 26% | would clip |
+
+Below 1.41:1 the plate switches to `object-fit: contain`, pinned to the top, so
+the whole picture shows and the copy sits on the base colour beneath. That base
+colour is sampled from each plate's own bottom edge (`#3f4957` day, `#524f53`
+night) so the join reads as a continuation rather than a hard cut. Verified: at
+1024x768 and 388x841 the fit switches and 100% of the width shows; at 1440x900
+and 1920x1080 it stays full-bleed at 89% and 99%.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx` (rewritten),
+`corporate.module.css` (variant18 block reduced to the hero, stack, flank and the
+aspect guard), regenerated WebP variants, `lib/imageManifest.json`.
+
+**Known Limitations:**
+- The letterboxed fallback is a compromise, not a design. A portrait scene pair
+  is the proper fix for phones and portrait tablets — same prompts, portrait
+  framing.
+- Changing the headline now means regenerating both images; the copy no longer
+  lives in code alone.
+
+---
+
+## 2026-07-22 18:55 IST
+
+### Hero scene prompts recorded in imagegeneration.md
+
+**Status:** Completed (documentation; the images themselves are not supplied)
+
+Client asked for the single-scene hero prompts to be written down so the
+headline can be changed later without anyone reconstructing the look from
+scratch. Added as **§11.10** of `imagegeneration.md`: both prompts verbatim, the
+target filenames `hero-scene-{day,night}.png`, the current headline for
+reference, and the four caveats — image models garble six-word headlines, baked
+text stops being a real `<h1>` (mitigated by keeping it visually hidden in the
+DOM), 16:9 crops badly on a portrait phone hero, and the zero-risk alternative of
+generating the scene text-free and compositing the headline with sharp using the
+site's own font.
+
+Also documented the two responsive ladders as **§11.11**, since the reason for
+them is not obvious from the script alone.
+
+`scripts/optimizeHeroExploration.mjs` now matches `hero-scene*` as full-bleed, so
+the 1920/2560/3072 tiers generate as soon as a 3840px source lands. Verified the
+filename matcher against four paths: `hero-scene-day.png` and `hero-sky-day.png`
+resolve to the full-bleed ladder, `commercial-tower.png` and
+`component-cabin.png` stay on the component ladder.
+
+**Affected Areas:** `imagegeneration.md` (§11.10, §11.11),
+`scripts/optimizeHeroExploration.mjs`.
+
+**Follow-up:** the hero is still the three-layer build. Nothing switches to the
+single-scene images until they are supplied.
+
+---
+
+## 2026-07-22 18:35 IST
+
+### Fix: variant18 hero plates were being upscaled 1.5x
+
+**Status:** Partly fixed in code; the rest needs bigger artwork
+
+Client: the hero looks blurry. It was, and measurably.
+
+**Cause.** `scripts/optimizeHeroExploration.mjs` builds one responsive ladder,
+`384/640/960/1280`, sized for the component cutouts that render in ~300px cards.
+The hero sky and building plates are painted EDGE TO EDGE, so on a 1920px screen
+the browser was picking the 1280 variant and stretching it by **1.5x**. Hard
+edges — window mullions, tower silhouettes — show that immediately.
+
+**Fix.** Full-bleed plates now get their own ladder,
+`640/960/1280/1536/1920/2560/3072`, at quality 88 rather than 80 (large
+photographic plates band in gradient sky at 80). Tiers above the source are
+skipped, never upscaled, so listing 3072 costs nothing today and pays off the
+day a bigger original arrives. Matched by filename:
+`environment/hero-(sky|city|front|tower)*`.
+
+Measured at 1920x1080, DPR 1, after regenerating:
+
+| | before | after |
+| --- | --- | --- |
+| variant served | 1280 | **1536** |
+| upscale factor | 1.50x | **1.24x** |
+
+Weight paid for it: the building plate goes 262KB to 339KB (day) and 336KB to
+483KB (night); the sky plates 83KB to 113KB and 90KB to 122KB.
+
+**What code cannot fix.** The sources are 1536px wide, so 1.24x is the floor at
+1920 CSS px, and a 2x-DPR laptop at that width needs 3840px to be truly crisp.
+The remaining softness needs the plates re-rendered larger — 3840x2560 keeps the
+current 3:2 framing. The sky matters far less (soft gradient hides
+interpolation); it is the buildings that show it.
+
+**Affected Areas:** `scripts/optimizeHeroExploration.mjs`, regenerated WebP
+variants, `lib/imageManifest.json`.
+
+---
+
+## 2026-07-22 18:10 IST
+
+### Variant18: real sky plate behind the headline, three layers
+
+**Status:** Completed
+
+Client, on seeing the previous pass: "we need three layers — full sky background
+(day/night), text, building image (day/night)… current version not look like
+sky". Correct. The gradient standing in for sky read as a flat coloured wall
+behind photoreal glass towers, especially in dark theme.
+
+The project already had the right asset: `hero-sky-{day,night}.png`, open sky
+rather than the `hero-city-*` skyline variant16/17 use. Sampled top to bottom,
+day runs `#3e8ab9` to `#adc9da` at the horizon; night `#010d22` to `#172d47`.
+Those are now z 0, and the hero's own background is a flat base colour only,
+covering the moment before the plate paints.
+
+Final stack, verified live at 1440x900:
+
+| z | layer |
+| --- | --- |
+| 4 | lead + trust badges, in FRONT of the buildings |
+| 3 | building plates, day/night, full bleed, bottom anchored |
+| 2 | headline, BEHIND the buildings |
+| 1 | scrim (dark theme only) |
+| 0 | sky plates, day/night |
+
+**Light theme deliberately does NOT match variant17's white headline.** Variant17
+sits on a dark city photograph and forces the headline white; variant18 sits on
+open daylight sky. Measured against the actual sky pixels behind the headline
+(`rgb(130,180,214)` average), white gives about 2.4:1 while the default
+near-black gives **8.62:1**. Dark theme keeps white at **17.36:1** over the night
+sky. The rule carries a comment saying not to "restore parity", because doing so
+would fail contrast.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx`,
+`corporate.module.css` (variant18 block).
+
+**Known Limitations:** unchanged from the entry below — no headline occlusion on
+mobile (the plate is cropped to its middle by `cover` at 388px), and the day and
+night building plates still differ by ~94px of skyline, so the towers shift
+slightly on the theme toggle.
+
+---
+
+## 2026-07-22 17:40 IST
+
+### Variant18: the supplied skyline plates become the hero background
+
+**Status:** Completed
+
+Client supplied `hero-front-{day,night}.png` (1536x1024, transparent) and then
+gave the composition direction plainly: drop the old hero photograph, make the
+two new plates the background, and paint them ABOVE the headline.
+
+**What the plates actually measured.** Before wiring anything, both were
+profiled for alpha. Day is 42.9% opaque, rows 63–979; night 39.0%, rows 62–1015.
+Neither reaches its own bottom edge, so laid flush the buildings float ~42px
+above the fold at 1440x900. Their skylines also differ by a mean of 93.8px per
+column — they are not the same geometry re-lit, so the towers shift on the theme
+toggle. `scripts/cropHeroFront.mjs` trims the transparent margins using ONE
+shared box (`0,62 1536x954`, the union of both) so day and night stay aligned,
+and the buildings now stand on the bottom edge.
+
+**Composition, as directed:**
+- The city photograph (`hero-city-*`) is gone from this variant. With a
+  photographed skyline in FRONT of the headline, a second one behind it reads as
+  two cities stacked. `z 0` is now a CSS gradient sky, light and dark.
+- The plates are `z 3`, full bleed, `object-fit: cover` anchored bottom, with
+  `inset: 0 0 -4% 0` so the last sliver of transparent pixels sits below the
+  fold.
+
+**The z-order had to be split, and the measurement is why.** With the whole
+content stack behind the plate, the canvas probe read **lead 100% covered,
+badges 96%** at 1440x900 — the body copy was entirely inside the buildings. Only
+the headline is meant to disappear. `.stack18` therefore carries **no** z-index
+(a z-index there makes it a stacking context and traps both halves below the
+plate); `.content18` is `z 2`, behind the skyline, and `.flank18` is `z 4`, in
+front of it.
+
+**Verified** by compositing the actual plate into a canvas at its rendered
+geometry and reading alpha, rather than by eye:
+
+| Viewport | Headline covered | Buildings meet fold | Overflow |
+| --- | --- | --- | --- |
+| 1920 x 1080 | 30% | yes | 0 |
+| 1440 x 900 | 27% day / 28% night | yes | 0 |
+| 388 x 841 | 0% (see below) | yes | 13px, pre-existing |
+
+**Regression caught and fixed.** Removing the old headline-anchoring CSS also
+removed variant18's mobile block. The three-column flank rule then beat
+variant17's mobile override (same specificity, declared later), squeezing the
+lead into a 145px column and pushing the trust badges to y846 on an 841px
+screen — below the fold. Restored: single column and a smaller stack gap under
+860px. Lead is now 343px wide and the badges sit inside the hero.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx` (rewritten,
+now purely presentational), `corporate.module.css` (variant18 block),
+`scripts/cropHeroFront.mjs`, two derived PNGs + WebP variants,
+`lib/imageManifest.json`.
+
+**Known Limitations:**
+- **On mobile the headline is not occluded at all (0%).** At 388px the plate is
+  cropped by `cover` to its middle, and the visible towers sit below the
+  headline. The result is legible and reads as a skyline under the words, but it
+  is not the layered effect. Fixing it properly needs a portrait crop of the
+  artwork, not CSS.
+- Day and night plates still differ by ~94px of skyline, so the buildings shift
+  slightly on the theme toggle. Only a re-render of night FROM day fixes that.
+- The 13px horizontal overflow at 388px is pre-existing on variant17 too.
+
+---
+
+## 2026-07-22 16:35 IST
+
+### Variant18: drag grip removed
+
+**Status:** Completed
+
+`.grip18` and the whole drag apparatus are gone from variant18: the pointer
+handlers, the offset state, `DRAG_LIMIT`, `KEY_STEP`, the `role="slider"` node
+and the `[data-dragging]` rules. The foreground is a composed part of the scene
+here, not a control, so the layer is plain `pointer-events: none` and nothing in
+the hero intercepts a click. `Variant18Hero` is now a presentational component
+whose only effect is the floating-navbar opt-in.
+
+Variant17 keeps its draggable tower — `.grip17` and `.fg17[data-dragging]` are
+untouched.
+
+Verified live: zero `grip18` nodes, zero `role="slider"` in the hero, foreground
+`pointer-events: none`, and the composition unchanged (peak at 50% into the last
+line, 2.5 characters covered, no horizontal overflow). Light-theme headline now
+resolves to `#fff`, confirming the `.hero18` parity rules added earlier.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx`,
+`corporate.module.css`.
+
+---
+
+## 2026-07-22 16:05 IST
+
+### Tawk's own launcher is the chat control; variant18 foreground plate wired
+
+**Status:** Completed (the hero plate is blocked on the client's artwork)
+
+**1. The site's chat button is gone.** On client direction Tawk's green launcher
+is the chat control again. Removed from `FloatingActions`: the chat button, the
+drag behaviour (which only ever existed so the visitor could park that button),
+the WhatsApp fallback and the Tawk imports. What is left is the scroll-to-top
+button, moved up to `bottom: clamp(5.5rem, 5vw + 4.5rem, 7rem)` so it stacks
+above Tawk's launcher instead of colliding with it.
+
+`TawkTo.tsx` lost the machinery that existed only to hide that launcher: the
+role-tagging by size and z-index, `hideWidget()` on load, `openTawk`,
+`closeTawk`, the forced-close `WeakSet`, and the open/close events. **Tawk now
+owns its own state end to end**, which is also the reliable arrangement — the
+un-closable window fixed earlier that day was caused by fighting that state
+machine. What remains is cosmetic: the chat window's iframe still gets the
+site's radius, hairline and shadow, found by the one stable marker (the `open` /
+`closed` class Tawk keeps on it in both states). Its launcher and the
+"Powered by tawk.to" strip are untouched.
+
+Verified live: the only site button left is "Scroll back to top", Tawk's
+launcher renders at 64x60 with its greeting bubble, and the dock sits at 110px
+from the bottom, clear of it.
+
+**2. Variant18 light theme was wrong.** `.hero18` never picked up the
+white-on-photograph treatment, because those rules are written against
+`.hero17`. The headline was falling back to the near-black body colour on a
+bright sky. Mirrored for `.hero18`, so the two variants differ only in
+composition, as intended.
+
+**3. Foreground skyline plate.** Client asked which asset would give the
+reference's layering, and chose a foreground cutout over real text rather than
+translucent type or baked-in words. The layer is wired and sits behind
+`HAS_FRONT_PLATE` in `Variant18Hero.tsx`, currently `false`; the single cropped
+tower from §11.8 stands in until the files land. Spec and both prompts are
+§11.9 of `imagegeneration.md` — transparent PNG, exactly 1535x1024 to match
+`hero-city-day.png`, day and night geometrically identical, open middle band,
+buildings reaching the bottom edge.
+
+**Affected Areas:**
+- `components/ui/FloatingActions.{tsx,module.css}`,
+  `components/providers/TawkTo.tsx`, `styles/globals.css`,
+  `sections/experience/corporate/{Variant18Hero.tsx,corporate.module.css}`,
+  `imagegeneration.md`.
+
+**Known Limitations:**
+- Baking the headline into the artwork was offered and declined: it would stop
+  the `<h1>` being real text (no responsive scaling, nothing for search engines,
+  blur at large sizes, a new render for every copy change).
+
+**Follow-up:**
+- Client to supply `hero-front-{day,night}.png`; then run
+  `node scripts/optimizeHeroExploration.mjs` and flip `HAS_FRONT_PLATE`.
+- The "update every .md file" pass is still outstanding (`SITE-STRUCTURE.md`,
+  `README.md`).
+
+---
+
+## 2026-07-22 15:20 IST
+
+### New `/variant18` — headline set into the sky, tower peak only
+
+**Status:** Completed
+
+Client on variant17: "the building is completely in front of the heading text".
+Correct — variant17 centres the headline and runs a full-bleed tower plate down
+the middle of it, so the shaft crosses **every** line. The reference they sent
+(large type in the sky, a peak rising through it, one or two letters lost) needs
+the opposite balance. Variant18 is variant17 with only the composition changed:
+same copy, same type, same spacing, same animations, same draggable tower.
+
+**Why a new asset was needed.** `hero-tower-{day,night}.png` is a 1024x1536
+plate whose building is a thin 213x1083 column of opaque pixels; the rest is
+transparent padding that does the positioning. Under `object-fit: contain` the
+building's width and its peak height are locked together, so the peak can only
+be lowered by making the tower thinner. `scripts/cropHeroTower.mjs` trims both
+plates to one shared box (`452,447 228x1089`, union of their alpha bounds plus a
+6px bleed, so day and night stay pixel-aligned) and writes
+`hero-tower-cut-{day,night}.png`. Derived only — nothing generated or repainted.
+Documented as §11.8 in `imagegeneration.md`.
+
+**The three composition changes:**
+1. Content is pinned to the top of the hero, in the open sky, not centred over
+   the skyline.
+2. The headline runs the full width (`max-width: none`, `clamp(2.6rem, 0.4rem +
+   8.6vw, 9.4rem)`, stack widened to 104rem), so a narrow tower can only ever be
+   a bite out of its middle.
+3. The tower is the cutout, ~2 characters wide, whose peak lands mid-way through
+   the headline's LAST line and whose base runs off the bottom of the hero and
+   is clipped.
+
+**Anchoring, which took two attempts.** Positioning the peak with viewport
+arithmetic (`calc(8.9rem + 15vw)`, fitted to measured line boxes at 1280 and
+1440) is exact on a laptop and wrong on a phone, where the headline wraps to
+three lines and the peak lands in the first one. The tower is now a child of a
+wrapper that hugs the `<h1>`, positioned at `top: calc(100% - var(--peak-lift))`
+where `--peak-lift` is `0.47 * var(--title-size)`, half a line of the headline's
+own clamp. That resolves against the headline at any width and any line count.
+
+**Verified** at four viewports, measured against the untransformed layout box:
+
+| Viewport | Lines | Peak depth into last line | Chars covered | % of headline width |
+| --- | --- | --- | --- | --- |
+| 388 x 840 | 3 | 50% | 2.5 | 15% |
+| 768 x 1024 | 3 | 50% | 2.5 | 14% |
+| 1440 x 900 | 2 | 50% | 2.3 | 11% |
+| 1920 x 1080 | 2 | 50% | 2.7 | 12% |
+
+**Affected Areas:**
+- `app/variant18/page.tsx`, `sections/experience/corporate/Variant18Hero.tsx`,
+  the variant18 block appended to `corporate.module.css`,
+  `scripts/cropHeroTower.mjs`, two derived PNGs + their WebP variants,
+  `lib/imageManifest.json`, `config/pageReleases.ts`, `imagegeneration.md`.
+- Variant17 and every other variant are untouched.
+
+**Technical Decisions:**
+- The `<h1>` stays real, selectable, indexable markup. The occlusion is done by
+  stacking, never by baking words into artwork — the same rule variant17 set.
+- On narrow screens the copy stacks, so there is no clear channel for a
+  full-height shaft. Rather than covering the lead paragraph, the tower fades
+  out into the sky above it with a mask. Reads as haze, not as a sliced-off
+  building. Verified the fade completes above the lead at 388px.
+
+**Known Limitations:**
+- The measured 13px of horizontal overflow at 388px is **pre-existing** — it is
+  present on `/variant17` too, so it was not introduced here and was left alone.
+- The client's reference has a chunky mountain; this asset is a slender tower,
+  so the mass reads lighter. If they want the reference's weight, that needs new
+  artwork, not a crop.
+
+**Follow-up:**
+- The "update every .md file" pass requested earlier is still outstanding:
+  `SITE-STRUCTURE.md` is stale (missing the four new routes, wrong release flags,
+  still calls the images Unsplash placeholders) and `README.md` has not been
+  re-checked.
+
+---
+
 ## 2026-07-22 14:30 IST
 
 ### Fix: the chat window could not be closed

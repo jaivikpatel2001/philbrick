@@ -1993,3 +1993,156 @@
 :global([data-theme="light"]) .hero17 .eyebrow::before {
   background: color-mix(in srgb, var(--accent) 42%, white);
 }
+
+/* =============================================================================
+   VARIANT 18 — the headline set INTO the sky.
+
+   Same hero as variant17; only the composition differs. Variant17 centres the
+   headline and runs a full-bleed tower plate down the middle of it, so the
+   building crosses every line. Here the words go up into the open sky, run the
+   full width of the viewport, and the building's PEAK reaches just far enough
+   to take a character or two out of the last line — the layering in the
+   client's reference. Everything not about composition is inherited from the
+   variant16/17 rules above (.bg16*, .scrim17, .content, .title, .flank17,
+   .lead, .trust17, animations).
+   ========================================================================== */
+.hero18 {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  display: flex;
+  /* The headline is inside the photograph, so the only live copy is the lead
+     and the badges, and they belong at the foot of the scene. */
+  align-items: flex-end;
+  justify-content: center;
+  padding: calc(var(--nav-h) + clamp(1.5rem, 5vh, 3.5rem))
+    clamp(1rem, 3vw, 2.5rem) clamp(2.5rem, 8vh, 5rem);
+  overflow: hidden;
+  /* Sampled from the plate's own bottom edge, so the band below a letterboxed
+     scene (see the aspect-ratio rule further down) continues the picture rather
+     than cutting to an unrelated colour. Also covers the moment before the
+     scene paints. */
+  background: #3f4957;
+}
+
+:global([data-theme="dark"]) .hero18 {
+  background: #524f53;
+}
+
+/* The headline lives inside the photograph now, so this holds only the copy
+   that stayed live. Pinned to the foot of the hero, over the calm lower corners
+   the scene was composed to leave clear. */
+.stack18 {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 104rem;
+  margin-top: auto;
+}
+
+/* Lead left, badges right, either side of the tallest cluster. */
+.flank18 {
+  grid-template-columns: 1fr clamp(11rem, 24vw, 22rem) 1fr;
+}
+
+/* ----- scrim ---------------------------------------------------------------
+   Variant18 does NOT reuse variant17's scrim. That one washes the whole frame —
+   in light theme from 0.88 at the foot to 0.26 at the very top, so it never
+   fully clears and a daylight scene renders like dusk. Here the headline is
+   already part of the photograph and needs no help, so the only job left is
+   anchoring the lead and the badges at the foot.
+
+   Hence a single bottom-up gradient over the lowest 30% and nothing above it.
+   The navbar needs no cover either: measured against the scene's own top 10%
+   (`#3578b9` day), white nav links sit at 4.62:1, which clears AA. Night is
+   19.49:1.
+
+   The wash takes the THEME's own polarity, not a single dark veil: white in
+   light, near-black in dark, so the band reads as part of the theme rather than
+   as a shadow dropped on the photograph. The tint and the frosting are shaped by
+   the same mask, so both fade out together at the 30% line — that is what gives
+   the soft, blurred edge rather than a visible band boundary. */
+.scrim18 {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    #000 0%,
+    rgba(0, 0, 0, 0.88) 10%,
+    rgba(0, 0, 0, 0.45) 20%,
+    transparent 30%
+  );
+  mask-image: linear-gradient(
+    to top,
+    #000 0%,
+    rgba(0, 0, 0, 0.88) 10%,
+    rgba(0, 0, 0, 0.45) 20%,
+    transparent 30%
+  );
+}
+
+:global([data-theme="dark"]) .scrim18 {
+  background: rgba(5, 9, 15, 0.82);
+}
+
+/* The per-block radial washes behind the lead and badges are redundant now that
+   the gradient covers the same band, and stacking the two is a large part of
+   what made the hero look murky. Both themes drop them. */
+:global([data-theme="light"]) .flank18::before,
+:global([data-theme="dark"]) .flank18::before,
+.flank18::before {
+  background: none;
+}
+
+/* The copy follows the wash it sits on: dark over the white band in light
+   theme, white over the near-black band in dark. Variant17 forces white in both
+   because its scrim is dark in both; here the polarity flips with the theme, so
+   this has to as well. */
+:global([data-theme="light"]) .hero18 .lead,
+:global([data-theme="light"]) .hero18 .badgeStat,
+/* The label goes primary, not secondary: at 0.72rem it needs the full 4.5:1 and
+   secondary measured 3.62:1 over the white band. Variant17 hit the same wall. */
+:global([data-theme="light"]) .hero18 .badgeLabel {
+  color: var(--text-primary);
+}
+
+:global([data-theme="dark"]) .hero18 .lead,
+:global([data-theme="dark"]) .hero18 .badgeStat,
+:global([data-theme="dark"]) .hero18 .badgeLabel {
+  color: #fff;
+}
+
+@media (max-width: 860px) {
+  /* No room to flank: the copy stacks. Without this the three-column rule above
+     wins over variant17's mobile override (same specificity, declared later),
+     which squeezes the lead into a 145px column and pushes the badges below the
+     fold. Measured at 388x841 before this was restored. */
+  .flank18 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- protecting the baked headline ---------------------------------------
+   The headline is pixels inside the photograph, spanning 10.6% to 89.3% of the
+   plate's width — it needs 78.7% of that width on screen to survive. `cover`
+   crops horizontally whenever the viewport is narrower than the plate's 1.79
+   aspect, so below 1.41:1 the first and last words start disappearing.
+   Measured: 1920x1080 shows 99%, 1440x900 89%, iPad landscape 80% — all fine;
+   1024x768 shows 74% and a phone 26% — both cut the words.
+
+   Under that threshold the whole plate is shown rather than filling the frame,
+   pinned to the top, and the copy sits on the base colour beneath it (sampled
+   from the plate's own bottom edge, so the join is not a hard cut). Less
+   striking than the full-bleed scene, but it never truncates the headline.
+   A portrait scene pair (§11.10 of imagegeneration.md) is the proper fix. */
+@media (max-aspect-ratio: 141 / 100) {
+  .hero18 .bg16Img {
+    object-fit: contain;
+    object-position: top center;
+  }
+}

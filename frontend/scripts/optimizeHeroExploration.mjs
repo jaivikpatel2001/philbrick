@@ -31,6 +31,23 @@ const MANIFEST = path.join(ROOT, "lib", "imageManifest.json");
 const WIDTHS = [384, 640, 960, 1280];
 const QUALITY = 80;
 
+/* FULL-BLEED PLATES need their own ladder. The hero sky and building plates in
+   environment/ are painted edge to edge, so on a 1920 screen the browser was
+   stretching the 1280 variant by 1.5x and the towers came out visibly soft.
+   These tiers let it pick the largest the source can actually give.
+
+   `withoutEnlargement` plus the `w <= meta.width` filter below mean a tier
+   larger than the source is simply skipped, never upscaled — so listing 2560
+   here costs nothing on a 1536px original and pays off the day a bigger one is
+   supplied. Quality is higher too: these are large photographic plates where 80
+   shows banding in gradient sky. */
+const FULL_BLEED_WIDTHS = [640, 960, 1280, 1536, 1920, 2560, 3072];
+const FULL_BLEED_QUALITY = 88;
+
+/** Plates that cover the whole hero, rather than sitting in a card. */
+const isFullBleed = (file) =>
+  /[\\/]environment[\\/]hero-(sky|city|front|tower|scene)/.test(file);
+
 async function* pngs(dir) {
   for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
@@ -55,13 +72,16 @@ async function run() {
   for await (const src of pngs(DIR)) {
     const base = src.slice(0, -".png".length);
     const meta = await sharp(src).metadata();
-    const widths = WIDTHS.filter((w) => w <= (meta.width ?? Infinity));
-    if (widths.length === 0) widths.push(meta.width ?? WIDTHS[0]);
+    const fullBleed = isFullBleed(src);
+    const ladder = fullBleed ? FULL_BLEED_WIDTHS : WIDTHS;
+    const quality = fullBleed ? FULL_BLEED_QUALITY : QUALITY;
+    const widths = ladder.filter((w) => w <= (meta.width ?? Infinity));
+    if (widths.length === 0) widths.push(meta.width ?? ladder[0]);
 
     for (const w of widths) {
       await sharp(src)
         .resize({ width: w, withoutEnlargement: true })
-        .webp({ quality: QUALITY })
+        .webp({ quality })
         .toFile(`${base}-${w}.webp`);
       generated++;
     }

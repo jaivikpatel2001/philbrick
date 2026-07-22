@@ -535,26 +535,16 @@ main>section:nth-of-type(even) {
    TAWK.TO CHAT WIDGET
 
    Tawk renders into cross-origin iframes, so the inside of the chat window is
-   out of reach from here (its header and bubble colours are a Tawk dashboard
-   setting — see TAWK_BRAND_NOTE in components/providers/TawkTo.tsx). The iframe
-   ELEMENTS live in this document though, and they are tagged by role at runtime
-   by `skinTawk()`, so the frame around the chat can be brought onto the brand.
+   out of reach from here (its header, bubble and launcher colours are a Tawk
+   dashboard setting — see TAWK_BRAND_NOTE in components/providers/TawkTo.tsx).
+   The iframe ELEMENT lives in this document though, so the frame around the
+   chat can at least be brought onto the brand; `skinTawk()` tags it.
 
-   The launcher bubble is hidden outright: the site draws its own floating
-   button (components/ui/FloatingActions.tsx), which stays in place and becomes
-   the close control, so the open and closed states read as one control. Tawk's
-   "Powered by tawk.to" strip is left alone — removing it breaches their terms.
+   Tawk's own launcher is the chat control and is left completely alone, as is
+   its "Powered by tawk.to" strip.
    -------------------------------------------------------------------------- */
-[data-philbrick-tawk] iframe[data-tawk-part="launcher"] {
-  display: none !important;
-  pointer-events: none !important;
-}
-
 [data-philbrick-tawk] iframe[data-tawk-part="window"] {
   border-radius: var(--radius-lg) !important;
   border: 1px solid var(--border-accent) !important;
   box-shadow: var(--shadow-xl) !important;
-  /* Sit clear of the floating button that opens it, which occupies the space
-     Tawk's own launcher used to take. */
-  margin-bottom: 4px !important;
 }
