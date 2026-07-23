@@ -92,7 +92,7 @@ export default function NetworkPage() {
       <CTASection
         eyebrow="Partner with us"
         title="Become a Philbrick partner"
-        description={`Interested in supplying or specifying Philbrick components in your region? Reach us at ${SITE.phone}.`}
+        description={`Interested in supplying or specifying Philbrick components in your region? Call our helpline on ${SITE.phone} or write to ${SITE.salesEmail}.`}
         primary={{ label: "Get in touch", href: "/contact" }}
         secondary={{ label: "View products", href: "/products" }}
       />

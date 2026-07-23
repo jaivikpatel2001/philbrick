@@ -16,23 +16,84 @@ export const SITE = {
   founded: 1992,
   themeColor: "#0A0E14",
 
-  /* Contact — from the WordPress Contact Us page. */
+  /* --- Contact ------------------------------------------------------------
+     Every address and number the client publishes, each tagged with what it
+     is actually for, so a visitor knows where to write and where to call.
+     Sources: WordPress Contact Us page (ID 3631), Career page (ID 3435),
+     Privacy policy page (ID 3992) and philbrick-child-theme/footer.php.
+     ---------------------------------------------------------------------- */
+
+  /* Primary scalars (kept for structured data and single-slot UI). The main
+     number is the helpline the client publishes first on the Contact page. */
   email: "philbrick@philbrickindia.com",
   salesEmail: "sales@philbrickindia.com",
   careersEmail: "hr.philbrickindia@gmail.com",
-  phone: "+91 99789 86631",
-  phoneHref: "tel:+919978986631",
-  /* The union of every number the client publishes: the first three are the
-     footer block in philbrick-child-theme/footer.php, the last two appear on
-     the Contact Us page and the helpline widget. */
-  phones: [
-    "+91 99789 86631",
-    "+91 93740 22660",
-    "+91 99789 86635",
-    "+91 84012 19941",
-    "+91 98250 09420",
+  altEmail: "philbrick_controls@yahoo.com",
+  phone: "+91 84012 19941",
+  phoneHref: "tel:+918401219941",
+
+  /* Categorised inboxes, in the order they are offered to a visitor. */
+  emails: [
+    {
+      label: "Sales",
+      address: "sales@philbrickindia.com",
+      purpose: "Quotations, orders and pricing",
+    },
+    {
+      label: "General enquiries",
+      address: "philbrick@philbrickindia.com",
+      purpose: "Company, products and support",
+    },
+    {
+      label: "Careers",
+      address: "hr.philbrickindia@gmail.com",
+      purpose: "Mail your resume to our HR team",
+    },
+    {
+      label: "Alternate inbox",
+      address: "philbrick_controls@yahoo.com",
+      purpose: "Second address for general mail",
+    },
   ],
+
+  /* Every number the client publishes, labelled by what it is for. Only the
+     helpline and the WhatsApp line carry a role on the client's own site; the
+     rest are the office lines listed on the Contact page and in the footer. */
+  phones: [
+    {
+      label: "Helpline",
+      number: "+91 84012 19941",
+      purpose: "Support and general help",
+      whatsapp: false,
+    },
+    {
+      label: "WhatsApp",
+      number: "+91 99789 86631",
+      purpose: "Call or chat with us on WhatsApp",
+      whatsapp: true,
+    },
+    {
+      label: "Office",
+      number: "+91 93740 22660",
+      purpose: "Office line",
+      whatsapp: false,
+    },
+    {
+      label: "Office",
+      number: "+91 98250 09420",
+      purpose: "Office line",
+      whatsapp: false,
+    },
+    {
+      label: "Office",
+      number: "+91 99789 86635",
+      purpose: "Office line",
+      whatsapp: false,
+    },
+  ],
+
   whatsapp: "+919978986631",
+  whatsappDisplay: "+91 99789 86631",
   whatsappUrl:
     "https://api.whatsapp.com/send?phone=+919978986631&text=Hello%20Sir%2C%20I%20would%20like%20to%20inquire%20about",
 
@@ -76,6 +137,9 @@ export const SITE = {
 export const gmailHref = (email: string) =>
   `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
 
+/** tel: href for any displayed number ("+91 84012 19941" → "tel:+918401219941"). */
+export const telHref = (number: string) => `tel:${number.replace(/\s/g, "")}`;
+
 /* Social profiles from the WordPress child theme footer, in the order the
    client's own "Join Us:" widget lists them (footer.php, #tz_socials-4).
    WhatsApp is the first of the four and had been missing here. */
@@ -83,7 +147,7 @@ export const SOCIALS: { label: string; href: string; icon: string }[] = [
   {
     label: "WhatsApp",
     href: "https://api.whatsapp.com/send?phone=+919978986631&text=Hello%20Sir%2C%20I%20would%20like%20to%20inquire%20about",
-    icon: "FiMessageCircle",
+    icon: "FaWhatsapp",
   },
   {
     label: "Facebook",
@@ -96,8 +160,9 @@ export const SOCIALS: { label: string; href: string; icon: string }[] = [
     icon: "FiInstagram",
   },
   {
-    label: "Twitter",
+    /* The account still lives on the twitter.com host, which redirects. */
+    label: "X (formerly Twitter)",
     href: "https://twitter.com/SaranshPatel20",
-    icon: "FiTwitter",
+    icon: "FaXTwitter",
   },
 ];

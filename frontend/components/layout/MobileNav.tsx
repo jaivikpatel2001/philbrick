@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FiX, FiChevronDown } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa6";
 import { MAIN_NAV } from "@/constants/navigation";
 import { SITE } from "@/constants/site";
 import type { MegaCategory } from "@/types";
@@ -181,8 +182,18 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
               <Button href="/contact" fullWidth withArrow onClick={onClose}>
                 Get a quote
               </Button>
+              {/* Helpline to call, WhatsApp line to chat on — labelled so it
+                  is clear which does what. */}
               <a href={SITE.phoneHref} className={styles.phone}>
-                {SITE.phone}
+                Helpline {SITE.phone}
+              </a>
+              <a
+                href={SITE.whatsappUrl}
+                className={styles.chat}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaWhatsapp aria-hidden /> Chat on WhatsApp
               </a>
             </div>
           </motion.aside>

@@ -49,7 +49,11 @@ export const PRODUCT_FAQS: Faq[] = [
 export const CONTACT_FAQS: Faq[] = [
   {
     question: "How do I request a quotation?",
-    answer: `Send the enquiry form on this page or call us on ${SITE.phone}. Tell us what you need, whether a specific product, a component set, or advice, and the Philbrick team will get back to you.`,
+    answer: `Send the enquiry form on this page, write to ${SITE.salesEmail}, or call our helpline on ${SITE.phone}. Tell us what you need, whether a specific product, a component set, or advice, and the Philbrick team will get back to you.`,
+  },
+  {
+    question: "Which number or email should I use?",
+    answer: `Call the helpline on ${SITE.phone} for support and general help. To chat instead, message us on WhatsApp at ${SITE.whatsappDisplay}. For quotations, orders and pricing write to ${SITE.salesEmail}; for anything general write to ${SITE.email}; to apply for a job mail your resume to ${SITE.careersEmail}. Our office hours are ${SITE.hours}.`,
   },
   {
     question: "What details help you prepare an accurate quote?",

@@ -47,3 +47,8 @@ next-env.d.ts
 
 # local performance capture (Pingdom HAR export)
 /har.json
+
+# content audit: the crawl is a regenerable intermediate
+# (scripts/contentAuditCrawl.mjs); the workbook itself IS committed, because it
+# is the deliverable the client reviews.
+/content-audit/crawl.json

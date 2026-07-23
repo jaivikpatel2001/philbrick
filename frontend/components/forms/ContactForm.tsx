@@ -28,6 +28,10 @@ const INQUIRY_TYPES = [
   "Technical Support",
   "Dealer or Network Inquiry",
   "Business Inquiry",
+  /* The client's WordPress site had a separate "Download Step Brochure" form;
+     documents are now linked directly on /downloads, and this option covers
+     anything not published there. */
+  "Brochure or Catalogue Request",
   "General Inquiry",
 ];
 
@@ -108,6 +112,11 @@ export function ContactForm({
           email: String(data.get("email")),
           "Phone Number": String(data.get("phone") || "Not provided"),
           "Company Name": String(data.get("company") || "Not provided"),
+          Website: String(data.get("website") || "Not provided"),
+          Address: String(data.get("address") || "Not provided"),
+          City: String(data.get("city") || "Not provided"),
+          State: String(data.get("state") || "Not provided"),
+          Country: String(data.get("country") || "Not provided"),
           "Inquiry Type": inquiryType,
           Message: String(data.get("message")),
           "Submitted At": submittedAt,
@@ -200,6 +209,53 @@ export function ContactForm({
           name="company"
           autoComplete="organization"
           placeholder="Company or project name"
+        />
+      </div>
+
+      {/* The client's WordPress inquiry form also asked for website and a full
+          postal location. Kept here so nothing is lost, but optional, so the
+          form stays quick to complete. */}
+      <div className={styles.row}>
+        <Field
+          label="Website"
+          name="website"
+          type="url"
+          autoComplete="url"
+          placeholder="https://"
+        />
+        <Field
+          label="City"
+          name="city"
+          autoComplete="address-level2"
+          placeholder="City"
+        />
+      </div>
+      <div className={styles.row}>
+        <Field
+          label="State"
+          name="state"
+          autoComplete="address-level1"
+          placeholder="State"
+        />
+        <Field
+          label="Country"
+          name="country"
+          autoComplete="country-name"
+          placeholder="Country"
+        />
+      </div>
+
+      <div className={styles.field}>
+        <label htmlFor="address" className={styles.label}>
+          Address
+        </label>
+        <textarea
+          id="address"
+          name="address"
+          rows={2}
+          className={styles.textarea}
+          autoComplete="street-address"
+          placeholder="Street address"
         />
       </div>
 

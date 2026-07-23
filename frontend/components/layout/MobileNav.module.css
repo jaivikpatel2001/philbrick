@@ -170,3 +170,12 @@
 .phone:hover {
   color: var(--accent);
 }
+
+.chat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: var(--fs-sm);
+  color: var(--accent);
+}

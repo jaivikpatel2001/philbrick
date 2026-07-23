@@ -6,6 +6,903 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-22 21:45 IST
+
+### Variant18: the bottom wash takes the theme's polarity
+
+**Status:** Completed
+
+Client: in light theme make the bottom band a **white** blurred fade, and black
+in dark, so the copy reads properly. Previously it was a dark veil in both,
+which is variant17's logic and wrong for a daylight scene.
+
+`.scrim18` is now a tint plus a frost, both shaped by the SAME mask so they fade
+out together at the 30% line — no visible band edge:
+
+| | tint | blur |
+| --- | --- | --- |
+| light | `rgba(255,255,255,0.86)` | `backdrop-filter: blur(14px)` |
+| dark | `rgba(5,9,15,0.82)` | same |
+
+Mask: `#000 0% → 0.88 at 10% → 0.45 at 20% → transparent at 30%`.
+
+**The copy follows the wash**, which is the part variant17 does not have to
+handle: dark over the white band in light theme, white over the near-black band
+in dark.
+
+**Two contrast failures caught by measuring rather than eyeballing.** First pass
+kept the copy white in light theme, over what was now a white band. Second pass
+put the badge label on `--text-secondary`, which measured **3.62:1** at 0.72rem —
+below the 4.5:1 it needs at that size. Both fixed; the label uses
+`--text-primary`, exactly as variant17 had to.
+
+Final, composited against the real plate, the tint and the mask:
+
+| | light | dark |
+| --- | --- | --- |
+| lead | 10.26:1 | 15.02:1 |
+| badge stat | 6.23:1 | 16.35:1 |
+| badge label | 8.40:1 | 16.10:1 |
+
+**Self-inflicted break worth recording:** the first edit dropped its comment text
+after an already-closed `*/`, which is a CSS parse error — the dev server
+returned 500 until it was fixed. Caught immediately because the route was polled
+after the edit.
+
+**Affected Areas:** `corporate.module.css` (variant18 scrim and copy colours).
+
+---
+
+## 2026-07-22 21:15 IST
+
+### Variant18: overlay cut back to a bottom-30% gradient
+
+**Status:** Completed
+
+Client: too much darkness over the scene. Correct, and the cause was inherited
+rather than intended — variant18 was still using variant17's `.scrim17`, which in
+**light theme** washes the entire frame from `rgba(6,12,22,0.88)` at the foot to
+`0.26` at the very top. It never fully clears, so a daylight photograph rendered
+like dusk. Dark theme added a 0.7 radial over the middle on top of that.
+
+**`.scrim18` replaces it:** one bottom-up linear gradient over the lowest 30% of
+the hero and nothing above it, per the client's own suggestion. `0.72 → 0.46 →
+0.18 → transparent` in light, a gentler `0.62 → 0.38 → 0.14 → transparent` in
+dark, since the night plate is already dark. Variant17 is untouched.
+
+**No top scrim, because it turned out not to be needed.** The scrim's other job
+was giving the fill-less floating navbar something to sit on. Measured against
+the scene's own top 10% (`#3578b9` day), white nav links sit at **4.62:1**, which
+clears AA; night is 19.49:1. So the top of the frame is now completely clear.
+
+**Also removed:** the per-block radial washes behind the lead and badges
+(`.flank18::before`). They covered the same band as the new gradient, and
+stacking the two was a large part of what made the hero look murky.
+
+**A real bug this exposed.** With the radials gone and no light-theme override,
+the lead and badges fell back to the near-black body colour over a dark scene:
+measured **1.66:1** (lead), **1.67:1** and **1.71:1** (badges) — unreadable. They
+are now white in light theme. Note this is deliberately NOT the same decision as
+the headline, which does not take variant17's white treatment: the headline is
+baked into the picture, while the lead and badges sit at the foot of the scene
+over dark buildings.
+
+**After, composited against the real plate plus the gradient:**
+
+| | light | dark |
+| --- | --- | --- |
+| lead | 11.52:1 | 11.80:1 |
+| badge stat | 11.43:1 | 14.89:1 |
+| badge label | 11.15:1 | 13.93:1 |
+
+**One dead end worth recording.** The dev page reported the floating navbar's
+links resolving to the light-theme near-black over the hero, which would have
+been a contrast failure. It is a dev-server hot-reload artifact: the production
+CSS contains no `@layer`, so specificity decides there and
+`[data-nav="float"] header[data-scrolled="false"] nav a` (0,2,3) beats
+`.navLink` (0,1,0). The client's own screenshots show light nav links. No change
+made.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx`,
+`corporate.module.css` (variant18 block).
+
+---
+
+## 2026-07-22 20:40 IST
+
+### Variant18 becomes a single-scene hero
+
+**Status:** Completed
+
+Client supplied `hero-scene-{day,night}.png` (2752x1536, headline baked in) and
+asked for the whole layered build to be replaced by one background image, with
+only the lead paragraph and the two trust badges kept live in front of it.
+
+**Now:**
+
+| z | layer |
+| --- | --- |
+| 2 | lead + trust badges |
+| 1 | scrim (dark theme only) |
+| 0 | the scene, day/night cross-faded by `[data-theme]` |
+
+Removed: the open-sky plates, the transparent building plate, the visible
+headline and eyebrow, and all the CSS that anchored towers to the headline
+(`.content18`, `.title18`, `.titleWrap18`, `.front18*`, `--peak-lift`).
+
+**The `<h1>` is still in the DOM, `sr-only`.** The headline is pixels inside a
+photograph now; without this the page has no heading outline for screen readers
+and nothing for search engines to read. Zero visual cost. It must be kept in step
+with the picture — the prompts are §11.10 of `imagegeneration.md`.
+
+**Sharpness is fixed by the new source.** At 1440x900 the browser now serves the
+1920 variant and paints it 1612px wide: a **0.84x downscale**, where the old
+1536px plates were being upscaled 1.24x and the original 1280 ladder 1.50x.
+
+**The crop threshold was measured, not guessed.** Scanning both plates for the
+azure accent line, the headline occupies rows 509–704 and spans x 293–2458 —
+**10.6% to 89.3%** of the width, identical in day and night. So it needs 78.7% of
+the plate's width on screen, and since `cover` crops horizontally below the
+plate's 1.79 aspect, anything narrower than **1.41:1** starts eating the first
+and last words:
+
+| Viewport | Aspect | Width shown | Headline |
+| --- | --- | --- | --- |
+| 1920x1080 | 1.78 | 99% | intact |
+| 1440x900 | 1.59 | 89% | intact |
+| iPad landscape 1180x820 | 1.44 | 80% | intact |
+| 1024x768 | 1.33 | 74% | would clip |
+| 768x1024 | 0.75 | 42% | would clip |
+| 388x841 | 0.46 | 26% | would clip |
+
+Below 1.41:1 the plate switches to `object-fit: contain`, pinned to the top, so
+the whole picture shows and the copy sits on the base colour beneath. That base
+colour is sampled from each plate's own bottom edge (`#3f4957` day, `#524f53`
+night) so the join reads as a continuation rather than a hard cut. Verified: at
+1024x768 and 388x841 the fit switches and 100% of the width shows; at 1440x900
+and 1920x1080 it stays full-bleed at 89% and 99%.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx` (rewritten),
+`corporate.module.css` (variant18 block reduced to the hero, stack, flank and the
+aspect guard), regenerated WebP variants, `lib/imageManifest.json`.
+
+**Known Limitations:**
+- The letterboxed fallback is a compromise, not a design. A portrait scene pair
+  is the proper fix for phones and portrait tablets — same prompts, portrait
+  framing.
+- Changing the headline now means regenerating both images; the copy no longer
+  lives in code alone.
+
+---
+
+## 2026-07-22 18:55 IST
+
+### Hero scene prompts recorded in imagegeneration.md
+
+**Status:** Completed (documentation; the images themselves are not supplied)
+
+Client asked for the single-scene hero prompts to be written down so the
+headline can be changed later without anyone reconstructing the look from
+scratch. Added as **§11.10** of `imagegeneration.md`: both prompts verbatim, the
+target filenames `hero-scene-{day,night}.png`, the current headline for
+reference, and the four caveats — image models garble six-word headlines, baked
+text stops being a real `<h1>` (mitigated by keeping it visually hidden in the
+DOM), 16:9 crops badly on a portrait phone hero, and the zero-risk alternative of
+generating the scene text-free and compositing the headline with sharp using the
+site's own font.
+
+Also documented the two responsive ladders as **§11.11**, since the reason for
+them is not obvious from the script alone.
+
+`scripts/optimizeHeroExploration.mjs` now matches `hero-scene*` as full-bleed, so
+the 1920/2560/3072 tiers generate as soon as a 3840px source lands. Verified the
+filename matcher against four paths: `hero-scene-day.png` and `hero-sky-day.png`
+resolve to the full-bleed ladder, `commercial-tower.png` and
+`component-cabin.png` stay on the component ladder.
+
+**Affected Areas:** `imagegeneration.md` (§11.10, §11.11),
+`scripts/optimizeHeroExploration.mjs`.
+
+**Follow-up:** the hero is still the three-layer build. Nothing switches to the
+single-scene images until they are supplied.
+
+---
+
+## 2026-07-22 18:35 IST
+
+### Fix: variant18 hero plates were being upscaled 1.5x
+
+**Status:** Partly fixed in code; the rest needs bigger artwork
+
+Client: the hero looks blurry. It was, and measurably.
+
+**Cause.** `scripts/optimizeHeroExploration.mjs` builds one responsive ladder,
+`384/640/960/1280`, sized for the component cutouts that render in ~300px cards.
+The hero sky and building plates are painted EDGE TO EDGE, so on a 1920px screen
+the browser was picking the 1280 variant and stretching it by **1.5x**. Hard
+edges — window mullions, tower silhouettes — show that immediately.
+
+**Fix.** Full-bleed plates now get their own ladder,
+`640/960/1280/1536/1920/2560/3072`, at quality 88 rather than 80 (large
+photographic plates band in gradient sky at 80). Tiers above the source are
+skipped, never upscaled, so listing 3072 costs nothing today and pays off the
+day a bigger original arrives. Matched by filename:
+`environment/hero-(sky|city|front|tower)*`.
+
+Measured at 1920x1080, DPR 1, after regenerating:
+
+| | before | after |
+| --- | --- | --- |
+| variant served | 1280 | **1536** |
+| upscale factor | 1.50x | **1.24x** |
+
+Weight paid for it: the building plate goes 262KB to 339KB (day) and 336KB to
+483KB (night); the sky plates 83KB to 113KB and 90KB to 122KB.
+
+**What code cannot fix.** The sources are 1536px wide, so 1.24x is the floor at
+1920 CSS px, and a 2x-DPR laptop at that width needs 3840px to be truly crisp.
+The remaining softness needs the plates re-rendered larger — 3840x2560 keeps the
+current 3:2 framing. The sky matters far less (soft gradient hides
+interpolation); it is the buildings that show it.
+
+**Affected Areas:** `scripts/optimizeHeroExploration.mjs`, regenerated WebP
+variants, `lib/imageManifest.json`.
+
+---
+
+## 2026-07-22 18:10 IST
+
+### Variant18: real sky plate behind the headline, three layers
+
+**Status:** Completed
+
+Client, on seeing the previous pass: "we need three layers — full sky background
+(day/night), text, building image (day/night)… current version not look like
+sky". Correct. The gradient standing in for sky read as a flat coloured wall
+behind photoreal glass towers, especially in dark theme.
+
+The project already had the right asset: `hero-sky-{day,night}.png`, open sky
+rather than the `hero-city-*` skyline variant16/17 use. Sampled top to bottom,
+day runs `#3e8ab9` to `#adc9da` at the horizon; night `#010d22` to `#172d47`.
+Those are now z 0, and the hero's own background is a flat base colour only,
+covering the moment before the plate paints.
+
+Final stack, verified live at 1440x900:
+
+| z | layer |
+| --- | --- |
+| 4 | lead + trust badges, in FRONT of the buildings |
+| 3 | building plates, day/night, full bleed, bottom anchored |
+| 2 | headline, BEHIND the buildings |
+| 1 | scrim (dark theme only) |
+| 0 | sky plates, day/night |
+
+**Light theme deliberately does NOT match variant17's white headline.** Variant17
+sits on a dark city photograph and forces the headline white; variant18 sits on
+open daylight sky. Measured against the actual sky pixels behind the headline
+(`rgb(130,180,214)` average), white gives about 2.4:1 while the default
+near-black gives **8.62:1**. Dark theme keeps white at **17.36:1** over the night
+sky. The rule carries a comment saying not to "restore parity", because doing so
+would fail contrast.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx`,
+`corporate.module.css` (variant18 block).
+
+**Known Limitations:** unchanged from the entry below — no headline occlusion on
+mobile (the plate is cropped to its middle by `cover` at 388px), and the day and
+night building plates still differ by ~94px of skyline, so the towers shift
+slightly on the theme toggle.
+
+---
+
+## 2026-07-22 17:40 IST
+
+### Variant18: the supplied skyline plates become the hero background
+
+**Status:** Completed
+
+Client supplied `hero-front-{day,night}.png` (1536x1024, transparent) and then
+gave the composition direction plainly: drop the old hero photograph, make the
+two new plates the background, and paint them ABOVE the headline.
+
+**What the plates actually measured.** Before wiring anything, both were
+profiled for alpha. Day is 42.9% opaque, rows 63–979; night 39.0%, rows 62–1015.
+Neither reaches its own bottom edge, so laid flush the buildings float ~42px
+above the fold at 1440x900. Their skylines also differ by a mean of 93.8px per
+column — they are not the same geometry re-lit, so the towers shift on the theme
+toggle. `scripts/cropHeroFront.mjs` trims the transparent margins using ONE
+shared box (`0,62 1536x954`, the union of both) so day and night stay aligned,
+and the buildings now stand on the bottom edge.
+
+**Composition, as directed:**
+- The city photograph (`hero-city-*`) is gone from this variant. With a
+  photographed skyline in FRONT of the headline, a second one behind it reads as
+  two cities stacked. `z 0` is now a CSS gradient sky, light and dark.
+- The plates are `z 3`, full bleed, `object-fit: cover` anchored bottom, with
+  `inset: 0 0 -4% 0` so the last sliver of transparent pixels sits below the
+  fold.
+
+**The z-order had to be split, and the measurement is why.** With the whole
+content stack behind the plate, the canvas probe read **lead 100% covered,
+badges 96%** at 1440x900 — the body copy was entirely inside the buildings. Only
+the headline is meant to disappear. `.stack18` therefore carries **no** z-index
+(a z-index there makes it a stacking context and traps both halves below the
+plate); `.content18` is `z 2`, behind the skyline, and `.flank18` is `z 4`, in
+front of it.
+
+**Verified** by compositing the actual plate into a canvas at its rendered
+geometry and reading alpha, rather than by eye:
+
+| Viewport | Headline covered | Buildings meet fold | Overflow |
+| --- | --- | --- | --- |
+| 1920 x 1080 | 30% | yes | 0 |
+| 1440 x 900 | 27% day / 28% night | yes | 0 |
+| 388 x 841 | 0% (see below) | yes | 13px, pre-existing |
+
+**Regression caught and fixed.** Removing the old headline-anchoring CSS also
+removed variant18's mobile block. The three-column flank rule then beat
+variant17's mobile override (same specificity, declared later), squeezing the
+lead into a 145px column and pushing the trust badges to y846 on an 841px
+screen — below the fold. Restored: single column and a smaller stack gap under
+860px. Lead is now 343px wide and the badges sit inside the hero.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx` (rewritten,
+now purely presentational), `corporate.module.css` (variant18 block),
+`scripts/cropHeroFront.mjs`, two derived PNGs + WebP variants,
+`lib/imageManifest.json`.
+
+**Known Limitations:**
+- **On mobile the headline is not occluded at all (0%).** At 388px the plate is
+  cropped by `cover` to its middle, and the visible towers sit below the
+  headline. The result is legible and reads as a skyline under the words, but it
+  is not the layered effect. Fixing it properly needs a portrait crop of the
+  artwork, not CSS.
+- Day and night plates still differ by ~94px of skyline, so the buildings shift
+  slightly on the theme toggle. Only a re-render of night FROM day fixes that.
+- The 13px horizontal overflow at 388px is pre-existing on variant17 too.
+
+---
+
+## 2026-07-22 16:35 IST
+
+### Variant18: drag grip removed
+
+**Status:** Completed
+
+`.grip18` and the whole drag apparatus are gone from variant18: the pointer
+handlers, the offset state, `DRAG_LIMIT`, `KEY_STEP`, the `role="slider"` node
+and the `[data-dragging]` rules. The foreground is a composed part of the scene
+here, not a control, so the layer is plain `pointer-events: none` and nothing in
+the hero intercepts a click. `Variant18Hero` is now a presentational component
+whose only effect is the floating-navbar opt-in.
+
+Variant17 keeps its draggable tower — `.grip17` and `.fg17[data-dragging]` are
+untouched.
+
+Verified live: zero `grip18` nodes, zero `role="slider"` in the hero, foreground
+`pointer-events: none`, and the composition unchanged (peak at 50% into the last
+line, 2.5 characters covered, no horizontal overflow). Light-theme headline now
+resolves to `#fff`, confirming the `.hero18` parity rules added earlier.
+
+**Affected Areas:** `sections/experience/corporate/Variant18Hero.tsx`,
+`corporate.module.css`.
+
+---
+
+## 2026-07-22 16:05 IST
+
+### Tawk's own launcher is the chat control; variant18 foreground plate wired
+
+**Status:** Completed (the hero plate is blocked on the client's artwork)
+
+**1. The site's chat button is gone.** On client direction Tawk's green launcher
+is the chat control again. Removed from `FloatingActions`: the chat button, the
+drag behaviour (which only ever existed so the visitor could park that button),
+the WhatsApp fallback and the Tawk imports. What is left is the scroll-to-top
+button, moved up to `bottom: clamp(5.5rem, 5vw + 4.5rem, 7rem)` so it stacks
+above Tawk's launcher instead of colliding with it.
+
+`TawkTo.tsx` lost the machinery that existed only to hide that launcher: the
+role-tagging by size and z-index, `hideWidget()` on load, `openTawk`,
+`closeTawk`, the forced-close `WeakSet`, and the open/close events. **Tawk now
+owns its own state end to end**, which is also the reliable arrangement — the
+un-closable window fixed earlier that day was caused by fighting that state
+machine. What remains is cosmetic: the chat window's iframe still gets the
+site's radius, hairline and shadow, found by the one stable marker (the `open` /
+`closed` class Tawk keeps on it in both states). Its launcher and the
+"Powered by tawk.to" strip are untouched.
+
+Verified live: the only site button left is "Scroll back to top", Tawk's
+launcher renders at 64x60 with its greeting bubble, and the dock sits at 110px
+from the bottom, clear of it.
+
+**2. Variant18 light theme was wrong.** `.hero18` never picked up the
+white-on-photograph treatment, because those rules are written against
+`.hero17`. The headline was falling back to the near-black body colour on a
+bright sky. Mirrored for `.hero18`, so the two variants differ only in
+composition, as intended.
+
+**3. Foreground skyline plate.** Client asked which asset would give the
+reference's layering, and chose a foreground cutout over real text rather than
+translucent type or baked-in words. The layer is wired and sits behind
+`HAS_FRONT_PLATE` in `Variant18Hero.tsx`, currently `false`; the single cropped
+tower from §11.8 stands in until the files land. Spec and both prompts are
+§11.9 of `imagegeneration.md` — transparent PNG, exactly 1535x1024 to match
+`hero-city-day.png`, day and night geometrically identical, open middle band,
+buildings reaching the bottom edge.
+
+**Affected Areas:**
+- `components/ui/FloatingActions.{tsx,module.css}`,
+  `components/providers/TawkTo.tsx`, `styles/globals.css`,
+  `sections/experience/corporate/{Variant18Hero.tsx,corporate.module.css}`,
+  `imagegeneration.md`.
+
+**Known Limitations:**
+- Baking the headline into the artwork was offered and declined: it would stop
+  the `<h1>` being real text (no responsive scaling, nothing for search engines,
+  blur at large sizes, a new render for every copy change).
+
+**Follow-up:**
+- Client to supply `hero-front-{day,night}.png`; then run
+  `node scripts/optimizeHeroExploration.mjs` and flip `HAS_FRONT_PLATE`.
+- The "update every .md file" pass is still outstanding (`SITE-STRUCTURE.md`,
+  `README.md`).
+
+---
+
+## 2026-07-22 15:20 IST
+
+### New `/variant18` — headline set into the sky, tower peak only
+
+**Status:** Completed
+
+Client on variant17: "the building is completely in front of the heading text".
+Correct — variant17 centres the headline and runs a full-bleed tower plate down
+the middle of it, so the shaft crosses **every** line. The reference they sent
+(large type in the sky, a peak rising through it, one or two letters lost) needs
+the opposite balance. Variant18 is variant17 with only the composition changed:
+same copy, same type, same spacing, same animations, same draggable tower.
+
+**Why a new asset was needed.** `hero-tower-{day,night}.png` is a 1024x1536
+plate whose building is a thin 213x1083 column of opaque pixels; the rest is
+transparent padding that does the positioning. Under `object-fit: contain` the
+building's width and its peak height are locked together, so the peak can only
+be lowered by making the tower thinner. `scripts/cropHeroTower.mjs` trims both
+plates to one shared box (`452,447 228x1089`, union of their alpha bounds plus a
+6px bleed, so day and night stay pixel-aligned) and writes
+`hero-tower-cut-{day,night}.png`. Derived only — nothing generated or repainted.
+Documented as §11.8 in `imagegeneration.md`.
+
+**The three composition changes:**
+1. Content is pinned to the top of the hero, in the open sky, not centred over
+   the skyline.
+2. The headline runs the full width (`max-width: none`, `clamp(2.6rem, 0.4rem +
+   8.6vw, 9.4rem)`, stack widened to 104rem), so a narrow tower can only ever be
+   a bite out of its middle.
+3. The tower is the cutout, ~2 characters wide, whose peak lands mid-way through
+   the headline's LAST line and whose base runs off the bottom of the hero and
+   is clipped.
+
+**Anchoring, which took two attempts.** Positioning the peak with viewport
+arithmetic (`calc(8.9rem + 15vw)`, fitted to measured line boxes at 1280 and
+1440) is exact on a laptop and wrong on a phone, where the headline wraps to
+three lines and the peak lands in the first one. The tower is now a child of a
+wrapper that hugs the `<h1>`, positioned at `top: calc(100% - var(--peak-lift))`
+where `--peak-lift` is `0.47 * var(--title-size)`, half a line of the headline's
+own clamp. That resolves against the headline at any width and any line count.
+
+**Verified** at four viewports, measured against the untransformed layout box:
+
+| Viewport | Lines | Peak depth into last line | Chars covered | % of headline width |
+| --- | --- | --- | --- | --- |
+| 388 x 840 | 3 | 50% | 2.5 | 15% |
+| 768 x 1024 | 3 | 50% | 2.5 | 14% |
+| 1440 x 900 | 2 | 50% | 2.3 | 11% |
+| 1920 x 1080 | 2 | 50% | 2.7 | 12% |
+
+**Affected Areas:**
+- `app/variant18/page.tsx`, `sections/experience/corporate/Variant18Hero.tsx`,
+  the variant18 block appended to `corporate.module.css`,
+  `scripts/cropHeroTower.mjs`, two derived PNGs + their WebP variants,
+  `lib/imageManifest.json`, `config/pageReleases.ts`, `imagegeneration.md`.
+- Variant17 and every other variant are untouched.
+
+**Technical Decisions:**
+- The `<h1>` stays real, selectable, indexable markup. The occlusion is done by
+  stacking, never by baking words into artwork — the same rule variant17 set.
+- On narrow screens the copy stacks, so there is no clear channel for a
+  full-height shaft. Rather than covering the lead paragraph, the tower fades
+  out into the sky above it with a mask. Reads as haze, not as a sliced-off
+  building. Verified the fade completes above the lead at 388px.
+
+**Known Limitations:**
+- The measured 13px of horizontal overflow at 388px is **pre-existing** — it is
+  present on `/variant17` too, so it was not introduced here and was left alone.
+- The client's reference has a chunky mountain; this asset is a slender tower,
+  so the mass reads lighter. If they want the reference's weight, that needs new
+  artwork, not a crop.
+
+**Follow-up:**
+- The "update every .md file" pass requested earlier is still outstanding:
+  `SITE-STRUCTURE.md` is stale (missing the four new routes, wrong release flags,
+  still calls the images Unsplash placeholders) and `README.md` has not been
+  re-checked.
+
+---
+
+## 2026-07-22 14:30 IST
+
+### Fix: the chat window could not be closed
+
+**Status:** Completed
+
+Reported with a screenshot: chat open, conversation in progress, the close
+button does nothing. Three separate defects, all introduced by this morning's
+skinning work. Reproduced and fixed each.
+
+**1. Tawk was left in a state where `minimize()` is ignored.** The widget was
+hidden with `hideWidget()` at load and again on every minimize, so Tawk was
+flagged *hidden* while its window was *maximized* — a combination it does not
+expect. In that state it can ignore `minimize()`, and since its own launcher was
+hidden too, there was no way out at all. `openTawk()` now calls `showWidget()`
+before `maximize()`, and `hideWidget()` is called once at load only (to stop the
+launcher flashing before skinning runs) and never again. Tawk's state machine
+stays consistent; the launcher stays invisible because the site hides that
+iframe directly rather than through the API.
+
+**2. The fallback did not work either.** `closeTawk()` fell back to
+`hideWidget()`, which flips the flag but leaves an open window exactly where it
+is — verified by sabotaging `minimize()` in the page and watching the window
+stay put. The fallback is now to set `display: none` on the window's own iframe,
+which cannot fail because that element is in our document. Restoring is tracked
+in a `WeakSet`: a hidden frame measures 0x0 and can no longer be recognised by
+size, so without that the chat would close and never reopen (which is exactly
+what the first attempt at this fix did).
+
+**3. Tawk's green launcher was never actually hidden.** Two rules were tried
+and both were wrong. Classifying by size mis-tagged the window at 300x150
+mid-animation and fails on phones, where the window is small by design.
+Classifying by z-index hid only one bubble — Tawk keeps **two** launcher frames
+(64x60 and 124x95 observed), so the visible one survived, which is the green
+chevron in the client's screenshots. Roles now come from what actually holds:
+the window is the only frame Tawk gives an `open`/`closed` class, and a launcher
+is any other frame that draws something at most 200px in both directions. Tawk's
+zero-size helper frames are never touched — hiding one could break its message
+transport — and the "Powered by tawk.to" strip is 350 wide so it can never match.
+
+**Verified** across five states, twice each, with the button only:
+
+| Step | Result |
+| --- | --- |
+| Open | window 350x520 + branding strip; no Tawk launcher anywhere |
+| Close with `minimize()` sabotaged (the reported bug) | everything gone |
+| Reopen after that forced close | window returns |
+| Close normally | gone, `isChatMaximized() === false` |
+| Reopen | window returns |
+
+**Affected Areas:** `components/providers/TawkTo.tsx` (`skinTawk`, `openTawk`,
+`closeTawk`, bootstrap callbacks, the re-skin effect).
+
+**Technical Decisions:**
+- Roles are re-derived on every pass instead of locked in on first sight, so a
+  frame that was mid-animation when one pass ran is picked up by the next and a
+  wrong guess can never persist.
+- The forced close hides the branding strip along with the window. Tawk hides it
+  itself when minimizing normally, so leaving it behind would orphan a
+  "Powered by tawk.to" bar over the page.
+
+**Known Limitations:**
+- Under a browser with third-party frames blocked, the button still falls back
+  to WhatsApp, as before.
+
+---
+
+## 2026-07-22 13:45 IST
+
+### Documentation pass: every .md re-checked against the code
+
+**Status:** Completed
+
+Read every markdown file in the repo against the actual code and corrected what
+had drifted. Findings, not just edits:
+
+| File | What was wrong | Fixed to |
+| --- | --- | --- |
+| `SITE-STRUCTURE.md` | Whole document predated the last three releases: no `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`, `/news-events/[slug]` or the 17 variants; release flags showed `/about` and `/products` as live when only `/` and the variants are; product count said 35 routes | Rewritten. Verified counts: 30 static (13 pages + 17 variants) + 38 product (14 categories + **24** products, counted off `out/`) + 6 news = 74 release entries, 82 prerendered pages |
+| `README.md` | Folder tree missing `hooks/`, `scripts/`, `content-audit/`, `components/{products,seo}`, the four new routes, the variants and half the providers; stack omitted Tawk.to and FormSubmit; release instructions wrong (see below) | Updated, plus a documentation map table and a content-audit section |
+| `CLAUDE.md` | **Product-route releases were documented wrong**: it said to flip the node's `released` flag in `data/products.ts`. That flag is a content-readiness hint; production gating reads the `RELEASED_PRODUCT_ROUTES` allow-list. Also said the site's chat button hides while the chat is open, which stopped being true this morning | Corrected in both the STRICT RULE and the architecture section; added a docs table and a rule to update `SITE-STRUCTURE.md` / `README.md` alongside `DONE.md` |
+| `imagegeneration.md` | Opened with "Today all of these come from Unsplash placeholders" — every one was replaced back in July; homepage-hero note claimed the Three.js scene was commented out in `app/page.tsx`, which it is not | Status corrected, plus a note on the four pages that deliberately have no imagery |
+| `DESIGN.md` | Is an **analysis of apple.com**, with Apple's hexes and SF Pro type scale, but nothing said so above the fold. A reader could easily take `#0066cc` for a project token | Added a banner: reference only, `styles/tokens.css` is the real system |
+| `THREEJS-IMPLEMENTATION.md` | Homepage flow listed sections that no longer exist ("Lifecycle support → Projects"); file table missed `ElevatorHero.tsx`; palette line still said champagne gold/electric blue; the arrival beat described a "VERTIQ tower ... backlit sign" | Corrected. The gold **material** reference at §4 is accurate and stays: `#c7a96a` is still in the scene as architectural metal, unrelated to the brand palette |
+| `variants/VARIANTS.md` | Said "Four alternative homepage heroes" above a table of 15 | 17, table completed with variant16/17, plus a reminder to delete the routes and their release flags together |
+| `public/hdri/README.md` | "steel, glass and gold" from the old palette | Neutral wording |
+| **new** `README.md` (repo root) | Did not exist. Nothing explained that `wordpress/` is a read-only content reference rather than a deployed app, or that `backend/` is empty | Added |
+
+`DONE.md` and `AGENTS.md` needed no changes; `public/models/README.md` is still
+accurate.
+
+**Verified, not assumed:** product route counts were taken from the built `out/`
+tree (14 category + 24 product HTML files), release flags from
+`config/pageReleases.ts`, the homepage composition from `app/page.tsx` +
+`sections/home/HomeSections.tsx`, and every relative link in the seven main docs
+was resolved against the filesystem (0 broken).
+
+**Affected Areas:** `README.md` (root, new), `frontend/{README,CLAUDE,SITE-STRUCTURE,imagegeneration,DESIGN}.md`,
+`frontend/sections/experience/THREEJS-IMPLEMENTATION.md`,
+`frontend/sections/experience/variants/VARIANTS.md`,
+`frontend/public/hdri/README.md`.
+
+**Follow-up:**
+- `DESIGN.md` is a large reference document that no longer describes anything in
+  this project. Consider moving it out of the repo root, or into a `docs/`
+  folder, so it stops reading like a project spec.
+
+---
+
+## 2026-07-22 13:15 IST
+
+### Chat widget on-brand, one control in both states, agency credit in the footer
+
+**Status:** Completed
+
+**1. The chat widget looked like someone else's product.** Opening it swapped a
+52px brand-blue circle for Tawk's own 64x60 green chevron, next to a green
+window. Tawk renders into cross-origin iframes, so the inside of that window
+(header colour, bubbles) cannot be restyled from this codebase at all — that is
+a property setting. What is reachable is the iframe **elements**, which live in
+our document. So:
+
+- `skinTawk()` (`components/providers/TawkTo.tsx`) finds Tawk's container and
+  tags each iframe by role. Every id and class Tawk writes is randomised per
+  load and its `open` class comes and goes, so the container is found by shape
+  instead: the `<body>` child div whose children are all iframes. Roles are then
+  assigned by measured size (launcher ≤120px wide, window ≥200×200, the wide
+  short one is the "Powered by tawk.to" strip).
+- **Tawk's launcher is hidden outright**, so the site's own floating button is
+  the only chat control. It stays exactly where it was and becomes the close
+  control: same circle, same 52px, same `--accent`, with the speech bubble and
+  the chevron cross-fading and counter-rotating in place. That is what makes the
+  open and closed states read as one control.
+- The chat window gets `--radius-lg`, a `--border-accent` hairline and
+  `--shadow-xl`.
+- **Overrides are applied inline, not from the stylesheet.** Tawk writes its own
+  inline `!important` declarations, which an author `!important` rule cannot
+  outrank; only another inline declaration can. The matching rules in
+  `styles/globals.css` document the intent and take over if Tawk ever drops
+  `!important`. `skinTawk()` re-runs on ready, on open and every 2s, because
+  Tawk rewrites those inline styles as the chat opens and closes.
+- The "Powered by tawk.to" strip is deliberately left alone: removing it breaches
+  Tawk's terms on the free plan.
+
+Measured at 1280×800: window `[900,352 → 1250,702]`, button
+`[1186,716 → 1238,768]`, no overlap, the window sits directly above the button
+in the space Tawk's launcher used to occupy. At 375×812 the window fits the
+viewport with no horizontal overflow.
+
+**Remaining, and it needs the client's Tawk login:** the window's header and
+message-bubble colour. `TAWK_BRAND_NOTE` in `TawkTo.tsx` records the one-time
+setting — Administration → Chat Widget → Appearance → widget colour `#109BDD`
+(light-theme `--accent`). There is no JavaScript API for it; this build's
+`Tawk_API` has no `customStyle` property at all.
+
+**2. Agency credit** in the footer, which the client's WordPress footer also
+carried ("Design & Developed By Media Radical"). A single highlight travels
+across the studio name every 7s using an animated `background-position` on
+gradient text, with a long rest between passes so it reads as craft rather than
+motion. Hover swaps the gradient for solid `--accent` and draws a hairline in
+from the left. `prefers-reduced-motion` stops the shimmer and renders the name
+in `--text-secondary`. Links to `https://mediaradical.in/` in a new tab with
+`rel="noopener noreferrer"`. Centred under a hairline rule, wraps to two lines
+on mobile.
+
+**Affected Areas:**
+- `components/providers/TawkTo.tsx` (`skinTawk`, `closeTawk`, `TAWK_BRAND_NOTE`,
+  a tagging effect), `styles/globals.css` (widget rules),
+  `components/ui/FloatingActions.{tsx,module.css}` (persistent toggle, icon
+  cross-fade), `components/layout/Footer.{tsx,module.css}` (credit).
+
+**Technical Decisions:**
+- Roles are assigned once per iframe and never re-classified, because the sizes
+  that identify them change as the chat opens and closes.
+- The site button no longer hides while the chat is open. Hiding it was the old
+  way of avoiding two controls; hiding Tawk's launcher instead is what the
+  client actually asked for, and it keeps the control in one place.
+
+**Known Limitations:**
+- The chat window's interior stays Tawk green until the dashboard setting above
+  is changed. Nothing in this repo can reach inside that iframe.
+- Window size (350×350) is also a dashboard setting; it is left as Tawk serves
+  it, since forcing a different iframe size would not re-lay-out the content
+  inside it.
+
+---
+
+## 2026-07-22 12:40 IST
+
+### WordPress content audit: superset migration, Tawk.to, floating buttons
+
+**Status:** Completed
+
+Full page-by-page comparison of the client's WordPress site against this one,
+then everything WordPress had that we did not was added, in our design system.
+No existing section was removed.
+
+**How the audit was done (repeatable):** the WordPress database dump in
+`wordpress/wp-content/updraft/backup_2026-07-11-0205_…-db.gz` was parsed with
+the existing `scripts/parseWordpressDump.mjs`, which yields posts, meta and
+terms. That gives the real page bodies, the four nav menus, the Contact Form 7
+definitions, `wp_options` (Tawk.to ids, widgets, theme mods), the Yoast fields
+and the 38 WooCommerce products. Findings below cite page IDs.
+
+**What WordPress had that we were missing, and what was added:**
+
+| WordPress | Gap | Now |
+| --- | --- | --- |
+| Company (3318) "Activity" | Text existed inside `ABOUT_STORY` but under no heading, and the industry list was invisible | Own section on `/about`, plus the 9 industrial segments as an indexed hairline list |
+| Company (3318) "History" | Only the condensed `/milestone` timeline existed; the long narrative did not | `HISTORY_CHAPTERS`, 11 chapters, on `/about`, linked to `/milestone` |
+| Career (3435) | No route; `CAREER_CONTENT` sat unused | `/career` with the HR inbox callout |
+| Quality Policy (3) | No route; `QUALITY_POLICY` sat unused, and one sentence had been dropped | `/quality-policy`, 4 clauses, sentence restored |
+| Privacy policy (3992) | No route | `/privacy-policy`, section for section (`data/legal.ts`) |
+| Download (3662) + Step Brochure (3899) | No route, brochure link lost | `/downloads` with the STEP catalogue (`https://acharyagroup.in/cdn/2023catalog.pdf`) and the client's empty-state wording kept for when the list is bare |
+| Inquiry form (CF7 id 5) | Website, Address, City, State, Country fields absent | Added to `ContactForm`, optional so the form stays quick |
+| Step Brochure form (CF7 3901) | Gated the PDF behind a form | Document linked directly; a "Brochure or Catalogue Request" enquiry type covers anything unpublished |
+| Footer menus `footer1`/`footer2` | Career and both policies were not linked | Added to `FOOTER_NAV` |
+| Tawk.to plugin | Not integrated | See below |
+
+**Verified as already complete (no action):** all 38 products, with salient
+features and specification tables (`data/generated/catalog.json` covers 38/38);
+every contact detail; the 7-item top menu; the site tagline; Vision & Mission,
+Milestone and News & Events (the WordPress pages hold Lorem ipsum only);
+Infrastructure and Network (WordPress pages are empty); the 11 blog posts are
+all theme demo content; there are no PDFs in `wp-content/uploads`; Yoast held no
+real meta descriptions; the Revolution Slider is the theme's demo slider.
+
+**Tawk.to** (`components/providers/TawkTo.tsx`): the same property the client
+already runs, ids read from `wp_options` (`tawkto-embed-widget-page-id` =
+`6039cf23385de407571a9744`, `…-widget-id` = `1evgt29n1`, visibility
+`always_display = 1`). Loaded in the root layout with `next/script`
+`afterInteractive`, so it is on every page. Ids are overridable through
+`NEXT_PUBLIC_TAWKTO_PROPERTY_ID` / `NEXT_PUBLIC_TAWKTO_WIDGET_ID`.
+
+**Floating buttons** (`components/ui/FloatingActions.tsx`): scroll to top,
+which appears past 60% of a viewport and returns through Lenis
+(`scrollToTop()`), and a chat button that opens Tawk. The chat button is
+draggable by mouse or finger with pointer events, clamped inside the viewport,
+and its offset lives in component state only, so a refresh returns it to the
+corner as specified. A move under 5px counts as a click, so dragging never opens
+the chat by accident.
+
+**Content audit workbook:** `content-audit/Philbrick-content-audit.xlsx`,
+1,471 text items across 58 pages, in the requested columns (Page URL · Section ·
+Current Website Text · Suggested / WordPress Text · Client Final Text) plus an
+item type and a status. Sheets: Read me · Summary (live COUNTIF) · Site content ·
+Product content · Global elements · SEO & meta · WordPress source · Product
+source. Regenerate with `node scripts/contentAuditCrawl.mjs http://localhost:3000`
+then `python scripts/buildContentAudit.py`.
+
+**Affected Areas:**
+- New routes: `app/{career,quality-policy,privacy-policy,downloads}/`.
+- New shared piece: `sections/shared/PageHeader.tsx` (text-only page header for
+  pages that have no brand photograph), `app/prose.module.css`.
+- Content: `data/company.ts` (Activity, segments, History, Quality Policy
+  sentence), `data/legal.ts`, `data/downloads.ts`.
+- Chrome: `app/layout.tsx`, `constants/navigation.ts`, `styles/tokens.css`
+  (`--z-fab`), `components/providers/SmoothScroll.tsx` (`scrollToTop`).
+- Tooling: `scripts/contentAuditCrawl.mjs`, `scripts/buildContentAudit.py`.
+
+**Technical Decisions:**
+- The four new pages use a text-only `PageHeader` rather than borrowing an
+  existing hero photograph, per the image rule: no unrelated image is better
+  than a wrong one. If the client wants photography there, it needs a documented
+  prompt in `imagegeneration.md` first.
+- Tawk re-shows its own launcher whenever the chat window is maximized, so the
+  site hides that launcher again on minimize and hides its own button while the
+  chat is open. Exactly one control is ever on screen.
+- The chat button carries a speech bubble, not the WhatsApp mark, because it
+  opens Tawk; WhatsApp is only the fallback when Tawk is blocked.
+- The workbook traces copy back to WordPress in two grades, "Matches WordPress"
+  for verbatim text and "Adapted from WordPress" for text re-punctuated or split
+  for the new layout, so the client can see that adapted copy is still their own
+  facts rather than something invented.
+
+**Known Limitations:**
+- `/news-events` still runs on the mock items in `data/news.ts`; all 150 of its
+  text rows are flagged "Placeholder" in the workbook.
+- The workbook's Summary sheet uses formulas with no cached values (LibreOffice
+  is not installed here, so `recalc.py` could not run). Excel and Google Sheets
+  compute them on open; a script reading the file with `data_only=True` sees
+  blanks until then.
+- All four new routes are `false` in `config/pageReleases.ts`, matching the
+  Home-only production release. Flip them when the client approves.
+
+**Follow-up:**
+- Send the workbook to the client; feed the "Client Final Text" column back into
+  `data/` and `constants/site.ts`.
+- Replace `data/news.ts` with real dated announcements before releasing
+  `/news-events`.
+
+---
+
+## 2026-07-22 12:20 IST
+
+### Categorised contact channels: labelled emails, helpline vs WhatsApp
+
+**Status:** Completed
+
+The site published one email address and an unlabelled list of five numbers, so
+a visitor could not tell which line to call, which to chat on, or which desk to
+write to. The client's WordPress site does carry that split across three pages,
+so it is now modelled properly.
+
+Sources reconciled (nothing left behind):
+
+| WordPress source | Detail | Where it now lives |
+| --- | --- | --- |
+| Contact Us (ID 3631) | `philbrick@philbrickindia.com`, `philbrick_controls@yahoo.com`, `sales@philbrickindia.com` | `SITE.emails` |
+| Career (ID 3435) | "Mail your resume on `hr.philbrickindia@gmail.com`" | `SITE.emails` (Careers) |
+| Contact Us + Privacy policy (ID 3992) | `+91 84012 19941` listed first, and given as the contact number | `SITE.phones` (Helpline) + `SITE.phone` |
+| Contact Us + `footer.php` | `+91 99789 86631` followed by "OR Chat On" / "Or Chat" WhatsApp | `SITE.phones` (WhatsApp) |
+| Contact Us + `footer.php` | `+91 93740 22660`, `+91 98250 09420`, `+91 99789 86635` | `SITE.phones` (Office) |
+| `footer.php` | "Mon-Fri 9:00 to 18:00" | `SITE.hours` (already present) |
+
+**Changes:**
+- `constants/site.ts`: `emails` (Sales · General enquiries · Careers · Alternate
+  inbox) and `phones` (Helpline · WhatsApp · three Office lines), each entry
+  carrying a `label` and a plain `purpose`. Added `altEmail`,
+  `whatsappDisplay` and a `telHref()` helper. **`SITE.phone` is now the helpline
+  `+91 84012 19941`**, not the WhatsApp number, because that is the number the
+  client publishes first on Contact and as the contact number on the privacy
+  policy page.
+- `app/contact/page.tsx`: the info column is now four labelled groups, Call or
+  chat · Email the right desk · Visit us · Speak to a person. Every row shows
+  label, value and what it is for, and the phone group ends in a "Chat on
+  WhatsApp" pill linking to the client's own `api.whatsapp.com` message.
+- `components/layout/Footer.tsx`: phone and email lists became tag + value rows;
+  the WhatsApp row carries an inline "Or chat on WhatsApp" link, mirroring the
+  WordPress footer wording.
+- `components/layout/MobileNav.tsx`: the drawer number is labelled "Helpline"
+  and gained a WhatsApp chat link beneath it.
+- `lib/schema.ts`: one `ContactPoint` per channel (customer support / sales /
+  human resources) instead of a single sales point.
+- `data/faqs.ts`: new "Which number or email should I use?" question, and the
+  quotation answer now names the sales inbox and the helpline.
+- `public/llms.txt`, `app/network/page.tsx`: contact block updated to match.
+
+**Affected Areas:**
+- `constants/site.ts`, `lib/schema.ts`, `data/faqs.ts`, `app/contact/*`,
+  `app/network/page.tsx`, `components/layout/{Footer,MobileNav}*`,
+  `public/llms.txt`.
+
+**Brand icons (same session):**
+- Every WhatsApp affordance (contact phone row, contact CTA pill, footer chat
+  link, footer social button) now uses the real `FaWhatsapp` glyph instead of
+  the generic Feather speech bubble, and the footer's Twitter bird became
+  `FaXTwitter`. Both come from `react-icons/fa6`, registered in `lib/icons.ts`
+  next to the Feather set. The social label is "X (formerly Twitter)" (it is the
+  `aria-label`, so "X" alone would read as nothing); the href stays on
+  `twitter.com`, which redirects.
+
+**Technical Decisions:**
+- The three unlabelled numbers are tagged "Office", not invented roles. Only the
+  helpline and the WhatsApp line carry a function on the client's own site, so
+  only those two are given one.
+- Brand marks (WhatsApp, X) are only correct as their own glyph, so those two
+  break the otherwise Feather-only icon rule; everything else stays Feather.
+- Scalar `SITE.email` / `salesEmail` / `careersEmail` / `phone` kept alongside
+  the new arrays, so structured data and single-slot UI need no rework.
+
+**Known Limitations:**
+- The enquiry form still posts to one inbox (`NEXT_PUBLIC_CONTACT_FORM_TO_EMAIL`);
+  the department split is informational, not routing.
+
+**Follow-up:**
+- WordPress has a **Career** page (ID 3435) and a **Privacy policy** page
+  (ID 3992) with no route here yet. Content for both already sits in
+  `data/company.ts` (`CAREER_CONTENT`) and `wpPages.json`. Adding them needs new
+  routes plus `config/pageReleases.ts` entries.
+
+---
+
 ## 2026-07-21 15:45 IST
 
 ### New `/variant17` — depth hero, headline behind the tower

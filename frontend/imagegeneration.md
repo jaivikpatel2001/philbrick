@@ -1,15 +1,28 @@
 # Philbrick — Image Generation Checklist
 
-A complete, page-by-page list of **every image the website renders**. Today all
-of these come from Unsplash placeholders (`data/images.ts`); this document is the
-brief for generating **custom, India-focused replacements**. Generate one image
-per entry using its **file name** and **aspect ratio**, then hand back the folder
-and the images will be wired into `data/images.ts` / product data by file name.
+A complete, page-by-page list of **every image the website renders**, with the
+prompt and aspect ratio for each. Generate one image per entry using its **file
+name** and **aspect ratio**, then hand back the folder and the images will be
+wired into `data/images.ts` / product data by file name.
 
-> **Homepage hero (2026-07-16):** the hero is now the scroll-driven exploded
-> component tour (`sections/experience/ExplorationHero.tsx`) running on interim
-> art; its final asset spec + prompts are **§11**. The Three.js scene is kept
-> intact (commented out in `app/page.tsx`). The logo, favicon, app icons and
+> **Status (2026-07-22): all 60 catalogued images are supplied and integrated.**
+> There are **no Unsplash or other external images left** anywhere in the site —
+> never reintroduce one. §8 records the delivery and §9 is the authoritative
+> asset mapping. Sections §1–§7 remain the brief that produced those assets, and
+> the template for anything new.
+>
+> **Pages with no imagery by design:** `/career`, `/quality-policy`,
+> `/privacy-policy` and `/downloads` use the text-only
+> `sections/shared/PageHeader.tsx` rather than a photographic hero, because no
+> brand photograph exists for them and borrowing an unrelated one would be worse
+> than none. If the client wants photography there, add the requirement here
+> first (prompt + exact aspect ratio), then generate and wire it.
+
+> **Homepage hero:** `app/page.tsx` renders the Three.js scene
+> (`sections/experience/ElevatorHero.tsx`). The scroll-driven exploded component
+> tour (`ExplorationHero.tsx`) is the `/variant1` review page, and its asset spec
+> + prompts are **§11**; the other hero directions under review are listed in
+> `sections/experience/variants/VARIANTS.md`. The logo, favicon, app icons and
 > OG card are already custom (`public/brand/`). The `/news-events` photos are
 > for the **currently mock** newsroom — regenerate with real event photography
 > when real news is published.
@@ -990,3 +1003,207 @@ Because these live under `hero-exploration/`, regenerate them with
 afterwards: the exploration script MERGES its entries into the same manifest and
 a plain optimizeImages run drops them. Re-run the exploration script whenever a
 photo is replaced under the same filename, or the stale WebP variants stay.
+
+### 11.8 Variant 18 tower cutout (derived, no new artwork)
+
+`/variant18` = variant17 with the hero recomposed: the headline sits high in the
+open sky and only the building's PEAK reaches it, taking a character or two out
+of the last line. Variant17's `hero-tower-{day,night}.png` cannot drive that
+composition, because the building is a thin column of opaque pixels inside a
+1024 x 1536 plate whose transparent padding does the positioning — with
+`object-fit: contain` the tower's width and its peak height are locked together,
+so the peak can only be lowered by making the building thinner.
+
+**Status: DERIVED (2026-07-22).** Nothing new was generated or repainted. The
+plates are trimmed to the building itself so width and peak height can be set
+independently, and the top edge of the image becomes the peak.
+
+| File | Derived from | Used in |
+| --- | --- | --- |
+| `hero-tower-cut-day.png` | `hero-tower-day.png` | `/variant18`, light theme |
+| `hero-tower-cut-night.png` | `hero-tower-night.png` | `/variant18`, dark theme |
+
+Both live in `public/images/home/hero-exploration/environment/`.
+
+**Crop:** `scripts/cropHeroTower.mjs` measures the alpha bounds of both plates,
+takes their union plus a 6px bleed, and extracts that ONE box from both, so the
+day and night cutouts stay pixel-aligned and the CSS cross-fade never shifts.
+The current box is `left 452, top 447, 228 x 1089` (aspect 0.2094). The intrinsic
+size is repeated in `Variant18Hero.tsx` as `CUT`, because the images are rendered
+with explicit `width`/`height` rather than `fill`.
+
+Regenerate after either source plate is replaced:
+
+```bash
+node scripts/cropHeroTower.mjs
+node scripts/optimizeHeroExploration.mjs
+```
+
+The same manifest caveat as §11.7 applies: a plain `optimizeImages.mjs` run drops
+these entries, so run the exploration script after it.
+
+### 11.9 Variant 18 foreground skyline plate (REQUESTED from the client)
+
+**Status: NOT SUPPLIED.** `Variant18Hero.tsx` has the layer wired behind a flag,
+`HAS_FRONT_PLATE`. Flip it to `true` once both files below are in place; until
+then the single cropped tower from §11.8 stands in.
+
+The effect: the hero headline runs BEHIND the front row of towers, so the
+skyline crosses the letters wherever it naturally falls. The `<h1>` stays real
+markup — the occlusion is done by stacking, never by baking words into artwork.
+
+| File | Theme | Pairs with |
+| --- | --- | --- |
+| `hero-front-day.png` | light | `hero-city-day.png` |
+| `hero-front-night.png` | dark | `hero-city-night.png` |
+
+Both go in `public/images/home/hero-exploration/environment/`.
+
+**Hard requirements** (alignment is the whole game here):
+
+1. **Transparent PNG.** Only the front row of towers is opaque. Sky, distant
+   towers, water and everything else must be fully transparent.
+2. **Exactly 1535 x 1024**, the same frame as `hero-city-day.png`. Same camera,
+   same horizon line, same perspective. The plate is laid over the photo at
+   `inset: 0`, so any difference in framing shows immediately as a double
+   skyline.
+3. **Day and night must be geometrically identical.** Same towers, same pixels,
+   only the lighting differs — the two cross-fade on the theme toggle, and any
+   shift makes the buildings jump.
+4. Keep an **open middle band**: the tallest towers grouped left and right of
+   centre so the middle of the headline stays readable. One or two towers may
+   cross the centre — that is the point — but not a solid wall.
+5. Buildings should reach the BOTTOM edge of the frame. The plate is
+   `object-fit: cover, bottom center`, so a gap at the base leaves them floating.
+6. No text, no logos, no people, no watermarks.
+
+Day prompt:
+"Ultra realistic photograph of the front row of a modern city business district,
+tall glass and steel high rise towers seen from across calm water on a bright
+clear day, crisp daylight, soft reflections on the glass. ONLY the nearest row
+of buildings, cut out on a fully transparent background, no sky, no background
+buildings, no water. Buildings extend to the bottom edge of the frame. Tallest
+towers grouped left and right of centre with an open gap through the middle.
+Photoreal, high resolution, premium corporate feel. No text, no logos, no
+people, no watermarks. Transparent PNG."
+
+Night prompt:
+"Ultra realistic photograph of the front row of a modern city business district
+at night, tall high rise towers brightly lit with warm and cool window lights,
+dramatic and premium. ONLY the nearest row of buildings, cut out on a fully
+transparent background, no sky, no background buildings, no water. Buildings
+extend to the bottom edge of the frame. Identical buildings, identical
+positions and identical framing to hero-front-day.png — only the lighting
+changes. Photoreal, high resolution, moody and elegant. No text, no logos, no
+people, no watermarks. Transparent PNG."
+
+If the generator cannot match the existing photograph's framing, supply a
+matched SET instead — a new background (sky and distant skyline, no front row)
+plus its front-row plate, generated from one scene — and the background pair in
+§11.7 is swapped for it.
+
+After the files land:
+
+```bash
+node scripts/optimizeHeroExploration.mjs
+```
+
+then set `HAS_FRONT_PLATE = true` in `Variant18Hero.tsx`. Same manifest caveat
+as §11.7: a plain `optimizeImages.mjs` run drops these entries, so run the
+exploration script after it.
+
+### 11.10 Variant 18 single-scene hero plates (sky + buildings + headline)
+
+**Status: PROMPTS ONLY — files not supplied yet.** Target filenames:
+`hero-scene-day.png` and `hero-scene-night.png`, in
+`public/images/home/hero-exploration/environment/`.
+
+**What this is.** A one-image-per-theme version of the variant18 hero: sky,
+buildings AND the headline all baked into a single flat photograph, so the page
+only has to set a background. It replaces the three-layer build (§11.7 sky +
+§11.9 building plates + live `<h1>`).
+
+**Keep these prompts.** They are recorded here precisely so the headline can be
+changed later without reverse-engineering the look: edit the two text lines in
+the prompt, regenerate both images, drop them in, re-run the optimizer. Nothing
+in the codebase needs to change.
+
+**Read before using this route:**
+
+1. **Image models garble text.** The headline is six words; misspellings,
+   doubled letters and malformed glyphs are common. Check every character before
+   accepting a render.
+2. **The headline stops being real text.** No responsive scaling, nothing for
+   search engines, and a re-render for every copy change. Mitigation used in the
+   build: the `<h1>` stays in the DOM visually hidden, so screen readers and
+   crawlers still get it.
+3. **16:9 crops badly on phones.** A 100svh hero at 388x841 is portrait; a 16:9
+   image is cropped to its middle and baked text gets cut off. A second portrait
+   pair is likely needed for mobile.
+4. **Alternative that avoids risk 1 entirely:** generate the same two images with
+   NO text (sky + buildings only, flat, no transparency) and composite the
+   headline in with sharp using the site's own font. Pixel-perfect spelling,
+   exact brand blue, and precise control over which characters the towers cover.
+
+#### Day prompt — `hero-scene-day.png`
+
+```text
+Ultra realistic wide photograph of a modern city business district, tall glass and steel high-rise towers seen from across calm water on a bright clear day, deep blue sky with soft wispy clouds, crisp daylight, soft reflections on the glass facades, subtle atmospheric haze at the base of the buildings. Photoreal, premium corporate feel, cinematic depth.
+
+Composition: the towers occupy the lower two thirds and rise into the upper third. Tallest towers grouped left of centre and right of centre, with one slender tower crossing the middle. Open clear sky across the top third.
+
+Text integrated INTO the scene, set in the open sky BEHIND the towers, so the buildings pass in front of the letters and hide one or two characters. Two centred lines of large geometric sans-serif type, tight letter spacing, spanning almost the full width of the frame, positioned in the upper third:
+Line 1, deep near-black navy: The machine behind
+Line 2, bright azure blue #109BDD: every smooth ride.
+The text must sit behind the buildings, never on top of them. Spell the words exactly as written.
+
+Keep the lower left and lower right corners visually calm and slightly darker, with no bright highlights, so overlaid caption text stays readable.
+
+3840x2160, 16:9. No other text, no logos, no people, no boats, no watermarks.
+```
+
+#### Night prompt — `hero-scene-night.png`
+
+```text
+The exact same scene, same buildings, same camera, same composition and same text layout as the previous image, at night. Modern city business district, high-rise towers brightly lit with warm and cool window lights, deep navy black sky, glowing reflections shimmering on dark calm water, dramatic and premium, rich contrast.
+
+Text integrated INTO the scene, set in the night sky BEHIND the towers, so the buildings pass in front of the letters and hide one or two characters. Two centred lines of large geometric sans-serif type, tight letter spacing, spanning almost the full width of the frame, in the upper third:
+Line 1, clean white: The machine behind
+Line 2, bright azure blue #109BDD: every smooth ride.
+The text must sit behind the buildings, never on top of them. Spell the words exactly as written.
+
+Do not move, add or remove any building; only the lighting and the text colour change from the day version. Keep the lower left and lower right corners calm and dark so overlaid caption text stays readable.
+
+3840x2160, 16:9. No other text, no logos, no people, no boats, no watermarks.
+```
+
+#### Current headline, for reference
+
+The two lines above must match `sections/experience/corporate/Variant18Hero.tsx`:
+
+> The machine behind *every smooth ride.*
+
+The italic part is the `<em>`, which the site renders in the brand accent. If the
+copy changes in the component, change it in both prompts too, or the hidden `<h1>`
+and the picture will disagree.
+
+#### After the files land
+
+```bash
+node scripts/optimizeHeroExploration.mjs
+```
+
+The full-bleed ladder (§11.11) generates up to 3072px for `hero-scene-*`, so a
+3840px source finally renders sharp on large and 2x-DPR screens.
+
+### 11.11 Full-bleed responsive ladder
+
+`scripts/optimizeHeroExploration.mjs` builds two ladders. Component cutouts,
+which render in ~300px cards, get `384/640/960/1280` at quality 80. Plates that
+cover the whole hero get `640/960/1280/1536/1920/2560/3072` at quality 88,
+matched by filename: `environment/hero-(sky|city|front|tower|scene)*`.
+
+This exists because the single 1280-wide ladder was being stretched 1.5x across a
+1920px hero and the towers came out visibly soft. Tiers larger than the source
+are skipped, never upscaled, so a 1536px original simply stops at 1536 and a
+3840px one uses every tier.

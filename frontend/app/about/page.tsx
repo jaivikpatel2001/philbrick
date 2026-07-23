@@ -9,7 +9,15 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Stats } from "@/components/ui/Stats";
 import { TeamCard } from "@/components/cards/TeamCard";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
-import { ABOUT_STORY, VALUES, INFRASTRUCTURE, LEADERSHIP } from "@/data/company";
+import {
+  ABOUT_STORY,
+  ACTIVITY_CONTENT,
+  ACTIVITY_SEGMENTS,
+  HISTORY_CHAPTERS,
+  VALUES,
+  INFRASTRUCTURE,
+  LEADERSHIP,
+} from "@/data/company";
 import { TRUST_METRICS, GLOBAL_STATS } from "@/data/stats";
 import { HERO, SECTION } from "@/data/images";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -73,6 +81,65 @@ export default function AboutPage() {
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Activity — the client's own "Activity" section from the Company page:
+          what the company actually does, and for which industries. */}
+      <section className="section">
+        <div className="container--wide">
+          <SectionHeader
+            eyebrow="Activity"
+            title="What we do, and who we do it for"
+            description="Automation solutions built around the application, from microcontroller based instruments to complete control panels."
+            align="center"
+          />
+          <div className={styles.activity}>
+            <div className={styles.activityText}>
+              {ACTIVITY_CONTENT.map((p, i) => (
+                <p key={i} className={styles.para} data-reveal="up">
+                  {p}
+                </p>
+              ))}
+            </div>
+            <ul className={styles.segments} data-reveal="up">
+              {ACTIVITY_SEGMENTS.map((s, i) => (
+                <li key={s} className={styles.segment}>
+                  <span className={styles.segmentIndex}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* History — the Company page's third section, told chapter by chapter.
+          The condensed year list lives on /milestone; this is the full story. */}
+      <section className="section">
+        <div className="container--wide">
+          <SectionHeader
+            eyebrow="History"
+            title="From a temperature indicator to a complete elevator range"
+            description="Three decades of products, each one answering a problem a customer brought to us."
+            align="center"
+          />
+          <ol className={styles.history}>
+            {HISTORY_CHAPTERS.map((c) => (
+              <li key={c.period} className={styles.chapter} data-reveal="up">
+                <span className={styles.chapterPeriod}>{c.period}</span>
+                <div className={styles.chapterBody}>
+                  <h3 className={styles.chapterTitle}>{c.title}</h3>
+                  <p className={styles.para}>{c.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className={styles.infraLink}>
+            <Link href="/milestone">See the milestone timeline →</Link>
+          </p>
         </div>
       </section>
 

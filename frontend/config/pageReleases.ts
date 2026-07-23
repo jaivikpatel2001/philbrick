@@ -52,7 +52,8 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
        variant14 animated floating product gallery (corporate)
        variant15 product spotlight hero + category browser (corporate)
        variant16 centred hero on a theme-swapped city photo + floating glass nav
-       variant17 variant16 + depth hero (headline behind a cutout tower) */
+       variant17 variant16 + depth hero (headline behind a cutout tower)
+       variant18 variant17 recomposed (headline in the sky, tower peak only) */
   "/variant1": true,
   "/variant2": true,
   "/variant3": true,
@@ -70,6 +71,7 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/variant15": true,
   "/variant16": true,
   "/variant17": true,
+  "/variant18": true,
   "/about": false,
   "/vision-mission": false,
   "/milestone": false,
@@ -78,6 +80,11 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/news-events": false,
   "/products": false,
   "/contact": false,
+  /* Pages migrated from the client's WordPress footer menu (2026-07-22). */
+  "/career": false,
+  "/quality-policy": false,
+  "/privacy-policy": false,
+  "/downloads": false,
 };
 
 /**

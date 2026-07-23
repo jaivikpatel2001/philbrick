@@ -1,0 +1,70 @@
+/* Floating action button — see FloatingActions.tsx.
+   The dock itself is not interactive; only the button is, so page content
+   underneath stays clickable. It also sits clear of Tawk's own chat launcher,
+   which occupies the corner itself. */
+.dock {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  /* Above Tawk's launcher (roughly 60px tall plus its own margin), so the two
+     controls stack instead of overlapping. */
+  bottom: clamp(5.5rem, 5vw + 4.5rem, 7rem);
+  z-index: var(--z-fab);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.fab {
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-circle);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    opacity var(--dur) var(--ease-out);
+}
+.fab:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.fab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Hidden until the visitor is past one screen. */
+.top {
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  pointer-events: none;
+}
+.top.visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab {
+    transition: opacity 0.01ms;
+  }
+}
+
+@media (max-width: 560px) {
+  .fab {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+}

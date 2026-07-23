@@ -42,12 +42,28 @@ export function organizationSchema() {
       addressCountry: "IN",
     },
     areaServed: { "@type": "Country", name: "India" },
+    /* One point per published channel, so search engines can route a caller
+       to the right desk (helpline, sales, careers) rather than one number. */
     contactPoint: [
       {
         "@type": "ContactPoint",
-        contactType: "sales",
+        contactType: "customer support",
+        name: "Helpline",
         telephone: SITE.phone,
+        email: SITE.email,
+        availableLanguage: ["en", "hi", "gu"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        telephone: SITE.whatsappDisplay,
         email: SITE.salesEmail,
+        availableLanguage: ["en", "hi", "gu"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "human resources",
+        email: SITE.careersEmail,
         availableLanguage: ["en", "hi", "gu"],
       },
     ],

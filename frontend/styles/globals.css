@@ -530,3 +530,21 @@ main>section:nth-of-type(even) {
 [data-nav="float"] header[data-scrolled="false"] nav [aria-expanded="true"] {
   color: #fff;
 }
+
+/* ---------------------------------------------------------------------------
+   TAWK.TO CHAT WIDGET
+
+   Tawk renders into cross-origin iframes, so the inside of the chat window is
+   out of reach from here (its header, bubble and launcher colours are a Tawk
+   dashboard setting — see TAWK_BRAND_NOTE in components/providers/TawkTo.tsx).
+   The iframe ELEMENT lives in this document though, so the frame around the
+   chat can at least be brought onto the brand; `skinTawk()` tags it.
+
+   Tawk's own launcher is the chat control and is left completely alone, as is
+   its "Powered by tawk.to" strip.
+   -------------------------------------------------------------------------- */
+[data-philbrick-tawk] iframe[data-tawk-part="window"] {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-accent) !important;
+  box-shadow: var(--shadow-xl) !important;
+}

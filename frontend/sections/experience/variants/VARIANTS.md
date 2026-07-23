@@ -1,9 +1,13 @@
 # Homepage Hero Variants — design + implementation reference
 
-Four alternative homepage heroes for client A/B review, each on its own URL,
+Seventeen alternative homepage heroes for client A/B review, each on its own URL,
 each sharing the page body below the hero (`sections/home/HomeSections.tsx`).
-All are noindex + excluded from the sitemap (temporary review pages). The main
-homepage `/` keeps the original cinematic Three.js night-city hero.
+All are noindex + excluded from the sitemap (temporary review pages) and are the
+only routes besides `/` currently live in production. The main homepage `/`
+keeps the original cinematic Three.js night-city hero.
+
+**Remove these routes once a hero direction is chosen** — and delete their
+entries from `config/pageReleases.ts` in the same change.
 
 | URL | Concept | Tech |
 | --- | --- | --- |
@@ -22,6 +26,8 @@ homepage `/` keeps the original cinematic Three.js night-city hero.
 | `/variant13` | Corporate scroll component reveal (drawing + marker) | DOM/CSS + ScrollTrigger (`../corporate/`) |
 | `/variant14` | Animated floating product gallery | DOM/CSS + pointer parallax (`../corporate/`) |
 | `/variant15` | Product spotlight hero + category browser | DOM/CSS + rotating spotlight (`../corporate/`) |
+| `/variant16` | Centred hero on a theme-swapped city photo + floating glass nav | DOM/CSS + next/image (`../corporate/`) |
+| `/variant17` | variant16 + depth hero (headline behind a cutout tower) | DOM/CSS, three-layer sandwich (`../corporate/`) |
 
 Inspiration was analysed (award-site scroll films, product configurators,
 technical reveal pages) but every concept, asset and interaction here is

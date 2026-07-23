@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa6";
 import { FOOTER_NAV } from "@/constants/navigation";
-import { SITE, SOCIALS, gmailHref } from "@/constants/site";
+import { SITE, SOCIALS, gmailHref, telHref } from "@/constants/site";
 import { Logo } from "@/components/ui/Logo";
 import { NewsletterForm } from "@/components/ui/NewsletterForm";
 import { getIcon } from "@/lib/icons";
@@ -45,28 +46,49 @@ export function Footer() {
                   {SITE.address.line1}, {SITE.address.line2}
                 </span>
               </li>
-              {/* Every number the client publishes, not just the first — the
-                  WordPress footer lists them all, plus the office hours. */}
+              {/* Every number the client publishes, each labelled with what it
+                  is for: the helpline to call, the WhatsApp line to chat on,
+                  then the office lines, plus the office hours. */}
               <li>
                 <FiPhone />
-                <span className={styles.phoneList}>
-                  {SITE.phones.map((number) => (
-                    <a key={number} href={`tel:${number.replace(/\s/g, "")}`}>
-                      {number}
-                    </a>
+                <span className={styles.contactList}>
+                  {SITE.phones.map((p) => (
+                    <span key={p.number} className={styles.contactRow}>
+                      <span className={styles.contactTag}>{p.label}</span>
+                      <a href={telHref(p.number)}>{p.number}</a>
+                      {p.whatsapp && (
+                        <a
+                          className={styles.chatLink}
+                          href={SITE.whatsappUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FaWhatsapp aria-hidden /> Or chat on WhatsApp
+                        </a>
+                      )}
+                    </span>
                   ))}
                   <span className={styles.hours}>{SITE.hours}</span>
                 </span>
               </li>
+              {/* Categorised inboxes: sales, general, careers and the client's
+                  alternate address, so mail reaches the right desk. */}
               <li>
                 <FiMail />
-                <a
-                  href={gmailHref(SITE.email)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {SITE.email}
-                </a>
+                <span className={styles.contactList}>
+                  {SITE.emails.map((e) => (
+                    <span key={e.address} className={styles.contactRow}>
+                      <span className={styles.contactTag}>{e.label}</span>
+                      <a
+                        href={gmailHref(e.address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {e.address}
+                      </a>
+                    </span>
+                  ))}
+                </span>
               </li>
             </ul>
           </div>
@@ -126,6 +148,21 @@ export function Footer() {
 
           <p className={styles.legalNote}>{SITE.tagline}</p>
         </div>
+
+        {/* Agency credit, as on the client's WordPress footer. A single slow
+            shimmer travels across the studio name, so the line reads as a
+            considered detail rather than an advert. */}
+        <p className={styles.credit}>
+          <span className={styles.creditLabel}>Designed &amp; Developed by</span>{" "}
+          <a
+            className={styles.creditLink}
+            href="https://mediaradical.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className={styles.creditName}>Media Radical</span>
+          </a>
+        </p>
       </div>
     </footer>
   );

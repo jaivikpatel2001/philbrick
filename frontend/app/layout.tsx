@@ -12,6 +12,8 @@ import { Preloader } from "@/components/providers/Preloader";
 import { RevealObserver } from "@/components/providers/RevealObserver";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { TawkTo } from "@/components/providers/TawkTo";
+import { FloatingActions } from "@/components/ui/FloatingActions";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
 
@@ -91,8 +93,12 @@ export default function RootLayout({
             <main id="main">{children}</main>
             <Footer />
           </SmoothScroll>
+          {/* Live chat + the floating buttons that drive it. Outside
+              SmoothScroll so they stay fixed to the viewport. */}
+          <FloatingActions />
           <RevealObserver />
         </ThemeProvider>
+        <TawkTo />
       </body>
     </html>
   );
