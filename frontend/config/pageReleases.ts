@@ -65,12 +65,15 @@ export const RELEASED_NEWS_ROUTES: string[] = [];
 
 /* Every product route (/products/<category> and /products/<category>/<product>)
    is enumerated from the product tree so the config is exhaustive; each is only
-   released if it appears in RELEASED_PRODUCT_ROUTES (default-deny). */
+   released if it appears in RELEASED_PRODUCT_ROUTES (default-deny).
+
+   NOTE: production gating deliberately does NOT consult the node's `released`
+   flag. That flag is a content-readiness hint on the product tree (23 nodes are
+   marked ready) and using it here silently published every "ready" product to
+   production, which is why /products/* was live. Gating is governed ONLY by the
+   explicit RELEASED_PRODUCT_ROUTES allow-list (currently empty → all gated). */
 const PRODUCT_ROUTE_RELEASES: Record<string, boolean> = Object.fromEntries(
-  productRoutes().map((r) => [
-    r.path,
-    r.released || RELEASED_PRODUCT_ROUTES.includes(r.path),
-  ])
+  productRoutes().map((r) => [r.path, RELEASED_PRODUCT_ROUTES.includes(r.path)])
 );
 
 /* News & Events detail routes, enumerated from the news data (default-deny). */

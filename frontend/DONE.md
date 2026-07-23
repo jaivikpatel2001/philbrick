@@ -12,7 +12,20 @@ completing one. Newest entries at the top.
 `philbrick.onrender.com` yet. Chosen scope: **Home only** live; everything else
 (products + all content pages) shows Coming Soon.
 
-**Root cause (the real one — a whitespace bug).** The release config was already
+**PRIMARY root cause (found after the first fix didn't fully work): the product
+gate honored the `released` content-hint.** `PRODUCT_ROUTE_RELEASES` computed
+`r.released || RELEASED_PRODUCT_ROUTES.includes(r.path)`. **23 product nodes in
+`data/products.ts` are flagged `released: true`** (a content-readiness hint), so
+those 23 product/category pages published to production regardless of the env —
+which is why `/products/elevator-doors`, `/products/integrated-control-panel/...`
+etc. stayed live even with `NEXT_PUBLIC_APP_ENV=production`. This directly
+contradicts CLAUDE.md ("the `released` flag is a content-readiness hint only and
+does not gate production"). Fixed: `PRODUCT_ROUTE_RELEASES` now consults ONLY the
+explicit `RELEASED_PRODUCT_ROUTES` allow-list (empty → every product route
+gated). Verified a production build: **all 38 product HTML pages bake Coming
+Soon, 0 leaks**; Home stays real.
+
+**Secondary root cause (a whitespace bug).** The release config was already
 correct — `"/products": false`, `RELEASED_PRODUCT_ROUTES: []` (default-deny),
 every product page wrapped in `<ReleaseGate>`, and `NEXT_PUBLIC_APP_ENV=production`
 IS set in the Render dashboard. Yet every product page rendered real content.
