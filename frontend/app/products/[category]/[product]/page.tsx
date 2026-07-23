@@ -5,7 +5,7 @@ import { CTASection } from "@/sections/shared/CTASection";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProductCard } from "@/components/cards/ProductCard";
 import { ProductDetail } from "@/sections/products/ProductDetail";
-import { getCatalogProduct, productImage } from "@/data/catalog";
+import { getCatalogProduct, productImage, type CatalogProduct } from "@/data/catalog";
 import {
   getCategory,
   getProduct,
@@ -53,6 +53,18 @@ export default async function ProductPage({ params }: Props) {
   const catalog = getCatalogProduct(product);
   const hero = productImage(product, p.image);
 
+  const displayCatalog: CatalogProduct = catalog ?? {
+    slug: p.slug,
+    name: p.name,
+    wpId: "",
+    images: [hero],
+    featureGroups: p.highlights?.length
+      ? [{ heading: "Salient features", items: p.highlights }]
+      : [],
+    specHtml: "",
+    hasContent: true,
+  };
+
   const related = (cat.children ?? [])
     .filter((c) => c.slug !== p.slug)
     .slice(0, 3);
@@ -84,18 +96,16 @@ export default async function ProductPage({ params }: Props) {
       />
 
       {/* Photography, salient features and the client's specification tables */}
-      {catalog && (
-        <section className="section">
-          <div className="container--wide">
-            <ProductDetail
-              product={catalog}
-              description={p.longDescription ?? p.description}
-              showName={false}
-              priority
-            />
-          </div>
-        </section>
-      )}
+      <section className="section">
+        <div className="container--wide">
+          <ProductDetail
+            product={displayCatalog}
+            description={p.longDescription ?? p.description}
+            showName={false}
+            priority
+          />
+        </div>
+      </section>
 
       {/* Related products in the same category */}
       {related.length > 0 && (

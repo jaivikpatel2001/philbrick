@@ -37,7 +37,7 @@ export const IS_PRODUCTION_RELEASE = getAppEnv() === "production";
  * Unknown routes default to NOT released in production (safe).
  */
 export function isReleased(route: string): boolean {
-  if (!IS_PRODUCTION_RELEASE) return true;
+  if (getAppEnv() !== "production") return true;
   return ROUTE_RELEASES[route] === true;
 }
 

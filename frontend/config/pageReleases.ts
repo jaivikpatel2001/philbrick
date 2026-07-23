@@ -105,7 +105,10 @@ export const RELEASED_NEWS_ROUTES: string[] = [];
    is enumerated from the product tree so the config is exhaustive; each is only
    released if it appears in RELEASED_PRODUCT_ROUTES (default-deny). */
 const PRODUCT_ROUTE_RELEASES: Record<string, boolean> = Object.fromEntries(
-  productRoutes().map((r) => [r.path, RELEASED_PRODUCT_ROUTES.includes(r.path)])
+  productRoutes().map((r) => [
+    r.path,
+    r.released || RELEASED_PRODUCT_ROUTES.includes(r.path),
+  ])
 );
 
 /* News & Events detail routes, enumerated from the news data (default-deny). */
