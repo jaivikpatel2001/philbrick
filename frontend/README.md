@@ -34,7 +34,6 @@ See [`CLAUDE.md`](CLAUDE.md) for the full vision, brand positioning and standard
 |---|---|
 | **Next.js (App Router)** | Routing, server components, metadata, image optimization |
 | **TypeScript (strict)** | Type safety across the app |
-| **Three.js** | Real-time 3D elevator hero (`sections/experience/ElevatorScene.tsx`) |
 | **GSAP + ScrollTrigger** | Scroll-scrubbed timelines and reveal animation |
 | **Lenis** | Smooth scrolling (wired into the GSAP ticker globally) |
 | **Custom CSS (CSS Modules + tokens)** | All styling — **no Tailwind, no UI kit** |
@@ -53,12 +52,11 @@ frontend/
 │   ├── layout.tsx   #   global chrome: ThemeProvider, Lenis SmoothScroll,
 │   │                #   Preloader, Navbar, <main>, Footer, FloatingActions,
 │   │                #   RevealObserver, TawkTo + site metadata
-│   ├── page.tsx     #   HOMEPAGE — ElevatorHero + HomeSections
+│   ├── page.tsx     #   HOMEPAGE — Variant18Hero + CategoryBrowse15 + HomeSections
 │   ├── about/ vision-mission/ milestone/ infrastructure/ network/
 │   ├── news-events/  news-events/[slug]/
 │   ├── products/  products/[category]/  products/[category]/[product]/
 │   ├── contact/  career/  quality-policy/  privacy-policy/  downloads/
-│   ├── variant1/ … variant17/   #   client-review hero A/B pages (noindex)
 │   ├── prose.module.css  company.module.css   #   shared page-level styles
 │   ├── icon.png  apple-icon.png  sitemap.ts  robots.ts  not-found.tsx
 ├── components/      # Reusable, presentational building blocks
@@ -75,9 +73,8 @@ frontend/
 ├── sections/        # Page-level composed sections (the "blocks" of a page)
 │   ├── home/        #   HomeSections + AboutPreview, ProductsShowcase,
 │   │                #   ServiceEcosystem (what we offer), IndustriesShowcase
-│   ├── experience/  #   ElevatorHero / ElevatorScene (Three.js), ExplorationHero,
-│   │                #   ScrollStory (CSS fallback), corporate/ + variants/
-│   │                #   +  THREEJS-IMPLEMENTATION.md, variants/VARIANTS.md
+│   ├── experience/  #   corporate/ — Variant18Hero (homepage hero),
+│   │                #   CategoryBrowse15, TrustBadges, corporateData
 │   ├── products/    #   ProductDetail
 │   ├── network/     #   dealer-network sections
 │   └── shared/      #   PageHero (photo hero), PageHeader (text-only hero),
@@ -166,7 +163,7 @@ flip the flag in `STATIC_ROUTE_RELEASES` for a normal page, or add the path to
 page. The `released` flag on a node in `data/products.ts` is a
 **content-readiness hint only** and does not gate production.
 
-Today only `/` and the `/variant1…17` review pages are live in production.
+Today only `/` (Home) is live in production; every other page shows Coming Soon.
 
 ### Live chat
 

@@ -7,10 +7,8 @@ import { CTASection } from "@/sections/shared/CTASection";
 import { COMPANY_STATS } from "@/data/stats";
 
 /**
- * Everything on the homepage BELOW the hero, shared by every hero variant
- * (`app/page.tsx` and `app/variant1/page.tsx`). The hero is the only part that
- * differs between the client-review variants; keeping the body here means it
- * only ever needs editing once.
+ * Everything on the homepage BELOW the hero (`app/page.tsx`), kept as its own
+ * component so the hero and the body stay cleanly separated.
  *
  * Flow: who we are → what we make → what we offer → applications → numbers → CTA.
  */

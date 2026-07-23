@@ -217,30 +217,19 @@ All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, 
 - **Performance.** `next/image`; code-split heavy client modules (Three.js is
   client-only); dispose GPU resources; cap DPR; lazy reveals.
 
-## Three.js standards
+## Hero (no more Three.js — 2026-07-23)
 
-The hero (`sections/experience/ElevatorScene.tsx`) is the brand centerpiece.
-- **Realistic, physically-based materials** (metalness/roughness, anisotropy on
-  brushed steel, real transmission glass). Window/interior lighting stays a
-  realistic **warm amber** (architectural, not brand); the Philbrick **azure**
-  brand accent lights the screens. The **building facade carries no brand name**
-  (it stays a clean, realistic tower); the Philbrick logo is a decal on the
-  **elevator car's door-operator header** (`/brand/logo.png`, unlit MeshBasic,
-  native aspect ratio — never stretched), so it reads the same in day and night.
-- **Adaptive mobile quality:** touch / small-viewport / low-core devices
-  (`lowPerf`) get a capped DPR (1.5 vs 2), a smaller shadow map (1024 vs 2048)
-  and skip the SMAA pass; the render loop **pauses when the hero is off-screen or
-  the tab is hidden** (IntersectionObserver + visibilitychange), and a one-way
-  DPR watchdog steps down once on sustained slow frames. Do not raise mobile DPR
-  or run the loop unconditionally — keep the desktop path (DPR 2, full post) intact.
-- **Architectural lighting** + an environment map (IBL) doing most of the work;
-  warm key / cool fill / rim / interior light.
-- **Minimal bloom** — only true emissives (LEDs, indicators) should glow.
-- **Performance budgets:** `pixelRatio ≤ 2`; one render loop; dispose geometries/
-  materials/render-targets on unmount; keep the scene lean.
-- **Mobile / capability fallback:** render the CSS `ScrollStory` on no-WebGL or
-  `prefers-reduced-motion`.
-- See [`sections/experience/THREEJS-IMPLEMENTATION.md`](sections/experience/THREEJS-IMPLEMENTATION.md).
+The homepage hero is `sections/experience/corporate/Variant18Hero.tsx`: a
+single photograph per theme (`hero-scene-{day,night}`, sky + skyline + headline
+baked in), cross-faded by `[data-theme]` in CSS, with the live lead + trust
+badges (`TrustBadges`) in front and the `<h1>` kept `sr-only` for semantics.
+Below it the homepage shows `CategoryBrowse15` then the shared `HomeSections`.
+
+The Three.js elevator scene and the whole client-review variant system
+(variants 1–17, the WebGL scenes, `ScrollStory`, `ExplorationHero`,
+`heroSceneKit`) were **removed** on 2026-07-23 once the client chose this hero.
+The `three` package is no longer imported anywhere. If a 3D hero is ever
+reintroduced, restore the standards from git history (they lived here).
 
 ## Documentation standards
 
@@ -255,8 +244,6 @@ AI) can get productive fast:
 | `SITE-STRUCTURE.md` | Every route + release flag, chrome, product tree, content map |
 | `DONE.md` | Dated implementation history (append after every task) |
 | `imagegeneration.md` | Image briefs + the authoritative asset mapping (§9) |
-| `sections/experience/THREEJS-IMPLEMENTATION.md` | The 3D hero |
-| `sections/experience/variants/VARIANTS.md` | The client-review hero variants |
 | `DESIGN.md` | **External reference** (apple.com analysis), not this project's system |
 
 **Whenever routes, sections, content files or chrome change, update
@@ -267,11 +254,13 @@ AI) can get productive fast:
 ## Current architecture (high level)
 
 - **Homepage `/` is the flagship experience:** `app/page.tsx` renders
-  `<ElevatorHero />` (the Three.js scene) then `<HomeSections />` — About →
-  Products (the range) → What we offer → Applications → stats → Contact/CTA. The
-  body is shared with every `/variantN` review page, so it is only ever edited
-  once. The global `app/layout.tsx` adds Navbar, Lenis smooth scroll, Preloader,
-  Footer, the floating action buttons, Tawk.to live chat, theme + reveal providers.
+  `<Variant18Hero />` (single-photo hero) + `<CategoryBrowse15 />` then
+  `<HomeSections />` — About → Products (the range) → What we offer →
+  Applications → stats → Contact/CTA. The global `app/layout.tsx` sets
+  `data-nav="float"` on `<html>` (floating glass navbar site-wide) and adds
+  Navbar, Lenis smooth scroll, Preloader, Footer, the floating action buttons,
+  Tawk.to live chat, theme + reveal providers. (The Three.js hero and the
+  `/variant1…17` A/B review pages were removed 2026-07-23.)
 - There is **no standalone `/experience` route** — the experience IS the homepage.
 - **Navigation:** Home · About ▾ (About Us · Vision & Mission · Milestone) ·
   Products ▾ (two-pane mega menu, `components/layout/MegaMenu.tsx`) ·
@@ -280,9 +269,9 @@ AI) can get productive fast:
 - **Routes:** `/`, `/about`, `/vision-mission`, `/milestone`, `/infrastructure`,
   `/network`, `/news-events`, `/news-events/[slug]`, `/products`,
   `/products/[category]`, `/products/[category]/[product]`, `/contact`,
-  `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`, plus the
-  temporary `/variant1…17` review pages (+ `/sitemap.xml`, `/robots.txt`, app
-  icons). Product routes come from the tree in `data/products.ts` (14
+  `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`
+  (+ `/sitemap.xml`, `/robots.txt`, app icons). Product routes come from the
+  tree in `data/products.ts` (14
   categories, 24 nested products); news detail routes from `data/news.ts`
   (6 items, currently mock). **Every route must appear in
   `config/pageReleases.ts` — see the STRICT RULE at the top.** A full route map

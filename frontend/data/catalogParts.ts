@@ -6,34 +6,46 @@
    exploded diagram) + the central technical drawing of the whole installation
    (public/images/home/hero-exploration/environment/drawing-elevetor.png).
 
-   Used by the catalogue-styled hero variants:
-     /variant11  ExplorationHero with this config (exploded tour)
-     /variant12  Variant12ElevatorScene overlay (3D arrival + exploded DOM view)
-     /variant13  corporate scroll reveal (one part at a time)
-
-   `anchor` = where the part lives ON THE DRAWING (stage %, drawing centred at
-   x 50, spanning y ~6..90), mapped from the client's reference diagram:
-   machine room at the top (control panel + machine), car mid-shaft (fan on the
-   roof, COP inside), landing door lower front, pit at the bottom.
-   `slot` = resting position in the exploded overview (catalogue-style columns:
-   left column for the parts the catalogue shows on the left, right column for
-   the right, vertically zigzagged so nothing overlaps).
+   Now consumed only by the homepage category browser (CategoryBrowse15), which
+   renders each part as a product card. The exploration/scroll hero variants
+   that also used it (and the `anchor`/`slot` staging fields) were removed with
+   the legacy variants on 2026-07-23; the fields are kept on the data so the
+   set stays a faithful record of the client's catalogue.
 
    Copy is honest and qualitative — component names come from the client's own
    catalogue labels; no fabricated specs.
    ========================================================================== */
-import type { ElevatorComponent } from "./elevatorComponents";
-import type { ExplorationPart, SpineConfig, StagePoint } from "./heroExploration";
+
+/* Types were previously imported from data/elevatorComponents + heroExploration
+   (both removed with the variants). Inlined here so this file is self-contained. */
+interface StagePoint {
+  x: number;
+  y: number;
+}
+interface ElevatorComponent {
+  key: string;
+  index: string;
+  name: string;
+  tagline: string;
+  description: string;
+  image: string;
+  specs: string[];
+  benefits: string[];
+  iconName: string;
+}
+export interface ExplorationPart {
+  key: string;
+  component: ElevatorComponent;
+  treatment: "cutout";
+  image: string;
+  aspect: number;
+  size: { wCap: number; hCapVh: number };
+  anchor: StagePoint;
+  slot: StagePoint;
+  side: "left" | "right";
+}
 
 const P = "/images/home/hero-exploration/components/parts";
-
-/** the central technical drawing of the complete installation */
-export const CATALOG_SPINE: SpineConfig = {
-  type: "image",
-  src: "/images/home/hero-exploration/environment/drawing-elevetor.png",
-  alt: "",
-  aspect: 476 / 1328,
-};
 
 interface CatalogSpec {
   key: string;
@@ -202,13 +214,3 @@ export const CATALOG_PARTS: ExplorationPart[] = SPECS.map((s) => ({
   slot: s.slot,
   side: s.side,
 }));
-
-/* ---- pacing for the catalogue exploration (same rhythm as variant1) ------- */
-export const CATALOG_TEXT_UNITS = 1.0;
-export const CATALOG_ELEVATOR_UNITS = 1.15;
-export const CATALOG_PARTS_START = CATALOG_TEXT_UNITS + CATALOG_ELEVATOR_UNITS;
-export const CATALOG_SETTLE_UNITS = 1.0;
-export const CATALOG_TOTAL_UNITS =
-  CATALOG_PARTS_START + CATALOG_PARTS.length + CATALOG_SETTLE_UNITS;
-const VH_PER_UNIT = 80;
-export const CATALOG_SCROLL_VH = Math.round(CATALOG_TOTAL_UNITS * VH_PER_UNIT);

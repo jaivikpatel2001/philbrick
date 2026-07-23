@@ -20,7 +20,6 @@
    semantics at zero visual cost. If the headline in the picture changes, change
    it here too — see §11.10 of imagegeneration.md, which holds the prompts.
    ========================================================================== */
-import { useEffect } from "react";
 import Image from "next/image";
 import { TrustBadges } from "./TrustBadges";
 import styles from "./corporate.module.css";
@@ -36,13 +35,8 @@ export const HERO_SCENE = {
 const TRUST_ONLY = ["Since 1992", "In-house"] as const;
 
 export function Variant18Hero() {
-  /* opt this page into the floating glass navbar (same as variant16/17) */
-  useEffect(() => {
-    const de = document.documentElement;
-    de.setAttribute("data-nav", "float");
-    return () => de.removeAttribute("data-nav");
-  }, []);
-
+  /* The floating glass navbar is now the site-wide default (data-nav="float" on
+     <html> in app/layout.tsx), so this hero no longer opts in per-page. */
   return (
     <section
       className={styles.hero18}

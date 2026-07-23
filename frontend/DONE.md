@@ -6,6 +6,79 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-23 — Variant 18 promoted to the homepage; variants 1–17 removed
+
+**Status:** Completed. Build clean (65 static pages, 0 variant routes), homepage
+hero verified rendering from the static export.
+
+**1. Homepage.** `app/page.tsx` now renders `Variant18Hero` + `CategoryBrowse15`
++ `HomeSections` (was `ElevatorHero` + `HomeSections`). Variant 18 is the single
+homepage hero: sky, skyline and headline baked into one photo per theme
+(`hero-scene-{day,night}`), live lead + trust badges in front, `<h1>` kept
+`sr-only` for semantics.
+
+**2. Navbar float is now site-wide.** `data-nav="float"` moved from the per-hero
+`useEffect` onto `<html>` in `app/layout.tsx`, so the floating glass pill (no
+fill, blur only, black nav links over content / white over a hero) is the global
+navbar on every page (client direction: "float everywhere"). Every inner page
+has a full-bleed hero or a full-bleed ComingSoon, so the fixed pill sits over
+imagery as intended — verified on `/products`.
+
+**3. Removed variants 1–17 (and the /variant18 review route).**
+- Routes: `git rm` of `app/variant1…18`.
+- Heroes: `Variant7/8/9/10/13/14/15/16/17Hero.tsx`.
+- Three.js / exploration engine: `ElevatorHero`, `ElevatorScene(.module.css)`,
+  `ExplorationHero(.module.css)`, `Exploration11Hero`, `Variant6/12ElevatorScene`,
+  `ScrollStory(.module.css)`, `ComponentModal(.module.css)`,
+  `THREEJS-IMPLEMENTATION.md`, and the whole `sections/experience/variants/` dir
+  (`heroSceneKit` + `Variant2–5Scene` + `VARIANTS.md`).
+- Dead data: `data/elevatorComponents.ts`, `data/heroExploration.ts`.
+- `config/pageReleases.ts`: all `/variantN` entries dropped.
+- Kept and still used by the homepage: `Variant18Hero`, `CategoryBrowse15`,
+  `TrustBadges`, `corporate.module.css`, `corporateData.ts` (trimmed to just
+  `TRUST_BADGES`), `data/catalogParts.ts` (made self-contained — the two type
+  imports pointed at the deleted data files; inlined `StagePoint` /
+  `ElevatorComponent` / `ExplorationPart` and dropped the dead `CATALOG_SPINE` +
+  pacing exports).
+
+**4. Asset GC.** A reference analyzer (scratchpad) flagged orphans by scanning
+all of `app/sections/components/lib/data/constants/config/styles/scripts` —
+excluding `imageManifest.json` (lists every optimized image, incl. dead) and
+`.md` docs (mention ≠ render). Deleted ~260 dead public files: the entire
+`/images/3D_Elevetor` render set (from the removed ElevatorScene), the dead
+`/images/home/hero-exploration` leftovers (old `hero-city/sky/tower/front`,
+`india-tower`, `lobby-backdrop`, `door-leaf`, `commercial-tower`,
+`skyline-strip`, `spine/elevator-cutaway`, the `components/original` raw shots
+and `components/0N-*.png` cards), Next boilerplate SVGs (`file/globe/next/vercel/
+window.svg`) and the duplicate brand files (`logo-source.png`, `logo.jpg`,
+`philbrick-logo.png`). Pruned the matching `lib/imageManifest.json` entries
+(107 → 72 keys). **Deliberately kept:** all `/images/products/*` — product
+images are addressed by TEMPLATE LITERAL in `data/products.ts` (`cover(slug)` /
+`leaf(cat, prod)`), so their literal paths never appear in source and a naive
+grep false-flags them; deleting would have broken every product/category page
+and its og:image/JSON-LD. Also kept the live `hero-scene*`, `drawing-elevetor`
+and `components/parts/*` (CategoryBrowse15 via `catalogParts`).
+
+**5. Fixed a pre-existing gap.** `hero-scene-{day,night}` had manifest entries
+but no generated `.webp` variants on disk, so the hero rendered as a grey
+gradient (the loader pointed at nonexistent files). Ran
+`scripts/optimizeHeroExploration.mjs` to generate them.
+
+**Known residual (not blocking):** `corporate.module.css` still contains the
+dead V7–V17 rule blocks. They are interleaved with classes the live hero reuses
+(`bg16`, `flank17`, `trust17`, `cat*15`), and unused CSS selectors cause no
+broken import, dead JS or build warning — so they were left rather than risk a
+silent visual break on the new hero (CSS removal can't fail the build, only the
+render). The `three` package is now unused (no Three.js in the tree) but left
+installed to avoid dependency churn; `gsap` is still used by `SmoothScroll`.
+
+**Files:** `app/page.tsx`, `app/layout.tsx`,
+`sections/experience/corporate/{Variant18Hero,corporateData}.ts(x)`,
+`data/catalogParts.ts`, `config/pageReleases.ts`, `lib/imageManifest.json`, and
+the deletions above.
+
+---
+
 ## 2026-07-22 21:45 IST
 
 ### Variant18: the bottom wash takes the theme's polarity
