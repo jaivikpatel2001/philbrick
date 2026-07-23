@@ -77,7 +77,15 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`no-js ${fontVariables}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`no-js ${fontVariables}`}
+      /* Floating glass navbar site-wide (was per-page opt-in on the hero
+         variants). The header detaches into a translucent blurred pill; see the
+         `[data-nav="float"]` rules in globals.css. */
+      data-nav="float"
+      suppressHydrationWarning
+    >
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {/* Entity-graph anchor: the company + website, referenced by every page */}

@@ -35,6 +35,17 @@ wired into `data/images.ts` / product data by file name.
 
 ## 0. How to use this file
 
+- **Removal note (2026-07-23):** the homepage hero exploration + Three.js scene
+  assets were deleted with the legacy hero variants — `public/images/3D_Elevetor/*`,
+  and under `public/images/home/hero-exploration/`: the `components/original` raw
+  shots, the `components/0N-*.png` cards, `spine/`, and the dead `environment/`
+  images (`hero-city/sky/tower/front`, `india-tower`, `lobby-backdrop`,
+  `door-leaf`, `commercial-tower`, `skyline-strip`). Still live from that tree:
+  `environment/hero-scene-{day,night}` (homepage hero), `environment/drawing-elevetor`
+  and `components/parts/*` (CategoryBrowse15). All `public/images/products/*`,
+  `about/`, `network/` etc. are unaffected. Sections §7–§11 that briefed the
+  removed assets are historical.
+
 - **Status (2026-07-11):** these images have been generated and **integrated**. Source
   files are **PNG**, reorganised into page-wise folders under `public/images/…`, and
   delivered as responsive **WebP** by `lib/imageLoader.ts` (static-export safe). The

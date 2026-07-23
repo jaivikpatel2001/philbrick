@@ -33,15 +33,15 @@ which is what makes local review and the content audit possible.
 ├─ /privacy-policy                         –  Privacy Policy
 └─ /downloads                              –  Downloads (STEP brochure)
 
-Client-review hero A/B pages (temporary, noindex, excluded from the sitemap):
-/variant1 … /variant17                     ✓  17 homepage hero alternatives
-
 System routes:  /sitemap.xml   /robots.txt   /icon.png   /apple-icon.png   /_not-found (404)
 ```
 
-**Counts:** 30 static route entries (13 real pages + 17 variants) + 38 product
-routes (14 categories + 24 products) + 6 news detail routes = **74 entries in the
-release map**; `next build` prerenders **82 pages** including the system routes.
+The homepage hero is `Variant18Hero` (single-photo scene). The client-review
+`/variant1…18` A/B pages were removed 2026-07-23.
+
+**Counts:** 13 static real-page entries + 38 product routes (14 categories + 24
+products) + 6 news detail routes = **57 entries in the release map**; `next
+build` prerenders **65 pages** including the system routes.
 
 **Current production release:** only `/` and the 17 variant pages are live.
 Everything else renders the animated **Coming Soon** screen and is excluded from
