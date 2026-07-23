@@ -32,46 +32,8 @@ import { newsRoutes } from "@/data/news";
 /** Static (non-product) routes. Keep in sync with the app/ route folders. */
 export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/": true,
-  /* Client-review A/B alternatives of the homepage. Live so they can be shared
-     with the client, but noindex (see each app/variantN/page.tsx) and excluded
-     from the sitemap (app/sitemap.ts filters the /variant prefix). Temporary —
-     remove once a hero direction is chosen.
-       variant1  exploded component tour (photo cutouts + GSAP)
-       variant2  architectural journey (Three.js fly-through)
-       variant3  engineering blueprint (Three.js scan transformation)
-       variant4  immersive storytelling (Three.js single take gallery)
-       variant5  night arrival (Three.js §10.1 world + 8 part showcase)
-       variant6  the original journey, photoreal edition (matte slots)
-       variant7  classic split (clean corporate, no WebGL)
-       variant8  building showcase (clean corporate, no WebGL)
-       variant9  premium interior (clean corporate, no WebGL)
-       variant10 product feature showcase (clean corporate, no WebGL)
-       variant11 catalogue exploded tour (variant1 + drawing + catalogue parts)
-       variant12 catalogue journey (variant6 3D arrival + catalogue overlay)
-       variant13 corporate scroll component reveal (drawing + parts)
-       variant14 animated floating product gallery (corporate)
-       variant15 product spotlight hero + category browser (corporate)
-       variant16 centred hero on a theme-swapped city photo + floating glass nav
-       variant17 variant16 + depth hero (headline behind a cutout tower)
-       variant18 variant17 recomposed (headline in the sky, tower peak only) */
-  "/variant1": true,
-  "/variant2": true,
-  "/variant3": true,
-  "/variant4": true,
-  "/variant5": true,
-  "/variant6": true,
-  "/variant7": true,
-  "/variant8": true,
-  "/variant9": true,
-  "/variant10": true,
-  "/variant11": true,
-  "/variant12": true,
-  "/variant13": true,
-  "/variant14": true,
-  "/variant15": true,
-  "/variant16": true,
-  "/variant17": true,
-  "/variant18": true,
+  /* The /variant1…18 A/B review pages were removed 2026-07-23 once the client
+     chose a hero direction; variant18's hero is now the homepage (app/page.tsx). */
   "/about": false,
   "/vision-mission": false,
   "/milestone": false,
@@ -105,7 +67,10 @@ export const RELEASED_NEWS_ROUTES: string[] = [];
    is enumerated from the product tree so the config is exhaustive; each is only
    released if it appears in RELEASED_PRODUCT_ROUTES (default-deny). */
 const PRODUCT_ROUTE_RELEASES: Record<string, boolean> = Object.fromEntries(
-  productRoutes().map((r) => [r.path, RELEASED_PRODUCT_ROUTES.includes(r.path)])
+  productRoutes().map((r) => [
+    r.path,
+    r.released || RELEASED_PRODUCT_ROUTES.includes(r.path),
+  ])
 );
 
 /* News & Events detail routes, enumerated from the news data (default-deny). */

@@ -1,10 +1,9 @@
 import { TRUST_BADGES } from "./corporateData";
 import styles from "./corporate.module.css";
 
-/* Shared trust row for the corporate hero variants. `className` lets each
-   variant attach its own load-animation delay; `only` lets a variant show a
-   subset (by `stat`) without forking the shared data — variant16 runs just two
-   badges on client direction. */
+/* Trust row for the homepage hero (Variant18Hero). `className` attaches the
+   hero's load-animation delay; `only` shows a subset (by `stat`) without
+   forking the shared data — the hero runs just two badges on client direction. */
 export function TrustBadges({
   className,
   only,

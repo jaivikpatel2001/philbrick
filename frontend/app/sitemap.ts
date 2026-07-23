@@ -15,8 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url;
   const now = new Date();
 
-  /* Client-review variant routes (/variant1, …) are live but intentionally
-     kept out of the public sitemap; they carry a page-level noindex too. */
+  /* The /variant* review routes were removed 2026-07-23; the guard stays as a
+     cheap safety net so a stray variant route could never reach the sitemap. */
   const publicRoutes = releasedRoutes().filter(
     (route) => !route.startsWith("/variant")
   );
