@@ -6,6 +6,40 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-23 — Gate Products (+ categories/sub-products) in production
+
+**Client:** `/products` and any category / sub-product must NOT be live on
+`philbrick.onrender.com` yet. Chosen scope: **Home only** live; everything else
+(products + all content pages) shows Coming Soon.
+
+**Root cause.** The release config was already correct — `"/products": false`
+and `RELEASED_PRODUCT_ROUTES: []` (default-deny), every product page wrapped in
+`<ReleaseGate>`. But `lib/release.ts` `getAppEnv()` only enforces flags when the
+env resolves to `"production"`, and `.env.local` has an **active**
+`NEXT_PUBLIC_APP_ENV=development` line, so locally the gate is bypassed and every
+page opens. On Render the same happens if a dashboard var
+`NEXT_PUBLIC_APP_ENV=development` is set (or the deploy is stale).
+
+**Fix.** Pinned `NEXT_PUBLIC_APP_ENV=production` in `render.yaml` `envVars` so
+the deployed build always runs in production release mode. `.env.local` left as
+`development` for local dev convenience (shell/CI env wins over `.env.local`, so
+it does not affect Render).
+
+**Verified** with `NEXT_PUBLIC_APP_ENV=production npm run build`: the static
+export bakes the **Coming Soon** screen into `out/products.html`,
+`out/products/<category>.html` and `out/products/<category>/<product>.html`
+(real product copy absent), while `out/index.html` keeps the real Home hero.
+
+**ACTION REQUIRED to take effect on Render:**
+1. Commit + push these changes and redeploy.
+2. If `philbrick` is a **dashboard-managed** service (not a Blueprint), Render
+   ignores `render.yaml` `envVars` — set `NEXT_PUBLIC_APP_ENV=production` under
+   Settings → Environment, and delete any existing `=development` value there.
+
+**Files:** `render.yaml`.
+
+---
+
 ## 2026-07-23 — Variant 18 promoted to the homepage; variants 1–17 removed
 
 **Status:** Completed. Build clean (65 static pages, 0 variant routes), homepage

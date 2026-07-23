@@ -21,6 +21,18 @@ services:
     rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: out
+    # RELEASE GATING (config/pageReleases.ts + lib/release.ts).
+    # Force the deployed build into production release mode so only routes
+    # flagged `true` show real content; everything else bakes the Coming Soon
+    # screen. Without this the gate falls back to NODE_ENV and can open pages
+    # that are not ready. Currently only "/" (Home) is live — Products and all
+    # its categories/sub-products, and every other page, are Coming Soon.
+    # NOTE: envVars here apply to BLUEPRINT-managed services. If philbrick is a
+    # dashboard-managed service, also set NEXT_PUBLIC_APP_ENV=production under
+    # Settings -> Environment, or Render will ignore this block.
+    envVars:
+      - key: NEXT_PUBLIC_APP_ENV
+        value: production
     # Content-hashed build output + self-hosted fonts never change for a given
     # URL → cache for a year, immutable.
     headers:
