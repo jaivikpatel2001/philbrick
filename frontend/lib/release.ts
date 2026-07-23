@@ -23,8 +23,19 @@ export function getAppEnv(): AppEnv {
     process.env.NEXT_PUBLIC_APP_ENV ??
     process.env.NODE_ENV ??
     "development"
-  ).toLowerCase();
-  return raw === "production" ? "production" : "development";
+  )
+    .trim()
+    .toLowerCase();
+  /* Fail CLOSED: only an explicit "development" opens every page; ANY other
+     value enforces the release flags. This is deliberate:
+       • `.trim()` — a hosting dashboard (Render's value textarea) can store the
+         value with a trailing newline, and the old `=== "production"` check
+         failed on "production\n", silently opening the WHOLE site in prod.
+       • production-by-default — an unset/typo'd/empty env now gates rather than
+         leaks unreleased pages. Local `next dev` still sets NODE_ENV
+         "development" (and .env.local sets NEXT_PUBLIC_APP_ENV=development), so
+         local work is unaffected. */
+  return raw === "development" ? "development" : "production";
 }
 
 /** True only when release flags are enforced (production). */
