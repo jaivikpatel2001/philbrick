@@ -12,31 +12,38 @@ completing one. Newest entries at the top.
 `philbrick.onrender.com` yet. Chosen scope: **Home only** live; everything else
 (products + all content pages) shows Coming Soon.
 
-**Root cause.** The release config was already correct — `"/products": false`
-and `RELEASED_PRODUCT_ROUTES: []` (default-deny), every product page wrapped in
-`<ReleaseGate>`. But `lib/release.ts` `getAppEnv()` only enforces flags when the
-env resolves to `"production"`, and `.env.local` has an **active**
-`NEXT_PUBLIC_APP_ENV=development` line, so locally the gate is bypassed and every
-page opens. On Render the same happens if a dashboard var
-`NEXT_PUBLIC_APP_ENV=development` is set (or the deploy is stale).
+**Root cause (the real one — a whitespace bug).** The release config was already
+correct — `"/products": false`, `RELEASED_PRODUCT_ROUTES: []` (default-deny),
+every product page wrapped in `<ReleaseGate>`, and `NEXT_PUBLIC_APP_ENV=production`
+IS set in the Render dashboard. Yet every product page rendered real content.
 
-**Fix.** Pinned `NEXT_PUBLIC_APP_ENV=production` in `render.yaml` `envVars` so
-the deployed build always runs in production release mode. `.env.local` left as
-`development` for local dev convenience (shell/CI env wins over `.env.local`, so
-it does not affect Render).
+Reason: `getAppEnv()` did `.toLowerCase()` on the env value but not `.trim()`,
+then checked `=== "production"`. Render's env-var *value* field is a textarea
+that stores a **trailing newline**, so the build saw `"production\n"`, which
+`!== "production"` → the function fell through to `"development"` → `isReleased`
+returned `true` for EVERY route → the whole site opened in production.
 
-**Verified** with `NEXT_PUBLIC_APP_ENV=production npm run build`: the static
-export bakes the **Coming Soon** screen into `out/products.html`,
-`out/products/<category>.html` and `out/products/<category>/<product>.html`
-(real product copy absent), while `out/index.html` keeps the real Home hero.
+**Fix — `lib/release.ts` `getAppEnv()` now trims and fails CLOSED:**
+```
+const raw = (NEXT_PUBLIC_APP_ENV ?? NODE_ENV ?? "development").trim().toLowerCase();
+return raw === "development" ? "development" : "production";
+```
+Only an explicit `"development"` opens pages now; `"production"`, `"production\n"`,
+empty, or a typo all enforce the flags. Local `next dev` is unaffected
+(NODE_ENV = "development", and `.env.local` sets `NEXT_PUBLIC_APP_ENV=development`).
+Also kept the `NEXT_PUBLIC_APP_ENV=production` pin in `render.yaml`.
 
-**ACTION REQUIRED to take effect on Render:**
-1. Commit + push these changes and redeploy.
-2. If `philbrick` is a **dashboard-managed** service (not a Blueprint), Render
-   ignores `render.yaml` `envVars` — set `NEXT_PUBLIC_APP_ENV=production` under
-   Settings → Environment, and delete any existing `=development` value there.
+**Proven** with `NEXT_PUBLIC_APP_ENV="production " npm run build` (trailing space
+reproduces the whitespace bug): the static export baked **Coming Soon** into
+`out/products.html`, `out/products/integrated-control-panel.html` and
+`out/products/integrated-control-panel/parallel-type-controller.html` (real
+product copy absent), while `out/index.html` kept the real Home hero. Under the
+old code that same value opened everything.
 
-**Files:** `render.yaml`.
+**To go live:** merge to `main` (Render deploys `main`) and it auto-redeploys —
+no dashboard change needed, the code now tolerates the existing value.
+
+**Files:** `lib/release.ts`, `render.yaml`.
 
 ---
 
