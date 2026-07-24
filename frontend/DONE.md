@@ -6,6 +6,40 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-24 — Site Refactoring, Page Cleanup, Navbar Fix, Publishing & Performance Optimization
+
+**Task Summary:**
+1. **Unused Pages Purged:** Completely removed `/milestone`, `/infrastructure`, `/news-events` (page routes, sub-routes, `NewsCard` components, `data/news.ts`, and image assets in `public/images/milestone`, `public/images/infrastructure`, `public/images/news-events`). Removed from navigation menus, release configs, image manifests, and build scripts.
+2. **Navbar Link Theme Fix:** Removed floating un-scrolled header override in `styles/globals.css` (`[data-nav="float"] header[data-scrolled="false"] nav a`). Navbar links now immediately follow active theme tokens on page load (black `#0b1017` in Light Theme, white `#ffffff` in Dark Theme).
+3. **Pages Published:** Released `/about` and `/vision-mission` (`released: true`) in `config/pageReleases.ts`.
+4. **Content Punctuation Cleanup:** Cleaned AI-generated punctuation patterns (`--`, ` — `, ` – `, `32 - bit`, `dead - zone`, `techno -commercial`, `PC -2000`, `Flame- failure`, etc.) across `data/company.ts` and generated catalog/WP JSON files.
+5. **HAR Performance Audit & Optimization:**
+   - **Logo Asset Optimization:** Resized `public/brand/logo.png` (1277px → 536px width, palette PNG) from 99 KB to 22.8 KB (-77%), and `philbrick-mark.png` from 37.9 KB to 9.9 KB. Updated `Logo.tsx` dimensions.
+   - **Render Caching & Headers:** Analyzed HAR and identified `Cache-Control: max-age=0` response header issue. Documented Render header rules (`/_next/static/*` max-age=31536000, `/images/*` max-age=2592000) for Render Dashboard / Blueprint.
+   - **CLAUDE.md & Rules Update:** Added STRICT RULE for Website Performance & Asset Optimization covering caching, logo sizing, responsive image width ladders, and lazy loading.
+
+**Files Affected:**
+- `app/milestone/`, `app/infrastructure/`, `app/news-events/` (deleted)
+- `components/cards/NewsCard.tsx`, `components/cards/NewsCard.module.css` (deleted)
+- `data/news.ts` (deleted)
+- `public/images/{milestone,infrastructure,news-events}/` (deleted)
+- `config/pageReleases.ts` (updated)
+- `constants/navigation.ts` (updated)
+- `constants/site.ts` (updated `SITE.url` to `https://philbrickindia.com`)
+- `components/release/ComingSoon.tsx` (updated)
+- `components/ui/Logo.tsx` (updated dimensions)
+- `public/brand/logo.png`, `public/brand/philbrick-mark.png` (optimized)
+- `data/images.ts`, `scripts/optimizeImages.mjs`, `lib/imageManifest.json` (updated)
+- `styles/globals.css` (updated navbar link theme styles)
+- `data/company.ts`, `data/generated/*.json` (punctuation cleanup)
+- `CLAUDE.md`, `SITE-STRUCTURE.md` (updated)
+
+**Verification:**
+- `npx tsc --noEmit`: 0 type errors.
+- `npx next build`: 56 static pages built cleanly.
+
+---
+
 ## 2026-07-23 — Gate Products (+ categories/sub-products) in production
 
 **Client:** `/products` and any category / sub-product must NOT be live on

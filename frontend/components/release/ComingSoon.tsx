@@ -12,10 +12,7 @@ const STATIC_LABELS: Record<string, string> = {
   "/contact": "Contact",
   "/products": "Products",
   "/vision-mission": "Vision & Mission",
-  "/milestone": "Milestone & Awards",
-  "/infrastructure": "Infrastructure",
   "/network": "Network",
-  "/news-events": "News & Events",
 };
 
 /** English list join: ["Home"] → "Home"; ["Home","About","Contact"] →

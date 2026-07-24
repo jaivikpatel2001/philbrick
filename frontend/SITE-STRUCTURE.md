@@ -19,11 +19,7 @@ which is what makes local review and the content audit possible.
 /                                          ✓  Home — Three.js elevator hero + page body
 ├─ /about                                  –  About Us (story · Activity · History · values · leadership)
 ├─ /vision-mission                         –  Vision & Mission
-├─ /milestone                              –  Milestone & Awards (timeline)
-├─ /infrastructure                         –  Infrastructure
 ├─ /network                                –  Network
-├─ /news-events                            –  News & Events (listing)
-│  └─ /news-events/<slug>                  –  6 article pages  ⚠ mock content
 ├─ /products                               –  Products index (14 categories)
 │  ├─ /products/<category>                 –  14 category pages
 │  └─ /products/<category>/<product>       –  24 nested product pages

@@ -27,8 +27,8 @@ export function Logo({ className, compact = false, priority = false }: LogoProps
         <Image
           src="/brand/philbrick-mark.png"
           alt="Philbrick"
-          width={330}
-          height={282}
+          width={150}
+          height={128}
           className={styles.mark}
           priority={priority}
         />
@@ -36,8 +36,8 @@ export function Logo({ className, compact = false, priority = false }: LogoProps
         <Image
           src="/brand/logo.png"
           alt="Philbrick, Providing Elevator Solutions"
-          width={1277}
-          height={286}
+          width={536}
+          height={120}
           className={styles.full}
           priority={priority}
         />

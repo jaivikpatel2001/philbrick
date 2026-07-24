@@ -11,7 +11,7 @@ export const SITE = {
   tagline: "Providing Elevator Solutions",
   description:
     "Philbrick Technologies is an Ahmedabad-based manufacturer, exporter and supplier of elevator control panels, integrated controllers, automatic rescue devices, door operators, cabins, displays and complete elevator components.",
-  url: "https://www.philbricktech.com",
+  url: "https://philbrickindia.com",
   locale: "en_IN",
   founded: 1992,
   themeColor: "#0A0E14",

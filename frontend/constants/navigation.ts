@@ -61,7 +61,6 @@ export const MAIN_NAV: NavItem[] = [
     dropdown: [
       { label: "About Us", href: "/about", description: "Who we are and what we build" },
       { label: "Vision & Mission", href: "/vision-mission", description: "What drives us" },
-      { label: "Milestone & Awards", href: "/milestone", description: "Our journey and recognition" },
     ],
   },
   {
@@ -80,9 +79,7 @@ export const MAIN_NAV: NavItem[] = [
       },
     },
   },
-  { label: "Infrastructure", href: "/infrastructure" },
   { label: "Network", href: "/network" },
-  { label: "News & Events", href: "/news-events" },
   { label: "Contact Us", href: "/contact" },
 ];
 
@@ -111,8 +108,6 @@ export const FOOTER_NAV: FooterColumn[] = [
     links: [
       { label: "About Us", href: "/about" },
       { label: "Vision & Mission", href: "/vision-mission" },
-      { label: "Milestone & Awards", href: "/milestone" },
-      { label: "Infrastructure", href: "/infrastructure" },
       { label: "Network", href: "/network" },
       /* The client's WordPress footer menu also carries Career and the two
          policies, so they belong here rather than only in the legal row. */
@@ -129,7 +124,6 @@ export const FOOTER_NAV: FooterColumn[] = [
   {
     title: "Resources",
     links: [
-      { label: "News & Events", href: "/news-events" },
       { label: "Downloads", href: "/downloads" },
       { label: "Quality Policy", href: "/quality-policy" },
       { label: "Privacy Policy", href: "/privacy-policy" },
