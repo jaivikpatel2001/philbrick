@@ -82,6 +82,23 @@ follow-up work. Use the real current date/time; never invent historical entries.
 
 ---
 
+## STRICT RULE — Website Performance & Asset Optimization
+
+To maintain high Pingdom / Lighthouse speed scores (Grade A / 90+), minimal initial page weight (< 1 MB initial load), and fast Largest Contentful Paint (LCP):
+
+1. **HTTP Caching Headers (Expires / Cache-Control):**
+   - Content-hashed static JS/CSS (`/_next/static/*`) and static fonts (`/fonts/*`) MUST be served with `Cache-Control: public, max-age=31536000, immutable`.
+   - Local brand photography (`/images/*` and `/brand/*`) MUST be served with `Cache-Control: public, max-age=2592000`.
+   - **Render Deployment Note:** Render static hosting ignores `render.yaml` if deployed as a manual dashboard service. Headers MUST be verified in the Render Dashboard (**Settings → Headers**) or deployed via Blueprint ([`render.yaml`](../render.yaml)).
+
+2. **Image Sizing & Responsive Ladders:**
+   - **Static Export Pipeline:** All local images in `public/images/` MUST be optimized via [`scripts/optimizeImages.mjs`](scripts/optimizeImages.mjs) to generate responsive WebP width variants recorded in [`lib/imageManifest.json`](lib/imageManifest.json).
+   - **Rendered Size Matching:** Brand logos, icons, and hero images MUST be stored at efficient resolutions matching max rendered DPR sizes (e.g. `public/brand/logo.png` capped at 536px width for 34px container height rather than 1200+px raw assets).
+   - **Image `sizes` Prop:** Every `<Image>` component MUST include a tight, accurate `sizes` attribute matching its container CSS width (e.g. `sizes="(max-width: 640px) 100vw, 340px"`) so `imageLoader` requests appropriate WebP variants instead of full-resolution 100vw fallbacks.
+   - **Lazy Loading & Priority:** ONLY the primary hero image above the fold should carry `priority`. All secondary, carousel, card, and footer images MUST use default lazy loading (`loading="lazy"`).
+
+---
+
 ## STRICT RULE — Image asset management
 
 All site imagery is custom, India-focused brand photography catalogued in
@@ -262,18 +279,16 @@ AI) can get productive fast:
   Tawk.to live chat, theme + reveal providers. (The Three.js hero and the
   `/variant1…17` A/B review pages were removed 2026-07-23.)
 - There is **no standalone `/experience` route** — the experience IS the homepage.
-- **Navigation:** Home · About ▾ (About Us · Vision & Mission · Milestone) ·
+- **Navigation:** Home · About ▾ (About Us · Vision & Mission) ·
   Products ▾ (two-pane mega menu, `components/layout/MegaMenu.tsx`) ·
-  Infrastructure · Network · News & Events · Contact Us. Nav + footer are derived
+  Network · Contact Us. Nav + footer are derived
   from the product tree in `constants/navigation.ts`.
-- **Routes:** `/`, `/about`, `/vision-mission`, `/milestone`, `/infrastructure`,
-  `/network`, `/news-events`, `/news-events/[slug]`, `/products`,
+- **Routes:** `/`, `/about`, `/vision-mission`, `/network`, `/products`,
   `/products/[category]`, `/products/[category]/[product]`, `/contact`,
   `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`
   (+ `/sitemap.xml`, `/robots.txt`, app icons). Product routes come from the
   tree in `data/products.ts` (14
-  categories, 24 nested products); news detail routes from `data/news.ts`
-  (6 items, currently mock). **Every route must appear in
+  categories, 24 nested products). **Every route must appear in
   `config/pageReleases.ts` — see the STRICT RULE at the top.** A full route map
   with release flags lives in [`SITE-STRUCTURE.md`](SITE-STRUCTURE.md).
 - Real Philbrick company data lives in `constants/site.ts`; product data in
