@@ -118,71 +118,11 @@
     960,
     1280
   ],
-  "/images/infrastructure/infrastructure-hero.png": [
-    640,
-    1080,
-    1600,
-    2048
-  ],
-  "/images/infrastructure/infrastructure-intro.png": [
-    384,
-    640,
-    960,
-    1280
-  ],
-  "/images/milestone/milestone-hero.png": [
-    640,
-    1080,
-    1600,
-    2048
-  ],
   "/images/network/network-hero.png": [
     640,
     1080,
     1600,
     2048
-  ],
-  "/images/news-events/news-ard-safety.png": [
-    384,
-    768,
-    1200,
-    1600
-  ],
-  "/images/news-events/news-events-hero.png": [
-    640,
-    1080,
-    1600,
-    2048
-  ],
-  "/images/news-events/news-expo.png": [
-    384,
-    768,
-    1200,
-    1600
-  ],
-  "/images/news-events/news-facility-upgrade.png": [
-    384,
-    768,
-    1200,
-    1600
-  ],
-  "/images/news-events/news-network.png": [
-    384,
-    768,
-    1200,
-    1600
-  ],
-  "/images/news-events/news-serial-can-bus.png": [
-    384,
-    768,
-    1200,
-    1600
-  ],
-  "/images/news-events/news-training.png": [
-    384,
-    768,
-    1200,
-    1600
   ],
   "/images/products/ard/ard.png": [
     384,

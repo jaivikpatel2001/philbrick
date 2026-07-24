@@ -515,21 +515,6 @@ main>section:nth-of-type(even) {
     width: 100%;
   }
 }
-/* With no fill behind it, the floating bar sits directly on the hero
-   photograph before the page scrolls — where light theme's dark nav text
-   measured 1.45:1, effectively invisible. So the links go light while the bar
-   is over the hero and hand back to the theme tokens once the page scrolls
-   under it (7.50:1 there). Targets elements, not the Navbar's hashed classes. */
-[data-nav="float"] header[data-scrolled="false"] nav a,
-[data-nav="float"] header[data-scrolled="false"] nav button {
-  color: rgba(255, 255, 255, 0.96);
-}
-
-[data-nav="float"] header[data-scrolled="false"] nav a:hover,
-[data-nav="float"] header[data-scrolled="false"] nav button:hover,
-[data-nav="float"] header[data-scrolled="false"] nav [aria-expanded="true"] {
-  color: #fff;
-}
 
 /* ---------------------------------------------------------------------------
    TAWK.TO CHAT WIDGET

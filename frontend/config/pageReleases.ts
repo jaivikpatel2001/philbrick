@@ -27,19 +27,15 @@
    finishing any route task — it fails on missing, duplicate or invalid routes.
    ========================================================================== */
 import { productRoutes } from "@/data/products";
-import { newsRoutes } from "@/data/news";
 
 /** Static (non-product) routes. Keep in sync with the app/ route folders. */
 export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/": true,
   /* The /variant1…18 A/B review pages were removed 2026-07-23 once the client
      chose a hero direction; variant18's hero is now the homepage (app/page.tsx). */
-  "/about": false,
-  "/vision-mission": false,
-  "/milestone": false,
-  "/infrastructure": false,
+  "/about": true,
+  "/vision-mission": true,
   "/network": false,
-  "/news-events": false,
   "/products": false,
   "/contact": false,
   /* Pages migrated from the client's WordPress footer menu (2026-07-22). */
@@ -56,13 +52,6 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
  */
 export const RELEASED_PRODUCT_ROUTES: string[] = [];
 
-/**
- * Explicit allow-list of News & Events detail routes live in production.
- * Default: empty — all `/news-events/<slug>` detail pages are disabled (the
- * `/news-events` listing is disabled in STATIC_ROUTE_RELEASES too).
- */
-export const RELEASED_NEWS_ROUTES: string[] = [];
-
 /* Every product route (/products/<category> and /products/<category>/<product>)
    is enumerated from the product tree so the config is exhaustive; each is only
    released if it appears in RELEASED_PRODUCT_ROUTES (default-deny).
@@ -76,16 +65,10 @@ const PRODUCT_ROUTE_RELEASES: Record<string, boolean> = Object.fromEntries(
   productRoutes().map((r) => [r.path, RELEASED_PRODUCT_ROUTES.includes(r.path)])
 );
 
-/* News & Events detail routes, enumerated from the news data (default-deny). */
-const NEWS_ROUTE_RELEASES: Record<string, boolean> = Object.fromEntries(
-  newsRoutes().map((path) => [path, RELEASED_NEWS_ROUTES.includes(path)])
-);
-
 /** The complete route → release map. */
 export const ROUTE_RELEASES: Record<string, boolean> = {
   ...STATIC_ROUTE_RELEASES,
   ...PRODUCT_ROUTE_RELEASES,
-  ...NEWS_ROUTE_RELEASES,
 };
 
 /** Every known route path. */

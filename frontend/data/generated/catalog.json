@@ -101,7 +101,7 @@
               ]
             }
           ],
-          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>Xpert Main Board Based Auto Door Hydraulic Lift Control Panel</td><td>XPLA - Hydra - 8L</td><td>Up to 8 landing floors for Automatic Door</td><td rowspan=\"2\"><ul><li>Available for DOL / Star-Delta Main Pump Stater.</li><li>Controller for MRL Application.</li><li>Phase Sequence Corrector.</li><li>Front &amp; Rear Door.</li></ul></td></tr><tr><td>Elevate + Main Board Based Manual Door Hydraulic Lift Control Panel</td><td>EPM - Hydra - 8L</td><td>Up to 8 landing floors for Manual Door</td></tr></tbody></table>",
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>Xpert Main Board Based Auto Door Hydraulic Lift Control Panel</td><td>XPLA Hydra 8L</td><td>Up to 8 landing floors for Automatic Door</td><td rowspan=\"2\"><ul><li>Available for DOL / Star-Delta Main Pump Stater.</li><li>Controller for MRL Application.</li><li>Phase Sequence Corrector.</li><li>Front &amp; Rear Door.</li></ul></td></tr><tr><td>Elevate + Main Board Based Manual Door Hydraulic Lift Control Panel</td><td>EPM Hydra 8L</td><td>Up to 8 landing floors for Manual Door</td></tr></tbody></table>",
           "hasContent": true
         }
       ]
@@ -122,19 +122,19 @@
               "heading": "Salient Features",
               "items": [
                 "Perfect Integration of Control Logic and V3F Drive of elevator leads to compact structure, less wiring, high reliability, easy operation and cost-efficiency.",
-                "Double 32 - bit MCU combines the elevator control and motor control.",
+                "Double 32-bit MCU combines the elevator control and motor control.",
                 "Full featured LCD Keyboard tool for programming & Debugging.",
-                "Direct to Floor Landing Give jerk less starting & stopping.",
+                "Direct to Floor Landing Give jerkless starting & stopping.",
                 "Redundant safety design, Double safety protection for control & Drive.",
                 "All parallel input and output.",
-                "Support speed – 2.5 m/s.",
+                "Support speed 2.5 m/s.",
                 "Support one main contactor solution.",
                 "Support Geared (Asynchronous) and Gearless (Synchronous) motor.",
                 "Sin /Cos. Endat, ABZ Incremental Resolver Interface.",
                 "Support Auto Door & Manual Door Lift Logic.",
                 "Use PIM Module Hardware, lower loss in switch on & off and longer lifetime.",
                 "Creative zero speed torque compensation technology provides the elevators with good starting ride quality without installing weighing devices.",
-                "New PWM dead - zone compensation technology brings less energy loss.",
+                "New PWM dead-zone compensation technology brings less energy loss.",
                 "Dynamic PWM carrier modulation technology brings less motor noise."
               ]
             }
@@ -154,14 +154,14 @@
               "heading": "Salient Features",
               "items": [
                 "Perfect integration for Control Logic & V3F drive of elevator leads to compact structure, few wiring, high reliability, easy operation & cost efficiency.",
-                "Double 32 - bit MCU combines the elevator control and motor control",
-                "Direct to Floor Landing Give jerk less starting & stopping",
+                "Double 32-bit MCU combines the elevator control and motor control",
+                "Direct to Floor Landing Give jerkless starting & stopping",
                 "Full featured LCD Keyboard tool for programming & Debugging",
                 "Analog Weighing Device Interface.",
                 "Redundant safety design, Double safety protection for control & Drive.",
                 "CAN Bus communication for COP, LOP & other accessories make the whole system rugged, easy, fast & reliable.",
-                "Support speed – 4.0 m/s.",
-                "Support traditional Group control and DDS – Destination Dispatching System control & IOT.",
+                "Support speed 4.0 m/s.",
+                "Support traditional Group control and DDS Destination Dispatching System control & IOT.",
                 "LIFT Debugging from COP by connecting programming tool in COP Board.",
                 "Support one main Contactor solution.",
                 "Support Geared (Asynchronous) and Gearless (Synchronous) motor.",
@@ -170,12 +170,12 @@
                 "Use PIM module, lower loss in switch on and off and longer lifetime.",
                 "Creative zero speed torque compensation technology provides the elevators with good starting ride quality without installing weighing devices.",
                 "Close loop vector brings higher performance in control.",
-                "New PWM dead - zone compensation technology brings less energy loss.",
+                "New PWM dead-zone compensation technology brings less energy loss.",
                 "Dynamic PWM carrier modulation technology brings less motor noise."
               ]
             }
           ],
-          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>AS380 Based Integrated Control Panel</td><td>INTL-380-64L</td><td>64 Landing Full Collective</td><td><ul><li>Customized Control Panel Enclosure for MRL application.</li><li>Pre Door opening.</li><li>Group / Duplex Control.</li><li>Double Door Function.</li><li>DDS - Destination Dispatching System control.</li><li>IOT - Internet of Things for remote monitoring of LIFT.</li><li>Community Monitoring System.</li></ul></td></tr></tbody></table>",
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>AS380 Based Integrated Control Panel</td><td>INTL-380-64L</td><td>64 Landing Full Collective</td><td><ul><li>Customized Control Panel Enclosure for MRL application.</li><li>Pre Door opening.</li><li>Group / Duplex Control.</li><li>Double Door Function.</li><li>DDS Destination Dispatching System control.</li><li>IOT Internet of Things for remote monitoring of LIFT.</li><li>Community Monitoring System.</li></ul></td></tr></tbody></table>",
           "hasContent": true
         },
         {
@@ -190,14 +190,14 @@
               "heading": "Salient Features",
               "items": [
                 "Perfect integration for Control Logic & V3F drive of elevator leads to compact structure, few wiring, high reliability, easy operation & cost efficiency.",
-                "Double 32 - bit MCU combines the elevator control and motor control",
-                "Direct to Floor Landing Give jerk less starting & stopping",
+                "Double 32-bit MCU combines the elevator control and motor control",
+                "Direct to Floor Landing Give jerkless starting & stopping",
                 "Full featured LCD Keyboard tool for programming & Debugging",
                 "Analog Weighing Device Interface.",
                 "Redundant safety design, Double safety protection for control & Drive.",
                 "CAN Bus communication for COP, LOP & other accessories make the whole system rugged, easy, fast & reliable.",
-                "Support speed – 4.0 m/s.",
-                "Support traditional Group control and DDS – Destination Dispatching System control & IOT.",
+                "Support speed 4.0 m/s.",
+                "Support traditional Group control and DDS Destination Dispatching System control & IOT.",
                 "LIFT Debugging from COP by connecting programming tool in COP Board.",
                 "Support one main Contactor solution.",
                 "Support Geared (Asynchronous) and Gearless (Synchronous) motor.",
@@ -206,12 +206,12 @@
                 "Use PIM module, lower loss in switch on and off and longer lifetime.",
                 "Creative zero speed torque compensation technology provides the elevators with good starting ride quality without installing weighing devices.",
                 "Close loop vector brings higher performance in control.",
-                "New PWM dead - zone compensation technology brings less energy loss.",
+                "New PWM dead-zone compensation technology brings less energy loss.",
                 "Dynamic PWM carrier modulation technology brings less motor noise."
               ]
             }
           ],
-          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>AS380 Based Integrated Control Panel</td><td>INTL-380-64L</td><td>64 Landing Full Collective</td><td><ul><li>Customized Control Panel Enclosure for MRL application.</li><li>Pre Door opening.</li><li>Group / Duplex Control.</li><li>Double Door Function.</li><li>DDS - Destination Dispatching System control.</li><li>IOT - Internet of Things for remote monitoring of LIFT.</li><li>Community Monitoring System.</li></ul></td></tr></tbody></table>",
+          "specHtml": "<table><thead><tr><th>Application</th><th>Model</th><th>Description</th><th>Options</th></tr></thead><tbody><tr><td>AS380 Based Integrated Control Panel</td><td>INTL-380-64L</td><td>64 Landing Full Collective</td><td><ul><li>Customized Control Panel Enclosure for MRL application.</li><li>Pre Door opening.</li><li>Group / Duplex Control.</li><li>Double Door Function.</li><li>DDS Destination Dispatching System control.</li><li>IOT Internet of Things for remote monitoring of LIFT.</li><li>Community Monitoring System.</li></ul></td></tr></tbody></table>",
           "hasContent": true
         }
       ]
@@ -221,7 +221,7 @@
       "products": [
         {
           "slug": "elevator-iot",
-          "name": "Elevator - IOT",
+          "name": "Elevator IOT",
           "wpId": "3791",
           "images": [
             "/images/products/catalog/elevator-iot01-1.jpg"
@@ -269,7 +269,7 @@
       "products": [
         {
           "slug": "lift-master-door-operator-controller",
-          "name": "Lift Master - Door Operator Controller",
+          "name": "Lift Master Door Operator Controller",
           "wpId": "3526",
           "images": [
             "/images/products/catalog/lift-master-door-operator-controller01-1.jpg"
@@ -287,7 +287,7 @@
               ]
             }
           ],
-          "specHtml": "<table><thead><tr><th>Model</th><th>Description</th><th>Application</th></tr></thead><tbody><tr><td>LMP66 – TINY</td><td>66 Watt BLDC Motor</td><td>Suitable for Small Opening/ Light Weight Doors</td></tr><tr><td>LMP110</td><td>110 Watt BLDC Motor</td><td>Suitable for Medium – Large Opening / Medium – Heavy Weight Doors</td></tr></tbody></table>",
+          "specHtml": "<table><thead><tr><th>Model</th><th>Description</th><th>Application</th></tr></thead><tbody><tr><td>LMP66 TINY</td><td>66 Watt BLDC Motor</td><td>Suitable for Small Opening/ Light Weight Doors</td></tr><tr><td>LMP110</td><td>110 Watt BLDC Motor</td><td>Suitable for Medium Large Opening / Medium Heavy Weight Doors</td></tr></tbody></table>",
           "hasContent": true
         }
       ]
@@ -315,7 +315,7 @@
                 "Wider Belt size for giving higher operating torque.",
                 "Hard Anodized Aluminium Track for quiet operation.",
                 "Dynamically Auto Learning for variable door weight & size.",
-                "Spped control of Skate–Coupler gives noiseless opening / closing.",
+                "Spped control of Skate\u2013Coupler gives noiseless opening / closing.",
                 "Dedicated VVVF gives flexibility of programmable parameters to cater user choice of door operation.",
                 "Continuously monitors operating Torque to give safe operation even in failure of photosensor.",
                 "Wide input power supply range gives trouble-free operation in power fluctuation.",
@@ -350,7 +350,7 @@
                 "Wider Belt size for giving higher operating torque.",
                 "Hard Anodized Aluminium Track for quiet operation.",
                 "Dynamically Auto Learning for variable door weight & size.",
-                "Spped control of Skate–Coupler gives noiseless opening / closing.",
+                "Spped control of Skate\u2013Coupler gives noiseless opening / closing.",
                 "Dedicated VVVF gives flexibility of programmable parameters to cater user choice of door operation.",
                 "Continuously monitors operating Torque to give safe operation even in failure of photosensor.",
                 "Wide input power supply range gives trouble-free operation in power fluctuation.",
@@ -384,7 +384,7 @@
                 "Wider Belt size for giving higher operating torque.",
                 "Hard Anodized Aluminium Track for quiet operation.",
                 "Dynamically Auto Learning for variable door weight & size.",
-                "Spped control of Skate–Coupler gives noiseless opening / closing.",
+                "Spped control of Skate\u2013Coupler gives noiseless opening / closing.",
                 "Dedicated VVVF gives flexibility of programmable parameters to cater user choice of door operation.",
                 "Continuously monitors operating Torque to give safe operation even in failure of photosensor.",
                 "Wide input power supply range gives trouble-free operation in power fluctuation.",
@@ -707,7 +707,7 @@
           ],
           "featureGroups": [
             {
-              "heading": "C-TOUCH - Salient Features",
+              "heading": "C-TOUCH Salient Features",
               "items": [
                 "Feel of Touch with Low Cost",
                 "Touch Sensing Principal with built-in Digital Signal Processing.",
@@ -724,11 +724,11 @@
               ]
             },
             {
-              "heading": "E-SENSE - Salient Features",
+              "heading": "E-SENSE Salient Features",
               "items": [
                 "Customized Android Application with wireless connectivity.",
                 "User Friendly software menu for Designing COP Appearance.",
-                "Suits to any size Android Tablet IE 7”, 8”, 10”, 14”.",
+                "Suits to any size Android Tablet IE 7\u201d, 8\u201d, 10\u201d, 14\u201d.",
                 "Elegant Looking Button Area with customized Button Appearance.",
                 "Short Circuit Proof o/p for recognized Button Press.",
                 "Isolated Open Collector Interface for Call Registration Lights.",
@@ -870,7 +870,7 @@
                 "Mains Isolated supply for Field Interlocking, Brake & CAM using Isolation control transformer.",
                 "Line chock to protect VVVF.",
                 "Natural cooling OR Forced cooling to prevent heating inside the control room.",
-                "Stable Power Supply - SMPS with EMI / RFI noise filter.",
+                "Stable Power Supply SMPS with EMI / RFI noise filter.",
                 "STOP, Auto / Inspection command section to operate LIFT from control panel."
               ],
               "note": "Download Brochure"

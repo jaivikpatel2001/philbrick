@@ -51,7 +51,7 @@ export const HISTORY_CHAPTERS: {
   {
     period: "1992",
     title: "The first instruments",
-    body: "Philbrick started with low cost high performing Digital Temperature Indicators, Temperature Controllers and scanners.",
+    body: "Philbrick started with low-cost, high-performing Digital Temperature Indicators, Temperature Controllers and scanners.",
   },
   {
     period: "1994",
@@ -61,7 +61,7 @@ export const HISTORY_CHAPTERS: {
   {
     period: "1997",
     title: "Into control panels, and into elevators",
-    body: "With a remarkable success story OEM demanded the complete solution from Philbrick, which led the company to enter the market of Industrial control panels, and Philbrick started manufacturing Automation Control Panels in 1997. Having the brand image as a quality manufacturer, Elevator Manufacturers approached us for a solution to the conventional relay logic based hardwired control panel for passenger lift. Philbrick had started the first Microcontroller based elevator controller panel in Ahmedabad in 1997.",
+    body: "With a remarkable success story OEM demanded the complete solution from Philbrick, which led the company to enter the market of Industrial control panels, and Philbrick started manufacturing Automation Control Panels in 1997. Having the brand image as a quality manufacturer, Elevator Manufacturers approached us for a solution to the conventional relay logic based hardwired control panel for passenger lift. Philbrick had started the first Microcontroller-based elevator controller panel in Ahmedabad in 1997.",
   },
   {
     period: "1997 to 2005",
@@ -81,7 +81,7 @@ export const HISTORY_CHAPTERS: {
   {
     period: "2009",
     title: "A new campus, and Synergy",
-    body: "As the company was growing with good acceleration, to strengthen the infrastructure and manufacturing capabilities Philbrick shifted to a new well organised campus having 10,000 sq feet of working area with latest manufacturing facilities and campus wide LAN connectivity in May 2009. The new infrastructure came with a boost: as a first result Philbrick started manufacturing “Synergy” brand Automatic Door Operator, commencing with the “Ultima” series.",
+    body: "As the company was growing with good acceleration, to strengthen the infrastructure and manufacturing capabilities Philbrick shifted to a new well-organized campus having 10,000 sq feet of working area with latest manufacturing facilities and campus wide LAN connectivity in May 2009. The new infrastructure came with a boost: as a first result Philbrick started manufacturing “Synergy” brand Automatic Door Operator, commencing with the “Ultima” series.",
   },
   {
     period: "2012",
@@ -101,7 +101,7 @@ export const HISTORY_CHAPTERS: {
   {
     period: "Today",
     title: "High tech R&D and manufacturing",
-    body: "Today Philbrick is an organization having high tech equipped R&D manufacturing infrastructure backboned by a Highly Qualified Engineers' team, skilled technicians and ERP. Philbrick will endeavour to improve every aspect of daily life for people and bring new thoughts and new life to society.",
+    body: "Today Philbrick is an organization having high-tech equipped R&D manufacturing infrastructure backboned by a Highly Qualified Engineers' team, skilled technicians and ERP. Philbrick will endeavour to improve every aspect of daily life for people and bring new thoughts and new life to society.",
   },
 ];
 
@@ -152,7 +152,7 @@ export const INFRASTRUCTURE: Feature[] = [
     iconName: "FiTool",
     title: "In-house manufacturing",
     description:
-      "A well organised campus with 10,000+ sq feet of working area with latest manufacturing facilities and LAN connectivity, doubled in 2019 to meet growing market demand.",
+      "A well-organized campus with 10,000+ sq feet of working area with latest manufacturing facilities and LAN connectivity, doubled in 2019 to meet growing market demand.",
   },
   {
     iconName: "FiCpu",
@@ -164,7 +164,7 @@ export const INFRASTRUCTURE: Feature[] = [
     iconName: "FiCheckCircle",
     title: "Quality control",
     description:
-      "Strict quality checks, records and test certificates as per ISO certification. Each part undergoes stage wise and final inspection as per Q.A. plan and tested as per Indian standard specification.",
+      "Strict quality checks, records and test certificates as per ISO certification. Each part undergoes stage-wise and final inspection as per Q.A. plan and tested as per Indian standard specification.",
   },
   {
     iconName: "FiPackage",
@@ -192,7 +192,7 @@ export const TIMELINE: TimelineItem[] = [
     year: "1992",
     title: "Founded in Ahmedabad",
     description:
-      "Philbrick started with low cost high performing Digital Temperature Indicators, Temperature Controllers and scanners.",
+      "Philbrick started with low-cost, high-performing Digital Temperature Indicators, Temperature Controllers and scanners.",
     milestone: true,
   },
   {
@@ -203,9 +203,9 @@ export const TIMELINE: TimelineItem[] = [
   },
   {
     year: "1997",
-    title: "First Microcontroller based Elevator Controller",
+    title: "First Microcontroller-based Elevator Controller",
     description:
-      "Philbrick started manufacturing Automation Control Panels and introduced the first Microcontroller based elevator controller panel in Ahmedabad.",
+      "Philbrick started manufacturing Automation Control Panels and introduced the first Microcontroller-based elevator controller panel in Ahmedabad.",
     milestone: true,
   },
   {
@@ -224,7 +224,7 @@ export const TIMELINE: TimelineItem[] = [
     year: "2009",
     title: "New manufacturing campus",
     description:
-      "Shifted to a new well organised campus having 10,000 sq feet of working area with latest manufacturing facilities and LAN connectivity. Started manufacturing \"Synergy\" brand Automatic Door Operator with the \"Ultima\" series.",
+      "Shifted to a new well-organized campus having 10,000 sq feet of working area with latest manufacturing facilities and LAN connectivity. Started manufacturing \"Synergy\" brand Automatic Door Operator with the \"Ultima\" series.",
     milestone: true,
   },
   {
@@ -256,7 +256,7 @@ export const TIMELINE: TimelineItem[] = [
     year: "Today",
     title: "High tech R&D and manufacturing",
     description:
-      "Philbrick is an organization having high tech equipped R&D manufacturing infrastructure backboned by Highly Qualified Engineers' team, skilled technicians and ERP, serving customers across India and export markets.",
+      "Philbrick is an organization having high-tech equipped R&D manufacturing infrastructure backboned by Highly Qualified Engineers' team, skilled technicians and ERP, serving customers across India and export markets.",
     milestone: true,
   },
 ];
@@ -266,7 +266,7 @@ export const QUALITY_POLICY = [
   "Philbrick Technologies (India) Pvt. Ltd. products and services constantly meet or exceed customer's expectation and implied needs together with safety at customer's premises. Each produced part undergoes strict quality inspection as per the quality plan and applicable Standards.",
   "Philbrick Technologies (India) Pvt. Ltd. prepares and submits the quality plan for order execution and maintains the quality record as per ISO certification. The procured material is 100% chemically and physically tested under strict quality supervision.",
   "Strict quality checks, records and test certificates ensure the final finished product is of high quality without any manufacturing defects. Philbrick Technologies (India) Pvt. Ltd. therefore always guarantees its products.",
-  "The quality assurance plan approved by all leading engineering consultants and industrial giants is strictly followed with upkeep of certifications till the dispatch of the parts. Each part undergoes stage wise and final inspection as per Q.A. plan and tested as per Indian standard specification.",
+  "The quality assurance plan approved by all leading engineering consultants and industrial giants is strictly followed with upkeep of certifications till the dispatch of the parts. Each part undergoes stage-wise and final inspection as per Q.A. plan and tested as per Indian standard specification.",
 ];
 
 /* Career content — from the WordPress Career page (page ID 3435). */

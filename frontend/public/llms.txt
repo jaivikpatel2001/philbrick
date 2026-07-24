@@ -24,17 +24,17 @@ China and Taiwan.
 
 ## Pages
 
-- [Home](https://www.philbricktech.com/): interactive 3D elevator experience and company overview
-- [About Us](https://www.philbricktech.com/about): history since 1992, in-house infrastructure, leadership
-- [Products](https://www.philbricktech.com/products): the full elevator-component range
-- [Elevator Control Panel](https://www.philbricktech.com/products/elevator-control-panel)
-- [Integrated Control Panel](https://www.philbricktech.com/products/integrated-control-panel)
-- [Automatic Rescue Device (ARD)](https://www.philbricktech.com/products/ard)
-- [Elevator IoT](https://www.philbricktech.com/products/elevator-iot)
-- [Synergy Auto Door](https://www.philbricktech.com/products/synergy-auto-door)
-- [Elevator Display](https://www.philbricktech.com/products/elevator-display)
-- [COP / LOP](https://www.philbricktech.com/products/cop-lop)
-- [Contact](https://www.philbricktech.com/contact): product, supply and modernisation enquiries
+- [Home](https://philbrickindia.com/): interactive 3D elevator experience and company overview
+- [About Us](https://philbrickindia.com/about): history since 1992, in-house infrastructure, leadership
+- [Products](https://philbrickindia.com/products): the full elevator-component range
+- [Elevator Control Panel](https://philbrickindia.com/products/elevator-control-panel)
+- [Integrated Control Panel](https://philbrickindia.com/products/integrated-control-panel)
+- [Automatic Rescue Device (ARD)](https://philbrickindia.com/products/ard)
+- [Elevator IoT](https://philbrickindia.com/products/elevator-iot)
+- [Synergy Auto Door](https://philbrickindia.com/products/synergy-auto-door)
+- [Elevator Display](https://philbrickindia.com/products/elevator-display)
+- [COP / LOP](https://philbrickindia.com/products/cop-lop)
+- [Contact](https://philbrickindia.com/contact): product, supply and modernisation enquiries
 
 ## Facts
 

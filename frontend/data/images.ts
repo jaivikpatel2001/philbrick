@@ -19,10 +19,7 @@ export const HERO = {
   products: "/images/products/products-hero.png",
   about: "/images/about/about-hero.png",
   visionMission: "/images/vision-mission/vision-mission-hero.png",
-  milestone: "/images/milestone/milestone-hero.png",
-  infrastructure: "/images/infrastructure/infrastructure-hero.png",
   network: "/images/network/network-hero.png",
-  newsEvents: "/images/news-events/news-events-hero.png",
   contact: "/images/contact/contact-hero.png",
 } as const;
 
@@ -30,7 +27,6 @@ export const HERO = {
 export const SECTION = {
   whoWeAre: "/images/home/who-we-are.png", // home "01 Who we are"
   aboutStory: "/images/about/about-story.png", // About "Who we are"
-  infrastructureIntro: "/images/infrastructure/infrastructure-intro.png", // Infrastructure "Under one roof"
 } as const;
 
 /* ----- Applications / industries (3:4 portrait cards) ----------------- */
@@ -42,16 +38,6 @@ export const INDUSTRY_IMG = {
   industrial: "/images/home/application-industrial.png",
   institutional: "/images/home/application-institutional.png",
   transit: "/images/home/application-transit.png",
-} as const;
-
-/* ----- News & Events (16:9, mock newsroom) ---------------------------- */
-export const NEWS_IMG = {
-  serialCanBus: "/images/news-events/news-serial-can-bus.png",
-  expo: "/images/news-events/news-expo.png",
-  training: "/images/news-events/news-training.png",
-  facilityUpgrade: "/images/news-events/news-facility-upgrade.png",
-  ardSafety: "/images/news-events/news-ard-safety.png",
-  network: "/images/news-events/news-network.png",
 } as const;
 
 /* ----- Product category covers (keyed by category slug) ---------------
@@ -81,8 +67,8 @@ export const CTA_BAND = "/images/shared/cta-band.png";
    Kept only so the Service type's `heroImage` resolves to a local asset; these
    are not shown in the UI. Mapped to topically-adjacent local photography. */
 export const SERVICE_IMG = {
-  installation: "/images/infrastructure/infrastructure-hero.png",
-  maintenance: "/images/news-events/news-training.png",
+  installation: "/images/about/about-hero.png",
+  maintenance: "/images/products/products-hero.png",
   modernization: "/images/about/about-story.png",
   amc: "/images/products/ard/ard.png",
 } as const;

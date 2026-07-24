@@ -46,15 +46,11 @@ const MAP = [
   ["hero-products", "products/products-hero", "wide"],
   ["hero-about", "about/about-hero", "wide"],
   ["hero-vision-mission", "vision-mission/vision-mission-hero", "wide"],
-  ["hero-milestone", "milestone/milestone-hero", "wide"],
-  ["hero-infrastructure", "infrastructure/infrastructure-hero", "wide"],
   ["hero-network", "network/network-hero", "wide"],
-  ["hero-news-events", "news-events/news-events-hero", "wide"],
   ["hero-contact", "contact/contact-hero", "wide"],
   // ---- Section media (4:5) ----
   ["section-who-we-are", "home/who-we-are", "section"],
   ["section-about-story", "about/about-story", "section"],
-  ["section-infrastructure-intro", "infrastructure/infrastructure-intro", "section"],
   // ---- Applications (3:4) ----
   ["application-residential", "home/application-residential", "application"],
   ["application-commercial", "home/application-commercial", "application"],
@@ -100,13 +96,6 @@ const MAP = [
   ["product-fa-250-mp3", "products/voice-announcing-systems/fa-250-mp3", "product"],
   ["product-close-door-announcer", "products/voice-announcing-systems/close-door-announcer", "product"],
   ["product-elevator-gong", "products/voice-announcing-systems/elevator-gong", "product"],
-  // ---- News & Events (16:9, mock) ----
-  ["news-serial-can-bus", "news-events/news-serial-can-bus", "news"],
-  ["news-expo", "news-events/news-expo", "news"],
-  ["news-training", "news-events/news-training", "news"],
-  ["news-facility-upgrade", "news-events/news-facility-upgrade", "news"],
-  ["news-ard-safety", "news-events/news-ard-safety", "news"],
-  ["news-network", "news-events/news-network", "news"],
   // ---- CTA band (21:9, shared) ----
   ["cta-band", "shared/cta-band", "wide"],
 ];
