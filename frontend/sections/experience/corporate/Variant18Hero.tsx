@@ -51,7 +51,7 @@ export function Variant18Hero() {
           fill
           sizes="100vw"
           priority
-          quality={90}
+          quality={82}
           className={`${styles.bg16Img} ${styles.bg16Day}`}
         />
         <Image
@@ -59,7 +59,8 @@ export function Variant18Hero() {
           alt=""
           fill
           sizes="100vw"
-          quality={90}
+          priority
+          quality={82}
           className={`${styles.bg16Img} ${styles.bg16Night}`}
         />
       </div>

@@ -137,7 +137,6 @@ export function TawkTo() {
         id="tawk-embed"
         src={TAWK_SRC}
         strategy="afterInteractive"
-        crossOrigin="anonymous"
       />
     </>
   );

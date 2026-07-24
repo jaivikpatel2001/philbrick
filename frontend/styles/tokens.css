@@ -186,7 +186,7 @@
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.66);
-  --text-muted: rgba(255, 255, 255, 0.46);
+  --text-muted: rgba(255, 255, 255, 0.65);
   --text-faint: rgba(255, 255, 255, 0.3);
   --text-on-accent: #041019;
 
@@ -274,7 +274,7 @@
 
   --text-primary: #0b1017;
   --text-secondary: #45505c;
-  --text-muted: #6a7581;
+  --text-muted: #525e6b;
   --text-faint: #9aa4af;
   --text-on-accent: #ffffff;
 

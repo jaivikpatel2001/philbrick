@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
     loader: "custom",
     loaderFile: "./lib/imageLoader.ts",
   },
+  experimental: {
+    optimizePackageImports: ["react-icons", "framer-motion", "gsap", "swiper"],
+  },
 };
 
 export default nextConfig;
