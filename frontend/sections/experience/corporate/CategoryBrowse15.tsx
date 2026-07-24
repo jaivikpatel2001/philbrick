@@ -43,7 +43,7 @@ export function CategoryBrowse15() {
                       src={p.image}
                       alt={p.component.name}
                       fill
-                      sizes="(max-width: 640px) 92vw, (max-width: 1100px) 44vw, 22vw"
+                      sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 280px"
                       className={styles.catImg15}
                     />
                   </span>

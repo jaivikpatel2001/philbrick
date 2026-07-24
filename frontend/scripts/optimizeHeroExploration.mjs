@@ -28,7 +28,7 @@ const MANIFEST = path.join(ROOT, "lib", "imageManifest.json");
 /* Component cutouts render ≤ ~300px wide (mobile) / 220px (desktop card) at up
    to 2x DPR; the spine renders much larger. One ladder covers both. Quality 80
    matches the 3D_Elevetor renders (graphics look better at 80 than photo 74). */
-const WIDTHS = [384, 640, 960, 1280];
+const WIDTHS = [192, 256, 384, 640, 960, 1280];
 const QUALITY = 80;
 
 /* FULL-BLEED PLATES need their own ladder. The hero sky and building plates in

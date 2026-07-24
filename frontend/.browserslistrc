@@ -1,0 +1,6 @@
+# Modern browsers list to eliminate unnecessary polyfills (Array.prototype.at, Object.hasOwn, etc.)
+chrome >= 90
+firefox >= 90
+safari >= 15
+edge >= 90
+not dead
