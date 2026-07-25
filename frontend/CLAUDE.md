@@ -218,8 +218,15 @@ All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, 
 - **Spacing & layout:** the spacing scale + `--section-y`; containers
   (`.container--wide/--narrow/--prose`); one max-width system; consistent section padding.
 - **Motion:** smooth, premium, intentional. Eases `--ease-out`/`--ease-in-out`;
-  GSAP ScrollTrigger for scroll, IntersectionObserver `[data-reveal]` for entrances.
-  Avoid flashy/random motion and excessive parallax. Respect `prefers-reduced-motion`.
+  CSS transitions/keyframes for scroll-linked effects, IntersectionObserver
+  `[data-reveal]` for entrances, Framer Motion for small interaction animations.
+  **GSAP + ScrollTrigger were removed on 2026-07-25** — nothing ever registered a
+  trigger, so ~60 KB gzip shipped on every page purely to host a rAF callback
+  that Lenis provides itself (`autoRaf`). Do not reintroduce GSAP for a single
+  effect; reach for CSS or Framer first, and if a scroll-scrubbed timeline is
+  genuinely required, add it behind a `next/dynamic` import so it stays off every
+  other route. Avoid flashy/random motion and excessive parallax. Respect
+  `prefers-reduced-motion`.
 - **Components:** consistent across hero, sections and footer — reuse `components/`
   and `sections/`; no section designed in isolation.
 
@@ -231,8 +238,9 @@ All of these are encoded as tokens in `styles/tokens.css` — **use the tokens, 
 - **Custom CSS only.** CSS Modules per file + design tokens. **No Tailwind, no UI kit.**
 - **Reusable design patterns.** Prefer extending existing components/tokens over new ones.
 - **Accessibility.** Semantic HTML, focus-visible, `aria-*`, skip link, reduced-motion fallbacks.
-- **Performance.** `next/image`; code-split heavy client modules (Three.js is
-  client-only); dispose GPU resources; cap DPR; lazy reveals.
+- **Performance.** `next/image`; code-split heavy client modules with
+  `next/dynamic`; lazy reveals; third-party embeds load with
+  `<Script strategy="lazyOnload">` so they never sit in the critical path.
 
 ## Hero (no more Three.js — 2026-07-23)
 

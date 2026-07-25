@@ -162,6 +162,35 @@ p {
   max-width: var(--container-prose);
 }
 
+/* -----------------------------------------------------------------------------
+   SECTION-LEVEL HORIZONTAL CLIPPING
+
+   Every top-level section clips its own horizontal overflow, so a scroll-driven
+   or entrance animation that travels sideways (marquees, slide-in reveals,
+   off-axis decorative art, .bleed breakouts) is bounded by the SECTION it
+   belongs to instead of escaping past the viewport edge and creating a
+   page-wide horizontal scrollbar.
+
+   ⚠ `clip`, NOT `hidden` — this distinction matters and is not cosmetic.
+   `overflow-x: hidden` cannot coexist with `overflow-y: visible`: the spec makes
+   the browser compute the other axis to `auto`, which turns the section into a
+   scroll container. Any `position: sticky` descendant then sticks to THAT box
+   instead of the viewport, which silently breaks it. Two such elements exist —
+   `.media` in sections/products/ProductDetail.module.css (the sticky product
+   gallery, on the pages released 2026-07-25) and `.stage13` in
+   sections/experience/corporate/corporate.module.css. `overflow: clip` clips
+   without establishing a scroll container, so sticky keeps working.
+
+   This matches the page-level guard already on `body` (`overflow-x: clip`
+   above). Safari < 16 does not support `overflow: clip` and simply drops the
+   declaration, falling back to today's unclipped behaviour — a graceful
+   degradation, and far preferable to shipping broken sticky positioning.
+   -------------------------------------------------------------------------- */
+.section,
+main>section {
+  overflow-x: clip;
+}
+
 .section {
   position: relative;
   padding-block: var(--section-y);

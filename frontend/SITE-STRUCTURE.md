@@ -16,13 +16,13 @@ Release status is the **production** flag from `config/pageReleases.ts`
 which is what makes local review and the content audit possible.
 
 ```
-/                                          ✓  Home — Three.js elevator hero + page body
-├─ /about                                  –  About Us (story · Activity · History · values · leadership)
-├─ /vision-mission                         –  Vision & Mission
+/                                          ✓  Home — single-scene photographic hero + page body
+├─ /about                                  ✓  About Us (story · Activity · History · values · leadership)
+├─ /vision-mission                         ✓  Vision & Mission
 ├─ /network                                –  Network
-├─ /products                               –  Products index (14 categories)
-│  ├─ /products/<category>                 –  14 category pages
-│  └─ /products/<category>/<product>       –  24 nested product pages
+├─ /products                               ✓  Products index (14 categories)
+│  ├─ /products/<category>                 ✓  14 category pages (all released 2026-07-25)
+│  └─ /products/<category>/<product>       ✓  24 nested product pages (all released 2026-07-25)
 ├─ /contact                                –  Contact Us (channels + enquiry form + map + FAQ)
 ├─ /career                                 –  Career
 ├─ /quality-policy                         –  Quality Policy
@@ -35,13 +35,18 @@ System routes:  /sitemap.xml   /robots.txt   /icon.png   /apple-icon.png   /_not
 The homepage hero is `Variant18Hero` (single-photo scene). The client-review
 `/variant1…18` A/B pages were removed 2026-07-23.
 
-**Counts:** 13 static real-page entries + 38 product routes (14 categories + 24
-products) + 6 news detail routes = **57 entries in the release map**; `next
-build` prerenders **65 pages** including the system routes.
+**Counts:** 10 static entries + 38 product routes (14 categories + 24 products)
+= **48 entries in the release map**; `next build` prerenders **56 pages**
+including the system routes. (The 6 news detail routes and the 17 variant pages
+counted here previously were removed on 2026-07-23/24.)
 
-**Current production release:** only `/` and the 17 variant pages are live.
-Everything else renders the animated **Coming Soon** screen and is excluded from
-`sitemap.xml`. Flip a flag in `config/pageReleases.ts` to release a page.
+**Current production release (2026-07-25):** live are `/`, `/about`,
+`/vision-mission`, `/products` and the **entire product catalogue** — all 14
+categories and all 24 nested products. Still Coming Soon: `/network`,
+`/contact`, `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`.
+Gated pages render the animated **Coming Soon** screen and are excluded from
+`sitemap.xml`. Flip a flag in `config/pageReleases.ts` to release a page — a
+product route also needs its path in `RELEASED_PRODUCT_ROUTES` (default-deny).
 
 ---
 
@@ -83,7 +88,7 @@ Defined once in `app/layout.tsx`:
 | **Footer** (`Footer.tsx`) | Wordmark · address · labelled phone list · categorised inboxes · 4 link groups · GST/CIN/IEC · socials · agency credit. |
 | **Floating actions** (`components/ui/FloatingActions.tsx`) | Bottom-right pair: scroll to top (appears past 60% of a viewport) and a draggable chat button. |
 | **Live chat** (`components/providers/TawkTo.tsx`) | Tawk.to, the client's own property, on every page. Tawk's own launcher is hidden so the floating button is the only chat control. |
-| **Providers** | `ThemeProvider` (light/dark), `SmoothScroll` (Lenis + GSAP ticker), `Preloader`, `RevealObserver`. |
+| **Providers** | `ThemeProvider` (light/dark), `SmoothScroll` (Lenis, `autoRaf`), `Preloader`, `RevealObserver`. |
 
 **Primary nav:** Home · About ▾ · Products ▾ · Infrastructure · Network ·
 News & Events · Contact Us
