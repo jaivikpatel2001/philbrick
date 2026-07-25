@@ -6,6 +6,120 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — PageSpeed follow-up: responsive-ladder gaps + WebP encoder effort
+
+Acting on the PageSpeed Insights report (`insight.pdf`, desktop 92 / mobile 78).
+Its two scored insights were **"Improve image delivery — Est savings 383 KiB"**
+and **"Render-blocking requests — Est savings 120 ms"**. Only images were
+addressed; the render-blocking item is a trade-off, see below.
+
+### The real bug: next/image was never offered the right widths
+
+The manifest ladders on disk were fine. The problem was that `next/image` only
+ever asks the loader for widths in its `imageSizes` / `deviceSizes` ladders, and
+the defaults have gaps that this design lands squarely in:
+
+| Component | Slot | Was served | Why |
+|---|---|---|---|
+| `IndustriesShowcase` cards | 340 px | **900 px** file | see below |
+| `CategoryBrowse15` cards | 280 px | 384 px file | nothing between 256 and 384 |
+| Full-bleed hero | 1350 px | 1920 px file | `deviceSizes` jumps 1200 → 1920 |
+
+The applications carousel was the expensive one and the least obvious. Its
+`sizes="(max-width: 640px) 78vw, 340px"` is **correct** — `.card` really is
+`flex: 0 0 340px` above 640px and `78vw` below. But when `sizes` contains any
+`vw` unit, next/image discards every candidate narrower than
+`min(vw) × deviceSizes[0]` = `0.78 × 640` = 499 px. That left 640w as the
+smallest candidate, which the loader then mapped **up** to the 900 px file — for
+a box 340 px wide. Seven cards, ~110 KB of waste each.
+
+Fixed in `next.config.ts` by filling the ladder gaps. The 560 step already
+existed in the manifest and on disk; nothing needed regenerating for it:
+
+```ts
+imageSizes:  [16, 32, 48, 64, 96, 128, 256, 320, 384, 560],
+deviceSizes: [640, 750, 828, 1080, 1200, 1536, 1920, 2048, 3840],
+```
+
+### WebP encoder effort (free, zero visual change)
+
+`scripts/optimizeHeroExploration.mjs` used sharp's default `effort: 4`. Raising
+it to 6 makes the encoder search harder for a smaller encoding at the **same**
+quality target — measured on `parts/elevator-door-384`: 58.3 KB → 53.6 KB (-8%)
+with no visual change. A 320 step was added to the parts ladder to match the new
+`imageSizes`.
+
+`FULL_BLEED_QUALITY` 88 → 84 for the hero plates, which were the two heaviest
+assets on the site. Verified before committing rather than assumed: a 1:1 crop
+of the hardest region (night facade — thousands of small bright windows on dark
+sky, plus the baked headline type) is indistinguishable at 84. 80 was rejected —
+banding starts in the sky gradient, which is why this constant is separate from
+`QUALITY` in the first place.
+
+### Result — homepage images at 1350 px, DPR 1 (what Lighthouse measures)
+
+| | Before | After |
+|---|---|---|
+| hero-scene-night | 317.2 KB (1920) | **179.7 KB** (1536) |
+| hero-scene-day | 227.8 KB (1920) | **123.4 KB** (1536) |
+| 7 × application cards | 770.6 KB (900) | **341.3 KB** (560) |
+| 9 × component cards | 337.0 KB (384) | **252.3 KB** (320) |
+| **Total image payload** | **~1924 KB** | **1122 KB (-42%)** |
+
+Confirmed in a real browser at 1270 px (not just simulated): applications resolve
+to `-560`, hero to `-1536`, parts to `-320`, **0 broken images**, 1076 KB of
+image bytes actually fetched.
+
+### Rejected after measuring — logo WebP
+
+PageSpeed flagged `/brand/logo.png` twice: "use a modern image format" (10.6 KB)
+and "larger than it needs to be (536x120) for its displayed dimensions (176x39)"
+(18.8 KB). A brand WebP ladder was built, measured, and **reverted**, because
+the advice is wrong for this asset — the logo is flat two-colour artwork, which
+an indexed PNG encodes better than lossy WebP at every size:
+
+| width | lossy q86 | lossless | palette PNG |
+|---|---|---|---|
+| 176 | 7.9 KB | 11.0 KB | **5.0 KB** |
+| 352 | 20.4 KB | 30.9 KB | **12.7 KB** |
+| 536 | 29.2 KB | **19.6 KB** | 20.9 KB |
+
+Shipping it would have made the served file 29.2 KB against today's 22.8 KB — a
+regression. The right-sizing half of the finding is real (~10 KB) but needs the
+loader to support per-entry output formats, since `lib/imageLoader.ts` hardcodes
+`.webp`; not worth that complexity for 10 KB on a 1.1 MB page. `scripts/
+optimizeBrand.mjs` and the generated variants were deleted; the manifest is back
+to 148 entries.
+
+### Also fixed: `scripts/serve.mjs` stale-cache footgun
+
+Its compressed-body cache was keyed on file path alone, so a `next build` while
+the server was running kept serving the **previous** HTML indefinitely. This bit
+during this very task — the applications cards appeared unchanged after the fix
+had actually landed. Key now includes mtime + size.
+
+### Not done, and why
+
+- **Render-blocking CSS (120 ms)** — three chunks, 27.2 KB transferred. The fix
+  is `experimental.inlineCss`, which moves ~132 KB raw into every HTML document
+  and forfeits cross-page caching. Worth it for a single-page bounce, bad for
+  multi-page browsing. Left as a deliberate trade-off, not an oversight.
+- **Legacy JavaScript (14 KB)** — Next's own polyfill chunk; not removable via
+  `.browserslistrc` alone in Next 16.
+- **Accessibility 97 — contrast failures** on `IndustriesShowcase` `__num`,
+  `__name`, `__tagline`. This is a real defect, but fixing it means changing
+  brand colours, which is explicitly out of scope. Flagged for a design decision.
+- **`object-fit: contain` letterboxing** — PageSpeed compares against *rendered
+  content* size, so a tall narrow part like `cop-lop-display` reports 76×171
+  inside a 280 px box. `sizes` describes the element, not the contained image, so
+  this cannot be expressed in markup. Residual, small.
+
+**Files affected:** `next.config.ts`, `scripts/optimizeHeroExploration.mjs`,
+`scripts/serve.mjs`, `lib/imageManifest.json`,
+`public/images/home/hero-exploration/**` (58 WebP variants regenerated), `DONE.md`.
+
+---
+
 ## 2026-07-25 — Release the full product catalogue + section-level horizontal clipping
 
 **1. `/products` and every sub-page released to production.**

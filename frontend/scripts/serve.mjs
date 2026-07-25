@@ -93,12 +93,15 @@ function cachePolicy(urlPath, ext) {
   return "public, max-age=0, must-revalidate";
 }
 
-/** Compressed bodies keyed by `file|encoding`; the export is immutable at run
- *  time, so each variant is built at most once per process. */
+/** Compressed bodies keyed by `file|encoding|mtime|size`. The mtime+size in the
+ *  key is what makes a rebuild visible: keying on the path alone meant a
+ *  `next build` while the server was running kept serving the PREVIOUS
+ *  compressed HTML forever, which is a genuinely confusing way to lose an hour
+ *  when you are checking whether a change landed. */
 const cache = new Map();
 
-function encodeBody(file, encoding, body) {
-  const key = `${file}|${encoding}`;
+function encodeBody(file, encoding, body, stamp) {
+  const key = `${file}|${encoding}|${stamp}`;
   const hit = cache.get(key);
   if (hit) return hit;
   const out =
@@ -164,7 +167,8 @@ const server = createServer(async (req, res) => {
 
     const encoding = negotiate(req.headers["accept-encoding"], ext, body.length);
     if (encoding) {
-      const encoded = encodeBody(file, encoding, body);
+      const st = await stat(file);
+      const encoded = encodeBody(file, encoding, body, `${st.mtimeMs}|${st.size}`);
       res.setHeader("Content-Encoding", encoding);
       res.setHeader("Content-Length", encoded.length);
       res.end(req.method === "HEAD" ? undefined : encoded);

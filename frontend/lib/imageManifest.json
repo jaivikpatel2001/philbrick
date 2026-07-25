@@ -62,32 +62,38 @@
   "/images/home/hero-exploration/components/parts/blower-fan.png": [
     192,
     256,
+    320,
     384,
     640
   ],
   "/images/home/hero-exploration/components/parts/cabin.png": [
     192,
     256,
+    320,
     384
   ],
   "/images/home/hero-exploration/components/parts/control-panel-ard.png": [
     192,
     256,
+    320,
     384,
     640
   ],
   "/images/home/hero-exploration/components/parts/cop-lop-display.png": [
     192,
-    256
+    256,
+    320
   ],
   "/images/home/hero-exploration/components/parts/elevator-door.png": [
     192,
     256,
+    320,
     384
   ],
   "/images/home/hero-exploration/components/parts/floor-announcing-system.png": [
     192,
     256,
+    320,
     384,
     640,
     960
@@ -95,24 +101,28 @@
   "/images/home/hero-exploration/components/parts/lift-display.png": [
     192,
     256,
+    320,
     384,
     640
   ],
   "/images/home/hero-exploration/components/parts/overload-announcing-device.png": [
     192,
     256,
+    320,
     384,
     640
   ],
   "/images/home/hero-exploration/components/parts/safety-light-curtain.png": [
     192,
     256,
+    320,
     384,
     640
   ],
   "/images/home/hero-exploration/environment/drawing-elevetor.png": [
     192,
     256,
+    320,
     384
   ],
   "/images/home/hero-exploration/environment/hero-scene-day.png": [
