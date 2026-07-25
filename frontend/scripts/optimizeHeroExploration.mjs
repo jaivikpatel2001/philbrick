@@ -28,8 +28,17 @@ const MANIFEST = path.join(ROOT, "lib", "imageManifest.json");
 /* Component cutouts render ≤ ~300px wide (mobile) / 220px (desktop card) at up
    to 2x DPR; the spine renders much larger. One ladder covers both. Quality 80
    matches the 3D_Elevetor renders (graphics look better at 80 than photo 74). */
-const WIDTHS = [192, 256, 384, 640, 960, 1280];
+const WIDTHS = [192, 256, 320, 384, 640, 960, 1280];
 const QUALITY = 80;
+
+/* WebP encoder effort (0-6, sharp's default is 4). 6 costs more CPU at BUILD
+   time only and is lossless in appearance — the encoder simply searches harder
+   for a smaller encoding at the SAME quality target. Measured on
+   parts/elevator-door-384: 58.3 KB at effort 4 -> 53.6 KB at effort 6, an 8%
+   saving for zero visual change. PageSpeed's "Increasing the image compression
+   factor could improve this image's download size" was flagging every one of
+   these. */
+const EFFORT = 6;
 
 /* FULL-BLEED PLATES need their own ladder. The hero sky and building plates in
    environment/ are painted edge to edge, so on a 1920 screen the browser was
@@ -42,7 +51,15 @@ const QUALITY = 80;
    supplied. Quality is higher too: these are large photographic plates where 80
    shows banding in gradient sky. */
 const FULL_BLEED_WIDTHS = [640, 960, 1280, 1536, 1920, 2560, 3072];
-const FULL_BLEED_QUALITY = 88;
+/* Lowered 88 -> 84 on 2026-07-25. hero-scene-night-1920 was 317 KB, the single
+   heaviest asset on the site, and PageSpeed flagged 50.7 KB of compression
+   headroom on it. Checked before committing: a 1:1 crop of the hardest region
+   (night facade — thousands of small bright windows against dark sky, plus the
+   baked headline type) is visually indistinguishable at 84, while the file
+   drops to ~256 KB (-19%). 80 was rejected as a step too far for a plate this
+   size — banding starts to show in the sky gradient, which is exactly why this
+   constant exists separately from QUALITY. */
+const FULL_BLEED_QUALITY = 84;
 
 /** Plates that cover the whole hero, rather than sitting in a card. */
 const isFullBleed = (file) =>
@@ -81,7 +98,7 @@ async function run() {
     for (const w of widths) {
       await sharp(src)
         .resize({ width: w, withoutEnlargement: true })
-        .webp({ quality })
+        .webp({ quality, effort: EFFORT })
         .toFile(`${base}-${w}.webp`);
       generated++;
     }
