@@ -2,9 +2,10 @@
 
 A flagship, cinematic marketing website for **Philbrick Technologies India Pvt.
 Ltd.**, an Ahmedabad-based elevator-component manufacturer, exporter and supplier
-(founded 1992). The homepage opens with a real-time Three.js elevator experience
-and flows into the brand's product range, capabilities and applications —
-designed to feel like a premium engineered product, not a corporate template.
+(founded 1992). The homepage opens with the single-scene photographic hero
+(`Variant18Hero`) and flows into the brand's product range, capabilities and
+applications — designed to feel like a premium engineered product, not a
+corporate template.
 
 It also ships an **environment-based page-release system** so pages can be
 released to the client one at a time in production (all pages stay open in
@@ -34,8 +35,7 @@ See [`CLAUDE.md`](CLAUDE.md) for the full vision, brand positioning and standard
 |---|---|
 | **Next.js (App Router)** | Routing, server components, metadata, image optimization |
 | **TypeScript (strict)** | Type safety across the app |
-| **GSAP + ScrollTrigger** | Scroll-scrubbed timelines and reveal animation |
-| **Lenis** | Smooth scrolling (wired into the GSAP ticker globally) |
+| **Lenis** | Smooth scrolling, driven by its own `autoRaf` loop |
 | **Custom CSS (CSS Modules + tokens)** | All styling — **no Tailwind, no UI kit** |
 | **Framer Motion** | Small entrance/interaction animations |
 | **react-icons** | Iconography — the Feather set throughout, plus the `fa6` brand marks for WhatsApp and X, which are only correct as their own glyph |
@@ -124,9 +124,11 @@ frontend/
 - **Reusable sections.** New page blocks go in `sections/`, built from `components/`
   and fed by `data/`.
 - **Performance-first.** `next/image` for all imagery; lazy/IO-driven reveals;
-  cap Three.js pixel ratio; dispose GPU resources; respect `prefers-reduced-motion`.
-- **Mobile-first, responsive.** Fluid `clamp()` type/spacing; test small screens;
-  the 3D hero falls back to a CSS experience on no-WebGL / reduced-motion.
+  `priority` on the one above-the-fold hero image only; respect
+  `prefers-reduced-motion`. Compression and cache headers are the host's job
+  (see `public/.htaccess` and `../render.yaml`) because a static export cannot
+  emit response headers.
+- **Mobile-first, responsive.** Fluid `clamp()` type/spacing; test small screens.
 - **TypeScript strict.** Avoid `any`; model content in `types/`.
 - **Accessibility.** Semantic HTML, focus states, `aria-*`, skip link, reduced-motion.
 

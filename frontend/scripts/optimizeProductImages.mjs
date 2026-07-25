@@ -49,8 +49,17 @@ async function main() {
     const meta = await sharp(src).metadata();
 
     /* never upscale: keep only ladder steps the original can actually serve */
-    let widths = WIDTHS.filter((w) => w <= (meta.width ?? Infinity));
+    const native = meta.width ?? Infinity;
+    let widths = WIDTHS.filter((w) => w <= native);
     if (widths.length === 0) widths = [meta.width ?? WIDTHS[0]];
+
+    /* ...but always keep a top step at the original's native width. The client's
+       catalogue photos are 800px wide, so a plain filter stopped the ladder at
+       640 and the full-bleed product hero (sizes="100vw") had to upscale a 640px
+       file. Adding the native width restores the original's full detail while
+       still delivering WebP instead of the ~250 KB source JPG. */
+    if (Number.isFinite(native) && !widths.includes(native)) widths.push(native);
+    widths.sort((a, b) => a - b);
 
     for (const w of widths) {
       const out = path.join(DIR, `${base}-${w}.webp`);

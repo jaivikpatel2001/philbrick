@@ -128,16 +128,21 @@ export function TawkTo() {
      than request an invalid embed. */
   if (!PROPERTY_ID || !WIDGET_ID) return null;
 
+  /* LOADING STRATEGY (2026-07-25). The bootstrap is inline and costs nothing, so
+     it still runs `afterInteractive` — `window.Tawk_API` must exist before the
+     embed evaluates. The embed itself moved to `lazyOnload`: `afterInteractive`
+     made Next emit a <link rel="preload" as="script"> for embed.tawk.to in
+     <head>, which put a third-party download (and its own follow-on requests) in
+     direct competition with the hero image for early bandwidth. `lazyOnload`
+     drops the preload and defers the widget until the browser is idle after
+     window load. The widget still appears on every page; it just stops taxing
+     LCP. */
   return (
     <>
       <Script id="tawk-bootstrap" strategy="afterInteractive">
         {bootstrap}
       </Script>
-      <Script
-        id="tawk-embed"
-        src={TAWK_SRC}
-        strategy="afterInteractive"
-      />
+      <Script id="tawk-embed" src={TAWK_SRC} strategy="lazyOnload" />
     </>
   );
 }

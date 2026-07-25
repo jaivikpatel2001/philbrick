@@ -16,9 +16,12 @@
    production (see lib/release.ts `isReleased`). This prevents a new product
    route from accidentally leaking to production.
 
-   INITIAL PRODUCTION RELEASE (2026-07-11): only "/" (Home) is live. Every other
-   page shows the branded Coming Soon screen. To release a page, flip its flag
-   below (static) or add its path to RELEASED_PRODUCT_ROUTES (product).
+   RELEASE STATE (2026-07-25): live are "/" (Home), "/about", "/vision-mission",
+   "/products" and the ENTIRE product catalogue — all 14 categories and all 24
+   nested products (see RELEASED_PRODUCT_ROUTES). Still Coming Soon: "/network",
+   "/contact", "/career", "/quality-policy", "/privacy-policy", "/downloads".
+   To release a page, flip its flag below (static) or add its path to
+   RELEASED_PRODUCT_ROUTES (product).
 
    ─────────────────────────────────────────────────────────────────────────
    ⚠  SYNC RULE (also in CLAUDE.md):
@@ -36,7 +39,7 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/about": true,
   "/vision-mission": true,
   "/network": false,
-  "/products": false,
+  "/products": true,
   "/contact": false,
   /* Pages migrated from the client's WordPress footer menu (2026-07-22). */
   "/career": false,
@@ -47,10 +50,64 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
 
 /**
  * Explicit allow-list of product routes that are LIVE in production.
- * Default: empty — ALL product routes (categories + nested products) are
- * disabled. Add a full path (e.g. "/products/ard") to release a single page.
+ *
+ * RELEASED 2026-07-25: the full catalogue — all 14 categories and all 24 nested
+ * products — is live, together with `/products` itself above.
+ *
+ * The paths are listed LITERALLY rather than derived from `productRoutes()` on
+ * purpose. Deriving them would re-open the exact hole this file was rebuilt to
+ * close (see the note below the map): any product added to the tree later would
+ * publish itself to production the moment it was written. Keeping the list
+ * explicit means a NEW product stays gated until someone deliberately adds its
+ * path here — which is the point of a default-deny allow-list.
+ *
+ * Adding a product to `data/products.ts`? Add its path here in the same change,
+ * or it ships as Coming Soon. `assertReleaseConfig()` runs at build via
+ * sitemap.ts and will not let an invalid path through.
  */
-export const RELEASED_PRODUCT_ROUTES: string[] = [];
+export const RELEASED_PRODUCT_ROUTES: string[] = [
+  /* --- Categories (14) --------------------------------------------------- */
+  "/products/ard",
+  "/products/cop-lop",
+  "/products/elevator-cabin",
+  "/products/elevator-control-panel",
+  "/products/elevator-display",
+  "/products/elevator-doors",
+  "/products/elevator-iot",
+  "/products/elevator-kit-accessories",
+  "/products/integrated-control-panel",
+  "/products/lift-master",
+  "/products/step-products",
+  "/products/synergy-auto-door",
+  "/products/touch-cop-lop",
+  "/products/voice-announcing-systems",
+
+  /* --- Nested products (24) ---------------------------------------------- */
+  "/products/elevator-control-panel/automatic-door-controller",
+  "/products/elevator-control-panel/hydraulic-controller",
+  "/products/elevator-control-panel/manual-door-controller",
+  "/products/elevator-display/xlcd-01-monochrome-lcd-display",
+  "/products/elevator-display/xlcd-02-monochrome-lcd-display",
+  "/products/elevator-display/xn-1000-led-segment-display",
+  "/products/elevator-display/xn-2000-dot-matrix-display",
+  "/products/elevator-display/xn-2100-dot-matrix-display",
+  "/products/elevator-display/xn-3000-dot-matrix-display",
+  "/products/elevator-display/xn-4000-date-time-temperature-display",
+  "/products/elevator-display/xtab-smart-display-with-audio",
+  "/products/elevator-display/xtft-043-tft-display",
+  "/products/elevator-display/xtft-056-tft-display",
+  "/products/elevator-display/xtft-070-tft-display",
+  "/products/integrated-control-panel/mrl-control-panel",
+  "/products/integrated-control-panel/parallel-type-controller",
+  "/products/integrated-control-panel/serial-can-bus-type-controller",
+  "/products/synergy-auto-door/2-panel-centre-opening",
+  "/products/synergy-auto-door/2-panel-telescopic-side-opening",
+  "/products/synergy-auto-door/4-panel-centre-opening",
+  "/products/voice-announcing-systems/close-door-announcer",
+  "/products/voice-announcing-systems/elevator-gong",
+  "/products/voice-announcing-systems/fa-250-mp3-voice-ann-system",
+  "/products/voice-announcing-systems/fa-50-chip-based-voice-ann-system",
+];
 
 /* Every product route (/products/<category> and /products/<category>/<product>)
    is enumerated from the product tree so the config is exhaustive; each is only

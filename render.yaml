@@ -5,14 +5,32 @@
 #   Cache-Control: public, max-age=0, s-maxage=300
 # for EVERY asset — including the content-hashed, immutable files under
 # /_next/static/*. That forces the browser to revalidate build assets on every
-# repeat visit (the Pingdom/HAR capture showed max-age=0 on all JS/CSS/fonts).
-# A static export can't set its own response headers, so caching is fixed here.
+# repeat visit (the Pingdom/HAR capture showed max-age=0 on all JS/CSS/fonts,
+# which is exactly what "Add Expires headers: F" is reporting).
+#
+# A Next.js static export CANNOT fix this in application code: `headers()` is
+# listed under "Unsupported Features" for `output: "export"` because emitting
+# response headers requires a server. So caching is configured here.
+#
+# COMPRESSION on Render is automatic and needs no configuration — the edge
+# negotiates Brotli/gzip for text responses (the HAR capture shows
+# `content-encoding: br` on every .js/.css/.html). If a Pingdom run still
+# reports "Compress components with gzip: F", it is because that check looks for
+# `Content-Encoding: gzip` literally and does not count Brotli; re-test with a
+# gzip-only client before treating it as a real regression.
 #
 # HOW TO APPLY:
 #   - Blueprint deploys: this file is picked up automatically.
-#   - Existing dashboard-managed service: add the same rules under
-#     Settings → Headers (Render ignores this file unless the service is a
-#     Blueprint). The path + Cache-Control values below are the exact config.
+#   - Existing dashboard-managed service: Render IGNORES this file. Add the same
+#     rules by hand under Settings → Headers, and NEXT_PUBLIC_APP_ENV under
+#     Settings → Environment. The values below are the exact config to copy.
+#   - Alternative that removes the dashboard drift entirely: change the service
+#     type from Static Site to a Node Web Service with
+#       buildCommand: npm ci && npm run build
+#       startCommand: npm start          (-> node scripts/serve.mjs)
+#     `scripts/serve.mjs` sets these same Cache-Control values and does its own
+#     Brotli + gzip negotiation, so the headers ship with the repo and cannot be
+#     lost in a dashboard edit.
 # =============================================================================
 services:
   - type: web
@@ -33,12 +51,14 @@ services:
     envVars:
       - key: NEXT_PUBLIC_APP_ENV
         value: production
-    # Content-hashed build output + self-hosted fonts never change for a given
-    # URL → cache for a year, immutable.
     headers:
+      # --- Content-hashed build output: the URL changes when the bytes do, so
+      # it never needs revalidating. This is the single highest-value rule.
       - path: /_next/static/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
+      # Reserved for any hand-placed self-hosted font under public/fonts.
+      # next/font output is hashed and already covered by /_next/static above.
       - path: /fonts/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
@@ -50,5 +70,30 @@ services:
       - path: /brand/*
         name: Cache-Control
         value: public, max-age=2592000
+      # PWA icon set referenced by manifest.webmanifest
+      - path: /icons/*
+        name: Cache-Control
+        value: public, max-age=2592000
+      # Next emits the app-icon set at the ROOT, not under /icons, and every
+      # page requests all three:
+      #   <link rel="icon"            href="/favicon.ico?favicon.<hash>.ico">
+      #   <link rel="icon"            href="/icon.png?icon.<hash>.png">
+      #   <link rel="apple-touch-icon" href="/apple-icon.png?apple-icon.<hash>.png">
+      # None of the globs above match them, so without these rules they fall
+      # back to Render's max-age=0 default and keep showing up in the Pingdom
+      # "Add Expires headers" list. The cache buster is in the query string, so
+      # the URL changes whenever the icon does.
+      - path: /favicon.ico
+        name: Cache-Control
+        value: public, max-age=2592000
+      - path: /icon.png
+        name: Cache-Control
+        value: public, max-age=2592000
+      - path: /apple-icon.png
+        name: Cache-Control
+        value: public, max-age=2592000
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
     # HTML revalidates so content/release-flag changes appear immediately
     # (Render already sends short-lived caching for .html; left as default).

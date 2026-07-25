@@ -43,7 +43,17 @@ export function Variant18Hero() {
       aria-label="Philbrick elevator components, engineered in India since 1992"
     >
       {/* z 0 — the scene, cross-faded between day and night by [data-theme] in
-          CSS, with no JS. */}
+          CSS, with no JS.
+
+          ONLY THE DAY PLATE IS `priority`. Both plates stay in the DOM (the
+          cross-fade needs them), but marking both as priority emitted TWO
+          full-width <link rel="preload" as="image"> tags in <head> — roughly
+          280 KB of preload for a hero where exactly one plate is ever visible.
+          The brand default is LIGHT for every first-time visitor (see
+          themeInitScript), so day is the LCP candidate and keeps the preload;
+          night loads lazily at normal priority behind it. Dark-theme returning
+          visitors see no visual difference — the plate is still fetched, just
+          without stealing early bandwidth from the one that paints. */}
       <div className={styles.bg16} aria-hidden>
         <Image
           src={HERO_SCENE.day}
@@ -59,7 +69,7 @@ export function Variant18Hero() {
           alt=""
           fill
           sizes="100vw"
-          priority
+          loading="lazy"
           quality={82}
           className={`${styles.bg16Img} ${styles.bg16Night}`}
         />

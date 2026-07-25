@@ -3,8 +3,6 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { MotionConfig } from "framer-motion";
 import Lenis from "lenis";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 let lenisInstance: Lenis | null = null;
 
@@ -30,15 +28,20 @@ export function scrollToTop() {
 }
 
 /**
- * Lenis smooth scroll wired into the GSAP ticker + ScrollTrigger.
- * Respects prefers-reduced-motion (falls back to native scroll).
+ * Lenis smooth scroll, driven by Lenis's own requestAnimationFrame loop
+ * (`autoRaf`). Respects prefers-reduced-motion (falls back to native scroll).
+ *
+ * PERFORMANCE NOTE (2026-07-25): this used to run the Lenis frame through the
+ * GSAP ticker and push every scroll event into `ScrollTrigger.update()`. No
+ * ScrollTrigger animation was ever registered anywhere in the app, so GSAP core
+ * + the ScrollTrigger plugin (~60 KB gzip) shipped on every page purely to host
+ * a rAF callback that Lenis already provides. Same scroll feel, no GSAP.
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
 
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -51,27 +54,19 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       smoothWheel: true,
       touchMultiplier: 1.6,
       anchors: true,
+      autoRaf: true,
     });
     lenisInstance = lenis;
 
-    lenis.on("scroll", ScrollTrigger.update);
-
-    const onTick = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(onTick);
-    gsap.ticker.lagSmoothing(0);
-
     return () => {
-      gsap.ticker.remove(onTick);
       lenis.destroy();
       lenisInstance = null;
     };
   }, []);
 
-  // Reset scroll position + refresh triggers on route change.
+  // Reset scroll position on route change.
   useEffect(() => {
     lenisInstance?.scrollTo(0, { immediate: true });
-    const id = window.setTimeout(() => ScrollTrigger.refresh(), 120);
-    return () => window.clearTimeout(id);
   }, [pathname]);
 
   /* Framer animations across the app respect prefers-reduced-motion (transform

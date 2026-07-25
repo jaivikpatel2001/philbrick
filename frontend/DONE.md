@@ -6,6 +6,262 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Release the full product catalogue + section-level horizontal clipping
+
+**1. `/products` and every sub-page released to production.**
+`config/pageReleases.ts`: `"/products"` flipped to `true`, and all 38 product
+routes (14 categories + 24 nested products) added to `RELEASED_PRODUCT_ROUTES`.
+
+Listed **literally** rather than derived from `productRoutes()`. Deriving them
+(`RELEASED_PRODUCT_ROUTES = productRoutes().map(r => r.path)`) would re-open the
+exact hole this file was rebuilt to close on 2026-07-23: any product added to
+the tree later would publish itself to production the moment it was written.
+Explicit paths keep the default-deny guarantee — a new product stays gated until
+someone deliberately lists it.
+
+Verified with a real production-env build (`NEXT_PUBLIC_APP_ENV=production npx
+next build`), because the local `.env.local` sets `development`, where gating is
+bypassed and the sitemap lists everything regardless — a normal `npm run build`
+proves nothing about gating here:
+
+| Route | Result |
+|---|---|
+| `/`, `/about`, `/products` | LIVE |
+| `/products/elevator-display` (category) | LIVE |
+| `/products/elevator-display/xtft-070-tft-display` (product) | LIVE |
+| `/contact`, `/network`, `/career` | still Coming Soon |
+
+Side effect worth noting: the catalogue WebP fix from the performance pass below
+now actually reaches production. It was previously invisible because these pages
+were gated.
+
+**2. Section-level horizontal clipping (`styles/globals.css`).**
+`.section, main>section { overflow-x: clip }` so a scroll-driven or entrance
+animation that travels sideways is bounded by its own section instead of
+escaping past the viewport edge.
+
+**`clip`, not `hidden` — this is the whole point of the change.**
+`overflow-x: hidden` cannot coexist with `overflow-y: visible`; the spec forces
+the other axis to compute to `auto`, turning the section into a scroll
+container, which silently breaks every `position: sticky` descendant. Two exist:
+`.media` in `sections/products/ProductDetail.module.css` (the sticky product
+gallery — on the very pages released above) and `.stage13` in
+`sections/experience/corporate/corporate.module.css`. Confirmed in-browser
+rather than assumed:
+
+```
+overflow-x: clip    ->  computed overflow-y: visible   (shipped)
+overflow-x: hidden  ->  computed overflow-y: auto      (would break sticky)
+```
+
+Also matches the existing precedent — `body` already carried `overflow-x: clip`.
+Safari < 16 does not support `overflow: clip` and drops the declaration,
+degrading to today's unclipped behaviour, which is far better than shipping
+broken sticky positioning.
+
+**Verified in-browser (production build, 1270 px viewport):**
+- Homepage: **45 elements extend past the viewport** (the `IndustriesShowcase`
+  card row runs to x=1420), yet `document.scrollWidth - clientWidth === 0` —
+  clipped by their section, no page-wide horizontal scrollbar. This is exactly
+  the requested behaviour.
+- Every `.section` computes `clip/visible`. `hero18` and `ProductsShowcase`
+  compute `hidden/hidden` from their own pre-existing module CSS (untouched,
+  neither contains sticky).
+- Sticky `.media` retained `position: sticky` and still lags the scroll
+  (moved 639 px while its non-sticky sibling moved 800 px). Its exact pin offset
+  is governed by the end of its container, unchanged by this edit.
+- `.bleed` (`width: 100vw`) is defined in `globals.css` but used in no component;
+  `CTASection`'s `100vw` child renders at exactly 1270 px, left 0 — no clipping
+  regression, since `body` was already clipping at the same edge.
+
+**Files affected:** `config/pageReleases.ts`, `styles/globals.css`,
+`SITE-STRUCTURE.md` (release flags + counts corrected — it still claimed only
+`/` and "the 17 variant pages" were live, and counted 6 removed news routes),
+`DONE.md`.
+
+---
+
+## 2026-07-25 — Performance pass: compression, cache headers, dead JS, catalogue WebP
+
+**Goal:** raise Pingdom/GTmetrix/PageSpeed scores (the capture in `har.json`
+graded "Compress components with gzip" and "Add Expires headers" as F) without
+changing UI, design, animation, layout or business logic. No visual change was
+made anywhere.
+
+### 1. Compression + Expires — why none of it can live in Next.js
+
+Confirmed against the INSTALLED docs (`node_modules/next/dist/docs/`, Next
+16.2.9 — the v14 docs do not apply to this repo):
+
+- `compress` "only works with `next start` or a custom server"
+  (`.../05-config/01-next-config-js/compress.md`).
+- `headers()` is listed under **Unsupported Features** for `output: "export"`
+  (`.../02-guides/static-exports.md`).
+
+There is no Next.js process in production, so both are the web server's job.
+Documented that reasoning inline in `next.config.ts` so it is not re-litigated.
+
+**`public/.htaccess` (cPanel/Apache) rewritten.** The important fix: the old
+`AddOutputFilterByType DEFLATE` list contained `application/javascript` but NOT
+`text/javascript`, which is the type Apache 2.4 assigns to `.js` — so **none of
+the Next.js bundles would have been gzipped on cPanel**. Now:
+- `mod_brotli` + `mod_deflate` (gzip kept deliberately: Pingdom/YSlow grade on
+  `Content-Encoding: gzip` and do not count Brotli).
+- `mod_mime` `AddType` block, because a type Apache does not know is served as
+  `application/octet-stream`, which silently skips both the compression filter
+  and the `ExpiresByType` rules.
+- `mod_expires` block — Pingdom's "Add Expires headers" grades on a real
+  `Expires` header, which `Cache-Control` alone does not provide.
+- `mod_headers` `Cache-Control`: `immutable` for hashed `.js/.css` and fonts,
+  1 month for imagery (matching the project caching rule), always-revalidate for
+  HTML / RSC `.txt` / sitemap / manifest. Images and fonts excluded from
+  compression. `ETag` removed.
+
+**`scripts/serve.mjs` upgraded** to do Brotli + gzip negotiation and emit the
+same cache headers, still with zero dependencies (`node:zlib`), plus a
+path-traversal guard. This makes the Render side fixable from the repo: Render's
+static-site default is `max-age=0, s-maxage=300` on *everything* including
+`/_next/static`, and it ignores `render.yaml` for dashboard-created services —
+running the service as a Node web service (`npm start`) puts the headers under
+version control instead. Verified locally: `br` when advertised, `gzip` for a
+gzip-only client, `immutable` on `/_next/static`, `max-age=2592000` on images,
+no compression on `.webp`.
+
+**`render.yaml`** documents all three options (Blueprint / dashboard / Node web
+service) and records that Render compresses automatically at the edge. Header
+rules went from 4 to 9. The gap worth noting: Next emits the app-icon set at the
+ROOT — `/favicon.ico?<hash>`, `/icon.png?<hash>`, `/apple-icon.png?<hash>`, all
+three requested by every page — and none of them match `/images/*`, `/brand/*`,
+`/icons/*` or `/_next/static/*`, so they were still falling back to Render's
+`max-age=0`. Explicit rules added for each. Coverage was then checked
+mechanically against every asset URL in the exported homepage: the only
+unmatched paths left are HTML routes and `/manifest.webmanifest`, which are
+supposed to revalidate.
+
+### 2. GSAP + ScrollTrigger removed (biggest JS win)
+
+`SmoothScroll.tsx` imported `gsap` + `ScrollTrigger` only to host the Lenis rAF
+callback and to call `ScrollTrigger.update/refresh`. **No ScrollTrigger
+animation was registered anywhere in the app** (verified by grep), so ~60 KB
+gzip of GSAP shipped on every page to do nothing. Replaced with Lenis's own
+`autoRaf: true`. Scroll feel is unchanged. `gsap`, `@gsap/react`, `three` and
+`@types/three` (all unimported) removed from `package.json`.
+
+### 3. Third-party chat off the critical path
+
+`TawkTo.tsx`: the embed moved from `afterInteractive` to `lazyOnload`. The old
+strategy made Next emit `<link rel="preload" as="script">` for `embed.tawk.to`
+in `<head>`, so a third-party download and its ~20 follow-on requests competed
+with the hero for early bandwidth. Measured after the change: first Tawk request
+now starts at ~1.66 s, after load, and `embed.tawk.to` no longer appears in the
+exported HTML at all. The inline bootstrap stays `afterInteractive` because
+`window.Tawk_API` must exist before the embed evaluates.
+
+### 4. Hero: one LCP preload instead of two
+
+`Variant18Hero` marked BOTH the day and night plates `priority`, emitting two
+full-width `<link rel="preload" as="image">` tags for a hero where exactly one
+plate is ever visible. Night is now `loading="lazy"`; day keeps `priority`
+because the brand default is light for every first-time visitor. Both plates
+remain in the DOM, so the CSS cross-fade is untouched.
+
+### 5. Product catalogue images were serving raw JPGs (biggest byte win)
+
+`lib/imageManifest.json` had **zero** `/images/products/catalog/` entries even
+though the WebP ladder existed on disk — a previous run of `optimizeImages.mjs`
+(which *rewrites* the manifest) after `optimizeProductImages.mjs` (which
+*merges*) had wiped them. With no manifest entry the loader passes the path
+through, so every product page was serving the original JPG (up to 403 KB).
+Re-ran the optimiser; all 86 catalogue photos are back in the manifest.
+
+Also fixed the ladder itself: sources are 800 px wide but `WIDTHS` stopped at
+640, so the full-bleed product hero (`sizes="100vw"`) had to upscale a 640 px
+file. `optimizeProductImages.mjs` now always keeps a top step at the source's
+native width. Result on `/products/elevator-control-panel/hydraulic-controller`:
+**201 KB of WebP fetched, zero JPGs**, versus 695 KB of JPGs for the same
+images at the same pixel dimensions.
+
+### 6. Assets and dead files
+
+- `app/icon.png` 140 KB → 45 KB, `icons/icon-512.png` 103 → 31 KB,
+  `icons/icon-192.png` 18 → 6 KB, `apple-icon.png` 22 → 7 KB,
+  `brand/philbrick-og.png` 155 → 46 KB (sharp palette quantisation; the marks
+  are flat two-colour artwork, so this is visually lossless — checked).
+- `public/images/home/hero-exploration/components/original/` (86 files, 12.3 MB)
+  moved to `image-sources/catalog-original/`. Verified byte-identical (MD5) to
+  `public/images/products/catalog/*.jpg`; it was a staging source read only by
+  `scripts/stageProductImages.mjs`, never served, and was being deployed.
+- `lib/fonts.ts`: dropped the explicit `weight` arrays. **This turned out to be
+  a no-op for bytes** — Next 16 already resolved both families to their variable
+  font (the emitted `@font-face` carries `font-weight: 100 900` / `300 700`, and
+  the file hashes are unchanged). Kept because the config was misleading, but it
+  is not a performance gain. Two `.woff2` (22 KB + 47 KB) are fetched per page.
+  `--fw-light` (300) is used 0 times in CSS; the variable axis still covers it.
+
+### Deliberately NOT done
+
+- `experimental.inlineCss`: the site's CSS is ~132 KB raw across three chunks
+  shared by every route — exactly the "large bundle / many pages share styles"
+  case the Next docs say to skip, since inlined CSS cannot be cached across
+  pages.
+- The `.png` sources under `public/images/` were left in place: per the STRICT
+  RULE in `CLAUDE.md` they are the `og:image` and JSON-LD image for their page
+  and are fetched directly by crawlers, which never run the WebP loader.
+- `lib/icons.ts` still ships ~45 react-icons glyphs on every page (`Footer` uses
+  the runtime `getIcon` lookup). ~4 KB gzip; converting to static per-use
+  imports would mean rewriting every data-driven `iconName`. Not worth it.
+- The `Preloader` overlay is a deliberate design element and was left exactly as
+  is, but it is now the single largest remaining metric cost: it covers the
+  viewport for a minimum of ~1.94 s (`MIN_MS`) and also waits on `window.load`
+  (hard cap 4.2 s), which delays FCP/LCP by roughly that much in any synthetic
+  test. Reducing `STEP_MS`/`MIN_MS` is a one-line change if the client ever
+  accepts a shorter ride — it is a product decision, not a technical one.
+
+### Measured result (homepage, brotli, from the built export)
+
+| | Before (`har.json`) | After |
+|---|---|---|
+| JS + CSS transferred | 295.4 KB | **247.1 KB** (-16%) |
+| `<link rel=preload as=image>` in head | 3 | **2** |
+| `embed.tawk.to` in critical path | yes (head preload) | **no** (starts ~1.66 s) |
+| Product page catalogue imagery | 695 KB JPG | **201 KB WebP** (-71%) |
+| Export size (`out/`) | 98 MB | **88 MB** |
+
+### Files affected
+
+`next.config.ts`, `package.json`, `public/.htaccess`, `../render.yaml`,
+`scripts/serve.mjs`, `scripts/optimizeProductImages.mjs`,
+`components/providers/SmoothScroll.tsx`, `components/providers/TawkTo.tsx`,
+`sections/experience/corporate/Variant18Hero.tsx`, `lib/fonts.ts`,
+`lib/imageManifest.json`, `app/icon.png`, `app/apple-icon.png`,
+`public/icons/icon-{192,512}.png`, `public/brand/philbrick-og.png`,
+`public/images/products/catalog/*` (258 WebP variants),
+`CLAUDE.md`, `README.md`, `SITE-STRUCTURE.md`, `DONE.md`.
+
+### Verification
+
+- `npx tsc --noEmit`: 0 errors. `npm run build`: 56 static pages, clean.
+- Local static server: homepage and `/products/.../hydraulic-controller` render,
+  22 and 10 images respectively, **0 broken**, 0 console errors, Lenis scrolling
+  confirmed (`document.documentElement.classList` contains `lenis`, page scrolls
+  to 8643 px), no JPG fetched on the product page.
+- Header/compression matrix checked per asset class over HTTP.
+
+### Follow-ups
+
+- **Not yet applied on the hosts.** The Render service must either be redeployed
+  as a Blueprint, have the headers copied into Settings → Headers, or be
+  switched to a Node web service running `npm start`. Until one of those
+  happens, Render keeps sending `max-age=0` and Pingdom keeps grading Expires F.
+- Run `npm install` to prune `gsap`, `@gsap/react`, `three`, `@types/three` from
+  `node_modules` / `package-lock.json`.
+- Still to delete by hand (blocked by the sandbox during this task, no runtime
+  cost, pure tidiness): `data/model.ts`, `data/environment.ts`,
+  `scripts/optimize3DElevator.mjs`, `public/models/`, `public/hdri/`,
+  `public/videos/`, `public/fonts/`.
+
+---
+
 ## 2026-07-24 — Site Refactoring, Page Cleanup, Navbar Fix, Publishing & Performance Optimization
 
 **Task Summary:**
