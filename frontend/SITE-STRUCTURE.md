@@ -19,15 +19,15 @@ which is what makes local review and the content audit possible.
 /                                          ✓  Home — single-scene photographic hero + page body
 ├─ /about                                  ✓  About Us (story · Activity · History · values · leadership)
 ├─ /vision-mission                         ✓  Vision & Mission
-├─ /network                                –  Network
+├─ /network                                ✓  Network
 ├─ /products                               ✓  Products index (14 categories)
 │  ├─ /products/<category>                 ✓  14 category pages (all released 2026-07-25)
 │  └─ /products/<category>/<product>       ✓  24 nested product pages (all released 2026-07-25)
-├─ /contact                                –  Contact Us (channels + enquiry form + map + FAQ)
-├─ /career                                 –  Career
-├─ /quality-policy                         –  Quality Policy
-├─ /privacy-policy                         –  Privacy Policy
-└─ /downloads                              –  Downloads (STEP brochure)
+├─ /contact                                ✓  Contact Us (channels + enquiry form + map + FAQ)
+├─ /career                                 ✓  Career
+├─ /quality-policy                         ✓  Quality Policy
+├─ /privacy-policy                         ✓  Privacy Policy
+└─ /downloads                              ✓  Downloads (STEP brochure)
 
 System routes:  /sitemap.xml   /robots.txt   /icon.png   /apple-icon.png   /_not-found (404)
 ```
@@ -40,13 +40,15 @@ The homepage hero is `Variant18Hero` (single-photo scene). The client-review
 including the system routes. (The 6 news detail routes and the 17 variant pages
 counted here previously were removed on 2026-07-23/24.)
 
-**Current production release (2026-07-25):** live are `/`, `/about`,
-`/vision-mission`, `/products` and the **entire product catalogue** — all 14
-categories and all 24 nested products. Still Coming Soon: `/network`,
-`/contact`, `/career`, `/quality-policy`, `/privacy-policy`, `/downloads`.
-Gated pages render the animated **Coming Soon** screen and are excluded from
-`sitemap.xml`. Flip a flag in `config/pageReleases.ts` to release a page — a
-product route also needs its path in `RELEASED_PRODUCT_ROUTES` (default-deny).
+**Current production release (2026-07-25): the whole site is live.** All 10
+static routes and all 38 product routes render real content; nothing shows the
+Coming Soon screen and all 48 URLs appear in `sitemap.xml`.
+
+The release gate is kept in place rather than removed: it costs nothing when
+everything is released, and it is how a future page — or one pulled back for a
+content fix — gets held without a code revert. A NEW route still defaults to
+denied until it is flagged in `config/pageReleases.ts`; a product route also
+needs its path in `RELEASED_PRODUCT_ROUTES` (default-deny).
 
 ---
 

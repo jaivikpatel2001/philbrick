@@ -6,6 +6,133 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Eyebrow prominence · full site release · custom 404 · floating-navbar clearance
+
+### 1. Eyebrow made more prominent (client request), site-wide
+
+Changed the shared `.eyebrow` utility in `styles/globals.css`, which every
+section label composes — `SectionHeader`, `PageHero`, `PageHeader`, `CTASection`
+and one local override. **155 eyebrows across all 10 pages** inherit it, so
+consistency is structural rather than something to police per page.
+
+| | Before | After |
+|---|---|---|
+| size | 0.72rem (11.5px) | `--fs-eyebrow-strong`, fluid 0.8–0.95rem (12.8–15.2px) |
+| weight | 500 | 600 (`--fw-semibold`) |
+| tracking | 0.2em | `--ls-eyebrow-strong`, 0.15em |
+| tick | 1px @ 0.55 alpha | 2px @ 0.9, rounded |
+| colour | `--accent` | **unchanged** |
+
+Measured hierarchy on the built page: eyebrow 15.2px/600, description
+21.6px/400, title 54.4px/600. The eyebrow gains presence and still sits clearly
+below both, which is what "without overpowering the main title" requires.
+
+Two decisions worth recording:
+
+- **Colour was left alone.** Contrast was measured before assuming it needed
+  help: `--accent` scores 5.60:1 / 5.07:1 / 5.91:1 on the light section
+  backgrounds and 7.58:1 / 6.97:1 on the dark ones — all above the 4.5:1 AA
+  threshold for text this size. It already passed, so changing brand colour
+  would have been churn, not a fix.
+- **New tokens instead of editing `--fs-eyebrow` / `--ls-eyebrow`.** Those two
+  are also read directly by footer column headings, stat captions, DownloadCard
+  meta, product spec labels and the prose clause numbers. Editing them would
+  have dragged a dozen unrelated components along with the section labels.
+
+### 2. Entire site released
+
+Every static route flipped to `true` in `config/pageReleases.ts` (`/network`,
+`/contact`, `/career`, `/quality-policy`, `/privacy-policy`, `/downloads` were
+the remaining six); the 38 product routes were already listed. Verified with a
+production-env build: all 10 static pages plus category and product pages render
+real content, sitemap carries 48 URLs, nothing renders Coming Soon.
+
+The gate itself was deliberately kept rather than deleted — it costs nothing
+when everything is released, and it is how a future page, or one pulled back for
+a content fix, gets held without a code revert.
+
+### 3. Custom 404
+
+Rebuilt `app/not-found.tsx` + `app/not-found.module.css`. The old one was
+functional but generic: no illustration, no animation, and it ignored the
+elevator motif that is the site's signature. The new one reuses the exact
+vocabulary of `ComingSoon` — drifting aurora, blueprint grid, floor-indicator
+panel — staged as a lift display sent to a floor the building doesn't have: the
+direction arrow stuck in the brand's signal red, a 404 readout with a flickering
+middle digit, and a scan line sweeping for a floor it won't find.
+
+- Eyebrow "Error 404 · Page not found" (middot, not a dash — the dash rule in
+  CLAUDE.md applies to user-facing copy, and `·` is already the site's separator
+  convention in page titles).
+- Primary **Back to home**, secondary **Contact us**.
+- **Server Component, zero JavaScript** — every animation is CSS, and all of it
+  is disabled under `prefers-reduced-motion`.
+
+**Routing was already correct and was verified, not assumed:** the static export
+emits `out/404.html`; Render returns it with a real **404 status** for unknown
+paths (checked against the live deployment); `public/.htaccess` maps it with
+`ErrorDocument 404 /404.html` for cPanel; client-side navigation to a missing
+route renders the same component.
+
+`global-not-found.tsx` (new in Next 16) was considered and **rejected**: it
+catches unmatched URLs at the routing level but bypasses the root layout — no
+navbar, no footer, no theme or smooth-scroll providers, and it must re-import
+global styles and fonts itself. That directly contradicts "should feel like a
+natural extension of the website", and it solves a routing problem that is
+already solved here. Known trade-off: `not-found.tsx` cannot export `metadata`,
+so the 404 keeps the default site title. Harmless — the real 404 status is the
+authoritative signal to crawlers.
+
+### 4. Floating-navbar clearance (reported: sections and breadcrumbs cut off)
+
+Root cause: `data-nav="float"` is set on `<html>` **site-wide**, which makes the
+header `position: fixed` — so it occupies **no layout space** and pushes nothing
+down. Pages whose first block is a full-bleed `PageHero` are fine by design (the
+bar floats over the photograph, and the copy is bottom-aligned in a 68vh block).
+Pages using the text-only `PageHeader` had nothing to absorb it.
+
+The numbers show it was short at *every* viewport, worst on mobile:
+
+| | Bar actually covers | `PageHeader` reserved |
+|---|---|---|
+| mobile | ~83px | 40px |
+| desktop | ~99px | 80px |
+
+`--nav-h` (76px) was the wrong constant to reach for — it describes the
+*non-floating* header and is smaller than the floating bar everywhere, which is
+how the clipping shipped. Added two tokens that describe the real geometry,
+mirrored from the `[data-nav="float"]` rules:
+
+```css
+--nav-float-h:   calc(64px + 2 * clamp(0.6rem, 1.6vh, 1.1rem));
+--nav-clearance: calc(var(--nav-float-h) + clamp(1.25rem, 3.5vw, 2.75rem));
+```
+
+Applied to `PageHeader.module.css` (covers all four policy/career/downloads
+pages through one shared component), `not-found.module.css` and
+`ComingSoon.module.css` — the last two because their content is vertically
+centred and could drift under the bar on a short viewport.
+
+**Verified by measuring the navbar's bottom edge against the first content
+element, not by eyeballing:**
+
+| viewport | breadcrumb clears by | overlap |
+|---|---|---|
+| 1270 desktop | 56px | none |
+| 768 tablet | 43px | none |
+| 375 mobile | 33px | none |
+
+404 at mobile: first content at 206px vs bar bottom 77px, no horizontal
+overflow. The stale comment in `PageHero.module.css` claiming the navbar
+"occupies its own space" — the assumption that caused this — was corrected.
+
+**Files affected:** `styles/tokens.css`, `styles/globals.css`,
+`config/pageReleases.ts`, `app/not-found.tsx`, `app/not-found.module.css`,
+`sections/shared/PageHeader.module.css`, `sections/shared/PageHero.module.css`,
+`components/release/ComingSoon.module.css`, `SITE-STRUCTURE.md`, `DONE.md`.
+
+---
+
 ## 2026-07-25 — PageSpeed follow-up: responsive-ladder gaps + WebP encoder effort
 
 Acting on the PageSpeed Insights report (`insight.pdf`, desktop 92 / mobile 78).

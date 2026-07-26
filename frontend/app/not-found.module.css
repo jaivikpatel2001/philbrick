@@ -1,31 +1,216 @@
+/* =============================================================================
+   404 — PAGE NOT FOUND
+   Themed entirely through tokens, responsive, reduced-motion aware, no JS.
+   Shares its ambient layers and indicator motif with
+   components/release/ComingSoon.module.css so the two screens read as siblings.
+   ========================================================================== */
 .wrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 80vh;
-  padding-top: 4rem;
-  padding-bottom: var(--section-y);
-  text-align: center;
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* The content is vertically centred, so on a short viewport the top of the
+     block can rise under the fixed floating navbar. Reserving the clearance as
+     padding (rather than shrinking min-height) keeps the centring while
+     guaranteeing the eyebrow always starts below the bar. */
+  min-height: 100vh;
+  padding-block: var(--nav-clearance) var(--space-7);
+  overflow: clip;
+  isolation: isolate;
 }
-.wrap > div {
+
+/* Drifting azure/red aurora blobs */
+.aurora {
+  position: absolute;
+  inset: -20% -10%;
+  z-index: -2;
+  background:
+    radial-gradient(38% 44% at 22% 28%, rgba(47, 172, 236, 0.22), transparent 70%),
+    radial-gradient(34% 40% at 82% 30%, rgba(225, 31, 38, 0.12), transparent 70%),
+    radial-gradient(46% 50% at 60% 88%, rgba(16, 155, 221, 0.16), transparent 72%);
+  filter: blur(8px);
+  animation: nf-drift 18s var(--ease-in-out) infinite alternate;
+}
+
+/* Faint blueprint grid, fading out toward the edges */
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--hairline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hairline) 1px, transparent 1px);
+  background-size: 54px 54px;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 78%);
+  opacity: 0.7;
+}
+
+.panel {
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
 }
+
+/* ----- Elevator floor indicator, in a fault state ---------------------- */
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.6rem 1.15rem;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  background: var(--surface-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--glow-accent);
+}
+
+/* Signal red rather than the usual accent: this is the fault state. */
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-bottom: 0.7rem solid var(--accent-2);
+  animation: nf-blink 1.3s var(--ease-in-out) infinite;
+}
+
+.readout {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.12em;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.digit {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  line-height: 2.4rem;
+  font-weight: var(--fw-semibold);
+  color: var(--accent);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  min-width: 1.1ch;
+  text-align: center;
+}
+
+/* The middle digit flickers, like a segment that cannot settle. */
+.digitMid {
+  animation: nf-flicker 3.4s var(--ease-in-out) infinite;
+}
+
+/* A scan line sweeping the readout, searching for a floor that isn't there. */
+.scan {
+  position: absolute;
+  inset-block: 0;
+  left: -40%;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 28%, transparent),
+    transparent
+  );
+  animation: nf-scan 3.6s var(--ease-in-out) infinite;
+}
+
+/* ----- Copy ------------------------------------------------------------ */
+.eyebrow {
+  justify-content: center;
+}
+
 .title {
+  margin-top: var(--space-3);
   font-size: var(--fs-display-2);
+  line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
+  text-wrap: balance;
 }
+
 .text {
+  margin-top: var(--space-3);
   font-size: var(--fs-lead);
+  line-height: var(--lh-snug);
   color: var(--text-secondary);
   max-width: 46ch;
+  text-wrap: pretty;
 }
+
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  margin-top: 0.5rem;
+  margin-top: var(--space-5);
+}
+
+/* ----- Motion ---------------------------------------------------------- */
+@keyframes nf-drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.08);
+  }
+}
+@keyframes nf-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+@keyframes nf-flicker {
+  0%,
+  42%,
+  48%,
+  100% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.35;
+  }
+}
+@keyframes nf-scan {
+  0% {
+    transform: translateX(0);
+  }
+  55%,
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora,
+  .arrow,
+  .digitMid,
+  .scan {
+    animation: none;
+  }
+  /* Without the sweep the scan line would sit parked over the first digit. */
+  .scan {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding-block: var(--space-6);
+  }
+  .text {
+    font-size: var(--fs-body);
+  }
+  .actions {
+    width: 100%;
+  }
+  .actions > * {
+    flex: 1 1 auto;
+  }
 }

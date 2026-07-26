@@ -1,7 +1,12 @@
 /* Text-only page header — see PageHeader.tsx. */
 .header {
   position: relative;
-  padding-top: clamp(2.5rem, 6vw, 5rem);
+  /* Clears the fixed floating navbar. This page type has no photograph to run
+     under the bar, so its first line — the breadcrumb — was landing behind it
+     at every viewport: the old clamp(2.5rem, 6vw, 5rem) topped out at 80px
+     against a bar that covers 83px on mobile and ~99px on desktop, so it was
+     short everywhere, worst on small screens. */
+  padding-top: var(--nav-clearance);
   padding-bottom: clamp(2rem, 4vw, 3.5rem);
   border-bottom: 1px solid var(--border);
   background: var(--bg-secondary);

@@ -270,24 +270,60 @@ main>section:nth-of-type(even) {
 }
 
 /* Technical label — small, mono, marked with a machined tick. */
+/* -----------------------------------------------------------------------------
+   EYEBROW — the section label above every <SectionHeader> title.
+
+   Made more prominent on 2026-07-25 at the client's request: at 0.72rem /
+   weight 500 / 0.2em tracking it was being overlooked next to the title and the
+   lead paragraph it introduces.
+
+   What changed, and what deliberately did NOT:
+     size    0.72rem -> fluid 0.8-0.95rem   (+11% to +32%)
+     weight  500 -> 600                     (--fw-semibold, the system's
+                                             workhorse weight, already used by
+                                             every heading)
+     track   0.2em -> 0.15em                (see --ls-eyebrow-strong)
+     tick    1px @ 0.55 alpha -> 2px @ 0.9  (the machined rule now reads as a
+                                             deliberate mark, not a hairline)
+     colour  UNCHANGED, still --accent      (brand blue is the eyebrow's
+                                             signature; it already passes AA on
+                                             every surface it sits on —
+                                             measured 5.07:1 / 5.60:1 / 5.91:1
+                                             on the light section backgrounds
+                                             and 6.97:1 / 7.58:1 on the dark
+                                             ones, all above the 4.5:1 required
+                                             for text this size. Nothing needed
+                                             changing, so nothing was.)
+
+   The ceiling is set below --fs-lead on purpose: the eyebrow must gain presence
+   without competing with the title or the description beneath it.
+
+   NOTE: this is the shared `.eyebrow` utility, so the change lands on every
+   section header on every page at once — which is the point. The smaller
+   technical labels that share the visual language but are NOT section headers
+   (footer column headings, stat captions, DownloadCard meta, product spec
+   labels) read --fs-eyebrow/--ls-eyebrow directly and are untouched.
+   -------------------------------------------------------------------------- */
 .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.9em;
   font-family: var(--font-mono);
-  font-size: var(--fs-eyebrow);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--ls-eyebrow);
+  font-size: var(--fs-eyebrow-strong);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-eyebrow-strong);
   text-transform: uppercase;
   color: var(--accent);
 }
 
 .eyebrow::before {
   content: "";
-  width: 1.75rem;
-  height: 1px;
+  flex: none;
+  width: 2rem;
+  height: 2px;
+  border-radius: 1px;
   background: currentColor;
-  opacity: 0.55;
+  opacity: 0.9;
 }
 
 .eyebrow--muted {
