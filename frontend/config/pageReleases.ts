@@ -16,12 +16,15 @@
    production (see lib/release.ts `isReleased`). This prevents a new product
    route from accidentally leaking to production.
 
-   RELEASE STATE (2026-07-25): live are "/" (Home), "/about", "/vision-mission",
-   "/products" and the ENTIRE product catalogue — all 14 categories and all 24
-   nested products (see RELEASED_PRODUCT_ROUTES). Still Coming Soon: "/network",
-   "/contact", "/career", "/quality-policy", "/privacy-policy", "/downloads".
-   To release a page, flip its flag below (static) or add its path to
-   RELEASED_PRODUCT_ROUTES (product).
+   RELEASE STATE (2026-07-25): THE WHOLE SITE IS LIVE. Every static route is
+   flagged `true` and every product route (14 categories + 24 nested products)
+   is listed in RELEASED_PRODUCT_ROUTES. Nothing renders Coming Soon any more.
+
+   The gate itself is intentionally left in place rather than removed: it costs
+   nothing when everything is released, and it is how any FUTURE page (or a page
+   pulled back for a content fix) gets held without a code revert. A new route
+   still defaults to DENIED until it is listed here — see the strategy note
+   above, which is what stops an unfinished page from leaking to production.
 
    ─────────────────────────────────────────────────────────────────────────
    ⚠  SYNC RULE (also in CLAUDE.md):
@@ -38,14 +41,14 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
      chose a hero direction; variant18's hero is now the homepage (app/page.tsx). */
   "/about": true,
   "/vision-mission": true,
-  "/network": false,
+  "/network": true,
   "/products": true,
-  "/contact": false,
+  "/contact": true,
   /* Pages migrated from the client's WordPress footer menu (2026-07-22). */
-  "/career": false,
-  "/quality-policy": false,
-  "/privacy-policy": false,
-  "/downloads": false,
+  "/career": true,
+  "/quality-policy": true,
+  "/privacy-policy": true,
+  "/downloads": true,
 };
 
 /**

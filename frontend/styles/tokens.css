@@ -72,6 +72,14 @@
   --fs-sm: 0.9375rem;
   --fs-xs: 0.8125rem;
   --fs-eyebrow: 0.72rem;
+  /* Prominent section-label size. The `.eyebrow` utility (globals.css) uses
+     this; the plain --fs-eyebrow above stays put for the smaller technical
+     labels that share the look but are NOT section headers — footer column
+     headings, stat captions, DownloadCard meta, product spec labels.
+     Tops out at 0.95rem (15.2px), deliberately below --fs-lead (17.2-21.6px)
+     so the eyebrow gains presence without competing with the title or the
+     description it introduces. */
+  --fs-eyebrow-strong: clamp(0.8rem, 0.74rem + 0.3vw, 0.95rem);
 
   /* ----- Weights -------------------------------------------------------- */
   --fw-light: 300;
@@ -90,6 +98,11 @@
   --ls-normal: 0;
   --ls-wide: 0.04em;
   --ls-eyebrow: 0.2em;
+  /* Slightly tighter than --ls-eyebrow. Wide tracking is what makes very small
+     uppercase mono readable, but it works against legibility once the size and
+     weight go up — the letters start to read as separate marks rather than a
+     word. 0.15em keeps the machined character at the larger size. */
+  --ls-eyebrow-strong: 0.15em;
 
   /* ----- Spacing scale -------------------------------------------------- */
   --space-0: 0;
@@ -124,6 +137,23 @@
   --container-prose: 760px;
   --gutter: clamp(1.25rem, 0.5rem + 4vw, 4rem);
   --nav-h: 76px;
+  /* THE HEIGHT THE FLOATING NAVBAR ACTUALLY COVERS.
+     `data-nav="float"` is set on <html> site-wide, which makes the header
+     `position: fixed` — so it occupies NO layout space and nothing below it is
+     pushed down. This is the band it visually covers: the 64px pill plus the
+     header's detaching padding above and below it. Both numbers are mirrored
+     from the `[data-nav="float"] header[data-scrolled]` rules in globals.css;
+     change them there and here together.
+
+     Any page whose first block is NOT a full-bleed hero must reserve at least
+     this much at the top, or its first line of content (breadcrumb, eyebrow)
+     renders underneath the bar. --nav-h (76px) is NOT the right number for
+     this: it is the non-floating header height and is smaller than the floating
+     bar at every viewport, which is exactly how the clipping got shipped. */
+  --nav-float-h: calc(64px + 2 * clamp(0.6rem, 1.6vh, 1.1rem));
+  /* Clearance = the covered band plus breathing room, so content starts below
+     the bar rather than flush against it. */
+  --nav-clearance: calc(var(--nav-float-h) + clamp(1.25rem, 3.5vw, 2.75rem));
 
   /* ----- Motion --------------------------------------------------------- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

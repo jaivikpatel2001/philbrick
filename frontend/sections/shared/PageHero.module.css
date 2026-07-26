@@ -4,7 +4,15 @@
   flex-direction: column;
   justify-content: flex-end;
   min-height: 68vh;
-  /* sticky navbar occupies its own space now — no nav-h compensation */
+  /* No nav clearance needed here, and this is the one header type that genuinely
+     doesn't need it: the navbar floats OVER the photograph by design, and the
+     copy is bottom-aligned (`justify-content: flex-end`) inside a 68vh block,
+     so it starts far below the bar. The text-only PageHeader has neither of
+     those properties and DOES need --nav-clearance; see PageHeader.module.css.
+     (The previous comment here claimed the navbar "occupies its own space",
+     which stopped being true when the floating bar became the site-wide
+     default — that assumption is what put the breadcrumb under the bar on the
+     policy pages.) */
   padding-top: clamp(3rem, 8vw, 7rem);
   padding-bottom: clamp(3rem, 6vw, 6rem);
   overflow: hidden;

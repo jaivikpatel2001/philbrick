@@ -7,7 +7,9 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
-  padding-block: var(--space-6) var(--space-7);
+  /* Same fix as the 404: centred content on a short viewport could drift under
+     the fixed floating navbar, so reserve the bar's clearance at the top. */
+  padding-block: var(--nav-clearance) var(--space-7);
   overflow: clip;
   background: var(--bg-primary);
   isolation: isolate;
