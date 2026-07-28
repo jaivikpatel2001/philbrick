@@ -17,7 +17,7 @@ export const VISION =
    the WordPress Company page (ID 3318). The page's other two sections, Activity
    and History, follow below and are rendered as their own sections on /about. */
 export const ABOUT_STORY = [
-  "Philbrick Controls India was founded in 1992 in Ahmedabad, a city of Gujarat, India with a main focus on providing automation solution by research and development and production of Control Instruments and Control Panels. A teamwork of young and professional entrepreneurial and engineers with apex of providing technical solution with economy, the proficiency, in depth techno-commercial knowledge has brought the results in front of you.",
+  "Philbrick India was founded in 1992 in Ahmedabad, a city of Gujarat, India with a main focus on providing automation solution by research and development and production of Control Instruments and Control Panels. A teamwork of young and professional entrepreneurial and engineers with apex of providing technical solution with economy, the proficiency, in depth techno-commercial knowledge has brought the results in front of you.",
 ];
 
 /* "Activity" — WordPress Company page, section 2. */

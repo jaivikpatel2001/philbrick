@@ -1,12 +1,151 @@
-/* Applications carousel — horizontal scroll-snap track with arrow controls.
-   Cards never overflow the viewport; touch/trackpad swipe + keyboard supported. */
-
-/* ----- Arrow controls (in the section header) ------------------------- */
-.arrows {
-  display: inline-flex;
-  gap: 0.5rem;
+/* =============================================================================
+   APPLICATIONS — coverflow carousel (Swiper).
+   The active card is centred, full-size and bright and reveals its detail; its
+   neighbours rotate back, shrink and dim. Flanking arrows + dots + drag/keys.
+   ========================================================================== */
+.carousel {
+  position: relative;
+  max-width: 1240px;
+  margin-inline: auto;
+  margin-top: clamp(1.75rem, 3vw, 2.75rem);
+  padding-inline: clamp(2.75rem, 6vw, 4.5rem); /* room for the flanking arrows */
 }
+
+.swiper {
+  /* THE CAROUSEL NEEDS AN EXPLICIT HEIGHT. Swiper's base CSS makes
+     `.swiper-wrapper` and `.swiper-slide` both `height: 100%`, but `.swiper`
+     itself has no intrinsic height — so the cards resolve to 100% of nothing,
+     collapse to 0, and `overflow: hidden` clips them away (Swiper still sets the
+     slide WIDTH inline from slidesPerView, which is why the cards had width but
+     no height and were invisible). Defining the height here is what makes the
+     cards appear; the slides fill it. The dots render in a separate `.dots`
+     element below (see the component), so no bottom padding is reserved here. */
+  height: clamp(420px, 60vh, 540px);
+  overflow: hidden;
+  padding-block: 0.5rem;
+}
+
+/* ----- Card -----------------------------------------------------------
+   Swiper sets each slide's WIDTH inline from `slidesPerView`; the HEIGHT comes
+   from the container above. This rule mainly keeps the `.slide` class present
+   for the active-state selectors further down. */
+.slide {
+  height: 100%;
+}
+.link {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-lg);
+  transition: box-shadow 0.5s var(--ease-out);
+}
+
+.img {
+  object-fit: cover;
+  z-index: -2;
+  filter: brightness(0.6) saturate(0.95);
+  transform: scale(1.04);
+  transition: filter 0.6s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 6, 8, 0.55) 0%,
+    rgba(5, 6, 8, 0.12) 34%,
+    rgba(5, 6, 8, 0.92) 100%
+  );
+}
+
+.num {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.body {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.4rem;
+  color: #fff;
+}
+.name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  line-height: 1.05;
+}
+/* Detail is revealed on the centre card only, so the side cards read as a stack
+   behind it — the same emphasis the reference design uses. */
+.tagline {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 26ch;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #63c2f1;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s var(--ease-out) 0.05s, transform 0.5s var(--ease-out) 0.05s;
+}
+
+/* ----- Active slide ---------------------------------------------------
+   NOTE: each rule targets ONE descendant and uses `brightness(100%)`, not
+   `brightness(1)`. Two CSS-modules/minifier quirks were hit here: grouping two
+   `:global()` selectors with a comma left a stray `)` in the compiled output
+   (dropping the whole rule), and `brightness(1)` was minified to the invalid
+   `brightness()`. Keeping the selectors ungrouped and using `100%` avoids both. */
+.slide:global(.swiper-slide-active) .link {
+  box-shadow: 0 0 0 1px var(--border-accent), var(--shadow-xl);
+}
+.slide:global(.swiper-slide-active) .img {
+  /* 1.02, not 1 or 100%: Lightning CSS treats an identity brightness as
+     removable and minifies it to the invalid `brightness()`, which drops the
+     whole filter and leaves the active image dimmed. A non-identity value
+     survives and is visually indistinguishable from full brightness. */
+  filter: brightness(1.02) saturate(1.03);
+  transform: scale(1);
+}
+.slide:global(.swiper-slide-active) .tagline {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide:global(.swiper-slide-active) .cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----- Flanking arrows ------------------------------------------------ */
 .arrow {
+  position: absolute;
+  top: calc(50% - 1.6rem); /* offset up for the dot padding below the cards */
+  z-index: 3;
   display: grid;
   place-items: center;
   width: 46px;
@@ -16,6 +155,7 @@
   background: var(--surface-2);
   color: var(--text-primary);
   font-size: 1.2rem;
+  transform: translateY(-50%);
   transition: background var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
@@ -29,116 +169,63 @@
   opacity: 0.36;
   cursor: not-allowed;
 }
+.arrowPrev {
+  left: clamp(0rem, 1vw, 0.75rem);
+}
+.arrowNext {
+  right: clamp(0rem, 1vw, 0.75rem);
+}
 
-/* ----- Track ---------------------------------------------------------- */
-.track {
+/* ----- Pagination dots (rendered below the cards) --------------------- */
+.dots {
   display: flex;
-  gap: 20px;
-  margin-top: clamp(1.75rem, 3vw, 2.75rem);
-  padding-inline: var(--gutter);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-}
-.track::-webkit-scrollbar {
-  display: none;
-}
-.track:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: var(--radius-md);
-}
-
-.card {
-  position: relative;
-  flex: 0 0 340px;
-  height: 440px;
-  scroll-snap-align: start;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  isolation: isolate;
-  background: var(--bg-secondary);
-}
-.link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.img {
-  object-fit: cover;
-  z-index: -2;
-  filter: saturate(0.95) brightness(0.78);
-  transform: scale(1.02);
-  transition: filter 0.5s var(--ease-out), transform 0.7s var(--ease-out);
-}
-.card:hover .img {
-  filter: saturate(1) brightness(0.9);
-  transform: scale(1);
-}
-.shade {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    180deg,
-    rgba(5, 6, 8, 0.68) 0%,
-    rgba(5, 6, 8, 0.2) 35%,
-    rgba(5, 6, 8, 0.9) 100%
-  );
-}
-
-.num {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.body {
-  position: absolute;
-  inset: auto 0 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 1.5rem;
-  color: #fff;
-}
-.name {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--ls-snug);
-  line-height: 1.05;
-}
-.tagline {
-  font-size: var(--fs-sm);
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 26ch;
-}
-.cta {
-  display: inline-flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #63c2f1;
+  gap: 8px;
+  margin-top: 1.5rem;
+}
+/* Swiper's pagination CSS is intentionally NOT imported (its absolute
+   positioning fought this in-flow container), so the bullets are styled from
+   scratch here. */
+.dots :global(.swiper-pagination-bullet) {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--text-primary);
+  opacity: 0.28;
+  cursor: pointer;
+  transition: opacity var(--dur-fast) var(--ease-out),
+    width var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.dots :global(.swiper-pagination-bullet-active) {
+  width: 22px;
+  border-radius: 4px;
+  background: var(--accent);
+  opacity: 1;
 }
 
 @media (max-width: 640px) {
-  .card {
-    flex-basis: 78vw;
-    height: 400px;
+  .carousel {
+    padding-inline: clamp(1rem, 5vw, 2rem);
+  }
+  .swiper {
+    height: clamp(380px, 64vh, 460px);
   }
   .name {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
+  }
+  /* Arrows would crowd the cards on a phone; dots + swipe carry it there. */
+  .arrow {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img,
+  .tagline,
+  .cta,
+  .link {
+    transition: none;
   }
 }

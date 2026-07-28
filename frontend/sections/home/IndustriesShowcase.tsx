@@ -1,12 +1,17 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperClass } from "swiper/types";
+import { EffectCoverflow, Pagination, Keyboard, A11y, Autoplay, Mousewheel } from "swiper/modules";
 import { FiArrowUpRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { INDUSTRY_IMG } from "@/data/images";
-import { cn } from "@/utils/cn";
 import styles from "./IndustriesShowcase.module.css";
+
+import "swiper/css";
+import "swiper/css/effect-coverflow";
 
 /* Application sectors elevators (and Philbrick components) serve. */
 const INDUSTRIES = [
@@ -19,42 +24,33 @@ const INDUSTRIES = [
   { name: "Transit", tagline: "Stations, metros & transport hubs", img: INDUSTRY_IMG.transit, alt: "Metro station concourse with escalators and a public elevator" },
 ];
 
+/**
+ * Applications showcase — a coverflow carousel (Swiper).
+ *
+ * The active application sits centre stage at full size and brightness; its
+ * neighbours rotate back, shrink and dim, so the eye is led to the middle card.
+ * Dots below and the flanking arrows drive it, alongside drag, trackpad/touch
+ * swipe, keyboard arrows and a gentle autoplay that pauses on hover and is
+ * switched off entirely under prefers-reduced-motion.
+ *
+ * The arrows call `slidePrev`/`slideNext` on the stored Swiper instance rather
+ * than going through Swiper's Navigation module: the buttons live OUTSIDE
+ * <Swiper>, and wiring external nav elements through the module (onBeforeInit or
+ * element refs) bound unreliably here. Driving the instance directly is simpler
+ * and always works; with loop enabled there are no disabled end-states to track.
+ */
 export function IndustriesShowcase() {
-  const trackRef = useRef<HTMLUListElement>(null);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(true);
+  const swiperRef = useRef<SwiperClass | null>(null);
 
-  const updateArrows = useCallback(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    setCanPrev(el.scrollLeft > 4);
-    setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
-  }, []);
-
+  // Autoplay is configured ON in the Swiper props below so it actually STARTS at
+  // init (enabling it later via a prop flip does not start Swiper's autoplay —
+  // that was the bug). Here we only STOP it for visitors who asked for reduced
+  // motion. Autoplay is a runtime behaviour, so the exported HTML is unaffected.
   useEffect(() => {
-    updateArrows();
-    const el = trackRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateArrows, { passive: true });
-    window.addEventListener("resize", updateArrows);
-    return () => {
-      el.removeEventListener("scroll", updateArrows);
-      window.removeEventListener("resize", updateArrows);
-    };
-  }, [updateArrows]);
-
-  const scrollByCards = (dir: 1 | -1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>("[data-card]");
-    const step = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
-    el.scrollBy({ left: dir * step, behavior: "smooth" });
-  };
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowRight") { e.preventDefault(); scrollByCards(1); }
-    if (e.key === "ArrowLeft") { e.preventDefault(); scrollByCards(-1); }
-  };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      swiperRef.current?.autoplay?.stop();
+    }
+  }, []);
 
   return (
     <section id="industries" className="section">
@@ -63,61 +59,96 @@ export function IndustriesShowcase() {
           eyebrow="04 Applications"
           title="Components for every kind of building."
           description="From homes and offices to hospitals and industrial sites, Philbrick components go into the elevators that serve every kind of building."
-          action={
-            <div className={styles.arrows} role="group" aria-label="Carousel controls">
-              <button
-                type="button"
-                className={styles.arrow}
-                onClick={() => scrollByCards(-1)}
-                disabled={!canPrev}
-                aria-label="Previous applications"
-              >
-                <FiChevronLeft />
-              </button>
-              <button
-                type="button"
-                className={styles.arrow}
-                onClick={() => scrollByCards(1)}
-                disabled={!canNext}
-                aria-label="Next applications"
-              >
-                <FiChevronRight />
-              </button>
-            </div>
-          }
         />
       </div>
 
-      <ul
-        ref={trackRef}
-        className={styles.track}
-        aria-label="Application sectors"
-        tabIndex={0}
-        onKeyDown={onKeyDown}
-      >
-        {INDUSTRIES.map((it, i) => (
-          <li key={it.name} className={styles.card} data-card>
-            <Link href="/products" className={styles.link}>
-              <Image
-                src={it.img}
-                alt={it.alt}
-                fill
-                sizes="(max-width: 640px) 78vw, 340px"
-                className={styles.img}
-              />
-              <span className={styles.shade} aria-hidden />
-              <span className={styles.num}>{String(i + 1).padStart(2, "0")}</span>
-              <span className={styles.body}>
-                <span className={styles.name}>{it.name}</span>
-                <span className={styles.tagline}>{it.tagline}</span>
-                <span className={styles.cta}>
-                  Explore solutions <FiArrowUpRight />
+      <div className={styles.carousel}>
+        <button
+          type="button"
+          className={`${styles.arrow} ${styles.arrowPrev}`}
+          aria-label="Previous application"
+          onClick={() => swiperRef.current?.slidePrev()}
+        >
+          <FiChevronLeft />
+        </button>
+
+        <Swiper
+          onSwiper={(s) => (swiperRef.current = s)}
+          modules={[EffectCoverflow, Pagination, Keyboard, A11y, Autoplay, Mousewheel]}
+          effect="coverflow"
+          grabCursor
+          centeredSlides
+          loop
+          slidesPerView={1.15}
+          spaceBetween={14}
+          coverflowEffect={{
+            rotate: 6,
+            stretch: 0,
+            depth: 150,
+            modifier: 1.9,
+            scale: 0.9,
+            slideShadows: false,
+          }}
+          breakpoints={{
+            640: { slidesPerView: 1.6, spaceBetween: 18 },
+            1024: { slidesPerView: 2.2, spaceBetween: 22 },
+            1440: { slidesPerView: 2.5, spaceBetween: 24 },
+          }}
+          pagination={{ el: `.${styles.dots}`, clickable: true }}
+          keyboard={{ enabled: true }}
+          /* Horizontal trackpad / wheel gestures scroll the carousel;
+             `forceToAxis` keeps VERTICAL page scrolling working normally over it
+             (so the carousel never traps the page's scroll). */
+          mousewheel={{ forceToAxis: true }}
+          /* Continuous 3s auto-advance that survives user interaction. Not paused
+             on hover, per the client's request for a constant loop. Stopped only
+             for reduced-motion users (see the effect above). */
+          autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: false }}
+          a11y={{
+            prevSlideMessage: "Previous application",
+            nextSlideMessage: "Next application",
+          }}
+          className={styles.swiper}
+        >
+          {INDUSTRIES.map((it, i) => (
+            <SwiperSlide key={it.name} className={styles.slide}>
+              <Link href="/products" className={styles.link}>
+                <Image
+                  src={it.img}
+                  alt={it.alt}
+                  fill
+                  sizes="(max-width: 640px) 82vw, 420px"
+                  className={styles.img}
+                />
+                <span className={styles.shade} aria-hidden />
+                <span className={styles.num}>{String(i + 1).padStart(2, "0")}</span>
+                <span className={styles.body}>
+                  <span className={styles.name}>{it.name}</span>
+                  <span className={styles.tagline}>{it.tagline}</span>
+                  <span className={styles.cta}>
+                    Explore solutions <FiArrowUpRight />
+                  </span>
                 </span>
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+              </Link>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        <button
+          type="button"
+          className={`${styles.arrow} ${styles.arrowNext}`}
+          aria-label="Next application"
+          onClick={() => swiperRef.current?.slideNext()}
+        >
+          <FiChevronRight />
+        </button>
+
+        {/* Pagination lives here, BELOW the cards, rather than inside <Swiper>:
+            Swiper's default in-container dots overlapped the card's CTA because
+            the content-box wrapper ignores reserved bottom padding. Swiper fills
+            this element with the bullets via the `el` selector above. */}
+        <div className={styles.dots} />
+      </div>
     </section>
   );
 }

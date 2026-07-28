@@ -27,7 +27,7 @@ import styles from "./about.module.css";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Philbrick Controls India was founded in 1992 in Ahmedabad with a main focus on providing automation solutions by R&D and production of Control Instruments, Control Panels and elevator accessories.",
+    "Philbrick India was founded in 1992 in Ahmedabad with a main focus on providing automation solutions by R&D and production of Control Instruments, Control Panels and elevator accessories.",
   alternates: { canonical: "/about" },
 };
 

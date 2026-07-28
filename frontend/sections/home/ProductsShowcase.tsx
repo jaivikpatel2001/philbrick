@@ -46,7 +46,7 @@ export function ProductsShowcase() {
               <span className={styles.coreIcon} aria-hidden>
                 <FiChevronsUp />
               </span>
-              <span className={styles.coreLabel}>The Philbrick system</span>
+              <span className={styles.coreLabel}>Philbrick Eco System</span>
               <span className={styles.coreSub}>Every component, one source</span>
             </div>
           </div>
