@@ -87,6 +87,13 @@ async function run() {
   let count = 0;
 
   for await (const src of pngs(DIR)) {
+    // The art-directed hero plates (hero-scene-<theme>-{landscape,portrait}.png)
+    // have their OWN optimiser (scripts/optimizeHeroScene.mjs) with per-
+    // orientation ladders and are consumed by a plain <picture>, not next/image.
+    // Skip them here so this script doesn't overwrite those variants with the
+    // generic full-bleed ladder or re-add manifest entries for them.
+    if (/hero-scene-(day|night)-(landscape|portrait)\.png$/i.test(src)) continue;
+
     const base = src.slice(0, -".png".length);
     const meta = await sharp(src).metadata();
     const fullBleed = isFullBleed(src);

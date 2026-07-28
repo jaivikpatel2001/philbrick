@@ -203,14 +203,34 @@ const toComponent = (s: CatalogSpec): ElevatorComponent => ({
   iconName: "FiBox",
 });
 
-export const CATALOG_PARTS: ExplorationPart[] = SPECS.map((s) => ({
-  key: s.key,
-  component: toComponent(s),
-  treatment: "cutout",
-  image: s.image,
-  aspect: s.aspect,
-  size: s.size,
-  anchor: s.anchor,
-  slot: s.slot,
-  side: s.side,
-}));
+/* Display order for the homepage "Browse the range" grid (CategoryBrowse15).
+   Overload Annunciating Device and Fan and Blower were moved to the end
+   (second-last and last) on 2026-07-25 at the client's request. SPECS above is
+   left in its original catalogue order; only the presented sequence changes. */
+const PART_DISPLAY_ORDER = [
+  "control-panel-ard",
+  "cabin",
+  "cop-lop-display",
+  "floor-announcing-system",
+  "safety-light-curtain",
+  "elevator-door",
+  "lift-display",
+  "overload-announcing-device",
+  "blower-fan",
+] as const;
+
+export const CATALOG_PARTS: ExplorationPart[] = PART_DISPLAY_ORDER.map((key) => {
+  const s = SPECS.find((spec) => spec.key === key);
+  if (!s) throw new Error(`PART_DISPLAY_ORDER references unknown key: ${key}`);
+  return {
+    key: s.key,
+    component: toComponent(s),
+    treatment: "cutout",
+    image: s.image,
+    aspect: s.aspect,
+    size: s.size,
+    anchor: s.anchor,
+    slot: s.slot,
+    side: s.side,
+  };
+});

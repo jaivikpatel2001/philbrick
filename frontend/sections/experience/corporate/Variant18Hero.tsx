@@ -2,17 +2,20 @@
 /* =============================================================================
    VARIANT 18 — single-scene hero.
 
-   Sky, buildings AND the headline are baked into one photograph per theme
-   (hero-scene-{day,night}), so the hero is just a background plus the copy that
-   sits in front of it:
+   Sky, buildings AND the headline are baked into the photograph, so the hero is
+   just a background plus the copy that sits in front of it:
 
      z 2   lead paragraph + trust badges, over the photograph
      z 1   scrim (dark theme only)
      z 0   the scene
 
-   The three-layer build this replaces — open sky, live <h1>, transparent
-   building plate stacked on top — is gone, along with the CSS that anchored the
-   towers to the headline.
+   ART-DIRECTED, TWO PLATES PER THEME (2026-07-25). Each theme has a LANDSCAPE
+   plate (1672x941) for wide screens and a PORTRAIT plate (~864x1821) for narrow
+   ones, chosen by a <picture> `<source media="(orientation: portrait)">`. This
+   is why the hero uses a plain <picture> and not next/image: next/image has a
+   single src and can't art-direct by orientation. The portrait plate replaces
+   the old letterbox-on-mobile hack (a landscape-only plate shown with
+   `object-fit: contain` below 1.41:1 so its baked headline wasn't cropped).
 
    THE HEADING IS STILL IN THE DOM, visually hidden. A page with no <h1> loses
    its heading outline for screen readers and gives search engines nothing to
@@ -20,17 +23,18 @@
    semantics at zero visual cost. If the headline in the picture changes, change
    it here too — see §11.10 of imagegeneration.md, which holds the prompts.
    ========================================================================== */
-import Image from "next/image";
 import { TrustBadges } from "./TrustBadges";
 import styles from "./corporate.module.css";
 
 const ENV = "/images/home/hero-exploration/environment";
 
-/** The whole hero, one photograph per theme. 2752x1536, headline included. */
-export const HERO_SCENE = {
-  day: `${ENV}/hero-scene-day.png`,
-  night: `${ENV}/hero-scene-night.png`,
-} as const;
+/** Build a WebP `srcset` for one plate base name + its generated widths. */
+const srcset = (base: string, widths: readonly number[]) =>
+  widths.map((w) => `${ENV}/${base}-${w}.webp ${w}w`).join(", ");
+
+/** Generated ladders (scripts/optimizeHeroScene.mjs). */
+const LANDSCAPE_W = [640, 960, 1280, 1536, 1672] as const;
+const PORTRAIT_W = [384, 640, 820] as const;
 
 const TRUST_ONLY = ["Since 1992", "In-house"] as const;
 
@@ -43,36 +47,50 @@ export function Variant18Hero() {
       aria-label="Philbrick elevator components, engineered in India since 1992"
     >
       {/* z 0 — the scene, cross-faded between day and night by [data-theme] in
-          CSS, with no JS.
+          CSS with no JS. Each <picture> serves the landscape plate by default
+          and the portrait plate under `(orientation: portrait)`; only the
+          matching <source> is ever downloaded, so a phone fetches the portrait
+          crop and a desktop the landscape one — never both.
 
-          ONLY THE DAY PLATE IS `priority`. Both plates stay in the DOM (the
-          cross-fade needs them), but marking both as priority emitted TWO
-          full-width <link rel="preload" as="image"> tags in <head> — roughly
-          280 KB of preload for a hero where exactly one plate is ever visible.
-          The brand default is LIGHT for every first-time visitor (see
-          themeInitScript), so day is the LCP candidate and keeps the preload;
-          night loads lazily at normal priority behind it. Dark-theme returning
-          visitors see no visual difference — the plate is still fetched, just
-          without stealing early bandwidth from the one that paints. */}
+          The DAY image carries `fetchpriority="high"` (it is the LCP element
+          for the brand-default light theme); the night image loads lazily. */}
       <div className={styles.bg16} aria-hidden>
-        <Image
-          src={HERO_SCENE.day}
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-          quality={82}
-          className={`${styles.bg16Img} ${styles.bg16Day}`}
-        />
-        <Image
-          src={HERO_SCENE.night}
-          alt=""
-          fill
-          sizes="100vw"
-          loading="lazy"
-          quality={82}
-          className={`${styles.bg16Img} ${styles.bg16Night}`}
-        />
+        <picture>
+          <source
+            media="(orientation: portrait)"
+            type="image/webp"
+            srcSet={srcset("hero-scene-day-portrait", PORTRAIT_W)}
+            sizes="100vw"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element -- <picture> art-direction, not a next/image use */}
+          <img
+            className={`${styles.bg16Img} ${styles.bg16Day}`}
+            alt=""
+            src={`${ENV}/hero-scene-day-landscape-1280.webp`}
+            srcSet={srcset("hero-scene-day-landscape", LANDSCAPE_W)}
+            sizes="100vw"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
+        <picture>
+          <source
+            media="(orientation: portrait)"
+            type="image/webp"
+            srcSet={srcset("hero-scene-night-portrait", PORTRAIT_W)}
+            sizes="100vw"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element -- <picture> art-direction, not a next/image use */}
+          <img
+            className={`${styles.bg16Img} ${styles.bg16Night}`}
+            alt=""
+            src={`${ENV}/hero-scene-night-landscape-1280.webp`}
+            srcSet={srcset("hero-scene-night-landscape", LANDSCAPE_W)}
+            sizes="100vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
       </div>
 
       {/* z 1 — a bottom-up wash over the lowest 30% only, to seat the lead and
@@ -84,7 +102,7 @@ export function Variant18Hero() {
           screen readers and search engines. Not shown. */}
       <div className="sr-only">
         <p>Elevator components, made in India</p>
-        <h1>The machine behind every smooth ride.</h1>
+        <h1>Your One Stop Elevator Solutions Partner.</h1>
       </div>
 
       {/* z 2 — the copy that stays live, in front of the scene */}

@@ -6,6 +6,90 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Home/About content edits + Applications coverflow carousel
+
+Client-requested content and UI changes across Home and About.
+
+### Content / data
+- **"Browse the range" order** (`data/catalogParts.ts`): Overload Annunciating
+  Device moved to second-last, Fan and Blower to last. Implemented as an explicit
+  `PART_DISPLAY_ORDER` list mapped over `SPECS` (SPECS stays in catalogue order);
+  `CATALOG_PARTS` is consumed only by `CategoryBrowse15`, which doesn't display
+  the `index` field, so ordering is purely presentational. Verified in built HTML:
+  …Lift Display → Overload Annunciating Device → Fan and Blower.
+- **"Controls" removed from the company name** (`data/company.ts`,
+  `app/about/page.tsx` metadata, `sections/home/AboutPreview.tsx`):
+  "Philbrick Controls India" → "Philbrick India". Left the product terms
+  "Control Instruments / Control Panels" and the catalogParts "Controls at every
+  landing" tagline untouched — those aren't the company name. 0 "Philbrick
+  Controls" remain in the export.
+- **ProductsShowcase** (`sections/home/ProductsShowcase.tsx`): core label
+  "The Philbrick system" → "Philbrick Eco System". (The client called this the
+  "04 Applications" section; the string actually lives in the "02 The range"
+  block — it's the only occurrence, so changed there.)
+- **Stat "Export markets" → "State Network", value 2 → 25+** across all three
+  arrays in `data/stats.ts` (drives Home "05 By the numbers" = COMPANY_STATS,
+  About `Stats` = GLOBAL_STATS, and the About trust band = TRUST_METRICS);
+  description "China & Taiwan" → "Across India". ⚠ This swaps a verifiable fact
+  (2 export markets) for a new claim (25+ state network) at the client's explicit
+  instruction — the client should confirm the 25+ figure. The Network page's
+  export-market content (NetworkMap, network/page.tsx, prose) was deliberately
+  left intact, as that page is specifically about the export network.
+- **Footer wordmark** (`components/layout/Footer.module.css`): font-size
+  `clamp(4rem, 14vw, 13.5rem)` → `clamp(1.6rem, 5.4vw, 5.4rem)` (~60% smaller,
+  within the requested 50–70%). Measured 26px at a 375px viewport (was clamping
+  to 64px).
+
+### Applications section — redesigned as a Swiper coverflow carousel
+`sections/home/IndustriesShowcase.{tsx,module.css}` rebuilt from the native
+scroll-snap track into a Swiper coverflow (client reference: a centred active
+card with tilted, dimmed neighbours, dots and flanking arrows).
+
+- Modules: `EffectCoverflow, Pagination, Keyboard, A11y, Autoplay`. Centred,
+  looped, `slidesPerView` responsive 1.15 → 2.5. Active card is centre-stage and
+  bright and reveals its tagline+CTA; neighbours rotate/shrink/dim (the detail is
+  hidden on non-active cards, matching the reference emphasis).
+- Autoplay is client-gated off under `prefers-reduced-motion` (and the SSR/export
+  HTML always renders with autoplay off, so output is deterministic). Arrows
+  hidden on ≤640px (dots + swipe carry it there). Keyboard + A11y labels on.
+- **Arrows drive `swiperRef.current.slideNext()/slidePrev()` directly** via an
+  `onSwiper`-stored instance, NOT Swiper's Navigation module. Wiring external nav
+  elements through the module (`onBeforeInit` and element-ref/state) bound
+  `nextEl` unreliably in this setup; calling the instance is simpler and robust
+  (loop means no disabled end-states).
+
+**Two Turbopack/Lightning-CSS gotchas hit and worked around** (both verified in
+the compiled CSS):
+1. Grouping two `.slide:global(.swiper-slide-active) X` selectors with a comma
+   left a stray `)` in the compiled output, dropping the whole rule. Fixed by
+   splitting them into separate rules.
+2. `filter: brightness(1)` (and `brightness(100%)`) was minified to the invalid
+   `brightness()`, dropping the active-image filter. Fixed with `brightness(1.02)`
+   (non-identity, survives minification, visually full-bright).
+
+**Verification note.** Reliable signals confirmed: coverflow renders (slide-width
+gradient 111/183/273/409/273/183/111 at tablet), 7 slides / 7 dots / 2 arrows,
+pagination works, first arrow click and the `slideNext` API advance, no console
+errors, no horizontal overflow at 375/768/1270. Two things could NOT be measured
+in the in-app preview because of its documented quirks — a frozen rAF/compositor
+(Swiper's `transitionend` never fires, so `sw.animating` sticks `true` and it
+ignores slide commands after the first) and a stuck `getComputedStyle` for
+properties toggled after init (an inline `!important` filter didn't register,
+which is impossible in a real engine). The compiled CSS is correct and the active
+rule wins the cascade (verified via CSSOM), and the arrow wiring is proven by the
+first click + native-click-fires + API-advances-when-not-animating. **Final
+pixel-level confirmation of the active-card emphasis and repeated arrow paging
+should be done in a real browser** — Claude-in-Chrome was not connected this
+session.
+
+**Files:** `data/catalogParts.ts`, `data/company.ts`, `data/stats.ts`,
+`app/about/page.tsx`, `sections/home/AboutPreview.tsx`,
+`sections/home/ProductsShowcase.tsx`,
+`sections/home/IndustriesShowcase.{tsx,module.css}`,
+`components/layout/Footer.module.css`, `DONE.md`.
+
+---
+
 ## 2026-07-25 — Eyebrow prominence · full site release · custom 404 · floating-navbar clearance
 
 ### 1. Eyebrow made more prominent (client request), site-wide
