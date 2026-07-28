@@ -6,6 +6,69 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Art-directed hero (landscape/portrait) + carousel fixes
+
+### Hero: landscape + portrait plates per theme
+The client supplied four new hero plates (day/night × landscape 1672×941 +
+portrait ~864×1821), each with the headline **"Your One Stop Elevator Solutions
+Partner."** baked in (replacing "The machine behind every smooth ride.").
+
+- `Variant18Hero.tsx` rewritten from two `next/image` plates to two `<picture>`
+  elements (day + night, cross-faded by `[data-theme]` as before). Each picture
+  has a `<source media="(orientation: portrait)">` with the portrait ladder and
+  an `<img>` fallback with the landscape ladder — so a phone downloads the
+  portrait crop and a desktop the landscape one, never both. next/image can't
+  art-direct by orientation (single src), hence the plain `<picture>`. Day `<img>`
+  carries `fetchpriority="high"` (LCP for the light default); night lazy-loads.
+- The sr-only `<h1>` updated to the new baked headline.
+- New `scripts/optimizeHeroScene.mjs` generates the WebP ladders (landscape
+  640–1672, portrait 384–820, q84/effort6). `optimizeHeroExploration.mjs` now
+  **skips** `hero-scene-*-{landscape,portrait}.png` so it can't clobber them.
+- Deleted the old single 2752×1536 `hero-scene-{day,night}.png` + their variants
+  (~16 MB) and removed their manifest entries. Removed the mobile
+  `object-fit: contain` letterbox hack in `corporate.module.css` — the portrait
+  plate is the fix that hack's own comment said it was waiting for. `.bg16Img`
+  now carries explicit fill positioning (it's a plain `<img>`, not next/image).
+- Verified (via `currentSrc` after forcing load, since the preview pane doesn't
+  auto-load images): desktop landscape → `hero-scene-day-landscape-*.webp`;
+  mobile portrait → `hero-scene-day-portrait-820.webp`; hero fills the viewport
+  at 375×812; no horizontal overflow. Both plate aspects ≈ their target frames,
+  so the baked headline shows with minimal cropping.
+
+### Applications carousel — three follow-up fixes
+1. **Cards were invisible** (reported): Swiper's base CSS makes `.swiper-slide`
+   and `.swiper-wrapper` `height: 100%`, but `.swiper` has no intrinsic height,
+   so the cards collapsed to 0 and `overflow:hidden` clipped them (width was set
+   inline by slidesPerView, which is why they had width but no height). Fixed by
+   giving `.swiper` an explicit `height: clamp(420px,60vh,540px)` (mobile
+   `clamp(380px,64vh,460px)`). Verified: center card 486×432, gradient
+   103/180/285/432/285/180/103.
+2. **Dots overlapped the card CTA**: the content-box wrapper ignored reserved
+   bottom padding, so the in-container dots sat over the cards. Moved pagination
+   to a dedicated `.dots` element BELOW the carousel (`pagination.el`), stopped
+   importing `swiper/css/pagination` (its absolute positioning fought the
+   in-flow container) and styled bullets from scratch. Verified: dots render
+   below the cards, centered.
+3. **Autoplay didn't run** (reported): it was gated behind a `useState` that
+   started `false`; flipping the prop to true after init does NOT start Swiper's
+   autoplay. Now autoplay is configured ON in the props (`delay: 3000`,
+   `disableOnInteraction: false`, `pauseOnMouseEnter: false` — continuous 3s
+   loop) and only STOPPED for reduced-motion users via an effect. Verified
+   `swiper.autoplay.running === true` at init.
+
+Also added **`Mousewheel`** (`forceToAxis: true`) so horizontal trackpad/wheel
+gestures scroll the carousel without trapping vertical page scroll.
+
+**Files:** `sections/experience/corporate/Variant18Hero.tsx`,
+`sections/experience/corporate/corporate.module.css`,
+`sections/home/IndustriesShowcase.{tsx,module.css}`,
+`scripts/optimizeHeroScene.mjs` (new), `scripts/optimizeHeroExploration.mjs`,
+`lib/imageManifest.json`, `imagegeneration.md`,
+`public/images/home/hero-exploration/environment/*` (4 new plates + 16 WebP
+variants; 14 old files deleted), `DONE.md`.
+
+---
+
 ## 2026-07-25 — Home/About content edits + Applications coverflow carousel
 
 Client-requested content and UI changes across Home and About.
