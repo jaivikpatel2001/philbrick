@@ -6,6 +6,49 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — UI refinements (navbar/hero/orbit) + SEO/GEO/AEO pass
+
+### UI (both themes)
+1. **Navbar pill background** (`styles/globals.css`): the floating pill was
+   `background: transparent` (a prior client call) and nav items blended into the
+   pale hero sky. Now `background: var(--surface-glass-strong)` (near-opaque
+   white light / near-black dark) + the existing blur — items sit on a stable
+   surface. Verified computed `rgba(255,255,255,0.85)` in light.
+2. **Hero bottom scrim removed** (`Variant18Hero.tsx` + `corporate.module.css`):
+   dropped the frosted `.scrim18` band so the photo runs clean into the next
+   section. The lead + trust badges relied on that band for contrast, so they now
+   go WHITE in both themes with a soft `text-shadow` — measured white=5.2:1 over
+   the day plate's lower third and 13:1 over night (AA at this size); dark text
+   would have failed (3.6:1). Removed the matching light-theme dark-text rule.
+3. **Orbit rings** (`ProductsShowcase.module.css`): the two concentric "The
+   Range" rings were `--border-strong` (~0.18α) at 0.5/0.28 opacity ≈ 9%
+   effective — barely visible. Now brand-accent tinted at 0.34/0.24 alpha
+   (light `#0a6a9c`, dark `#2facec`), 1.5px, with per-theme overrides. ~3.7×
+   more visible. Explicit rgba (not color-mix) for Safari 15.
+
+### SEO / GEO / AEO (via the seo-geo-aeo skill — audit + implement)
+Full audit in `SEO-AUDIT.md`. The site was already strong (canonicals +
+breadcrumbs + rich JSON-LD on every route, OG/Twitter, sitemap/robots/llms.txt).
+Implemented the real gaps in `lib/schema.ts` + `app/page.tsx`:
+- **Organization → `["Organization","LocalBusiness"]`** with `geo`, `hasMap`,
+  `openingHoursSpecification`, `logo`, and statutory `identifier`s (GSTIN/CIN/IEC
+  as PropertyValues) — real `SITE` data that wasn't in the graph. Biggest local +
+  GEO win.
+- **Product JSON-LD images made absolute** (`https://…`, were root-relative and
+  unresolvable by crawlers); added `brand.name`.
+- **Homepage `WebPage` node + `SpeakableSpecification`** (AEO/voice), plus
+  `alternateName` on WebSite.
+Verified: all JSON-LD parses; scores moved SEO 8.5→9, GEO 7→8.5, AEO 6.5→7.5.
+Recommended-next (blog for GEO, per-page OG, homepage FAQ, question headings) are
+logged in `SEO-AUDIT.md` — they need a content/product decision.
+
+**Files:** `styles/globals.css`,
+`sections/experience/corporate/{Variant18Hero.tsx,corporate.module.css}`,
+`sections/home/ProductsShowcase.module.css`, `lib/schema.ts`, `app/page.tsx`,
+`SEO-AUDIT.md` (new), `DONE.md`.
+
+---
+
 ## 2026-07-25 — Art-directed hero (landscape/portrait) + carousel fixes
 
 ### Hero: landscape + portrait plates per theme

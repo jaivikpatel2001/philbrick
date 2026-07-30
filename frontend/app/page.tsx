@@ -2,6 +2,8 @@ import { Variant18Hero } from "@/sections/experience/corporate/Variant18Hero";
 import { CategoryBrowse15 } from "@/sections/experience/corporate/CategoryBrowse15";
 import { HomeSections } from "@/sections/home/HomeSections";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { homePageSchema } from "@/lib/schema";
 
 /**
  * Homepage `/` — the single-scene hero (Variant18Hero): sky, buildings and the
@@ -14,6 +16,7 @@ import { ReleaseGate } from "@/components/release/ReleaseGate";
 export default function HomePage() {
   return (
     <ReleaseGate route="/" label="Home">
+      <JsonLd data={homePageSchema()} />
       <Variant18Hero />
       <CategoryBrowse15 />
       <HomeSections />

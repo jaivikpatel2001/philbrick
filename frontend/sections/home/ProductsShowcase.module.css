@@ -14,7 +14,11 @@
   height: calc(var(--r) * 2 + 120px);
   margin-top: clamp(1.5rem, 4vw, 3rem);
 }
-/* concentric orbit rings */
+/* Concentric orbit rings. Brought up in contrast on 2026-07-25 (client: the
+   outer rings were barely visible) — they were --border-strong (~0.18 alpha) at
+   0.5/0.28 opacity, i.e. ~9% effective. Now a brand-accent tint at a readable
+   alpha, controlled by the colour directly (opacity 1) so the value is
+   predictable. Explicit rgba per theme rather than color-mix, for Safari 15. */
 .stage::before,
 .stage::after {
   content: "";
@@ -22,9 +26,9 @@
   top: 50%;
   left: 50%;
   border-radius: 50%;
-  border: 1px dashed var(--border-strong);
+  /* light theme: accent #0a6a9c (rgb 10,106,156) */
+  border: 1.5px dashed rgba(10, 106, 156, 0.34);
   transform: translate(-50%, -50%);
-  opacity: 0.5;
   pointer-events: none;
 }
 .stage::before {
@@ -35,7 +39,14 @@
   width: calc(var(--r) * 1.2);
   height: calc(var(--r) * 1.2);
   border-style: solid;
-  opacity: 0.28;
+  border-color: rgba(10, 106, 156, 0.24);
+}
+/* dark theme: accent #2facec (rgb 47,172,236) */
+:global([data-theme="dark"]) .stage::before {
+  border-color: rgba(47, 172, 236, 0.34);
+}
+:global([data-theme="dark"]) .stage::after {
+  border-color: rgba(47, 172, 236, 0.26);
 }
 
 /* Centering wrapper — keeps the core on the exact orbit axis regardless of the

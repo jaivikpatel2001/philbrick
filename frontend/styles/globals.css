@@ -540,12 +540,12 @@ main>section:nth-of-type(even) {
      (the scrolled height) is the one to keep. */
   height: 64px;
   border-radius: var(--radius-pill);
-  /* genuinely translucent, not a solid bar: thin the glass token down so the
-     photo reads through it, and let the blur do the legibility work */
-  /* No fill at all — the client found any tint distracting. The pill is
-     defined purely by the blur behind it plus a hairline edge, so whatever is
-     underneath shows through frosted rather than tinted. */
-  background: transparent;
+  /* Theme-appropriate frosted fill (2026-07-25, client request). The pill was
+     fully transparent — over the pale daylight hero the nav items blended into
+     the sky and readability suffered. `--surface-glass-strong` is a near-opaque
+     white in light / near-black in dark, so the items always sit on a stable
+     surface while the backdrop-blur keeps the glassy feel. */
+  background: var(--surface-glass-strong);
   /* declare ONLY the standard property — the CSS minifier auto-prefixes it.
      Writing the -webkit- alias by hand makes it dedupe to the prefixed form
      alone, which modern Chrome no longer supports, and the blur silently dies. */
