@@ -17,11 +17,15 @@ export const WEBSITE_ID = `${SITE.url}/#website`;
 /** Absolute URL for the branded OG image (JSON-LD should not use root-relative). */
 const OG_IMAGE_ABS = OG_IMAGE.startsWith("http") ? OG_IMAGE : `${SITE.url}${OG_IMAGE}`;
 
-/** The company as a single, unambiguous business entity. */
+/** The company as a single, unambiguous business entity.
+ *  Typed as both Organization AND LocalBusiness: Philbrick is a manufacturer
+ *  with a physical plant (GIDC Kathwada, Ahmedabad) that has real coordinates
+ *  and opening hours, so the LocalBusiness facet (geo + hasMap + hours) feeds
+ *  the local pack and gives AI answer engines a precise, verifiable entity. */
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "LocalBusiness"],
     "@id": ORG_ID,
     name: SITE.name,
     legalName: SITE.legalName,
@@ -29,10 +33,18 @@ export function organizationSchema() {
     description: SITE.description,
     foundingDate: String(SITE.founded),
     slogan: SITE.tagline,
+    logo: OG_IMAGE_ABS,
     image: OG_IMAGE_ABS,
     email: SITE.email,
     telephone: SITE.phone,
     taxID: SITE.gst,
+    /* India-specific statutory IDs as generic identifiers (there is no dedicated
+       schema.org property for GST/CIN/IEC). */
+    identifier: [
+      { "@type": "PropertyValue", propertyID: "GSTIN", value: SITE.gst },
+      { "@type": "PropertyValue", propertyID: "CIN", value: SITE.cin },
+      { "@type": "PropertyValue", propertyID: "IEC", value: SITE.iec },
+    ],
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE.address.line1,
@@ -40,6 +52,18 @@ export function organizationSchema() {
       postalCode: SITE.address.postalCode,
       addressRegion: SITE.address.region,
       addressCountry: "IN",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SITE.geo.lat,
+      longitude: SITE.geo.lng,
+    },
+    hasMap: SITE.mapUrl,
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "18:00",
     },
     areaServed: { "@type": "Country", name: "India" },
     /* One point per published channel, so search engines can route a caller
@@ -83,9 +107,32 @@ export function websiteSchema() {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
     name: SITE.name,
+    alternateName: SITE.legalName,
     url: SITE.url,
     inLanguage: "en-IN",
     publisher: { "@id": ORG_ID },
+  };
+}
+
+/** Homepage WebPage node. Ties the page into the entity graph (WebPage →
+ *  isPartOf WebSite → publisher Organization) and marks the headline speakable
+ *  for voice assistants / answer engines. */
+export function homePageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${SITE.url}/#webpage`,
+    url: SITE.url,
+    name: `${SITE.name} | ${SITE.tagline}`,
+    description: SITE.description,
+    inLanguage: "en-IN",
+    isPartOf: { "@id": WEBSITE_ID },
+    about: { "@id": ORG_ID },
+    primaryImageOfPage: OG_IMAGE_ABS,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1"],
+    },
   };
 }
 
@@ -102,6 +149,10 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
+/** Absolute-ise a root-relative asset path for JSON-LD (crawlers can't resolve
+ *  "/images/..." — they need the full origin). */
+const abs = (u?: string) => (!u ? undefined : u.startsWith("http") ? u : `${SITE.url}${u}`);
+
 /** Product entity. `path` is the full route (nested for sub-products). */
 export function productSchema(product: ProductNode, path: string) {
   return {
@@ -110,9 +161,9 @@ export function productSchema(product: ProductNode, path: string) {
     name: product.name,
     description: product.longDescription ?? product.description,
     url: `${SITE.url}${path}`,
-    image: product.image,
+    image: abs(product.image),
     category: product.category,
-    brand: { "@id": ORG_ID },
+    brand: { "@id": ORG_ID, name: SITE.name },
     manufacturer: { "@id": ORG_ID },
     ...(product.specs && product.specs.length > 0
       ? {

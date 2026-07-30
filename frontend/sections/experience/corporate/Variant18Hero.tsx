@@ -93,10 +93,10 @@ export function Variant18Hero() {
         </picture>
       </div>
 
-      {/* z 1 — a bottom-up wash over the lowest 30% only, to seat the lead and
-          the badges. Nothing above that: the headline is part of the picture,
-          and the navbar clears AA against the scene unaided. */}
-      <div className={styles.scrim18} aria-hidden />
+      {/* The bottom scrim band was removed 2026-07-25 (client request) so the
+          hero photo runs clean into the next section. The lead + badges keep
+          their legibility via white copy + a soft text-shadow (see CSS) — the
+          lower third of both plates is dark enough for that to clear AA. */}
 
       {/* The words that are painted into the photograph, kept as real markup for
           screen readers and search engines. Not shown. */}
