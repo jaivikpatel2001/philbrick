@@ -13,7 +13,7 @@ import styles from "@/app/prose.module.css";
 export const metadata: Metadata = {
   title: "Career",
   description:
-    "Work at Philbrick Technologies (India) Pvt. Ltd. in Ahmedabad. A family where every person and their ideas are treated equally, with training programmes at various levels.",
+    "Work at Philbrick in Ahmedabad. A family where every person and their ideas are treated equally, with training programmes at various levels.",
   alternates: { canonical: "/career" },
 };
 

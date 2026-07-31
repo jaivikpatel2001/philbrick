@@ -17,7 +17,7 @@ import styles from "./contact.module.css";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Talk to Philbrick Technologies about elevator control panels, ARD, door operators, cabins, displays and components. Based in Ahmedabad, Gujarat.",
+    "Talk to Philbrick about elevator control panels, ARD, door operators, cabins, displays and components. Based in Ahmedabad, Gujarat.",
   alternates: { canonical: "/contact" },
 };
 
@@ -33,7 +33,7 @@ type Method = {
 };
 
 const PHONE_METHODS: Method[] = SITE.phones.map((p) => ({
-  icon: p.whatsapp ? FaWhatsapp : FiPhone,
+  icon: FiPhone,
   label: p.label,
   value: p.number,
   note: p.purpose,
@@ -116,7 +116,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Let's talk elevators"
-        description="Tell us about your requirement and the Philbrick team will get back to you. We're based in Ahmedabad and supply across India and export markets."
+        description="Tell us about your requirement and the Philbrick team will get back to you. We're based in Ahmedabad and supply elevator components across India."
         image={HERO.contact}
         imageAlt="Philbrick headquarters building facade at dusk"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Contact" }]}
@@ -142,9 +142,9 @@ export default function ContactPage() {
               </a>
             </div>
 
-            {/* Inboxes by department: sales, general, careers, alternate. */}
+            {/* Single published inbox. */}
             <div className={styles.group}>
-              <p className={styles.groupTitle}>Email the right desk</p>
+              <p className={styles.groupTitle}>Email us</p>
               <MethodList methods={EMAIL_METHODS} />
             </div>
 
@@ -171,8 +171,7 @@ export default function ContactPage() {
             </div>
 
             <p className={styles.note}>
-              Philbrick Technologies (India) Pvt. Ltd. supplies elevator components
-              across India and exports to markets including China and Taiwan.
+              Philbrick supplies elevator components across India.
               GST&nbsp;{SITE.gst} · CIN&nbsp;{SITE.cin}
             </p>
           </div>
@@ -199,7 +198,7 @@ export default function ContactPage() {
           />
           <div className={styles.mapWrap}>
             <iframe
-              title="Philbrick Technologies location on Google Maps"
+              title="Philbrick location on Google Maps"
               className={styles.map}
               src={`https://maps.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=15&output=embed`}
               loading="lazy"

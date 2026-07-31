@@ -64,7 +64,7 @@ export const SERVICES: Service[] = [
     benefits: [
       { iconName: "FiBox", title: "Spares & kits", description: "Parts, fixtures and complete kits to keep lifts running." },
       { iconName: "FiUsers", title: "Technical support", description: "Help with specification, fitment and troubleshooting." },
-      { iconName: "FiGlobe", title: "Export supply", description: "Serving customers across India and export markets." },
+      { iconName: "FiMapPin", title: "Pan-India supply", description: "Serving installers, OEMs and modernisers across India." },
     ],
   },
 ];

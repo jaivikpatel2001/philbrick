@@ -20,19 +20,15 @@ export interface DownloadItem {
   source: string;
 }
 
-export const DOWNLOADS: DownloadItem[] = [
-  {
-    title: "STEP Brochure",
-    description:
-      "The STEP product catalogue Philbrick publishes for its integrated elevator controller range.",
-    href: "https://acharyagroup.in/cdn/2023catalog.pdf",
-    format: "PDF",
-    source: "Step Brochure page",
-  },
-];
+/* No live downloads yet. The previous STEP-brochure row pointed at the old
+   acharyagroup.in host (a dead/placeholder link), so it was removed 2026-07-25
+   rather than shown as a dummy card. Add real, self-hosted PDFs here (e.g.
+   under public/downloads/) and the list renders automatically; until then the
+   page shows the friendly empty state below. */
+export const DOWNLOADS: DownloadItem[] = [];
 
-/** Shown when DOWNLOADS is empty, mirroring the client's own Download page. */
+/** Shown when DOWNLOADS is empty. */
 export const DOWNLOADS_EMPTY = [
-  "Sorry, there is nothing to download right now.",
-  "Visit again later.",
+  "No brochures or catalogues are available for download right now.",
+  "Please check back later, or ask us and we will send what you need.",
 ];

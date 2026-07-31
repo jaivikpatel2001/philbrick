@@ -12,7 +12,7 @@ import styles from "./downloads.module.css";
 export const metadata: Metadata = {
   title: "Downloads",
   description:
-    "Product brochures and catalogues from Philbrick Technologies, including the STEP brochure for the integrated elevator controller range.",
+    "Product brochures and catalogues from Philbrick. Need a specific datasheet? Ask us and we will send it.",
   alternates: { canonical: "/downloads" },
 };
 

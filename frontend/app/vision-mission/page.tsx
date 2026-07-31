@@ -12,7 +12,7 @@ import styles from "@/app/company.module.css";
 export const metadata: Metadata = {
   title: "Vision & Mission",
   description:
-    "The mission and vision behind Philbrick Technologies: dependable elevator control, safety and signalling systems, engineered in-house.",
+    "The mission and vision behind Philbrick: dependable elevator control, safety and signalling systems, engineered in-house.",
   alternates: { canonical: "/vision-mission" },
 };
 

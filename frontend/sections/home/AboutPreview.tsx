@@ -22,7 +22,7 @@ export function AboutPreview() {
         <div className={styles.grid}>
           <div className={styles.content}>
             <p className={styles.text} data-reveal="up">
-              Philbrick India was founded in 1992 in Ahmedabad with a
+              Philbrick was founded in 1992 in Ahmedabad with a
               main focus on providing automation solutions by research and
               development and production of Control Instruments and Control
               Panels. We have a dedicated team with a special focus on Elevator

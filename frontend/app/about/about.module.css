@@ -124,8 +124,10 @@
 
 .team {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 340px));
-  gap: 1.5rem;
+  /* Three leadership cards in one row on desktop; columns shrink to fit and
+     stack on small screens (see the 900px query below). */
+  grid-template-columns: repeat(3, minmax(0, 300px));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
   justify-content: center;
   margin-top: clamp(2rem, 4vw, 3rem);
 }

@@ -293,8 +293,8 @@ export function NetworkMap() {
             <dd className={styles.statValue}>Ahmedabad</dd>
           </div>
           <div className={styles.stat}>
-            <dt className={styles.statLabel}>Export markets</dt>
-            <dd className={styles.statValue}>China &amp; Taiwan</dd>
+            <dt className={styles.statLabel}>Coverage</dt>
+            <dd className={styles.statValue}>Across India</dd>
           </div>
         </dl>
       </aside>

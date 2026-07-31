@@ -49,11 +49,11 @@ export const PRODUCT_FAQS: Faq[] = [
 export const CONTACT_FAQS: Faq[] = [
   {
     question: "How do I request a quotation?",
-    answer: `Send the enquiry form on this page, write to ${SITE.salesEmail}, or call our helpline on ${SITE.phone}. Tell us what you need, whether a specific product, a component set, or advice, and the Philbrick team will get back to you.`,
+    answer: `Send the enquiry form on this page, write to ${SITE.email}, or call our sales line on ${SITE.phone}. Tell us what you need, whether a specific product, a component set, or advice, and the Philbrick team will get back to you.`,
   },
   {
     question: "Which number or email should I use?",
-    answer: `Call the helpline on ${SITE.phone} for support and general help. To chat instead, message us on WhatsApp at ${SITE.whatsappDisplay}. For quotations, orders and pricing write to ${SITE.salesEmail}; for anything general write to ${SITE.email}; to apply for a job mail your resume to ${SITE.careersEmail}. Our office hours are ${SITE.hours}.`,
+    answer: `Call the Sales line on ${SITE.phone}, or use the labelled support numbers on this page to reach the right desk directly (control panel, doors, door drive & lift parts, accounts or escalation). To chat instead, message us on WhatsApp at ${SITE.whatsappDisplay}. For anything by email, write to ${SITE.email}. Our office hours are ${SITE.hours}.`,
   },
   {
     question: "What details help you prepare an accurate quote?",
@@ -67,6 +67,6 @@ export const CONTACT_FAQS: Faq[] = [
   },
   {
     question: "Where is Philbrick based and where do you supply?",
-    answer: `Philbrick Technologies is based at ${SITE.address.line1}, ${SITE.address.line2}. We supply customers across India and export to markets including China and Taiwan.`,
+    answer: `Philbrick is based at ${SITE.address.line1}, ${SITE.address.line2}. We supply elevator components to installers, OEMs and modernisers across India.`,
   },
 ];
