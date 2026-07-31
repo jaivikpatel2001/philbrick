@@ -1,6 +1,6 @@
 /* =============================================================================
    TRUST BADGES — shared content for the homepage hero (Variant18Hero via
-   TrustBadges). Copy uses only verifiable Philbrick facts (constants/site.ts +
+   TrustBadges). Copy uses only verifiable philbrick facts (constants/site.ts +
    data/company.ts): founded 1992 in Ahmedabad; ISO quality process tested to
    Indian standards; in-house manufacturing; exporter (India, China, Taiwan).
 

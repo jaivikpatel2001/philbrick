@@ -11,7 +11,7 @@ import styles from "@/app/prose.module.css";
 export const metadata: Metadata = {
   title: "Quality Policy",
   description:
-    "Philbrick products and services constantly meet or exceed customer expectation. Each part undergoes stage wise and final inspection as per the Q.A. plan and Indian standard specification.",
+    "philbrick products and services constantly meet or exceed customer expectation. Each part undergoes stage wise and final inspection as per the Q.A. plan and Indian standard specification.",
   alternates: { canonical: "/quality-policy" },
 };
 
@@ -75,7 +75,7 @@ export default function QualityPolicyPage() {
         title="Ask us for the quality plan"
         description="We prepare and submit the quality plan for order execution, and keep the records and test certificates for every dispatch."
         primary={{ label: "Contact us", href: "/contact" }}
-        secondary={{ label: "About Philbrick", href: "/about" }}
+        secondary={{ label: "About philbrick", href: "/about" }}
       />
     </ReleaseGate>
   );

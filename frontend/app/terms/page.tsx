@@ -15,7 +15,7 @@ import styles from "@/app/prose.module.css";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
-    "The terms governing your access to and use of the Philbrick website, product documentation, technical specifications and online services.",
+    "The terms governing your access to and use of the philbrick website, product documentation, technical specifications and online services.",
   alternates: { canonical: "/terms" },
 };
 

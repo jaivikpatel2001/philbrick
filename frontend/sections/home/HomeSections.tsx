@@ -41,7 +41,7 @@ export function HomeSections() {
       <CTASection
         eyebrow="Let's build"
         title="Ready to specify your next elevator?"
-        description="Tell us about your project and the Philbrick team will help you choose the right control, safety and signalling components."
+        description="Tell us about your project and the philbrick team will help you choose the right control, safety and signalling components."
         primary={{ label: "Request a quote", href: "/contact" }}
         secondary={{ label: "Explore products", href: "/products" }}
       />

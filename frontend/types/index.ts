@@ -206,13 +206,6 @@ export interface FAQItem {
   category?: string;
 }
 
-export interface TimelineItem {
-  year: string;
-  title: string;
-  description: string;
-  milestone?: boolean;
-}
-
 export interface Value {
   iconName: string;
   title: string;

@@ -7,7 +7,7 @@ import styles from "./not-found.module.css";
    Built from the same vocabulary as the rest of the site rather than as a
    standalone screen: the drifting aurora + blueprint grid and the elevator
    floor-indicator motif are the ones ComingSoon already uses, so a visitor who
-   lands here recognises it as Philbrick. The idea is a lift display that has
+   lands here recognises it as philbrick. The idea is a lift display that has
    been sent to a floor the building does not have: the direction arrow is stuck
    in the fault colour (--accent-2, the brand's signal red), the readout shows
    404, and a scan line sweeps the panel looking for a floor it will not find.

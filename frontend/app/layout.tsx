@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     "elevator display",
     "COP LOP",
     "elevator components",
-    "Philbrick",
+    "philbrick",
     "elevator manufacturer Ahmedabad",
   ],
   authors: [{ name: SITE.legalName }],

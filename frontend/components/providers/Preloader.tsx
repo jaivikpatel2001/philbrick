@@ -114,7 +114,7 @@ export function Preloader() {
       className={styles.wrap}
       data-phase={phase}
       role="status"
-      aria-label="Philbrick is loading"
+      aria-label="philbrick is loading"
     >
       {/* Door leaves — full-viewport, sliding apart on open */}
       <div className={`${styles.door} ${styles.doorLeft}`} aria-hidden>

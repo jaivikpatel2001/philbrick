@@ -122,7 +122,7 @@ export function ContactForm({
           "Submitted At": submittedAt,
           Page: "philbrickindia.com/contact",
           // FormSubmit configuration
-          _subject: `Philbrick website enquiry: ${inquiryType}`,
+          _subject: `philbrick website enquiry: ${inquiryType}`,
           _template: "table",
           _captcha: "false",
         }),
@@ -158,7 +158,7 @@ export function ContactForm({
         </span>
         <h3>Thank you, your enquiry is on its way.</h3>
         <p>
-          The Philbrick team has received your message and will get back to you
+          The philbrick team has received your message and will get back to you
           shortly. For anything urgent, please call us directly.
         </p>
         <button className={styles.again} onClick={() => setStatus("idle")}>
@@ -313,7 +313,7 @@ export function ContactForm({
       <label className={styles.consent}>
         <input type="checkbox" name="consent" className={styles.checkbox} />
         <span>
-          I agree to Philbrick&apos;s privacy policy and to being contacted
+          I agree to philbrick&apos;s privacy policy and to being contacted
           about my enquiry.
         </span>
       </label>

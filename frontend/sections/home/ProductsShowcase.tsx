@@ -27,7 +27,7 @@ export function ProductsShowcase() {
         <SectionHeader
           eyebrow="02 The range"
           title="Everything an elevator needs."
-          description="Control, safety, doors, cabins and signalling: Philbrick engineers and builds the components that make a lift run, all under one roof."
+          description="Control, safety, doors, cabins and signalling: philbrick engineers and builds the components that make a lift run, all under one roof."
           action={
             <Button href="/products" variant="ghost" withArrow>
               All products
@@ -46,7 +46,7 @@ export function ProductsShowcase() {
               <span className={styles.coreIcon} aria-hidden>
                 <FiChevronsUp />
               </span>
-              <span className={styles.coreLabel}>Philbrick Eco System</span>
+              <span className={styles.coreLabel}>philbrick Eco System</span>
               <span className={styles.coreSub}>Every component, one source</span>
             </div>
           </div>

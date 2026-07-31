@@ -12,7 +12,7 @@ interface LogoProps {
 }
 
 /**
- * Philbrick brand lockup. Uses the official logo (transparent PNG) so the
+ * philbrick brand lockup. Uses the official logo (transparent PNG) so the
  * blue wordmark + red emblem read correctly on both light and dark themes.
  * `compact` renders just the emblem mark.
  */
@@ -21,12 +21,12 @@ export function Logo({ className, compact = false, priority = false }: LogoProps
     <Link
       href="/"
       className={cn(styles.logo, className)}
-      aria-label="Philbrick, home"
+      aria-label="philbrick, home"
     >
       {compact ? (
         <Image
           src="/brand/philbrick-mark.png"
-          alt="Philbrick"
+          alt="philbrick"
           width={150}
           height={128}
           className={styles.mark}
@@ -35,7 +35,7 @@ export function Logo({ className, compact = false, priority = false }: LogoProps
       ) : (
         <Image
           src="/brand/logo.png"
-          alt="Philbrick, Providing Elevator Solutions"
+          alt="philbrick, Providing Elevator Solutions"
           width={536}
           height={120}
           className={styles.full}

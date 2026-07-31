@@ -17,7 +17,7 @@ import styles from "./contact.module.css";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Talk to Philbrick about elevator control panels, ARD, door operators, cabins, displays and components. Based in Ahmedabad, Gujarat.",
+    "Talk to philbrick about elevator control panels, ARD, door operators, cabins, displays and components. Based in Ahmedabad, Gujarat.",
   alternates: { canonical: "/contact" },
 };
 
@@ -116,9 +116,9 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Let's talk elevators"
-        description="Tell us about your requirement and the Philbrick team will get back to you. We're based in Ahmedabad and supply elevator components across India."
+        description="Tell us about your requirement and the philbrick team will get back to you. We're based in Ahmedabad and supply elevator components across India."
         image={HERO.contact}
-        imageAlt="Philbrick headquarters building facade at dusk"
+        imageAlt="philbrick headquarters building facade at dusk"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Contact" }]}
       />
 
@@ -171,7 +171,7 @@ export default function ContactPage() {
             </div>
 
             <p className={styles.note}>
-              Philbrick supplies elevator components across India.
+              philbrick supplies elevator components across India.
               GST&nbsp;{SITE.gst} · CIN&nbsp;{SITE.cin}
             </p>
           </div>
@@ -198,7 +198,7 @@ export default function ContactPage() {
           />
           <div className={styles.mapWrap}>
             <iframe
-              title="Philbrick location on Google Maps"
+              title="philbrick location on Google Maps"
               className={styles.map}
               src={`https://maps.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=15&output=embed`}
               loading="lazy"
@@ -231,7 +231,7 @@ export default function ContactPage() {
       <FAQSection
         eyebrow="Before you write"
         title="How working with us starts"
-        description="What to expect from first enquiry onward, and how Philbrick supports installers and building owners."
+        description="What to expect from first enquiry onward, and how philbrick supports installers and building owners."
         faqs={CONTACT_FAQS}
       />
     </ReleaseGate>

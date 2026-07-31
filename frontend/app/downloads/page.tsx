@@ -12,7 +12,7 @@ import styles from "./downloads.module.css";
 export const metadata: Metadata = {
   title: "Downloads",
   description:
-    "Product brochures and catalogues from Philbrick. Need a specific datasheet? Ask us and we will send it.",
+    "Product brochures and catalogues from philbrick. Need a specific datasheet? Ask us and we will send it.",
   alternates: { canonical: "/downloads" },
 };
 
@@ -29,7 +29,7 @@ export default function DownloadsPage() {
       <PageHeader
         eyebrow="Downloads"
         title="Brochures and catalogues"
-        description="Everything Philbrick publishes for download, in one place. Need a datasheet that is not listed? Ask us and we will send it."
+        description="Everything philbrick publishes for download, in one place. Need a datasheet that is not listed? Ask us and we will send it."
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Downloads" }]}
       />
 

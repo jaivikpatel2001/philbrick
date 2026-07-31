@@ -16,7 +16,7 @@ import styles from "./products.module.css";
 export const metadata: Metadata = {
   title: "Products",
   description:
-    "Explore Philbrick's elevator component range: control panels, integrated controllers, ARD, door operators, Synergy auto doors, cabins, displays, COP/LOP and voice systems.",
+    "Explore philbrick's elevator component range: control panels, integrated controllers, ARD, door operators, Synergy auto doors, cabins, displays, COP/LOP and voice systems.",
   alternates: { canonical: "/products" },
 };
 
@@ -37,7 +37,7 @@ export default function ProductsPage() {
         title="Complete elevator components, engineered in-house"
         description="From control panels and the Automatic Rescue Device to doors, cabins, displays and signalling: everything needed to build, upgrade and maintain a lift, from one source."
         image={HERO.products}
-        imageAlt="Finished Philbrick elevator control cabinets on the assembly line"
+        imageAlt="Finished philbrick elevator control cabinets on the assembly line"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Products" }]}
         stats={TRUST_METRICS.slice(0, 3)}
       />
@@ -74,7 +74,7 @@ export default function ProductsPage() {
         title="Not sure which product fits?"
         description="Tell us about your elevator and our engineers will recommend the right control, safety and signalling components."
         primary={{ label: "Get expert advice", href: "/contact" }}
-        secondary={{ label: "About Philbrick", href: "/about" }}
+        secondary={{ label: "About philbrick", href: "/about" }}
       />
     </ReleaseGate>
   );

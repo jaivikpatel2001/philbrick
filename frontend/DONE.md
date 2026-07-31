@@ -6,6 +6,57 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Lowercase "philbrick" branding + dead-code cleanup
+
+### Lowercase brand
+Client: "don't want capital P". Lowercased the standalone brand **Philbrick →
+philbrick** everywhere user-facing — 106 replacements across 33 `.ts/.tsx` files
+plus `public/llms.txt` — via a negative-lookahead (`Philbrick(?! Technologies)`)
+so the formal legal entity **"Philbrick Technologies (India) Pvt. Ltd." is
+preserved** (it's the registered name and appears in the verbatim legal bodies +
+structured-data `legalName`). `SITE.name` is now `philbrick`, which flows to page
+titles ("philbrick | Providing Elevator Solutions"), OG, and the Organization
+schema `name`. Verified in the built HTML: the ONLY capital "Philbrick" left is
+"Philbrick Technologies" (legal name); zero standalone capital Philbrick leaked.
+Note: the Terms defined-term `("Philbrick", …)` was lowercased to `("philbrick",
+…)` to match the brand — a deliberate, minor deviation from verbatim that follows
+the client's explicit casing preference. Footer wordmark was already lowercase.
+
+### Removed the "Stay updated" newsletter
+It was a placeholder that discarded emails and falsely showed "You're
+subscribed". Removed the footer block, its import, the orphaned
+`NewsletterForm.{tsx,module.css}`, and the dead `.newsTitle` CSS.
+
+### Dead-code cleanup (audit for "unused / misleading")
+- Removed dead data from `data/company.ts` (`ACTIVITY_CONTENT`,
+  `ACTIVITY_SEGMENTS`, `HISTORY_CHAPTERS`, `TIMELINE`) and the now-unused
+  `TimelineItem` type — all rendered nowhere after the About redesign + the
+  earlier `/milestone` removal. Purged the matching dead CSS from
+  `about.module.css` (`.activity/.history/.chapter/.segment/.infraLink`…).
+- Deleted **11 confirmed-orphan components** (no importers project-wide,
+  leftovers from removed pages/redesigns): `Timeline`, `BlogCard`, `IndustryCard`,
+  `ProjectCard`, `ServiceCard`, `FAQAccordion`, `ImageGallery`, `LogoMarquee`,
+  `Pill` (each + its `.module.css`), and hooks `useMediaQuery`,
+  `useScrollProgress`. Verified the FAQ section and product galleries still
+  render (they use `FAQSection` / `ProductGallery`, not the deleted files).
+- Fixed the committed `.env.example` contact-form recipient (was the old
+  `philbrick@`, now `info@philbrickindia.com`). (`.env.local` is the dev's own
+  test inbox by design; production sets the client address on the host.)
+
+**Flagged, left as-is per client:** contact form recipient (prod uses client
+email), the X/Twitter link, the "25+ State Network" stat, and the WhatsApp number
+— all confirmed OK by the client.
+
+**Verification:** `next build` clean, 57 pages, TypeScript clean, no console
+errors; contact FAQ + product galleries render; titles/schema show lowercase
+`philbrick` with `legalName` preserved.
+
+**Files:** 33 `.ts/.tsx` (brand casing), `public/llms.txt`, `.env.example`,
+`data/company.ts`, `types/index.ts`, `app/about/about.module.css`,
+`components/layout/{Footer.tsx,Footer.module.css}`, + 20 deleted files, `DONE.md`.
+
+---
+
 ## 2026-07-25 — Requirement 38: branding, contact, About, Network, legal pages
 
 Large content/branding pass. All changes flow through the centralized config

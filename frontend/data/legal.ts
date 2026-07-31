@@ -72,7 +72,7 @@ export const TERMS_OF_SERVICE: LegalSection[] = [
   {
     heading: null,
     paragraphs: [
-      'Welcome to the official digital platform of Philbrick Technologies (India) Pvt. Ltd. ("Philbrick", "Company", "we", "us", or "our"). These Terms & Conditions govern your access to and use of our website, product documentation, technical specifications, and online services.',
+      'Welcome to the official digital platform of Philbrick Technologies (India) Pvt. Ltd. ("philbrick", "Company", "we", "us", or "our"). These Terms & Conditions govern your access to and use of our website, product documentation, technical specifications, and online services.',
       "By accessing or using our website, requesting product quotes, or downloading technical data sheets, you agree to be bound by these Terms. If you do not agree with any part of these Terms, please refrain from using our digital services.",
     ],
   },

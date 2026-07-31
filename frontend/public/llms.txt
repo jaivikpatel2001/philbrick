@@ -1,4 +1,4 @@
-# Philbrick
+# philbrick
 
 > Philbrick Technologies (India) Pvt. Ltd. is a manufacturer, exporter and
 > supplier of elevator components, based in Ahmedabad, Gujarat, India.
@@ -11,7 +11,7 @@
 > philbrick_controls@yahoo.com (alternate).
 > GST 24AAHCP6212D1ZU · CIN U31501GJ2014PTC078837 · IEC 0814002951.
 
-Philbrick manufactures the components that make an elevator work: elevator
+philbrick manufactures the components that make an elevator work: elevator
 control panels (automatic-door, manual-door and hydraulic), integrated control
 panels (parallel, serial CAN-bus and machine-room-less), the Automatic Rescue
 Device (ARD), Elevator IoT connectivity, the Lift Master door-operator
@@ -19,7 +19,7 @@ controller, Synergy automatic door mechanisms (centre-opening and telescopic),
 elevator doors and cabins, displays (LED segment, dot-matrix, LCD and TFT),
 COP/LOP and touch COP/LOP fixtures, voice announcing systems, elevator kits and
 accessories, and STEP products. Everything is engineered and built in-house.
-Philbrick supplies customers across India and exports to markets including
+philbrick supplies customers across India and exports to markets including
 China and Taiwan.
 
 ## Pages

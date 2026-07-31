@@ -19,7 +19,7 @@ import styles from "./about.module.css";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Philbrick was founded in 1992 in Ahmedabad with a main focus on providing automation solutions by R&D and production of Control Instruments, Control Panels and elevator accessories.",
+    "philbrick was founded in 1992 in Ahmedabad with a main focus on providing automation solutions by R&D and production of Control Instruments, Control Panels and elevator accessories.",
   alternates: { canonical: "/about" },
 };
 
@@ -40,7 +40,7 @@ export default function AboutPage() {
         title="Elevator solutions, engineered in Ahmedabad since 1992"
         description="Providing automation solutions by research and development and production of Control Instruments, Control Panels and elevator accessories, with a dedicated team focused on Smarter, Safer and Simpler solutions for the passenger lift."
         image={HERO.about}
-        imageAlt="Philbrick engineer inspecting an elevator control panel wiring harness"
+        imageAlt="philbrick engineer inspecting an elevator control panel wiring harness"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
         stats={TRUST_METRICS.slice(0, 3)}
       />
@@ -66,7 +66,7 @@ export default function AboutPage() {
             <div className={styles.storyMedia} data-reveal="right">
               <Image
                 src={SECTION.aboutStory}
-                alt="Interior of a premium Philbrick elevator cabin with brushed steel walls"
+                alt="Interior of a premium philbrick elevator cabin with brushed steel walls"
                 fill
                 sizes="(max-width: 900px) 100vw, 45vw"
                 className={styles.storyImg}
@@ -131,7 +131,7 @@ export default function AboutPage() {
         <div className="container--wide">
           <SectionHeader
             eyebrow="Leadership"
-            title="The people behind Philbrick"
+            title="The people behind philbrick"
             description="Guided by our founder and led by a team focused on quality, safety and service."
             align="center"
           />
@@ -146,7 +146,7 @@ export default function AboutPage() {
       <StatsBand stats={TRUST_METRICS} columns={4} variant="default" surface />
 
       <CTASection
-        title="Build with Philbrick"
+        title="Build with philbrick"
         description="Whether you're specifying components or exploring a partnership, we'd like to talk."
         primary={{ label: "Get in touch", href: "/contact" }}
         secondary={{ label: "Our products", href: "/products" }}

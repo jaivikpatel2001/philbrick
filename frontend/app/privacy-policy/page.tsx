@@ -15,7 +15,7 @@ import styles from "@/app/prose.module.css";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Philbrick collects, uses, retains and protects the personal data you submit through this website.",
+    "How philbrick collects, uses, retains and protects the personal data you submit through this website.",
   alternates: { canonical: "/privacy-policy" },
 };
 

@@ -12,7 +12,7 @@ import styles from "@/app/company.module.css";
 export const metadata: Metadata = {
   title: "Vision & Mission",
   description:
-    "The mission and vision behind Philbrick: dependable elevator control, safety and signalling systems, engineered in-house.",
+    "The mission and vision behind philbrick: dependable elevator control, safety and signalling systems, engineered in-house.",
   alternates: { canonical: "/vision-mission" },
 };
 
@@ -73,7 +73,7 @@ export default function VisionMissionPage() {
       </section>
 
       <CTASection
-        title="Build with Philbrick"
+        title="Build with philbrick"
         description="Talk to us about elevator control, safety and signalling for your project."
         primary={{ label: "Contact us", href: "/contact" }}
         secondary={{ label: "About us", href: "/about" }}

@@ -6,7 +6,7 @@
    ========================================================================== */
 
 export const SITE = {
-  name: "Philbrick",
+  name: "philbrick",
   legalName: "Philbrick Technologies (India) Pvt. Ltd.",
   tagline: "Providing Elevator Solutions",
   description:
