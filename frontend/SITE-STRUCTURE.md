@@ -27,7 +27,8 @@ which is what makes local review and the content audit possible.
 ├─ /career                                 ✓  Career
 ├─ /quality-policy                         ✓  Quality Policy
 ├─ /privacy-policy                         ✓  Privacy Policy
-└─ /downloads                              ✓  Downloads (STEP brochure)
+├─ /terms                                  ✓  Terms & Conditions
+└─ /downloads                              ✓  Downloads (empty-state until real PDFs are added)
 
 System routes:  /sitemap.xml   /robots.txt   /icon.png   /apple-icon.png   /_not-found (404)
 ```
@@ -35,10 +36,10 @@ System routes:  /sitemap.xml   /robots.txt   /icon.png   /apple-icon.png   /_not
 The homepage hero is `Variant18Hero` (single-photo scene). The client-review
 `/variant1…18` A/B pages were removed 2026-07-23.
 
-**Counts:** 10 static entries + 38 product routes (14 categories + 24 products)
-= **48 entries in the release map**; `next build` prerenders **56 pages**
-including the system routes. (The 6 news detail routes and the 17 variant pages
-counted here previously were removed on 2026-07-23/24.)
+**Counts:** 11 static entries + 38 product routes (14 categories + 24 products)
+= **49 entries in the release map**; `next build` prerenders **57 pages**
+including the system routes. (`/terms` was added 2026-07-25; the 6 news detail
+routes and the 17 variant pages counted here previously were removed 2026-07-23/24.)
 
 **Current production release (2026-07-25): the whole site is live.** All 10
 static routes and all 38 product routes render real content; nothing shows the

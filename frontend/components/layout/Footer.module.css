@@ -44,12 +44,6 @@
   font-size: var(--fs-sm);
   line-height: var(--lh-relaxed);
 }
-.newsTitle {
-  font-family: var(--font-display);
-  font-weight: var(--fw-semibold);
-  font-size: 1.1rem;
-  margin-bottom: 0.85rem;
-}
 .contact {
   display: flex;
   flex-direction: column;

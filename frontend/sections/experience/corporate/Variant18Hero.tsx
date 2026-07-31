@@ -44,7 +44,7 @@ export function Variant18Hero() {
   return (
     <section
       className={styles.hero18}
-      aria-label="Philbrick elevator components, engineered in India since 1992"
+      aria-label="philbrick elevator components, engineered in India since 1992"
     >
       {/* z 0 — the scene, cross-faded between day and night by [data-theme] in
           CSS with no JS. Each <picture> serves the landscape plate by default
@@ -109,7 +109,7 @@ export function Variant18Hero() {
       <div className={styles.stack18}>
         <div className={`${styles.flank17} ${styles.flank18}`}>
           <p className={`${styles.lead} ${styles.animUp} ${styles.d3}`}>
-            Since 1992, Philbrick has engineered control panels, cabins, doors,
+            Since 1992, philbrick has engineered control panels, cabins, doors,
             displays and safety systems for elevator builders across India and
             beyond.
           </p>

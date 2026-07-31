@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { PageHero } from "@/sections/shared/PageHero";
 import { FeatureGrid } from "@/sections/shared/FeatureGrid";
 import { CTASection } from "@/sections/shared/CTASection";
@@ -8,16 +7,9 @@ import { StatsBand } from "@/sections/shared/StatsBand";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Stats } from "@/components/ui/Stats";
 import { TeamCard } from "@/components/cards/TeamCard";
+import { HistoryTimeline } from "@/sections/about/HistoryTimeline";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
-import {
-  ABOUT_STORY,
-  ACTIVITY_CONTENT,
-  ACTIVITY_SEGMENTS,
-  HISTORY_CHAPTERS,
-  VALUES,
-  INFRASTRUCTURE,
-  LEADERSHIP,
-} from "@/data/company";
+import { ABOUT_STORY, VALUES, INFRASTRUCTURE, LEADERSHIP } from "@/data/company";
 import { TRUST_METRICS, GLOBAL_STATS } from "@/data/stats";
 import { HERO, SECTION } from "@/data/images";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -27,7 +19,7 @@ import styles from "./about.module.css";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Philbrick India was founded in 1992 in Ahmedabad with a main focus on providing automation solutions by R&D and production of Control Instruments, Control Panels and elevator accessories.",
+    "philbrick was founded in 1992 in Ahmedabad with a main focus on providing automation solutions by R&D and production of Control Instruments, Control Panels and elevator accessories.",
   alternates: { canonical: "/about" },
 };
 
@@ -48,7 +40,7 @@ export default function AboutPage() {
         title="Elevator solutions, engineered in Ahmedabad since 1992"
         description="Providing automation solutions by research and development and production of Control Instruments, Control Panels and elevator accessories, with a dedicated team focused on Smarter, Safer and Simpler solutions for the passenger lift."
         image={HERO.about}
-        imageAlt="Philbrick engineer inspecting an elevator control panel wiring harness"
+        imageAlt="philbrick engineer inspecting an elevator control panel wiring harness"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
         stats={TRUST_METRICS.slice(0, 3)}
       />
@@ -74,7 +66,7 @@ export default function AboutPage() {
             <div className={styles.storyMedia} data-reveal="right">
               <Image
                 src={SECTION.aboutStory}
-                alt="Interior of a premium Philbrick elevator cabin with brushed steel walls"
+                alt="Interior of a premium philbrick elevator cabin with brushed steel walls"
                 fill
                 sizes="(max-width: 900px) 100vw, 45vw"
                 className={styles.storyImg}
@@ -84,40 +76,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Activity — the client's own "Activity" section from the Company page:
-          what the company actually does, and for which industries. */}
-      <section className="section">
-        <div className="container--wide">
-          <SectionHeader
-            eyebrow="Activity"
-            title="What we do, and who we do it for"
-            description="Automation solutions built around the application, from microcontroller based instruments to complete control panels."
-            align="center"
-          />
-          <div className={styles.activity}>
-            <div className={styles.activityText}>
-              {ACTIVITY_CONTENT.map((p, i) => (
-                <p key={i} className={styles.para} data-reveal="up">
-                  {p}
-                </p>
-              ))}
-            </div>
-            <ul className={styles.segments} data-reveal="up">
-              {ACTIVITY_SEGMENTS.map((s, i) => (
-                <li key={s} className={styles.segment}>
-                  <span className={styles.segmentIndex}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  {s}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* History — the Company page's third section, told chapter by chapter.
-          The condensed year list lives on /milestone; this is the full story. */}
+      {/* History — redesigned as a graphical timeline of concise milestones
+          (the Activity section and the long chapter prose were removed
+          2026-07-25 at the client's request). */}
       <section className="section">
         <div className="container--wide">
           <SectionHeader
@@ -126,20 +87,7 @@ export default function AboutPage() {
             description="Three decades of products, each one answering a problem a customer brought to us."
             align="center"
           />
-          <ol className={styles.history}>
-            {HISTORY_CHAPTERS.map((c) => (
-              <li key={c.period} className={styles.chapter} data-reveal="up">
-                <span className={styles.chapterPeriod}>{c.period}</span>
-                <div className={styles.chapterBody}>
-                  <h3 className={styles.chapterTitle}>{c.title}</h3>
-                  <p className={styles.para}>{c.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <p className={styles.infraLink}>
-            <Link href="/milestone">See the milestone timeline →</Link>
-          </p>
+          <HistoryTimeline />
         </div>
       </section>
 
@@ -157,9 +105,6 @@ export default function AboutPage() {
           <div className={styles.infraStats}>
             <Stats stats={GLOBAL_STATS} columns={4} variant="bordered" />
           </div>
-          <p className={styles.infraLink}>
-            <Link href="/infrastructure">Explore our infrastructure →</Link>
-          </p>
         </div>
       </section>
 
@@ -186,7 +131,7 @@ export default function AboutPage() {
         <div className="container--wide">
           <SectionHeader
             eyebrow="Leadership"
-            title="The people behind Philbrick"
+            title="The people behind philbrick"
             description="Guided by our founder and led by a team focused on quality, safety and service."
             align="center"
           />
@@ -201,7 +146,7 @@ export default function AboutPage() {
       <StatsBand stats={TRUST_METRICS} columns={4} variant="default" surface />
 
       <CTASection
-        title="Build with Philbrick"
+        title="Build with philbrick"
         description="Whether you're specifying components or exploring a partnership, we'd like to talk."
         primary={{ label: "Get in touch", href: "/contact" }}
         secondary={{ label: "Our products", href: "/products" }}

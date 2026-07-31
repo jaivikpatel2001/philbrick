@@ -18,7 +18,7 @@ export const WEBSITE_ID = `${SITE.url}/#website`;
 const OG_IMAGE_ABS = OG_IMAGE.startsWith("http") ? OG_IMAGE : `${SITE.url}${OG_IMAGE}`;
 
 /** The company as a single, unambiguous business entity.
- *  Typed as both Organization AND LocalBusiness: Philbrick is a manufacturer
+ *  Typed as both Organization AND LocalBusiness: philbrick is a manufacturer
  *  with a physical plant (GIDC Kathwada, Ahmedabad) that has real coordinates
  *  and opening hours, so the LocalBusiness facet (geo + hasMap + hours) feeds
  *  the local pack and gives AI answer engines a precise, verifiable entity. */

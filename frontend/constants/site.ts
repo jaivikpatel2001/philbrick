@@ -6,7 +6,7 @@
    ========================================================================== */
 
 export const SITE = {
-  name: "Philbrick",
+  name: "philbrick",
   legalName: "Philbrick Technologies (India) Pvt. Ltd.",
   tagline: "Providing Elevator Solutions",
   description:
@@ -23,72 +23,55 @@ export const SITE = {
      Privacy policy page (ID 3992) and philbrick-child-theme/footer.php.
      ---------------------------------------------------------------------- */
 
-  /* Primary scalars (kept for structured data and single-slot UI). The main
-     number is the helpline the client publishes first on the Contact page. */
-  email: "philbrick@philbrickindia.com",
-  salesEmail: "sales@philbrickindia.com",
-  careersEmail: "hr.philbrickindia@gmail.com",
-  altEmail: "philbrick_controls@yahoo.com",
-  phone: "+91 84012 19941",
-  phoneHref: "tel:+918401219941",
+  /* Primary scalars (kept for structured data and single-slot UI). Updated
+     2026-07-25 to the client's verified single inbox + Sales as the lead line. */
+  email: "info@philbrickindia.com",
+  salesEmail: "info@philbrickindia.com",
+  careersEmail: "info@philbrickindia.com",
+  phone: "+91 99789 86731",
+  phoneHref: "tel:+919978986731",
 
-  /* Categorised inboxes, in the order they are offered to a visitor. */
+  /* The company publishes a single inbox for everything. */
   emails: [
     {
-      label: "Sales",
-      address: "sales@philbrickindia.com",
-      purpose: "Quotations, orders and pricing",
-    },
-    {
-      label: "General enquiries",
-      address: "philbrick@philbrickindia.com",
-      purpose: "Company, products and support",
-    },
-    {
-      label: "Careers",
-      address: "hr.philbrickindia@gmail.com",
-      purpose: "Mail your resume to our HR team",
-    },
-    {
-      label: "Alternate inbox",
-      address: "philbrick_controls@yahoo.com",
-      purpose: "Second address for general mail",
+      label: "Email",
+      address: "info@philbrickindia.com",
+      purpose: "Sales, support and general enquiries",
     },
   ],
 
-  /* Every number the client publishes, labelled by what it is for. Only the
-     helpline and the WhatsApp line carry a role on the client's own site; the
-     rest are the office lines listed on the Contact page and in the footer. */
+  /* Verified support numbers (2026-07-25), each labelled by the desk it reaches.
+     Footer + Contact both render this one list, so they stay in sync. */
   phones: [
     {
-      label: "Helpline",
-      number: "+91 84012 19941",
-      purpose: "Support and general help",
-      whatsapp: false,
+      label: "Sales",
+      number: "+91 99789 86731",
+      purpose: "Quotations, orders and pricing",
     },
     {
-      label: "WhatsApp",
-      number: "+91 99789 86631",
-      purpose: "Call or chat with us on WhatsApp",
-      whatsapp: true,
+      label: "Control Panel Support",
+      number: "+91 99789 86738",
+      purpose: "Control panel technical support",
     },
     {
-      label: "Office",
-      number: "+91 93740 22660",
-      purpose: "Office line",
-      whatsapp: false,
+      label: "Door & Header Support",
+      number: "+91 99789 86736",
+      purpose: "Doors and headers",
     },
     {
-      label: "Office",
-      number: "+91 98250 09420",
-      purpose: "Office line",
-      whatsapp: false,
+      label: "Door Drive & Lift Parts Support",
+      number: "+91 99789 86737",
+      purpose: "Door drives and lift parts",
     },
     {
-      label: "Office",
+      label: "Account Support",
+      number: "+91 99789 86735",
+      purpose: "Accounts and billing",
+    },
+    {
+      label: "Escalation",
       number: "+91 99789 86635",
-      purpose: "Office line",
-      whatsapp: false,
+      purpose: "Escalations and priority issues",
     },
   ],
 
@@ -122,8 +105,6 @@ export const SITE = {
     { name: "Saransh Patel", role: "Customer Relationship (CRM)" },
     { name: "Prakash Patel", role: "Technical Support" },
   ],
-
-  exportMarkets: ["China", "Taiwan"],
 } as const;
 
 /* ---------------------------------------------------------------------------

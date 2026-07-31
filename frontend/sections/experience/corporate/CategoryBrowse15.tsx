@@ -24,12 +24,12 @@ const CATEGORY_FOR_PART: Record<string, string> = {
 
 export function CategoryBrowse15() {
   return (
-    <section className="section" aria-label="Browse Philbrick components">
+    <section className="section" aria-label="Browse philbrick components">
       <div className="container--wide">
         <SectionHeader
           eyebrow="Browse the range"
           title="Find it by component"
-          description="The core Philbrick components, all engineered and built in-house. Pick one to explore the products inside."
+          description="The core philbrick components, all engineered and built in-house. Pick one to explore the products inside."
         />
         <ul className={styles.catGrid15} role="list">
           {CATALOG_PARTS.map((p, i) => {

@@ -13,7 +13,7 @@ import { HERO } from "@/data/images";
 export const metadata: Metadata = {
   title: "Network",
   description:
-    "Philbrick's reach: based in Ahmedabad, supplying elevator components across India and exporting to markets including China and Taiwan.",
+    "philbrick's reach: based in Ahmedabad, supplying elevator components to installers, OEMs and modernisers across India.",
   alternates: { canonical: "/network" },
 };
 
@@ -31,10 +31,10 @@ const REACH = [
       "We supply elevator components to installers, OEMs and modernisers throughout India.",
   },
   {
-    iconName: "FiGlobe",
-    title: "Export markets",
+    iconName: "FiTool",
+    title: "Support & service",
     description:
-      "We export elevator components to international markets including China and Taiwan.",
+      "Application help, commissioning support and after-sales service for partners across the country.",
   },
   {
     iconName: "FiUsers",
@@ -56,8 +56,8 @@ export default function NetworkPage() {
 
       <PageHero
         eyebrow="Reach"
-        title="From Ahmedabad, across India and beyond"
-        description="Philbrick supplies elevator components from its Ahmedabad facility to customers across India and export markets, held to the same standard everywhere."
+        title="From Ahmedabad, across India"
+        description="philbrick supplies elevator components from its Ahmedabad facility to customers across India, held to the same standard everywhere."
         image={HERO.network}
         imageAlt="Modern Indian city skyline at golden hour"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Network" }]}
@@ -70,7 +70,7 @@ export default function NetworkPage() {
           <SectionHeader
             eyebrow="Domestic network"
             title="One factory, 31 cities."
-            description="Every point on this map is a city on Philbrick's domestic business network, supplied from our Ahmedabad factory. Select a city to see how we reach it."
+            description="Every point on this map is a city on philbrick's domestic business network, supplied from our Ahmedabad factory. Select a city to see how we reach it."
           />
           <NetworkMap />
         </div>
@@ -80,7 +80,7 @@ export default function NetworkPage() {
         <div className="container--wide">
           <FeatureGrid
             eyebrow="Our network"
-            title="Where Philbrick reaches"
+            title="Where philbrick reaches"
             description="An in-house manufacturing base supplying a growing footprint of customers and partners."
             align="center"
             columns={2}
@@ -91,8 +91,8 @@ export default function NetworkPage() {
 
       <CTASection
         eyebrow="Partner with us"
-        title="Become a Philbrick partner"
-        description={`Interested in supplying or specifying Philbrick components in your region? Call our helpline on ${SITE.phone} or write to ${SITE.salesEmail}.`}
+        title="Become a philbrick partner"
+        description={`Interested in supplying or specifying philbrick components in your region? Call our sales line on ${SITE.phone} or write to ${SITE.email}.`}
         primary={{ label: "Get in touch", href: "/contact" }}
         secondary={{ label: "View products", href: "/products" }}
       />

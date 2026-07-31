@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: cat.description,
     alternates: { canonical: categoryHref(cat.slug) },
     openGraph: {
-      title: `${cat.name} · Philbrick`,
+      title: `${cat.name} · philbrick`,
       description: cat.description,
       images: [cat.image],
     },
@@ -129,7 +129,7 @@ export default async function CategoryPage({ params }: Props) {
             <SectionHeader
               eyebrow="The range"
               title={`Explore ${cat.name}`}
-              description={`Choose the ${cat.name.toLowerCase()} variant that fits your project. The Philbrick team will help you specify the rest.`}
+              description={`Choose the ${cat.name.toLowerCase()} variant that fits your project. The philbrick team will help you specify the rest.`}
             />
             <div className={styles.rangeGrid}>
               {cat.children.map((child) => (
@@ -146,7 +146,7 @@ export default async function CategoryPage({ params }: Props) {
 
       <CTASection
         title={`Interested in ${cat.name}?`}
-        description="Tell us about your project and the Philbrick team will help you specify the right solution."
+        description="Tell us about your project and the philbrick team will help you specify the right solution."
         primary={{ label: "Request a quote", href: "/contact" }}
         secondary={{ label: "All products", href: "/products" }}
       />

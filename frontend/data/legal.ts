@@ -12,6 +12,8 @@ export interface LegalSection {
   /** Heading as published, or null for the opening, un-headed paragraphs. */
   heading: string | null;
   paragraphs: string[];
+  /** Optional bulleted items rendered after the paragraphs (e.g. Terms §3). */
+  list?: string[];
 }
 
 export const PRIVACY_POLICY: LegalSection[] = [
@@ -58,3 +60,62 @@ export const PRIVACY_POLICY: LegalSection[] = [
 export const PRIVACY_CONTACT_HEADING = "Contact Us";
 export const PRIVACY_CONTACT_INTRO =
   "If you have any questions or concerns about this privacy policy, please contact us at";
+
+/* =============================================================================
+   TERMS & CONDITIONS
+
+   Verbatim from the official site (philbrickindia.com/terms-condition.html).
+   Wording preserved exactly; only structured for the site's prose layout.
+   Contact details are not hard-coded — they come from constants/site.ts.
+   ========================================================================== */
+export const TERMS_OF_SERVICE: LegalSection[] = [
+  {
+    heading: null,
+    paragraphs: [
+      'Welcome to the official digital platform of Philbrick Technologies (India) Pvt. Ltd. ("philbrick", "Company", "we", "us", or "our"). These Terms & Conditions govern your access to and use of our website, product documentation, technical specifications, and online services.',
+      "By accessing or using our website, requesting product quotes, or downloading technical data sheets, you agree to be bound by these Terms. If you do not agree with any part of these Terms, please refrain from using our digital services.",
+    ],
+  },
+  {
+    heading: "Intellectual Property Rights",
+    paragraphs: [
+      "All contents displayed on this website—including but not limited to brand logos, trademarks, technical drawings, engineering designs, product catalogs, software, photography, graphics, and text—are the exclusive intellectual property of Philbrick Technologies (India) Pvt. Ltd. and are protected by applicable Indian and international copyright, trademark, and patent laws.",
+      "You are granted a limited, non-exclusive, non-transferable license to view and download content solely for personal, non-commercial, or legitimate procurement evaluation purposes. Any reproduction, distribution, modification, or commercial exploitation without our prior written consent is strictly prohibited.",
+    ],
+  },
+  {
+    heading: "Product Specifications & Quality Assurance",
+    paragraphs: [
+      "While Philbrick Technologies makes every effort to present accurate engineering data and product images, technical specifications and dimensions are subject to continuous engineering enhancements. All product executions and deliveries are governed strictly by individual commercial purchase orders, approved Quality Assurance (Q.A.) plans, and relevant Indian Standard specifications.",
+      "Certificates of physical and chemical analysis are issued as per the agreed order execution terms and ISO certified quality procedures.",
+    ],
+  },
+  {
+    heading: "User Obligations & Conduct",
+    paragraphs: [
+      "When interacting with our website and digital services, you agree that you will not:",
+    ],
+    list: [
+      "Use the site for any unlawful, fraudulent, or unauthorized purpose.",
+      "Attempt to probe, scan, or breach the security of our network infrastructure or servers.",
+      "Use automated bots, scrapers, or data mining software to extract proprietary technical assets.",
+      "Transmit malicious code, viruses, or disruptive digital assets.",
+    ],
+  },
+  {
+    heading: "Limitation of Liability",
+    paragraphs: [
+      "To the maximum extent permitted by applicable law, Philbrick Technologies (India) Pvt. Ltd. shall not be liable for any indirect, incidental, consequential, or punitive damages arising out of your access to or use of this website. Product warranties are strictly limited to manufactured parts adhering to agreed technical purchase orders and safety compliance at customer premises.",
+    ],
+  },
+  {
+    heading: "Governing Law & Jurisdiction",
+    paragraphs: [
+      "These Terms & Conditions shall be governed by and construed in accordance with the laws of the Republic of India. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the competent courts of India.",
+    ],
+  },
+];
+
+export const TERMS_CONTACT_HEADING = "Legal Contact & Inquiries";
+export const TERMS_CONTACT_INTRO =
+  "For any legal inquiries regarding these terms or commercial contracts, please contact Philbrick Technologies:";

@@ -48,6 +48,7 @@ export const STATIC_ROUTE_RELEASES: Record<string, boolean> = {
   "/career": true,
   "/quality-policy": true,
   "/privacy-policy": true,
+  "/terms": true,
   "/downloads": true,
 };
 

@@ -6,6 +6,150 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Lowercase "philbrick" branding + dead-code cleanup
+
+### Lowercase brand
+Client: "don't want capital P". Lowercased the standalone brand **Philbrick →
+philbrick** everywhere user-facing — 106 replacements across 33 `.ts/.tsx` files
+plus `public/llms.txt` — via a negative-lookahead (`Philbrick(?! Technologies)`)
+so the formal legal entity **"Philbrick Technologies (India) Pvt. Ltd." is
+preserved** (it's the registered name and appears in the verbatim legal bodies +
+structured-data `legalName`). `SITE.name` is now `philbrick`, which flows to page
+titles ("philbrick | Providing Elevator Solutions"), OG, and the Organization
+schema `name`. Verified in the built HTML: the ONLY capital "Philbrick" left is
+"Philbrick Technologies" (legal name); zero standalone capital Philbrick leaked.
+Note: the Terms defined-term `("Philbrick", …)` was lowercased to `("philbrick",
+…)` to match the brand — a deliberate, minor deviation from verbatim that follows
+the client's explicit casing preference. Footer wordmark was already lowercase.
+
+### Removed the "Stay updated" newsletter
+It was a placeholder that discarded emails and falsely showed "You're
+subscribed". Removed the footer block, its import, the orphaned
+`NewsletterForm.{tsx,module.css}`, and the dead `.newsTitle` CSS.
+
+### Dead-code cleanup (audit for "unused / misleading")
+- Removed dead data from `data/company.ts` (`ACTIVITY_CONTENT`,
+  `ACTIVITY_SEGMENTS`, `HISTORY_CHAPTERS`, `TIMELINE`) and the now-unused
+  `TimelineItem` type — all rendered nowhere after the About redesign + the
+  earlier `/milestone` removal. Purged the matching dead CSS from
+  `about.module.css` (`.activity/.history/.chapter/.segment/.infraLink`…).
+- Deleted **11 confirmed-orphan components** (no importers project-wide,
+  leftovers from removed pages/redesigns): `Timeline`, `BlogCard`, `IndustryCard`,
+  `ProjectCard`, `ServiceCard`, `FAQAccordion`, `ImageGallery`, `LogoMarquee`,
+  `Pill` (each + its `.module.css`), and hooks `useMediaQuery`,
+  `useScrollProgress`. Verified the FAQ section and product galleries still
+  render (they use `FAQSection` / `ProductGallery`, not the deleted files).
+- Fixed the committed `.env.example` contact-form recipient (was the old
+  `philbrick@`, now `info@philbrickindia.com`). (`.env.local` is the dev's own
+  test inbox by design; production sets the client address on the host.)
+
+**Flagged, left as-is per client:** contact form recipient (prod uses client
+email), the X/Twitter link, the "25+ State Network" stat, and the WhatsApp number
+— all confirmed OK by the client.
+
+**Verification:** `next build` clean, 57 pages, TypeScript clean, no console
+errors; contact FAQ + product galleries render; titles/schema show lowercase
+`philbrick` with `legalName` preserved.
+
+**Files:** 33 `.ts/.tsx` (brand casing), `public/llms.txt`, `.env.example`,
+`data/company.ts`, `types/index.ts`, `app/about/about.module.css`,
+`components/layout/{Footer.tsx,Footer.module.css}`, + 20 deleted files, `DONE.md`.
+
+---
+
+## 2026-07-25 — Requirement 38: branding, contact, About, Network, legal pages
+
+Large content/branding pass. All changes flow through the centralized config
+(`constants/site.ts`) and data files so the Footer and Contact stay in sync.
+
+### A. Company name standardized to "Philbrick"
+Shortened user-facing marketing/meta/alt occurrences of the longer name to
+"Philbrick": `ABOUT_STORY`, `AboutPreview`, `CAREER_CONTENT`, the About/Career/
+Contact/Downloads/Vision/Quality/Privacy metadata, and the contact map's aria
+title. "Philbrick India" → "Philbrick". The **legal name**
+("Philbrick Technologies (India) Pvt. Ltd.") is deliberately kept where it is
+correct: structured-data `legalName`, footer copyright, and the verbatim legal
+page bodies (Requirement F wants exact wording there). No stray old brands
+remain (VERTIQ/Controls audited — none).
+
+### B + E. Contact info (footer + contact page, centralized)
+`constants/site.ts`: replaced the phone list with the six verified support lines
+(Sales 86731, Control Panel 86738, Door & Header 86736, Door Drive & Lift Parts
+86737, Account 86735, Escalation 86635) and consolidated all inboxes to the
+single **info@philbrickindia.com** (email/salesEmail/careersEmail scalars +
+`emails[]`). Removed `altEmail` and `exportMarkets`. Footer + Contact both render
+`SITE.phones`/`SITE.emails`, so they're automatically in sync; all six numbers
+are `tel:` links and the email is a mailto/gmail link. WhatsApp kept as a
+separate chat channel (footer row + floating button). Verified in-browser: 6
+clickable numbers + info@ in the footer, 0 horizontal overflow.
+
+### C. About page
+- **Activity section removed** entirely (layout + data imports).
+- **History redesigned** as a graphical vertical timeline
+  (`sections/about/HistoryTimeline.{tsx,module.css}`) fed by new concise
+  `ABOUT_MILESTONES` one-line summaries. Central spine, cards alternating
+  left/right on desktop, single left rail on mobile, theme-aware, reveal-
+  animated. Node dots are centred on the spine AND vertically centred on each
+  card (verified dx=0, dy=0 — two rounds of client feedback).
+- **Leadership updated**: Vasant Patel (CEO & Founder), Prakash Patel (CTO),
+  Saransh Patel (Management Head). Grid changed to **3-up in one row** (was 2-up,
+  which broke 3 cards to 2+1); monogram media shortened 4/5 → 4/3 (~225px) at the
+  client's request. `leadershipSchema()` picks up the new people automatically.
+- Fixed two **dead links** (`/milestone`, `/infrastructure` — removed routes) on
+  About and Quality Policy.
+
+### D. Export references removed site-wide
+Philbrick does not export internationally. Removed every China/Taiwan/export-
+market reference: Network page (hero, metadata, REACH card → "Support & service"),
+`NetworkMap` stat ("Coverage · Across India"), `company.ts` (VISION, VALUES,
+INFRASTRUCTURE ×2, TIMELINE), `services.ts` ("Pan-India supply"), `faqs.ts`, and
+the earlier stats change. Verified: **0 export references in the built HTML.**
+
+### F. Legal pages (exact official content)
+Fetched verbatim from philbrickindia.com.
+- **Privacy Policy**: already matched `legal.ts` — unchanged (contact block pulls
+  from `SITE`, so it now shows info@ + the new number).
+- **Quality Policy**: replaced with the exact official content — four principle
+  cards + four detailed sections (with headings) + the "100% Quality Guaranteed"
+  strip. Restructured `QUALITY_POLICY` + new `QUALITY_PRINCIPLES` in `company.ts`;
+  page rewritten.
+- **Terms & Conditions**: NEW page `app/terms/page.tsx` + `TERMS_OF_SERVICE` in
+  `legal.ts` (exact content, 6 sections incl. a bulleted conduct list —
+  `LegalSection` gained an optional `list`). Wired into `config/pageReleases.ts`
+  (`/terms: true`), footer nav (Resources → Terms & Conditions), sitemap and
+  `SITE-STRUCTURE.md`. Uses the shared prose layout (PageHeader + clauses +
+  breadcrumb), theme-aware and responsive.
+- Prose CSS extended (`app/prose.module.css`): `.list/.listItem`,
+  `.principles/.principle`, `.badge` for the legal/quality layouts.
+
+### Also (client requests mid-task)
+- Footer wordmark **PHILBRICK → philbrick** (lowercase, matches the logo).
+- **Downloads**: removed the single dummy "STEP Brochure" card (dead
+  `acharyagroup.in` link); `DOWNLOADS` is now empty so the page shows its
+  friendly empty state ("No brochures… available right now. Please check back
+  later…") — already-built empty-state, just triggered.
+
+**Verification:** `next build` clean, **57 pages** (+1 `/terms`), TypeScript
+clean. In-browser: no export refs, footer/contact synced (6 numbers + info@),
+timeline nodes aligned, leadership 3-up, downloads empty state, all legal pages
+render without Coming Soon, no console errors, no horizontal overflow.
+
+**Files:** `constants/site.ts`, `constants/navigation.ts`, `config/pageReleases.ts`,
+`data/{company,legal,faqs,services,stats,downloads}.ts`,
+`app/{about,contact,network,downloads,career,vision-mission,quality-policy,privacy-policy}/page.tsx`,
+`app/terms/page.tsx` (new), `app/prose.module.css`, `app/about/about.module.css`,
+`sections/about/HistoryTimeline.{tsx,module.css}` (new), `sections/home/AboutPreview.tsx`,
+`sections/network/NetworkMap.tsx`, `components/layout/Footer.tsx`,
+`components/cards/TeamCard.module.css`, `SITE-STRUCTURE.md`, `DONE.md`.
+
+**Known limitations / follow-up:** Downloads has no live files — drop real PDFs
+under `public/downloads/` and populate `DOWNLOADS` to replace the empty state.
+`about.module.css` retains now-unused `.activity/.history/.chapter/.segment`
+rules (dead CSS, harmless) that could be pruned. WhatsApp number unchanged
+(not in the client's new list) — confirm if it should move to a new line.
+
+---
+
 ## 2026-07-25 — UI refinements (navbar/hero/orbit) + SEO/GEO/AEO pass
 
 ### UI (both themes)

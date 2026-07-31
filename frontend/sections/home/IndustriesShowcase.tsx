@@ -13,7 +13,7 @@ import styles from "./IndustriesShowcase.module.css";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 
-/* Application sectors elevators (and Philbrick components) serve. */
+/* Application sectors elevators (and philbrick components) serve. */
 const INDUSTRIES = [
   { name: "Residential", tagline: "Homes, villas & residential towers", img: INDUSTRY_IMG.residential, alt: "Modern Indian residential high-rise apartment tower" },
   { name: "Commercial", tagline: "Offices, retail & mixed use", img: INDUSTRY_IMG.commercial, alt: "Sleek glass and steel commercial office tower" },
@@ -58,7 +58,7 @@ export function IndustriesShowcase() {
         <SectionHeader
           eyebrow="04 Applications"
           title="Components for every kind of building."
-          description="From homes and offices to hospitals and industrial sites, Philbrick components go into the elevators that serve every kind of building."
+          description="From homes and offices to hospitals and industrial sites, philbrick components go into the elevators that serve every kind of building."
         />
       </div>
 

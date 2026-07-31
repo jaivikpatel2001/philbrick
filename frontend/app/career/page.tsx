@@ -13,7 +13,7 @@ import styles from "@/app/prose.module.css";
 export const metadata: Metadata = {
   title: "Career",
   description:
-    "Work at Philbrick Technologies (India) Pvt. Ltd. in Ahmedabad. A family where every person and their ideas are treated equally, with training programmes at various levels.",
+    "Work at philbrick in Ahmedabad. A family where every person and their ideas are treated equally, with training programmes at various levels.",
   alternates: { canonical: "/career" },
 };
 
@@ -30,7 +30,7 @@ export default function CareerPage() {
       <PageHeader
         eyebrow="Career"
         title="Build a career where ideas count"
-        description="There is always something happening at Philbrick that keeps the passion flowing. If that sounds like you, we would like to read your resume."
+        description="There is always something happening at philbrick that keeps the passion flowing. If that sounds like you, we would like to read your resume."
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Career" }]}
       />
 
@@ -81,7 +81,7 @@ export default function CareerPage() {
 
       <CTASection
         title="Questions before you apply?"
-        description="Talk to the Philbrick team about roles, training programmes and life at our Ahmedabad facility."
+        description="Talk to the philbrick team about roles, training programmes and life at our Ahmedabad facility."
         primary={{ label: "Contact us", href: "/contact" }}
         secondary={{ label: "About us", href: "/about" }}
       />

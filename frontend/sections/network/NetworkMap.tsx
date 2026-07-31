@@ -153,7 +153,7 @@ export function NetworkMap() {
           className={styles.svg}
           viewBox={`${-PAD.l} ${-PAD.t} ${VIEW_W} ${VIEW_H}`}
           role="img"
-          aria-label="Map of India showing the 31 cities on Philbrick's domestic business network"
+          aria-label="Map of India showing the 31 cities on philbrick's domestic business network"
         >
           <defs>
             <pattern id="nm-dots" width="11" height="11" patternUnits="userSpaceOnUse">
@@ -248,7 +248,7 @@ export function NetworkMap() {
         ))}
 
         <figcaption className="sr-only">
-          Cities from Philbrick&apos;s domestic business network, supplied from
+          Cities from philbrick&apos;s domestic business network, supplied from
           the Ahmedabad factory.
         </figcaption>
       </figure>
@@ -274,7 +274,7 @@ export function NetworkMap() {
           </>
         ) : (
           <p className={styles.panelBody}>
-            Part of Philbrick&apos;s domestic business network. Components from
+            Part of philbrick&apos;s domestic business network. Components from
             our Ahmedabad factory reach installers, OEMs and modernisers here.
           </p>
         )}
@@ -293,8 +293,8 @@ export function NetworkMap() {
             <dd className={styles.statValue}>Ahmedabad</dd>
           </div>
           <div className={styles.stat}>
-            <dt className={styles.statLabel}>Export markets</dt>
-            <dd className={styles.statValue}>China &amp; Taiwan</dd>
+            <dt className={styles.statLabel}>Coverage</dt>
+            <dd className={styles.statValue}>Across India</dd>
           </div>
         </dl>
       </aside>

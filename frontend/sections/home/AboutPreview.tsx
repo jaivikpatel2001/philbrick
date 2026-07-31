@@ -22,7 +22,7 @@ export function AboutPreview() {
         <div className={styles.grid}>
           <div className={styles.content}>
             <p className={styles.text} data-reveal="up">
-              Philbrick India was founded in 1992 in Ahmedabad with a
+              philbrick was founded in 1992 in Ahmedabad with a
               main focus on providing automation solutions by research and
               development and production of Control Instruments and Control
               Panels. We have a dedicated team with a special focus on Elevator
@@ -61,13 +61,13 @@ export function AboutPreview() {
           <figure className={styles.media} data-reveal="right">
             <Image
               src={SECTION.whoWeAre}
-              alt="Philbrick engineer assembling a stainless steel car operating panel"
+              alt="philbrick engineer assembling a stainless steel car operating panel"
               fill
               sizes="(max-width: 900px) 100vw, 44vw"
               className={styles.img}
             />
             <figcaption className={styles.caption}>
-              Philbrick · engineering since 1992
+              philbrick · engineering since 1992
             </figcaption>
           </figure>
         </div>

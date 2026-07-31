@@ -8,7 +8,6 @@ import type { Stat } from "@/types";
      • 14 product categories, ~35 products/variants (see data/products.ts)
      • Dedicated in-house units: procurement, design, QC, warehousing, packaging
      • Supply/state network across 25+ states in India
-     • (Also exports to China & Taiwan — see the Network page prose)
    ========================================================================== */
 
 /** Headline trust metrics — page heroes / hero bands. */

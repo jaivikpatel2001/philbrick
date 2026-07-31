@@ -1,11 +1,11 @@
 /* =============================================================================
    PHILBRICK — PRODUCT CATALOGUE (single source of truth)
 
-   Philbrick's real product hierarchy, modelled as a two-level tree:
+   philbrick's real product hierarchy, modelled as a two-level tree:
      Category  (/products/<category>)
        Product (/products/<category>/<product>)
 
-   Content is drawn from Philbrick's public product range. Descriptions are
+   Content is drawn from philbrick's public product range. Descriptions are
    honest and qualitative: NO fabricated specifications, capacities or numbers.
    `released` is a content-readiness hint; production gating is governed centrally
    by config/pageReleases.ts (secure default-deny). In development every route is
@@ -30,7 +30,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Control panels that manage motion, safety, signalling and door operation for a smooth, reliable elevator, engineered and built in-house.",
     longDescription:
-      "The elevator control panel is the intelligence behind the ride: it drives the machine, levels the car, sequences the doors and supervises every safety circuit. Philbrick builds control panels in-house using RISC microprocessor-based High Speed clocked design for automatic-door, manual-door and hydraulic elevators. Features include Multi Functional keypad with LCD display, Programmable configuration, Self Diagnostic/Debugging Mode, Opto Coupler based Galvanic Isolation for all Inputs and Outputs, and PTC protected Digital I/O.",
+      "The elevator control panel is the intelligence behind the ride: it drives the machine, levels the car, sequences the doors and supervises every safety circuit. philbrick builds control panels in-house using RISC microprocessor-based High Speed clocked design for automatic-door, manual-door and hydraulic elevators. Features include Multi Functional keypad with LCD display, Programmable configuration, Self Diagnostic/Debugging Mode, Opto Coupler based Galvanic Isolation for all Inputs and Outputs, and PTC protected Digital I/O.",
     highlights: [
       "RISC microprocessor-based High Speed design",
       "Automatic, manual and hydraulic variants",
@@ -77,7 +77,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "All-in-one elevator control that integrates the drive, controller and signalling into a single, space-saving cabinet, in parallel, serial CAN-bus and MRL configurations.",
     longDescription:
-      "Philbrick's integrated control panels bring the drive, controller and signalling together in one compact cabinet, cutting wiring, footprint and commissioning time. The range spans traditional parallel wiring, modern serial CAN-bus communication and dedicated machine-room-less control, so the right architecture is available for every building.",
+      "philbrick's integrated control panels bring the drive, controller and signalling together in one compact cabinet, cutting wiring, footprint and commissioning time. The range spans traditional parallel wiring, modern serial CAN-bus communication and dedicated machine-room-less control, so the right architecture is available for every building.",
     highlights: [
       "Drive, controller and signalling combined",
       "Parallel and serial CAN-bus options",
@@ -124,12 +124,12 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "A connectivity module that streams live status, fault and usage data from the elevator controller to the cloud for remote monitoring and faster response.",
     longDescription:
-      "Philbrick's Elevator IoT links the controller to the cloud, turning each lift into a connected asset. Building and maintenance teams can watch live status, receive fault alerts and review usage remotely, shortening downtime and supporting condition-based, rather than purely scheduled, maintenance.",
+      "philbrick's Elevator IoT links the controller to the cloud, turning each lift into a connected asset. Building and maintenance teams can watch live status, receive fault alerts and review usage remotely, shortening downtime and supporting condition-based, rather than purely scheduled, maintenance.",
     highlights: [
       "Live status and fault alerts",
       "Remote monitoring from anywhere",
       "Usage insight for smarter maintenance",
-      "Works with Philbrick controllers",
+      "Works with philbrick controllers",
     ],
     image: cover("elevator-iot"),
     released: true,
@@ -140,14 +140,14 @@ export const PRODUCT_TREE: ProductNode[] = [
     category: "Safety & Intelligence",
     tagline: "Nobody stays trapped.",
     description:
-      "On a power failure the Automatic Rescue Device moves the car to the nearest floor and opens the doors, releasing passengers safely. A core Philbrick safety product.",
+      "On a power failure the Automatic Rescue Device moves the car to the nearest floor and opens the doors, releasing passengers safely. A core philbrick safety product.",
     longDescription:
       "Lift Power LP440/LP220 is a specially designed High Starting Current type Inverter to operate the LIFT in Emergency Mode to rescue the passenger in power fail condition. When mains power fails, it automatically brings the elevator to the nearest landing on backup power and opens the doors so passengers are never left stranded between floors.",
     highlights: [
       "Automatic rescue on power failure",
       "Moves the car to the nearest floor",
       "Opens doors to free passengers",
-      "Flagship Philbrick safety device",
+      "Flagship philbrick safety device",
     ],
     image: cover("ard"),
     released: true,
@@ -158,9 +158,9 @@ export const PRODUCT_TREE: ProductNode[] = [
     category: "Doors & Mechanism",
     tagline: "Precise doors, every cycle.",
     description:
-      "Philbrick's dedicated door-operator controller, driving the car-door mechanism with smooth, precisely profiled opening and closing and reliable obstruction handling.",
+      "philbrick's dedicated door-operator controller, driving the car-door mechanism with smooth, precisely profiled opening and closing and reliable obstruction handling.",
     longDescription:
-      "Lift Master is Philbrick's dedicated door-operator controller available in two models: the LMP66 TINY with 66 Watt BLDC Motor suitable for small opening/light weight doors, and the LMP110 with 110 Watt BLDC Motor suitable for medium to large opening/medium to heavy weight doors. It drives the car-door mechanism with a smooth, tuned motion profile and handles obstructions gracefully.",
+      "Lift Master is philbrick's dedicated door-operator controller available in two models: the LMP66 TINY with 66 Watt BLDC Motor suitable for small opening/light weight doors, and the LMP110 with 110 Watt BLDC Motor suitable for medium to large opening/medium to heavy weight doors. It drives the car-door mechanism with a smooth, tuned motion profile and handles obstructions gracefully.",
     highlights: [
       "Smooth, profiled door motion",
       "Reliable obstruction handling",
@@ -176,9 +176,9 @@ export const PRODUCT_TREE: ProductNode[] = [
     category: "Doors & Mechanism",
     tagline: "Quiet, precise automatic doors.",
     description:
-      "Philbrick's automatic door mechanism for car and landing entrances: quiet and precise, in centre-opening and telescopic/side-opening panel configurations.",
+      "philbrick's automatic door mechanism for car and landing entrances: quiet and precise, in centre-opening and telescopic/side-opening panel configurations.",
     longDescription:
-      "Synergy is Philbrick's automatic door mechanism for elevator car and landing entrances. Engineered for quiet, precise and repeatable operation, it is available in two- and four-panel centre-opening and telescopic/side-opening layouts to suit everything from compact residential lifts to wide hospital and freight openings.",
+      "Synergy is philbrick's automatic door mechanism for elevator car and landing entrances. Engineered for quiet, precise and repeatable operation, it is available in two- and four-panel centre-opening and telescopic/side-opening layouts to suit everything from compact residential lifts to wide hospital and freight openings.",
     highlights: [
       "Quiet, precise automatic operation",
       "Centre-opening and telescopic layouts",
@@ -225,7 +225,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Landing and car door sets engineered and finished in-house: robust and well-aligned, in a range of sizes and finishes to match the cabin and building.",
     longDescription:
-      "Philbrick manufactures landing and car doors as complete, well-aligned sets. Sturdy construction and a choice of sizes and finishes let each door integrate cleanly with the cabin, the shaft and the building's interior, supplied as part of a full elevator package or on their own.",
+      "philbrick manufactures landing and car doors as complete, well-aligned sets. Sturdy construction and a choice of sizes and finishes let each door integrate cleanly with the cabin, the shaft and the building's interior, supplied as part of a full elevator package or on their own.",
     highlights: [
       "Landing and car door sets",
       "In-house fabrication and finishing",
@@ -243,7 +243,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Passenger cabins built to order: durable construction with a choice of finishes, lighting, flooring and fixtures for residential and commercial elevators.",
     longDescription:
-      "Philbrick builds cabins to order with homogeneous bottom and top structure with minimum welding joints. Available in MS Powder Coated, Galvanized Powder Coated and Stainless Steel material with customized designs in various combinations of Plain S.S., Designer S.S. Sheet Material, MS Powder Coated, Titanium Gold Designed, Mirror Finish and Full Glass Capsule Car configurations.",
+      "philbrick builds cabins to order with homogeneous bottom and top structure with minimum welding joints. Available in MS Powder Coated, Galvanized Powder Coated and Stainless Steel material with customized designs in various combinations of Plain S.S., Designer S.S. Sheet Material, MS Powder Coated, Titanium Gold Designed, Mirror Finish and Full Glass Capsule Car configurations.",
     highlights: [
       "Homogeneous bottom and top structure",
       "MS Powder Coated, Galvanized and Stainless Steel options",
@@ -261,7 +261,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Car and landing position indicators: the XN, XLCD and XTFT range spans LED segment, dot-matrix, monochrome LCD and colour TFT displays.",
     longDescription:
-      "Philbrick's display range covers every signalling need in the car and at the landings, from simple LED segment indicators to multi-line dot-matrix, crisp monochrome LCD and full-colour TFT screens. All show floor position, direction and travel information clearly, and can carry additional messaging where required.",
+      "philbrick's display range covers every signalling need in the car and at the landings, from simple LED segment indicators to multi-line dot-matrix, crisp monochrome LCD and full-colour TFT screens. All show floor position, direction and travel information clearly, and can carry additional messaging where required.",
     highlights: [
       "LED segment, dot-matrix, LCD and TFT",
       "Car and landing indicators",
@@ -380,7 +380,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Car Operating Panels and Landing Operating Panels: the buttons and indicators passengers use to call and command the lift, in durable finishes with clear signalling.",
     longDescription:
-      "The Car Operating Panel (COP) and Landing Operating Panel (LOP) are how passengers interact with the elevator. Philbrick builds them in hard-wearing finishes with tactile buttons and clear indication, so calling and commanding the lift is intuitive at the landing and inside the car.",
+      "The Car Operating Panel (COP) and Landing Operating Panel (LOP) are how passengers interact with the elevator. philbrick builds them in hard-wearing finishes with tactile buttons and clear indication, so calling and commanding the lift is intuitive at the landing and inside the car.",
     highlights: [
       "Car and landing operating panels",
       "Durable, hard-wearing finishes",
@@ -398,7 +398,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Touch-based car and landing panels: capacitive touch buttons and glass fascias for a premium, easy-to-clean passenger interface.",
     longDescription:
-      "Philbrick's Touch COP/LOP replaces mechanical buttons with capacitive touch controls behind a smooth glass fascia. The result is a premium, modern interface that is easy to clean and hard to wear out, a natural fit for showcase lobbies and contemporary interiors.",
+      "philbrick's Touch COP/LOP replaces mechanical buttons with capacitive touch controls behind a smooth glass fascia. The result is a premium, modern interface that is easy to clean and hard to wear out, a natural fit for showcase lobbies and contemporary interiors.",
     highlights: [
       "Capacitive touch controls",
       "Glass fascia, premium look",
@@ -416,7 +416,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Voice and audible signalling: floor and direction announcements, arrival gongs and door alerts that improve accessibility and the ride experience.",
     longDescription:
-      "Philbrick's voice announcing systems add clear audible signalling to the elevator: spoken floor and direction announcements, arrival gongs and door alerts. Beyond a more comfortable ride, they support accessibility for passengers with visual impairment. The range spans chip-based and MP3 announcers, close-door alerts and gongs.",
+      "philbrick's voice announcing systems add clear audible signalling to the elevator: spoken floor and direction announcements, arrival gongs and door alerts. Beyond a more comfortable ride, they support accessibility for passengers with visual impairment. The range spans chip-based and MP3 announcers, close-door alerts and gongs.",
     highlights: [
       "Spoken floor and direction announcements",
       "Arrival gong and door alerts",
@@ -472,7 +472,7 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Complete elevator kits and accessories: the parts, fixtures and spares needed to build, upgrade or maintain a lift, supplied together.",
     longDescription:
-      "Philbrick supplies complete elevator kits and the accessories that go with them: the assortment of parts, fixtures and spares needed to build a new lift, modernise an old one or keep an existing installation running. Sourcing them together simplifies procurement and keeps a project moving.",
+      "philbrick supplies complete elevator kits and the accessories that go with them: the assortment of parts, fixtures and spares needed to build a new lift, modernise an old one or keep an existing installation running. Sourcing them together simplifies procurement and keeps a project moving.",
     highlights: [
       "Complete elevator kits",
       "Fixtures, parts and spares",
@@ -490,12 +490,12 @@ export const PRODUCT_TREE: ProductNode[] = [
     description:
       "Elevator products from the STEP range: drives, controllers and integrated components for new installations and modernisation.",
     longDescription:
-      "In 2014 Philbrick partnered with STEP, the largest Chinese manufacturer of elevator products, to keep its image as a trend setter. Philbrick supplies elevator products from the STEP range, including drives, controllers and integrated control components, giving installers and modernisers a proven, widely-supported option that pairs with Philbrick's own panels, doors and fixtures.",
+      "In 2014 philbrick partnered with STEP, the largest Chinese manufacturer of elevator products, to keep its image as a trend setter. philbrick supplies elevator products from the STEP range, including drives, controllers and integrated control components, giving installers and modernisers a proven, widely-supported option that pairs with philbrick's own panels, doors and fixtures.",
     highlights: [
       "STEP drives and controllers",
       "Integrated control components",
       "For new builds and modernisation",
-      "Pairs with Philbrick systems",
+      "Pairs with philbrick systems",
     ],
     image: cover("step-products"),
     released: true,

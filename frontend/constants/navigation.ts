@@ -127,6 +127,7 @@ export const FOOTER_NAV: FooterColumn[] = [
       { label: "Downloads", href: "/downloads" },
       { label: "Quality Policy", href: "/quality-policy" },
       { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms & Conditions", href: "/terms" },
     ],
   },
   {

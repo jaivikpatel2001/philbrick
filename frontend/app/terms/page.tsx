@@ -1,48 +1,48 @@
 import type { Metadata } from "next";
-import { FiShield } from "react-icons/fi";
+import { FiFileText } from "react-icons/fi";
 import { PageHeader } from "@/sections/shared/PageHeader";
 import { ReleaseGate } from "@/components/release/ReleaseGate";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 import {
-  PRIVACY_POLICY,
-  PRIVACY_CONTACT_HEADING,
-  PRIVACY_CONTACT_INTRO,
+  TERMS_OF_SERVICE,
+  TERMS_CONTACT_HEADING,
+  TERMS_CONTACT_INTRO,
 } from "@/data/legal";
 import { SITE, gmailHref } from "@/constants/site";
 import styles from "@/app/prose.module.css";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Terms & Conditions",
   description:
-    "How philbrick collects, uses, retains and protects the personal data you submit through this website.",
-  alternates: { canonical: "/privacy-policy" },
+    "The terms governing your access to and use of the philbrick website, product documentation, technical specifications and online services.",
+  alternates: { canonical: "/terms" },
 };
 
-/* The opening paragraphs carry no heading on the client's page, so only the
-   headed sections are numbered, and the Contact Us block continues the count. */
-const INTRO = PRIVACY_POLICY.filter((s) => !s.heading);
-const CLAUSES = PRIVACY_POLICY.filter((s) => s.heading).map((s, i) => ({
+/* The opening paragraphs carry no heading, so only the headed sections are
+   numbered, and the contact block continues the count. */
+const INTRO = TERMS_OF_SERVICE.filter((s) => !s.heading);
+const CLAUSES = TERMS_OF_SERVICE.filter((s) => s.heading).map((s, i) => ({
   ...s,
   index: String(i + 1).padStart(2, "0"),
 }));
 const CONTACT_INDEX = String(CLAUSES.length + 1).padStart(2, "0");
 
-export default function PrivacyPolicyPage() {
+export default function TermsPage() {
   return (
-    <ReleaseGate route="/privacy-policy" label="Privacy Policy">
+    <ReleaseGate route="/terms" label="Terms & Conditions">
       <JsonLd
         data={breadcrumbSchema([
           { name: "Home", path: "/" },
-          { name: "Privacy Policy", path: "/privacy-policy" },
+          { name: "Terms & Conditions", path: "/terms" },
         ])}
       />
 
       <PageHeader
-        eyebrow="Privacy Policy"
-        title="How we handle your personal data"
-        description="We act as the data controller for the personal data you submit or disclose, and for personal data obtained through third parties."
-        breadcrumb={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]}
+        eyebrow="Terms & Conditions"
+        title="The terms for using our digital services"
+        description="These Terms govern your access to and use of our website, product documentation, technical specifications and online services."
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "Terms & Conditions" }]}
       />
 
       <section className="section">
@@ -69,19 +69,28 @@ export default function PrivacyPolicyPage() {
                     {p}
                   </p>
                 ))}
+                {section.list && (
+                  <ul className={styles.list}>
+                    {section.list.map((item) => (
+                      <li key={item} className={styles.listItem}>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           ))}
 
-          {/* Final section: the client's contact details, from constants/site. */}
+          {/* Final section: legal contact, from constants/site. */}
           <div className={styles.clause} data-reveal="up">
             <span className={styles.clauseIndex}>{CONTACT_INDEX}</span>
             <div className={styles.clauseBody}>
-              <h2 className={styles.clauseHeading}>{PRIVACY_CONTACT_HEADING}</h2>
-              <p className={styles.para}>{PRIVACY_CONTACT_INTRO}</p>
+              <h2 className={styles.clauseHeading}>{TERMS_CONTACT_HEADING}</h2>
+              <p className={styles.para}>{TERMS_CONTACT_INTRO}</p>
               <div className={styles.callout}>
                 <span className={styles.calloutIcon}>
-                  <FiShield />
+                  <FiFileText />
                 </span>
                 <div>
                   <p className={styles.calloutLabel}>Email and phone</p>

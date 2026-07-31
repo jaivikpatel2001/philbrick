@@ -1,0 +1,161 @@
+/* =============================================================================
+   HISTORY TIMELINE — graphical company milestones.
+   Desktop: a central spine with cards alternating left/right.
+   Mobile:  a single left rail with all cards to its right.
+   ========================================================================== */
+.timeline {
+  position: relative;
+  max-width: 1000px;
+  margin: clamp(2rem, 4vw, 3.5rem) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The spine */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--border-strong) 8%,
+    var(--border-strong) 92%,
+    transparent
+  );
+}
+
+.item {
+  position: relative;
+  width: 50%;
+  padding-block: clamp(0.75rem, 1.6vw, 1.15rem);
+  box-sizing: border-box;
+}
+/* Left column: card sits left of the spine, text right-aligned toward it. */
+.item:nth-child(odd) {
+  left: 0;
+  padding-right: clamp(2rem, 4vw, 3.25rem);
+  text-align: right;
+}
+/* Right column: card sits right of the spine. */
+.item:nth-child(even) {
+  left: 50%;
+  padding-left: clamp(2rem, 4vw, 3.25rem);
+  text-align: left;
+}
+
+/* The node on the spine, vertically centred on the card (padding is symmetric,
+   so the item's 50% lines up with the card's middle). */
+.node {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-circle);
+  background: var(--accent);
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 0 0 1px var(--accent);
+  z-index: 1;
+}
+/* The item's outer box edge sits ON the spine (each item is 50% wide), so a
+   14px node offset by -7px lands its centre exactly on the spine. No extra
+   transform — that was double-shifting the dots off the line. */
+.item:nth-child(odd) .node {
+  right: -7px;
+}
+.item:nth-child(even) .node {
+  left: -7px;
+}
+
+/* Card */
+.card {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: clamp(1rem, 1.6vw, 1.4rem) clamp(1.15rem, 1.8vw, 1.6rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-accent);
+}
+
+.year {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow-strong, 0.85rem);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.item:nth-child(odd) .year {
+  align-self: flex-end;
+}
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+.summary {
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 42ch;
+  text-wrap: pretty;
+}
+.item:nth-child(odd) .summary {
+  margin-left: auto; /* keep the ragged edge toward the spine */
+}
+
+/* ----- Mobile: single left rail ---------------------------------------- */
+@media (max-width: 760px) {
+  .timeline::before {
+    left: 9px;
+    transform: none;
+  }
+  .item,
+  .item:nth-child(odd),
+  .item:nth-child(even) {
+    width: 100%;
+    left: 0;
+    padding-left: 2.25rem;
+    padding-right: 0;
+    text-align: left;
+  }
+  .item:nth-child(odd) .node,
+  .item:nth-child(even) .node {
+    left: 9px;
+    right: auto;
+    transform: translate(-50%, -50%);
+  }
+  .card {
+    display: flex;
+  }
+  .item:nth-child(odd) .year,
+  .year {
+    align-self: flex-start;
+  }
+  .item:nth-child(odd) .summary {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}

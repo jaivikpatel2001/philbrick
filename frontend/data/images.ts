@@ -73,5 +73,5 @@ export const SERVICE_IMG = {
   amc: "/images/products/ard/ard.png",
 } as const;
 
-/* Branded Open Graph / social share image (Philbrick logo on navy). */
+/* Branded Open Graph / social share image (philbrick logo on navy). */
 export const OG_IMAGE = "/brand/philbrick-og.png";

@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: p.description,
     alternates: { canonical: productHref(category, product) },
     openGraph: {
-      title: `${p.name} · Philbrick`,
+      title: `${p.name} · philbrick`,
       description: p.description,
       images: [p.image],
     },
@@ -127,7 +127,7 @@ export default async function ProductPage({ params }: Props) {
 
       <CTASection
         title={`Specify ${p.name}`}
-        description="Share your requirements and the Philbrick team will prepare a tailored proposal."
+        description="Share your requirements and the philbrick team will prepare a tailored proposal."
         primary={{ label: "Request a quote", href: "/contact" }}
         secondary={{ label: `All ${cat.name}`, href: categoryHref(cat.slug) }}
       />

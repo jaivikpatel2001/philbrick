@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { SERVICES } from "@/data/services";
 import styles from "./ServiceEcosystem.module.css";
 
-/* A partnership continuum: the four real Philbrick offerings presented as a
+/* A partnership continuum: the four real philbrick offerings presented as a
    relationship that runs the length of an elevator's life, not four cards.
    Distinct from section 02's ecosystem orbit (linear vs radial). */
 const STEP_VERB: Record<string, string> = {
@@ -20,7 +20,7 @@ export function ServiceEcosystem() {
         <SectionHeader
           eyebrow="03 What we offer"
           title="More than parts. A partner."
-          description="An elevator lasts decades, and the components inside it should be supported for just as long. Philbrick manufactures, supplies, modernises and stocks the systems that keep lifts running."
+          description="An elevator lasts decades, and the components inside it should be supported for just as long. philbrick manufactures, supplies, modernises and stocks the systems that keep lifts running."
           action={
             <Button href="/contact" variant="ghost" withArrow>
               Discuss your project
