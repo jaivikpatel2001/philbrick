@@ -6,6 +6,31 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Hero landscape plates replaced (portrait kept)
+
+Client supplied two new landscape hero images. Swapped only the LANDSCAPE
+plates; the portrait plates (tablet/mobile) are untouched. Headline baked into
+the new art is unchanged ("Your One Stop Elevator Solutions Partner."), so no
+component/CSS/sr-only change was needed — the `<picture>` orientation split
+already routes landscape→desktop, portrait→mobile.
+
+- Deleted old `hero-scene-{day,night}-landscape.png` + their 5 WebP variants each.
+- Renamed the uploads (`… (2).png`) into place and re-ran
+  `scripts/optimizeHeroScene.mjs` to regenerate the landscape 640–1672 ladders
+  (portrait ladders regenerated identically).
+- Verified in-browser: desktop loads `hero-scene-day-landscape-*.webp` (new),
+  mobile portrait loads `hero-scene-day-portrait-820.webp` (old, kept), no
+  horizontal overflow, build clean (57 pages).
+
+Caveat: hero images use stable filenames with a 1-month `Cache-Control`, so
+returning visitors may see the previous landscape for up to a month after deploy
+until their browser cache expires (inherent to the stable-name image strategy).
+
+**Files:** `public/images/home/hero-exploration/environment/hero-scene-*-landscape*`
+(2 sources replaced, 10 WebP variants regenerated), `DONE.md`.
+
+---
+
 ## 2026-07-25 — Lowercase "philbrick" branding + dead-code cleanup
 
 ### Lowercase brand
