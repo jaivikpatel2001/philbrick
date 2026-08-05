@@ -24,24 +24,6 @@
   top: calc(var(--nav-h) + 1.5rem);
 }
 
-/* No features published: stack copy over photography instead of leaving an
-   empty half-row. The gallery is capped so a lone studio shot does not sprawl. */
-.topSolo {
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: center;
-}
-
-.topSolo .info {
-  order: -1;
-  max-width: var(--container-prose);
-  text-align: center;
-}
-
-.topSolo .media {
-  position: static;
-  width: min(100%, 34rem);
-}
-
 .info {
   display: flex;
   flex-direction: column;
@@ -50,12 +32,15 @@
 
 .name {
   font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
   letter-spacing: var(--ls-tight);
+  color: var(--text-primary);
 }
 
+/* Description reads as supporting body under the title, not a competing lead. */
 .lead {
-  font-size: var(--fs-lead);
-  line-height: var(--lh-snug);
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
   color: var(--text-secondary);
 }
 
@@ -91,8 +76,9 @@
 .featureList li {
   position: relative;
   padding-left: 1.5rem;
+  font-size: var(--fs-body);
   color: var(--text-secondary);
-  line-height: var(--lh-snug);
+  line-height: var(--lh-relaxed);
 }
 
 /* machined tick rather than a bullet, matching the editorial direction */

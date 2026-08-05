@@ -113,7 +113,7 @@ export default async function CategoryPage({ params }: Props) {
                   description={
                     i === 0 ? (cat.longDescription ?? cat.description) : ""
                   }
-                  showName={inlineProducts.length > 1}
+                  showName
                   priority={i === 0}
                 />
               ))}

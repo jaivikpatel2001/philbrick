@@ -6,6 +6,33 @@ completing one. Newest entries at the top.
 
 ---
 
+## 2026-07-25 — Product detail: name on the right + type hierarchy + uniform 2-col
+
+Iterated on the product detail body (`ProductDetail`).
+
+- **Name shown above the description** on the right: the detail page now passes
+  `showName` (was `false`), so the product name renders as an `h2` at the top of
+  the right-hand copy column. Hero keeps the `h1`; body `h2` is smaller
+  (`--fs-h2` vs the hero's `--fs-display-2`).
+- **Type hierarchy tuned** (`ProductDetail.module.css`): the description dropped
+  from `--fs-lead` (~24px) to `--fs-body` (17px) with relaxed leading so it reads
+  as supporting text under the title, not a competing lead; feature-list items
+  set to `--fs-body` + relaxed leading. Result on the right column: title 54px →
+  description 17px → features 17px.
+- **Uniform two-column layout — title on the right for EVERY product.** Removed
+  the `topSolo` special case that stacked/centred the copy for the ~19
+  no-feature products; all products now use gallery-left + copy-right. Verified:
+  a no-features/no-specs product (`elevator-gong`) renders 2-col (544/544) with a
+  left-aligned title on the right, no horizontal overflow, no console errors.
+
+The category-inline `ProductDetail` (`showName={inline > 1}`) is unchanged —
+intentional for self-contained categories. Build clean (57 pages), tsc clean.
+
+**Files:** `app/products/[category]/[product]/page.tsx`,
+`sections/products/ProductDetail.{tsx,module.css}`, `DONE.md`.
+
+---
+
 ## 2026-07-25 — Hero landscape plates replaced (portrait kept)
 
 Client supplied two new landscape hero images. Swapped only the LANDSCAPE
