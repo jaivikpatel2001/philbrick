@@ -39,14 +39,12 @@ export function ProductDetail({
 }: Props) {
   const hasFeatures = product.featureGroups.length > 0;
 
-  /* 19 of the 38 products carry no copy on the client's site. A two-column
-     split would leave half the row empty, so those stack: a short intro, then
-     the photography at a comfortable reading width. */
-  const solo = !hasFeatures;
-
   return (
     <article className={styles.detail}>
-      <div className={`${styles.top} ${solo ? styles.topSolo : ""}`}>
+      {/* Always two-column: photography left, copy (name + description +
+          features) right — so the product title sits on the right for EVERY
+          product, whether or not it carries a feature list. */}
+      <div className={styles.top}>
         <div className={styles.media} data-reveal="up">
           <ProductGallery
             images={product.images}

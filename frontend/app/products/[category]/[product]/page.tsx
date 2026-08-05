@@ -101,7 +101,7 @@ export default async function ProductPage({ params }: Props) {
           <ProductDetail
             product={displayCatalog}
             description={p.longDescription ?? p.description}
-            showName={false}
+            showName
             priority
           />
         </div>
